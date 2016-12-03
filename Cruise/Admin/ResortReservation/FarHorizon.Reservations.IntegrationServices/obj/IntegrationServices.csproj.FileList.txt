@@ -1,0 +1,17 @@
+obj\Debug\ResolveAssemblyReference.cache
+bin\Debug\IntegrationServices.dll
+bin\Debug\IntegrationServices.pdb
+bin\Debug\BusinessTier.dll
+bin\Debug\Common.dll
+bin\Debug\EmailManager.dll
+bin\Debug\SessionManager.dll
+bin\Debug\DataLayer.dll
+bin\Debug\UploadManager.dll
+bin\Debug\Common.pdb
+bin\Debug\EmailManager.pdb
+bin\Debug\BusinessTier.pdb
+bin\Debug\SessionManager.pdb
+bin\Debug\DataLayer.pdb
+bin\Debug\UploadManager.pdb
+obj\Debug\IntegrationServices.dll
+obj\Debug\IntegrationServices.pdb

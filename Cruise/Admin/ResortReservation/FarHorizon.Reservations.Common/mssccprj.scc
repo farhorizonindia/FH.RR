@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[Common.csproj]
+SCC_Aux_Path = "C:\sourcesafe"
+SCC_Project_Name = "$/ResortReservation/ResortReservation/Common", DOBAAAAA
+
+[FarHorizon.Reservations.Common.csproj]
+SCC_Aux_Path = "C:\F\ProductionSourceCode"
+SCC_Project_Name = "$/Projects/ResortReservation.root/ResortReservation/FarHorizon.Reservations.Common", ZBAAAAAA

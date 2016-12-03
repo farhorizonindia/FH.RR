@@ -1,0 +1,9 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\XMLServices.dll
+obj\Debug\XMLServices.pdb
+bin\Debug\XMLServices.dll
+bin\Debug\XMLServices.pdb
+bin\Debug\Common.dll
+bin\Debug\DataLayer.dll
+bin\Debug\DataLayer.pdb
+bin\Debug\Common.pdb

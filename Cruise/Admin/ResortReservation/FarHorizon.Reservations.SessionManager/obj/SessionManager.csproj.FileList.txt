@@ -1,0 +1,5 @@
+bin\Debug\SessionManager.dll
+bin\Debug\SessionManager.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\SessionManager.dll
+obj\Debug\SessionManager.pdb

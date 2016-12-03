@@ -1,0 +1,12 @@
+﻿.roleList { height: 400px; width:150px; }
+.roleListParent { height: 400px; float:left; margin:10px; margin-left:20px; }
+.rightListParent {float:left;  margin:10px; margin-left:15px;}
+.rightList { height: 400px; width: 300px; overflow:scroll; border: 1px solid gray; }            
+.operationStyle { font-weight:bold; font-family:Verdana; font-size:12px; font-style:normal; color:Orange;}
+.pageStyle { font-style:italic; font-family:Verdana; font-size:12px; }
+.rightStyle { font-style:normal; color:Green; font-family:Verdana; font-size:12px; }
+.inputsection2 { margin-left:20px; }
+.buttonsection2 { margin-left: 15px; }
+.gridsection2 { height: 400px; float:left; width:470px; overflow:scroll; border:1px solid gray; padding-left:2px;}
+.headerLabel { border: 1px solid gray; background-color:Orange; padding: 2px 2px 2px 2px}
+.extremeRightListParent { margin: 10px; width:475px; float:left;}

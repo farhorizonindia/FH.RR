@@ -1,0 +1,13 @@
+SCC = This is a Source Code Control file
+
+[EmailManager.csproj]
+SCC_Aux_Path = "C:\sourcesafe"
+SCC_Project_Name = "$/ResortReservation/ResortReservation/EmailManager", GOBAAAAA
+
+[FarHorizon.Reservations.EmailManager.csproj]
+SCC_Aux_Path = "C:\F\ProductionSourceCode"
+SCC_Project_Name = "$/Projects/ResortReservation.root/ResortReservation/FarHorizon.Reservations.EmailManager", REAAAAAA
+
+[FarHorizon.Reservations.EmailServices.csproj]
+SCC_Aux_Path = "C:\sourcesafe"
+SCC_Project_Name = "$/ResortReservation.root/ResortReservation/FarHorizon.Reservations.EmailManager", DLDAAAAA

@@ -1,0 +1,9 @@
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.EMailManager.dll
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.EMailManager.pdb
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.Common.dll
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.Common.pdb
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\FarHorizon.Reservations.EMailManager.dll
+C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\FarHorizon.Reservations.EMailManager.pdb

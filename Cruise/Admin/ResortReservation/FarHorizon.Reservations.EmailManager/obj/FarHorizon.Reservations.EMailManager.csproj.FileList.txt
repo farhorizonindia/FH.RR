@@ -1,0 +1,9 @@
+bin\Debug\FarHorizon.Reservations.EMailManager.dll
+bin\Debug\FarHorizon.Reservations.EMailManager.pdb
+bin\Debug\FarHorizon.Reservations.Common.dll
+bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+bin\Debug\FarHorizon.Reservations.Common.pdb
+bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\FarHorizon.Reservations.EMailManager.dll
+obj\Debug\FarHorizon.Reservations.EMailManager.pdb

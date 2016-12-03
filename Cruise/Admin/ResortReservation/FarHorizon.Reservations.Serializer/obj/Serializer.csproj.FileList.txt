@@ -1,0 +1,5 @@
+bin\Debug\Serializer.dll
+bin\Debug\Serializer.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Serializer.dll
+obj\Debug\Serializer.pdb

@@ -1,0 +1,7 @@
+D:\Vijay\ResortReservation\BusinessTier\bin\Debug\BusinessTier.dll
+D:\Vijay\ResortReservation\BusinessTier\bin\Debug\BusinessTier.pdb
+D:\Vijay\ResortReservation\BusinessTier\bin\Debug\DataLayer.dll
+D:\Vijay\ResortReservation\BusinessTier\bin\Debug\DataLayer.pdb
+D:\Vijay\ResortReservation\BusinessTier\obj\Debug\ResolveAssemblyReference.cache
+D:\Vijay\ResortReservation\BusinessTier\obj\Debug\BusinessTier.dll
+D:\Vijay\ResortReservation\BusinessTier\obj\Debug\BusinessTier.pdb

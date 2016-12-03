@@ -1,0 +1,7 @@
+﻿.category { padding:3px 5px 5px 10px; font-weight:bold; }
+.roomType { padding:3px 5px 5px 10px; font-weight:bold; }
+.rooms { float:left; padding:5px 5px 10px 10px; font-weight:normal; }
+.room { float:left; padding:5px 5px 10px 10px; font-weight:normal; }
+.clearingDiv { clear:both; }
+.waitListedBookings { float:left; padding:5px 5px 10px 10px; font-weight:normal; }
+.waitListedBooking { float:left; padding:5px 5px 10px 10px; font-weight:normal; }

@@ -1,0 +1,6 @@
+bin\Debug\FarHorizon.Reservations.DataTier.dll.config
+bin\Debug\FarHorizon.Reservations.DataTier.dll
+bin\Debug\FarHorizon.Reservations.DataTier.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\FarHorizon.Reservations.DataTier.dll
+obj\Debug\FarHorizon.Reservations.DataTier.pdb

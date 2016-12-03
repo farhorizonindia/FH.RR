@@ -1,0 +1,15 @@
+bin\Debug\BusinessTier.dll
+bin\Debug\BusinessTier.pdb
+bin\Debug\Common.dll
+bin\Debug\DataLayer.dll
+bin\Debug\EmailManager.dll
+bin\Debug\SessionManager.dll
+bin\Debug\UploadManager.dll
+bin\Debug\Common.pdb
+bin\Debug\EmailManager.pdb
+bin\Debug\DataLayer.pdb
+bin\Debug\SessionManager.pdb
+bin\Debug\UploadManager.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\BusinessTier.dll
+obj\Debug\BusinessTier.pdb

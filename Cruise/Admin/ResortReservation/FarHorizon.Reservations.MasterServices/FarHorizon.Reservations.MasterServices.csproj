@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C862145C-B545-4F67-8796-7A9F219E899A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FarHorizon.Reservations.MasterServices</RootNamespace>
+    <AssemblyName>FarHorizon.Reservations.MasterServices</AssemblyName>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ResortManager\Bin\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ResortManager\Bin\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccomodationContactsMaster.cs" />
+    <Compile Include="AccomodationMaster.cs" />
+    <Compile Include="AccomodationTypeMaster.cs" />
+    <Compile Include="AccomWiseActivityMaster.cs" />
+    <Compile Include="AgentMaster.cs" />
+    <Compile Include="ApplicationRightsMaster.cs" />
+    <Compile Include="BookingStatusMaster.cs" />
+    <Compile Include="CityMaster.cs" />
+    <Compile Include="DepartmentMaster.cs" />
+    <Compile Include="EventMessageMaster.cs" />
+    <Compile Include="FloorMaster.cs" />
+    <Compile Include="MealPlanMaster.cs" />
+    <Compile Include="NationalityMaster.cs" />
+    <Compile Include="RegionMaster.cs" />
+    <Compile Include="RoleRightsMaster.cs" />
+    <Compile Include="RoomCategoryMaster.cs" />
+    <Compile Include="RoomMaster.cs" />
+    <Compile Include="RoomTypeMaster.cs" />
+    <Compile Include="SMTPMaster.cs" />
+    <Compile Include="TransportMaster.cs" />
+    <Compile Include="TreeTypeMaster.cs" />
+    <Compile Include="UserAgentMapperMaster.cs" />
+    <Compile Include="UserMaster.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRoleMaster.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FarHorizon.Reservations.Common\FarHorizon.Reservations.Common.csproj">
+      <Project>{2CF66C59-D704-4C60-BD41-1B3141F73E12}</Project>
+      <Name>FarHorizon.Reservations.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.DataTier\FarHorizon.Reservations.DataBaseManager.csproj">
+      <Project>{EB133CE4-2A4D-48B0-BD45-91D18634B3F4}</Project>
+      <Name>FarHorizon.Reservations.DataBaseManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.XMLServices\FarHorizon.Reservations.XMLManager.csproj">
+      <Project>{85B79E83-5A0A-4756-8643-F8E045B64A08}</Project>
+      <Name>FarHorizon.Reservations.XMLManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

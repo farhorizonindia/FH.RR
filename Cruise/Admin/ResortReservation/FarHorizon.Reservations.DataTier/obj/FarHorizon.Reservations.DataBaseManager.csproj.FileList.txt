@@ -1,0 +1,6 @@
+bin\Debug\FarHorizon.Reservations.DataBaseManager.dll.config
+bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\FarHorizon.Reservations.DataBaseManager.dll
+obj\Debug\FarHorizon.Reservations.DataBaseManager.pdb

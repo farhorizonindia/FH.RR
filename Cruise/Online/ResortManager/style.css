@@ -1,0 +1,55 @@
+﻿html, body, p, input, td, h1, h2, h3, h4, h5, h6 { margin:0; padding:0; line-height:17px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: Arial;
+    }
+p { padding-bottom:10px; overflow:hidden; }	
+td { vertical-align:middle; }
+
+a.applink:link {text-decoration:none; color:white;}
+a.applink:visited {text-decoration:none; color:white;}
+a.applink:active {text-decoration:none; color:white;}
+a.applink:hover {text-decoration:underline; color:orange; }
+
+a img { border-width:0; }
+.select { width:auto; height:auto; border:1px solid #96959A; color:#2A4A5B; font-size:11px; margin-left:4px;}
+.input { text-align:left; font-family:Arial; font-size:8pt; margin-left:4px; }
+.appbutton { font-size:9px; height:23px; text-align:center; vertical-align:middle; width:60px; margin-left:4px;}
+
+.label { font-size:12px; padding-right:4px; padding-left:4px; width:auto;}
+
+.labelcell { font-family:Arial; font-size:8pt; padding-left:3px; }
+.inputcell { padding-right:3px; padding-top:2px; padding-bottom:2px; }
+
+.datebutton { padding-right:4px; height:21px; width:21px; vertical-align:top; font-size:9px; text-align:center;}
+.dropdown { font-size:10px;}
+
+.inputsection { margin-left:6px;
+    width: 425px;
+}
+.roomsection { margin-left:6px; overflow:auto;max-height:500px;}
+.buttonsection { margin-left:6px; margin-top:10px;}
+.statussection { margin-left:6px; }
+.gridsection { margin-left:5px; }
+
+.Total-text
+{ color:#333; 
+  background-color: #eaeaea; 
+  margin-top:30px; 
+  margin-bottom:10px; 
+  font-size:35px;  text-align:center;
+  width:400px; line-height:50px;
+}
+.clear
+{ clear:both;
+}
+.RoomRatesBox h2{ font-size:25px; color:#333; line-height:40px; margin-bottom:5px;
+}
+.RoomRatesBox table tr td { padding:3px;
+}
+
+.RoomRatesBox div table tr td  { padding:7px;
+}
+

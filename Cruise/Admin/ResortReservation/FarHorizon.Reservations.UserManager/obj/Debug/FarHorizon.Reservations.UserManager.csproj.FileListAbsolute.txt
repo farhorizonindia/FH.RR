@@ -1,0 +1,17 @@
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.UserManager.dll.config
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.UserManager.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.UserManager.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.Common.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.MasterServices.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.SessionManager.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.XMLManager.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.SessionManager.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.XMLManager.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.Common.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\bin\Debug\FarHorizon.Reservations.MasterServices.pdb
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\obj\Debug\ResolveAssemblyReference.cache
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\obj\Debug\FarHorizon.Reservations.UserManager.dll
+C:\F\Projects\ResortReservation\FarHorizon.Reservations.UserManager\obj\Debug\FarHorizon.Reservations.UserManager.pdb
