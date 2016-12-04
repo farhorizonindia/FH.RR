@@ -1,19 +1,10 @@
+using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
 using System;
-using System.Data;
-using System.Configuration;
-using System.Web;
-using System.Web.Security;
+using System.Diagnostics;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using System.Diagnostics;
-using FarHorizon.Reservations.BusinessServices;
-using FarHorizon.Reservations.MasterServices;
-using FarHorizon.Reservations.Common.DataEntities.Masters;
-using FarHorizon.Reservations.UserManager;
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
 
 public partial class _Default : ClientBasePage 
 {

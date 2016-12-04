@@ -57,3 +57,13 @@ C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservatio
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.csprojResolveAssemblyReference.cache
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.dll
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.SessionManager.dll.config
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.SessionManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.SessionManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\bin\Release\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.csprojResolveAssemblyReference.cache
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.SessionManager\obj\Release\FarHorizon.Reservations.SessionManager.pdb

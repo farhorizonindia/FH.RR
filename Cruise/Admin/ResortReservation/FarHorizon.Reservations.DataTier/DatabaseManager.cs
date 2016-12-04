@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Configuration;
 
 namespace FarHorizon.Reservations.DataBaseManager
 {
@@ -9,16 +7,14 @@ namespace FarHorizon.Reservations.DataBaseManager
         /// <summary>
         /// Get the DBName from the configuration file
         /// </summary>
-        protected static string DBName
+        protected static string ConnectionString
         {
             get
             {
-                // Read from the Application Configuration
-                //CISConfigurationElement calcData;
-                //calcData = ConfigurationManager.GetConfiguration("CISSettings") as CISConfigurationElement;
+                //return "ReservationConnectionString";
 
-                //return calcData.DBName;
-                return "ReservationConnectionString";
+                // Read from the Application Configuration
+                return ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
             }
         }
 
@@ -26,7 +22,7 @@ namespace FarHorizon.Reservations.DataBaseManager
         /// Default Constructor inherits the CISDataBase parameter constructor
         /// </summary>
         public DatabaseManager()
-            : base(DBName)
+            : base(ConnectionString)
         {
 
         }

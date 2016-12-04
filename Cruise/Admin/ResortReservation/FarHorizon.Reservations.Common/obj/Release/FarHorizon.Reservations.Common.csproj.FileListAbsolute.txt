@@ -46,3 +46,13 @@ C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservatio
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.csprojResolveAssemblyReference.cache
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.dll
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\Microsoft.Practices.EnterpriseLibrary.Data.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\Microsoft.Practices.ObjectBuilder.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.csprojResolveAssemblyReference.cache
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.pdb

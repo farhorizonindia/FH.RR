@@ -65,3 +65,16 @@ C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FaarHorizon.Reservati
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.csprojResolveAssemblyReference.cache
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.dll
 C:\Amit\Personal\FarHorizon\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.WebHelper.dll.config
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.WebHelper.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.WebHelper.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\AjaxControlToolkit.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.SessionManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.SessionManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\bin\Release\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.csprojResolveAssemblyReference.cache
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.dll
+C:\Amit\Personal\FarHorizon\FH.RR\Cruise\Admin\ResortReservation\FaarHorizon.Reservations.Bases\obj\Release\FarHorizon.Reservations.WebHelper.pdb
