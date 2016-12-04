@@ -51,6 +51,7 @@ namespace FarHorizon.Reservations.UserManager
             UserMaster userMaster = new UserMaster();
             UserDTO user;
             user = userMaster.GetUser(userId);
+            user.Password = string.Empty;
 
             LoggedInUser.User = user;
             if (user != null)

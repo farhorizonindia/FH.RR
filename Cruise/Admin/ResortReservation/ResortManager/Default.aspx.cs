@@ -6,14 +6,14 @@ using System.Diagnostics;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class _Default : ClientBasePage 
+public partial class _Default : ClientBasePage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Debugger.IsAttached)
         {
             Login1.UserName = "admin";
-        }        
+        }
     }
 
     protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
@@ -33,14 +33,14 @@ public partial class _Default : ClientBasePage
             iLoginId = userServices.ValidateUser(userDto);
             if (iLoginId > 0)
             {
-                e.Authenticated = true;                
-                SessionServices.LoginId = iLoginId; 
+                e.Authenticated = true;
+                SessionServices.LoginId = iLoginId;
             }
             else if (iLoginId <= 0)
             {
                 iLoginId = 0;
                 //SessionHandler"LoginId"] = 0;
-                SessionServices.LoginId = iLoginId; 
+                SessionServices.LoginId = iLoginId;
                 e.Authenticated = false;
             }
         }
@@ -58,7 +58,6 @@ public partial class _Default : ClientBasePage
 
     protected void Login1_LoggedIn(object sender, EventArgs e)
     {
-        //Response.Redirect("ClientUI/BookingChartView.aspx", true);
         Response.Redirect("mainmenu.aspx", true);
     }
 
@@ -79,7 +78,7 @@ public partial class _Default : ClientBasePage
 
         if (iLoginId > 0)
         {
-           // e.Authenticated = true;
+            // e.Authenticated = true;
 
             SessionServices.LoginId = iLoginId;
             Response.Redirect("mainmenu.aspx", true);
@@ -89,7 +88,7 @@ public partial class _Default : ClientBasePage
             iLoginId = 0;
             //SessionHandler"LoginId"] = 0;
             SessionServices.LoginId = iLoginId;
-          //  e.Authenticated = false;
+            //  e.Authenticated = false;
         }
     }
 }

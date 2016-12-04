@@ -7,8 +7,7 @@
 <head runat="server">
     <title>Far Horizon India Resort Reservation Manager</title>
     <style type="text/css">
-        .auto-style1
-        {
+        .auto-style1 {
             width: 321px;
             height: 208px;
         }
@@ -16,13 +15,18 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div style="font-weight: bold; font-size: 10px; text-transform: capitalize; color: navy; font-family: 'Monotype Corsiva'">
+        <%--position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);--%>
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; font-weight: bold; font-size: 10px; text-transform: capitalize; color: navy; font-family: 'Monotype Corsiva'">
+            <%--<div style="font-weight: bold; font-size: 10px; text-transform: capitalize; color: navy; font-family: 'Monotype Corsiva'">--%>
             <br />
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>
-                    <table style="width: 789px; height: 132px;">
+                    <table>
                         <tr>
                             <td rowspan="2" class="auto-style1">
                                 <asp:Login ID="Login1" runat="server" BackColor="#EFF3FB" BorderColor="#FF8000" BorderPadding="4"
@@ -47,18 +51,18 @@
         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
             <ProgressTemplate>
                 <iframe id="pgrIFrame" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
-                    src="javascript:'<html></html>';" style="position: absolute; top: 342px; left: 334px; height: 45px; width: 208px; z-index: 19999"></iframe>
-                <asp:Panel ID="Panel1" runat="server" BackColor="white" BorderColor="#C2D3FC"
-                    BorderStyle="solid" BorderWidth="1" Height="100" Style="z-index: 20000" Width="300">
-                    <div style="position: relative; top: 20px; left: 70px;">
+                    src="javascript:'<html></html>';" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 100px; width: 250px; z-index: 19999; background-color: white; border-color: #C2D3FC; border-style: solid; border-width: 1px;"></iframe>
+                <asp:Panel ID="Panel1" runat="server" BackColor="white" Style="z-index: 20000">
+                    <%--<div style="position: relative; top: 20px; left: 70px;">--%>
+                    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                         <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />
-                    Please Wait....                     
+                        Please Wait....      
+                    </div>
                 </asp:Panel>
             </ProgressTemplate>
         </asp:UpdateProgress>
         <cc1:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1" runat="server"
-            TargetControlID="Panel1" HorizontalOffset="300" VerticalOffset="150">
-        </cc1:AlwaysVisibleControlExtender>
+            TargetControlID="Panel1" HorizontalOffset="300" VerticalOffset="150"></cc1:AlwaysVisibleControlExtender>
     </form>
 </body>
 </html>
