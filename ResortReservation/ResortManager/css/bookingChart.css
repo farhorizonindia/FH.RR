@@ -1,0 +1,70 @@
+﻿.monthheader 
+{
+	font-family :Verdana;
+	font-size:x-small;
+	background-color:#95BEDE;
+	/*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#5987D6, endColorstr=#002D96);*/
+	border-color:#342d7e;
+	font-weight:bold;
+	color:White;
+	height:auto;	
+	font-weight:bold;
+	border-style:outset;	
+}
+
+.dayheader
+{
+	/*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#5987D6, endColorstr=#002D96);*/
+	background-color:#95BEDE;
+	border-color:#3B9C9C;
+	color:white;
+	font-family :Verdana;
+	font-size:x-small;
+	border-style:outset;
+	padding-left:2px;	
+	padding-right:2px;
+}
+
+.dayheadersunday
+{
+	/*background-color:#3EA99F;*/
+	background-repeat:repeat-x;
+	BACKGROUND-IMAGE: url(../images/orangebg.gif);	
+	border-color:#342D7E;
+	color:black;
+	font-family :Verdana;
+	font-size:x-small;
+	border-style:outset;
+	padding-left:2px;
+	padding-right:2px;
+}
+
+.mainTable {width:100%;  background-color:#342D7E; /*BACKGROUND-IMAGE: url(../images/orangebg.gif);	background-repeat:repeat-x;*/}
+.tblBookingView {	border-width:1px; border-color:#3B9C9C; font-size:x-small;    font-family:Verdana;}
+
+.changeTree { padding-left:5px; font-weight:bold; width:145px;}
+.btnnavigator { Width:24px; height:23px; font-size:9px; text-align:center; }
+.multibookingcell { background-color:#E56717; color:Black; font-size:x-small;}
+.singlebookingcell { background-color:Orange; color:Black; font-size:x-small;}
+.bookedCell { background-color:Aqua; color:Black; font-size:x-small; }
+.maintainCell { background-color:grey; color:Black; font-size:x-small; }
+.confirmedCell { background-color:Lime; color:Black; font-size:x-small; }
+.waitListedCell { background-color:orange; color:Black; font-size:x-small; }
+.proposedCell { background-color:blue; color:Black; font-size:x-small; }
+.cancelledCell { background-color:red; color:Black; font-size:x-small; }
+.maintenanceCell { background-color:gray; color:Black; font-size:x-small; }
+.availablebookingcell { font-size:xx-small; }
+.Two_Column { width: auto; }
+.LeftColumn { width:215px; padding-right:10px; }
+.RightColumn { width: 375px; margin-left:25px;}
+.uppersection { height:300px; width:215px; border-color:#342D7E; }
+.charttree { height:300px; width:221px; font-size:small; 
+	/*filter: progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#eff3fb, endColorstr=#507cd1);*/
+			 border:none;}
+.lowersection { height:auto; width:224px; float:left;}
+.bookingsummary { background-color:#342D7E; color:White; padding-left:5px; }
+.bookingdetails { /*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#eff3fb, endColorstr=#507cd1);*/
+	 height:150px; overflow:auto; padding-left:5px; border:thin solid; border-color:#342D7E; width:auto;}
+.mainTT { border: 1px solid black; text-align:left; padding:3px; width:300px; line-height:20px; background-color:#CAE1FF;}
+
+

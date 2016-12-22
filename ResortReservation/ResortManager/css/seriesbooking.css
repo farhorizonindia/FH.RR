@@ -1,0 +1,34 @@
+﻿.filtersection { margin-left:1px; border-style:solid; border-width:1px;}
+.inputsection { margin-left:1px; border-style:solid; border-width:1px;}
+.gridsection  { margin-left:1px; }
+.buttonsection { margin-left:12px; }
+.leftsection { padding:5px 5px 5px 15px; float:left; }
+.rightsection { padding:5px 5px 5px 20px; float:left; }
+.filterLabel { padding-left:7px; padding-right:4px;}
+.roomRow { padding-bottom:10px; border-bottom:solid 1px #ffd275; }
+/*.category { padding-bottom:3px; padding-top:5px; background-color:#3399cc;
+			filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#507cd1, endColorstr=#eff3fb); }*/
+.category { color:White; background-color:#3399cc; border-style:solid; font-size:11px; 
+	padding: 3px 10px 3px 3px; font-weight:bold; width:170px;}
+.lblCategory { margin-left:5px; background-color:#3399cc; /*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#507cd1, endColorstr=#eff3fb);*/}	
+.chkCatType { margin-left:5px; margin-right:8px; }
+.lblType { margin-left:5px; margin-right:8px; }
+
+.categoryCell { padding:0px 3px 0px 3px; color:White; background-color:#3399cc; text-align:center; border-style:solid; border-width:1px; font-size:11px; }
+.typeCell { padding:0px 3px 0px 3px; color:black; background-color: #cae1ff; text-align:center; border-style:solid; border-width:1px; font-size:11px; }
+.rawLabels { padding:0px 3px 0px 3px; text-align:left; border-style:solid; border-width:1px; background-color:#CAE1FF; }
+.dateCells { padding:0px 3px 0px 3px; text-align:left; border-style:solid; border-width:1px; }
+.checkboxCells { text-align:left; border-style:solid; border-width:1px; padding:5px; }
+.checkboxCells .input { padding-right:5px; }
+.requested { text-align:center; border-style:solid; border-width:1px; }
+.available { text-align:center; border-style:solid; border-width:1px; color:Green;}
+.waitlisted { text-align:center; border-style:solid; border-width:1px; color:red;}
+.booked { text-align:center; border-style:solid; border-width:1px; color:Blue; margin-right:10px;}
+.requestedHeader { text-align:center; border-style:solid; border-width:1px; width:15px; background-color:#CAE1FF; }
+.availableHeader { text-align:center; border-style:solid; border-width:1px; color:Green; width:15px; background-color:#CAE1FF; }
+.waitlistedHeader { text-align:center; border-style:solid; border-width:1px; color:red; width:15px; background-color:#CAE1FF; }
+.bookedHeader { text-align:center; border-style:solid; border-width:1px; color:Blue; margin-right:10px; width:15px; background-color:#CAE1FF; }
+.categorySeperator { width:5px;}
+.divSelect { width:75px; border-style:outset; background-image:url(../images/graybg.jpg); text-align:center; 
+	cursor:pointer;}
+.bookingListContainer { margin-left:10px; }

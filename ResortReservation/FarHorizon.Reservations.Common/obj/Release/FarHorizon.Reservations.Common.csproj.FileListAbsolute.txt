@@ -1,0 +1,7 @@
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Release\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.csprojResolveAssemblyReference.cache
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Release\FarHorizon.Reservations.Common.pdb

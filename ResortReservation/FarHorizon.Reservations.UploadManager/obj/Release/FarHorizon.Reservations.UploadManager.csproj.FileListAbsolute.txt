@@ -1,0 +1,12 @@
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.UploadManager.dll.config
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.UploadManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.UploadManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.Common.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.DataBaseManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.XMLManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.Common.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.DataBaseManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Release\FarHorizon.Reservations.XMLManager.pdb
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Release\FarHorizon.Reservations.UploadManager.csprojResolveAssemblyReference.cache
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Release\FarHorizon.Reservations.UploadManager.dll
+C:\Amit\Personal\FarHorizon\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Release\FarHorizon.Reservations.UploadManager.pdb

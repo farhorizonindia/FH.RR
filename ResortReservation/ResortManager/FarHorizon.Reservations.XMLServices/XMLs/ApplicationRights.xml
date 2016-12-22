@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Pages>
+  <PageType Description="Operations">
+    <Page Key="Booking" Description="Booking">
+      <Rights>
+        <Right Key="Add" Description="Add Booking"></Right>
+        <Right Key="Update" Description="Update Booking"></Right>
+        <Right Key="Delete" Description="Delete Booking"></Right>
+        <Right Key="Cancel" Description="Cancel Booking"></Right>
+        <Right Key="View" Description="View Booking"></Right>
+      </Rights>
+    </Page>
+    <Page Key="afterBookingactions" Description="AfterBookingactions">
+      <Rights>
+        <Right Key="View" Description="View After Booking"></Right>
+      </Rights>
+    </Page>
+    <Page Key="afterBookingSeriesactions" Description="AfterBookingSeriesactions">
+      <Rights>
+        <Right Key="View" Description="View After Booking Series"></Right>
+      </Rights>
+    </Page>
+    <Page Key="afterBookingTouristactions" Description="AfterBookingTouristactions">
+      <Rights>
+        <Right Key="View" Description="View Afert Booking Tourist"></Right>
+      </Rights>
+    </Page>
+    <Page Key="BookingConfirmation" Description="Booking Confirmation">
+      <Rights>
+        <Right Key="Confirm" Description="Confirm Booking"></Right>
+        <Right Key="Update" Description="Updating Confirmed Booking"></Right>
+        <Right Key="Cancel" Description="Cancel Confirmed Booking"></Right>
+        <Right Key="View" Description="View Booking Confirmation"></Right>
+      </Rights>
+    </Page>
+    <Page Key="BookingChartView" Description="Booking Chart View">
+      <Rights>        
+        <Right Key="View" Description="View Chart View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="ViewBookings" Description="Booking List">
+      <Rights>
+        <Right Key="View" Description="View Bookings"></Right>
+      </Rights>
+    </Page>
+    <Page Key="touristDetails" Description="Tourist">
+      <Rights>
+        <Right Key="Add" Description="Add Tourist"></Right>
+        <Right Key="Update" Description="Update Tourist"></Right>
+        <Right Key="Delete" Description="Delete Tourist"></Right>
+        <Right Key="View" Description="View Tourist"></Right>
+      </Rights>
+    </Page>
+    <Page Key="ViewTourists" Description="Tourist List">
+      <Rights>
+        <Right Key="View" Description="View Tourist"></Right>
+      </Rights>
+    </Page>
+    <Page Key="uploader" Description="Upload Tourist">
+      <Rights>
+        <Right Key="Add" Description="Upload Tourist"></Right>
+        <Right Key="View" Description="View Upload Tourist"></Right>
+      </Rights>
+    </Page>
+    <Page Key="SeriesBooking" Description="Series">
+      <Rights>
+        <Right Key="Add" Description="Add Series"></Right>
+        <Right Key="Update" Description="Update Series"></Right>
+        <Right Key="Delete" Description="Delete Series"></Right>
+        <Right Key="View" Description="View Series"></Right>
+      </Rights>
+    </Page>
+    <Page Key="viewSeries.aspx" Description="Series List">
+      <Rights>
+        <Right Key="View" Description="View Series"></Right>
+      </Rights>
+    </Page>
+    <Page Key="waitListmanagement" Description="Wait List Management">
+      <Rights>
+        <Right Key="Update" Description="Update WaitListed Bookings"></Right>
+        <Right Key="View" Description="View WaitListManagement"></Right>
+      </Rights>
+    </Page>
+    <Page Key="MainMenu" Description="Main Menu">
+      <Rights>
+        <Right Key="View" Description="Main Menu"></Right>
+      </Rights>
+    </Page>
+  </PageType>
+  <PageType Description="Masters">
+    <Page Key="AccomMaster" Description="Accomodations">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AccomodationSeasonMaster" Description="Accomodation Season">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AccomodationContactMaster" Description="Accomodation Contact">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AccomTypeMaster" Description="Accom Type">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AccomWiseActivitiesMaster" Description="Accomodation Wise Activities">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AgentMaster" Description="Agents">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="CityMaster" Description="Cities">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="DepartmentMaster" Description="Departments">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="EventMessageMaster" Description="Event Message">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="FloorMaster" Description="Floors">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="MailServerDetailsMaster" Description="Mail Server Details">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="MealPlanMaster" Description="Meal Plans">
+      <Rights>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="Menu" Description="Menu">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="NationalityMaster" Description="Nationalities">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="RegionMaster" Description="Regions">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="RoomCategoryMaster" Description="RoomCategory">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="RoomMaster" Description="Rooms">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="RoomTypeMaster" Description="Room Types">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="TransportMaster" Description="Transport">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="UserMaster" Description="Users">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="UserRoleMaster" Description="Roles">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="UserRoleRightsMaster" Description="Role Rights">
+      <Rights>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="UserAgentMaster" Description="User Agent Mapping Rights">
+      <Rights>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+  </PageType>
+  <PageType Description="Reports">
+    <Page Key="CFormReport" Description="C Form">
+      <Rights>
+        <Right Key="View" Description="View C Form"></Right>    
+     
+      </Rights>
+    
+    </Page>
+  
+<Page Key="FHReport" Description="Resort Report">
+      <Rights>
+        <Right Key="View" Description="Resort Report"></Right>    
+     
+      </Rights>
+    
+    </Page>
+
+<Page Key="TouristReportftr" Description="Tourist Report">
+      <Rights>
+        <Right Key="View" Description="Tourist Report"></Right>    
+     
+      </Rights>
+    
+    </Page>
+  </PageType>
+</Pages>

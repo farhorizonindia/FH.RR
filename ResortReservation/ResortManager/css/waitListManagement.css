@@ -1,0 +1,13 @@
+﻿.pnlDetails { width:560px; margin-left:25px; border:2px outset; padding-bottom:5px; margin-bottom:5px;border-color:Orange; }
+.bookingHeaderDataRowTable { margin-left:5px; width:auto }
+.bookingHeaderDataRowcell { color:White; background-color:#3399cc; border-style:solid; font-size:11px; 
+	padding: 3px 10px 3px 8px; font-weight:bold; width:170px;}
+.categorytypeHeaderdatacell { width:160px; padding: 3px 10px 0px 8px; border-style:solid; border-color:White;}
+.categorytypeHeader { margin-left:0px; }
+.tblRooms { margin-left:0px; }
+.RoomsHeaderCell { width:160px; padding: 3px 10px 0px 12px; }
+.waitlistChkCell { width:auto; padding-left:12px; color:Red;}
+.availableChkCell { width:auto; padding-left:12px; color:Green;}
+.btnSubmit { width:125px; margin-left:15px; margin-top:5px;}
+.seperator { border-top-style:ridge; border-width:1px; margin-top:3px;}
+
