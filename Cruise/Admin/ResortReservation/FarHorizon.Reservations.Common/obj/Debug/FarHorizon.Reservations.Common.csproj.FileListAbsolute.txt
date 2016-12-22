@@ -1,8 +1,0 @@
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.Common.dll
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.Common.pdb
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\ResolveAssemblyReference.cache
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\FarHorizon.Reservations.Common.dll
-C:\F\Projects\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\FarHorizon.Reservations.Common.pdb

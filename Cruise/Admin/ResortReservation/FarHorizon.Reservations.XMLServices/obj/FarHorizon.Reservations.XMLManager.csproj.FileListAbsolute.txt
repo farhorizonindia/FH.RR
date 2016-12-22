@@ -1,9 +1,0 @@
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.XMLManager.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.XMLManager.pdb
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.Common.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.Common.pdb
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\obj\Debug\ResolveAssemblyReference.cache
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\obj\Debug\FarHorizon.Reservations.XMLManager.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.XMLServices\obj\Debug\FarHorizon.Reservations.XMLManager.pdb

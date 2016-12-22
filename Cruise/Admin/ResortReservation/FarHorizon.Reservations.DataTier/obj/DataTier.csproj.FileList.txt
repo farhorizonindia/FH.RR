@@ -1,6 +1,0 @@
-bin\Debug\DataLayer.dll.config
-bin\Debug\DataLayer.dll
-bin\Debug\DataLayer.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\DataLayer.dll
-obj\Debug\DataLayer.pdb

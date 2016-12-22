@@ -1,9 +1,0 @@
-SCC = This is a Source Code Control file
-
-[FarHorizon.Reservations.IntegrationServices.csproj]
-SCC_Aux_Path = "C:\sourcesafe"
-SCC_Project_Name = "$/ResortReservation/ResortReservation/IntegrationServices", TSBAAAAA
-
-[FarHorizon.Reservations.BusinessServices.csproj]
-SCC_Aux_Path = "C:\F\ProductionSourceCode"
-SCC_Project_Name = "$/Projects/ResortReservation.root/ResortReservation/FarHorizon.Reservations.IntegrationServices", YEAAAAAA

@@ -1,6 +1,0 @@
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll.config
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\ResolveAssemblyReference.cache
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.dll
-C:\Amit\FarHorizon\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.pdb

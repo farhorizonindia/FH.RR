@@ -1,5 +1,0 @@
-bin\Debug\EmailManager.dll
-bin\Debug\EmailManager.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\EmailManager.dll
-obj\Debug\EmailManager.pdb
