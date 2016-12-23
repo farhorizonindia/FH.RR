@@ -1036,8 +1036,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             dv = new DataView(Returndt, "RoomCategoryId='" + roomCatId + "' and RoomTypeId='" + roomtypeid + "'", "RoomCategoryId,RoomTypeId", DataViewRowState.CurrentRows);
             if (pax > 0 && gdvSelectedRooms.Rows.Count < Convert.ToInt32(dv.ToTable().Rows[0]["rcount"]))
             {
-
-
                 if (Session["UserCode"] != null)
                 {
 
@@ -1057,8 +1055,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                             addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
                             CalculateRoomRates();
                         }
-
-
                     }
                 }
                 else
@@ -1079,8 +1075,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                             addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
                             CalculateRoomRates();
                         }
-
-
                     }
                 }
 
@@ -1303,9 +1297,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 {
                     DivRmRate.Style.Add("display", "None");
                     ViewState["VsRoomDetails"] = null;
-
                 }
-
             }
             catch
             {

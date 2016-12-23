@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
+
 public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 {
-
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
     BALRateCard blCard = new BALRateCard();
     DALRateCard dlcard = new DALRateCard();
     DataTable dtGetReturnedData;
     int getQueryResponse = 0;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -28,7 +27,6 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
                     lnkView.Visible = true;
                     lblLoginas.Visible = false;
                     lnkCustLogin.Visible = false;
-
                 }
                 else
                 {
@@ -37,7 +35,6 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
                     lnkView.Visible = false;
                     lblLoginas.Visible = true;
                     lnkCustLogin.Visible = true;
-
                 }
 
                 LoadCountries();

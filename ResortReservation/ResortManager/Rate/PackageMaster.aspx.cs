@@ -486,61 +486,47 @@ public partial class Rate_PackageMaster : MasterBasePage
         try
         {
             ddlnights.Items.Clear();
-            
+
             blPackage._Action = "GetNightsDetail";
             blPackage._packageId = ddlMasterPackage.SelectedItem.Value.ToString();
             dtGetReturnedData = dlPakage.GetNightsDetail(blPackage);
 
             ddlnights.Items.Insert(0, "-Select-");
 
-            int number = 0;
+            int startPoint = 0;
+            int endPoint = 0;
             List<string> nights = new List<string>();
             int i = 0;
             for (i = 0; i < dtGetReturnedData.Rows.Count; i++)
             {
                 bool IsAllowCheckIn = Convert.ToBoolean(dtGetReturnedData.Rows[i]["CheckIn"].ToString());
-                bool IsAllowCheckOut = Convert.ToBoolean(dtGetReturnedData.Rows[i]["CheckOut"].ToString());
 
                 if (IsAllowCheckIn)
                 {
-                    number = i - number;
-                    if (number > 0)
-                        nights.Add(number.ToString());
+                    startPoint = i;
+
+                    for (int j = i + 1; j < dtGetReturnedData.Rows.Count; j++)
+                    {
+                        bool IsAllowCheckOut = Convert.ToBoolean(dtGetReturnedData.Rows[j]["CheckOut"].ToString());
+
+                        if (IsAllowCheckOut)
+                        {
+                            endPoint = j;
+                            if (j == dtGetReturnedData.Rows.Count - 1) //If it is last row.
+                            {
+                                endPoint++;
+                            }
+                            break;
+                        }
+                    }
+                    nights.Add((endPoint - startPoint).ToString());
                 }
             }
 
-            number = i - number;
-            nights.Add(number.ToString());
-
-            int index = 1;
-            foreach (var item in nights)
+            for (int cntr = 0; cntr < nights.Count; cntr++)
             {
-                ddlnights.Items.Insert(index, item);
-                index++;
-            }            
-
-            //for (int loopCounter = 0; loopCounter < dtGetReturnedData.Rows.Count; loopCounter++)
-            //{
-            //    string Night = dtGetReturnedData.Rows[loopCounter]["Night"].ToString();
-            //    bool IsAllowCheckIn = Convert.ToBoolean(dtGetReturnedData.Rows[loopCounter]["CheckIn"].ToString());
-            //    bool IsAllowCheckOut = Convert.ToBoolean(dtGetReturnedData.Rows[loopCounter]["CheckOut"].ToString());
-            //    if (loopCounter == 0)
-            //    {
-            //        //do nothing . because thats only for master package checkin.(that is  start date of package).
-            //    }
-            //    else
-            //    {
-            //        if (IsAllowCheckIn == true)
-            //        {
-            //            ddlnights.Items.Add(((dtGetReturnedData.Rows.Count + 1) - (loopCounter + 1)).ToString());
-            //            ddlnights.Items.Add(((dtGetReturnedData.Rows.Count + 1) - ((dtGetReturnedData.Rows.Count + 1) - (loopCounter + 1))).ToString());
-            //        }
-            //        if (loopCounter == dtGetReturnedData.Rows.Count - 1)
-            //            ddlnights.Items.Insert(0, "-Select-");
-
-            //    }
-            //}
-
+                ddlnights.Items.Insert((cntr + 1), nights[cntr]);
+            }
         }
         catch (Exception sqe)
         {
