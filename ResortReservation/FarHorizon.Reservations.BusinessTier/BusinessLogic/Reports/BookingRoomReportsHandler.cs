@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.DataBaseManager;
+using System;
+using System.Data;
 
 namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.Reports
 {
