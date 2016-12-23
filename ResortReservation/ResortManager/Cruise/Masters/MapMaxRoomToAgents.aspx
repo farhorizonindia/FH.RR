@@ -9,6 +9,19 @@
     <link rel="stylesheet" type="text/css" media="all" href="../../css/pageheader.css" />
     <link rel="stylesheet" type="text/css" media="all" href="../../style.css" />
     <link href="../../css/roleRights.css" rel="stylesheet" type="text/css" />
+     <link rel="stylesheet" type="text/css" media="all" href="../../css/calendar-blue2.css"
+        title="win2k-cold-1" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/Booking.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/pageheader.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../style.css" />
+    
+    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar-en.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar-setup.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/popups.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/global.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/client/booking.js"></script>
+
     <title>Open Dates Master</title>
     <style>
         .controlsCss
@@ -28,8 +41,11 @@
         <div>
             <asp:ScriptManager ID="scmgrLocation" runat="server">
             </asp:ScriptManager>
-            <asp:UpdatePanel ID="updatepanel1" runat="server">
-                <ContentTemplate>
+           <asp:UpdatePanel ID="Upd1" runat="server">
+               <ContentTemplate>
+
+
+      
                     <br />
                     <div id="ddSection">
                         <table id="tblDd">
@@ -37,8 +53,17 @@
                                 <td>&nbsp;&nbsp; Agent
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlAgents" AutoPostBack="true" runat="server" OnSelectedIndexChanged="ddlAgents_SelectedIndexChanged"></asp:DropDownList>
+                                    <asp:DropDownList ID="ddlAgents" runat="server" OnSelectedIndexChanged="ddlAgents_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
                                 </td>
+                                <td>Select Date</td>
+                                <td>
+                                    <asp:TextBox ID="txtCalender" runat="server"  AutoPostBack="True" ></asp:TextBox>
+                                     <input type="button" class="datebutton" id="btnStartDate" name="btnStartDate" onfocus="return setupCalendar('txtCalender', 'btnStartDate')"
+                                    onclick="return setupCalendar('txtCalender', 'btnStartDate')" value="..." />
+                                </td>
+                                <td> <asp:TextBox ID="txtCalenderto" runat="server" AutoPostBack="True" OnTextChanged="txtCalenderto_TextChanged" ></asp:TextBox>
+                                     <input type="button" class="datebutton" id="btnEndDate" name="btnEndDate" onfocus="return setupCalendar('txtCalenderto', 'btnEndDate')"
+                                    onclick="return setupCalendar('txtCalenderto', 'btnEndDate')" value="..." /></td>
                             </tr>
                         </table>
                     </div>
@@ -86,9 +111,42 @@
 
 
                     </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
+           
+                   <asp:GridView ID="gdvMaxBookableDetails" runat="server" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" DataKeyNames="Id" OnRowDeleting="gdvMaxBookableDetails_RowDeleting" CellSpacing="5">
+                       <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                       <Columns>
+                           <asp:TemplateField HeaderText="Sno.">
+                               <ItemTemplate>
+                                   <%#Container.DataItemIndex+1 %>
+
+                               </ItemTemplate>
+
+                           </asp:TemplateField>
+                           <asp:BoundField DataField="AgentName" HeaderText="AgentName" />
+                           <asp:BoundField DataField="AccomName" HeaderText="Accomodation" />
+                           <asp:BoundField DataField="MaxRooms" HeaderText="MaxRooms" />
+                           <asp:BoundField DataField="date" HeaderText="FromDate" DataFormatString="{0:dd-MMM-yyyy}" />
+                           <asp:BoundField DataField="ToDate" HeaderText="ToDate" DataFormatString="{0:dd-MMM-yyyy}" />
+                           <asp:TemplateField>
+                               <ItemTemplate>
+                                   <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete"  OnClientClick="return confirm('Are you certain you want to delete this Record?')" >Delete</asp:LinkButton>
+                               </ItemTemplate>
+                           </asp:TemplateField>
+                       </Columns>
+                       <EditRowStyle BackColor="#999999" />
+                       <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                       <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                       <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
+                       <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />
+                       <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+                       <SortedAscendingCellStyle BackColor="#E9E7E2" />
+                       <SortedAscendingHeaderStyle BackColor="#506C8C" />
+                       <SortedDescendingCellStyle BackColor="#FFFDF8" />
+                       <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
+                    </asp:GridView>
         </div>
+                            </ContentTemplate>
+           </asp:UpdatePanel>
     </form>
 </body>
 </html>

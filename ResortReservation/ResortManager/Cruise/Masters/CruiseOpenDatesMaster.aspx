@@ -41,6 +41,14 @@
         {
             Width: 161px;
         }
+        .auto-style1
+        {
+            height: 24px;
+        }
+        .auto-style2
+        {
+            height: 19px;
+        }
     </style>
 </head>
 <body>
@@ -52,7 +60,7 @@
             <asp:UpdatePanel ID="updatepanel1" runat="server">
                 <ContentTemplate>
                     <div id="gridsection" class="gridsection">
-                        <asp:GridView ID="GridOpenDates" ForeColor="#333333" AutoGenerateColumns="false" BorderStyle="Ridge" GridLines="Both" runat="server" Width="950px">
+                        <asp:GridView ID="GridOpenDates" ForeColor="#333333" AutoGenerateColumns="False" BorderStyle="Ridge" runat="server" Width="950px"  OnRowDeleting="GridOpenDates_RowDeleting1" DataKeyNames="Id" OnRowCommand="GridOpenDates_RowCommand">
                             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                             <EditRowStyle BackColor="#2461BF" />
                             <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
@@ -64,50 +72,51 @@
                                 <asp:TemplateField HeaderText="Sn.">
                                     <ItemTemplate><%#Container.DataItemIndex+1 %> </ItemTemplate>
                                 </asp:TemplateField>
+                                  <asp:TemplateField HeaderText="Package Name">
+                                    <ItemTemplate>
+                                       
+                                        <asp:Label runat="server" ID="lblPckName" Text='<%#Eval("PackageName") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+
                                 <asp:TemplateField HeaderText="AccomName">
                                     <ItemTemplate>
-                                        <asp:HiddenField ID="hdfnOpenDateId" runat="server" Value='<%#Eval("Id") %>' />
-                                        <asp:HiddenField ID="hdnfAccomId" runat="server" Value='<%#Eval("AccomId") %>' />
+                                       
                                         <asp:Label runat="server" ID="lbAccomName" Text='<%#Eval("AccomName") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="River">
                                     <ItemTemplate>
-                                        <asp:HiddenField ID="hdnfRiverId" runat="server" Value='<%#Eval("RiverId") %>' />
+                                        
                                         <asp:Label runat="server" ID="lbRiverName" Text='<%#Eval("RiverName") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Country">
                                     <ItemTemplate>
-                                        <asp:HiddenField ID="hdnfCountryName" runat="server" Value='<%#Eval("CountryId") %>' />
+                                       
                                         <asp:Label runat="server" ID="lbCountryName" Text='<%#Eval("CountryName") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Boarding Loc.">
                                     <ItemTemplate>
-                                        <asp:HiddenField ID="hdnfBoardingFrom" runat="server" Value='<%#Eval("BoardingFrom") %>' />
-                                        <asp:Label runat="server" ID="lbBoardingFrom" Text='<%#Eval("BoardingFrom1") %>'></asp:Label>
+                                     
+                                        <asp:Label runat="server" ID="lbBoardingFrom" Text='<%#Eval("BoardingFrom") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Deboarding Loc.">
                                     <ItemTemplate>
-                                        <asp:HiddenField ID="hdnfBoardingTo" runat="server" Value='<%#Eval("BoardingTo") %>' />
-                                        <asp:Label runat="server" ID="lbBoardingTo" Text='<%#Eval("BoardingTo1") %>'></asp:Label>
+
+                                        <asp:Label runat="server" ID="lbBoardingTo" Text='<%#Eval("BoardingTo") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Boarding Date">
+                                <asp:BoundField DataField="CheckInDate" HeaderText="Boarding Date" DataFormatString="{0:dd-MMM-yyyy}" />
+                                <asp:BoundField DataField="CheckOutDate" HeaderText="Deboarding Date" DataFormatString="{0:dd-MMM-yyyy}" />
+                                
+                                <asp:TemplateField>
                                     <ItemTemplate>
-                                        <asp:Label runat="server" ID="lbBoardingDate" Text='<%#Eval("BoardingDate") %>'></asp:Label>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Deboarding Date">
-                                    <ItemTemplate>
-                                        <asp:Label runat="server" ID="lbDeboardingDate" Text='<%#Eval("DeboardingDate") %>'></asp:Label>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Cruise Direction">
-                                    <ItemTemplate>
-                                        <asp:Label runat="server" ID="lbCruiseDirection" Text='<%#Eval("CruiseDirection") %>'></asp:Label>
+                                        <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Select">Edit</asp:LinkButton>
+                                        <asp:LinkButton ID="lnkDelete" runat="server" OnClientClick="return confirm('Are you certain you want to delete this departure?')" CommandName="Delete">Delete</asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
@@ -120,21 +129,21 @@
                                 <asp:DropDownList ID="ddlAccom" CssClass="controlsCss" runat="server"></asp:DropDownList>
                             </td>
                             <td>
-                                <asp:RequiredFieldValidator ID="reqfddlAccom" runat="server" ErrorMessage="*" ControlToValidate="ddlAccom" InitialValue="-Select-" ForeColor="Red"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="reqfddlAccom" runat="server" ErrorMessage="*" ControlToValidate="ddlAccom" InitialValue="-Select-" ForeColor="Red" ValidationGroup="Open"></asp:RequiredFieldValidator>
                             </td>
                             <td>&nbsp;</td>
 
                         </tr>
                         <tr>
-                            <td>Country</td>
-                            <td>
+                            <td class="auto-style1">Country</td>
+                            <td class="auto-style1">
                                 <asp:DropDownList ID="ddlCountry" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged" CssClass="controlsCss">
                                 </asp:DropDownList>
                             </td>
-                            <td>
-                                <asp:RequiredFieldValidator ID="reqfddlCountry" runat="server" ControlToValidate="ddlCountry" ErrorMessage="*" ForeColor="Red" InitialValue="-Select-"></asp:RequiredFieldValidator>
+                            <td class="auto-style1">
+                                <asp:RequiredFieldValidator ID="reqfddlCountry" runat="server" ControlToValidate="ddlCountry" ErrorMessage="*" ForeColor="Red" InitialValue="-Select-" ValidationGroup="Open"></asp:RequiredFieldValidator>
                             </td>
-                            <td>&nbsp;</td>
+                            <td class="auto-style1"></td>
                         </tr>
                         <tr>
                             <td>River</td>
@@ -143,7 +152,7 @@
                                 </asp:DropDownList>
                             </td>
                             <td>
-                                <asp:RequiredFieldValidator ID="reqfddlRiver" runat="server" ControlToValidate="ddlRiver" ErrorMessage="*" ForeColor="Red" InitialValue="-Select-"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="reqfddlRiver" runat="server" ControlToValidate="ddlRiver" ErrorMessage="*" ForeColor="Red" InitialValue="-Select-" ValidationGroup="Open"></asp:RequiredFieldValidator>
                             </td>
                             <td>&nbsp;</td>
                         </tr>
@@ -154,7 +163,7 @@
                                 </asp:DropDownList>
                             </td>
                             <td>
-                                <asp:RequiredFieldValidator ID="reqfddlpackage" runat="server" ErrorMessage="*" ControlToValidate="ddlpackage" InitialValue="-Select-" ForeColor="Red"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="reqfddlpackage" runat="server" ErrorMessage="*" ControlToValidate="ddlpackage" InitialValue="-Select-" ForeColor="Red" ValidationGroup="Open"></asp:RequiredFieldValidator>
                             
                             <asp:HiddenField  runat="server" ID="hdnfNoOfRooms"/>
                             
@@ -172,11 +181,11 @@
                                 <asp:RegularExpressionValidator ID="regtxtBoardingDate"
                                     ValidationExpression="^([0-9]|0[1-9]|1[012])\/([0-9]|0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$"
                                     ControlToValidate="txtBoardingDate" ErrorMessage="Invalid Format. Use MM/DD/YYYY" runat="server"
-                                    CssClass="colorred">
-                                </asp:RegularExpressionValidator>
+                                    CssClass="colorred" ValidationGroup="Open"></asp:RegularExpressionValidator>
                             </td>
                             <td>
-                                <asp:RequiredFieldValidator ID="reqftxtBoardingDate" runat="server" ErrorMessage="*" ControlToValidate="txtBoardingDate" ForeColor="Red"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="reqftxtBoardingDate" runat="server" ErrorMessage="*" ControlToValidate="txtBoardingDate" ForeColor="Red" ValidationGroup="Open"></asp:RequiredFieldValidator>
+                                <asp:HiddenField ID="hfid" runat="server" />
                             </td>
                             <td>&nbsp;</td>
                         </tr>
@@ -190,11 +199,10 @@
                                 <asp:RegularExpressionValidator ID="regtxtDeBordingDate"
                                     ValidationExpression="^([0-9]|0[1-9]|1[012])\/([0-9]|0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$"
                                     ControlToValidate="txtDeBordingDate" ErrorMessage="Invalid Format. Use MM/DD/YYYY" runat="server"
-                                    CssClass="colorred">
-                                </asp:RegularExpressionValidator>
+                                    CssClass="colorred" ValidationGroup="Open"></asp:RegularExpressionValidator>
                             </td>
                             <td>
-                                <asp:RequiredFieldValidator ID="reqftxtDeBordingDate" runat="server" ErrorMessage="*" ControlToValidate="txtDeBordingDate" ForeColor="Red"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="reqftxtDeBordingDate" runat="server" ErrorMessage="*" ControlToValidate="txtDeBordingDate" ForeColor="Red" ValidationGroup="Open"></asp:RequiredFieldValidator>
                                 <br />
                         <%-- <asp:CompareValidator ID="cmprtxtDeBordingDate" runat="server" ControlToCompare="txtBoardingDate" ControlToValidate="txtDeBordingDate" ForeColor="Red" ErrorMessage="*Invalid Date Range(End Date should be greater)" Operator="GreaterThan" Type="Date" />--%>
 
@@ -202,16 +210,16 @@
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
-                            <td>&nbsp;</td>
-                            <td>
-                                &nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
+                            <td class="auto-style2"></td>
+                            <td class="auto-style2">
+                                </td>
+                            <td class="auto-style2"></td>
+                            <td class="auto-style2"></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>
-                                <asp:Button ID="btnAdd" runat="server" CssClass="appbutton" Height="24px" OnClick="btnAdd_Click" Text="Add" Width="65px" />
+                                <asp:Button ID="btnAdd" runat="server" CssClass="appbutton" Height="24px" OnClick="btnAdd_Click" Text="Add" Width="65px" ValidationGroup="Open" />
                             </td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
