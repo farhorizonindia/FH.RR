@@ -15,8 +15,6 @@ using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 
-
-
 public partial class ClientUI_Booking : ClientBasePage
 {
     BALHotelBooking blht = new BALHotelBooking();
@@ -32,6 +30,11 @@ public partial class ClientUI_Booking : ClientBasePage
     int iBookingId = 0;
     Table tblMaster = null;
 
+    int totalEventHandlersAdded = 0;
+    int eventCounter = 0;
+
+    List<AddRoomEventingTracker> addRoomEventingTrackers;
+
     #region Event handlers
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -39,6 +42,8 @@ public partial class ClientUI_Booking : ClientBasePage
         DateTime sd;
         DateTime ed;
         int iAccomId = 0;
+
+        addRoomEventingTrackers = new List<AddRoomEventingTracker>();
 
         sCtrlName = GetPostBackControlID();
         ClearSessionVariables();
@@ -189,6 +194,7 @@ public partial class ClientUI_Booking : ClientBasePage
                 //}
             }
         }
+        else { totalEventHandlersAdded = 0; }
         #endregion IsPostBack = True
 
         if (iBookingId > 0)
@@ -305,9 +311,6 @@ public partial class ClientUI_Booking : ClientBasePage
         }
     }
 
-
-
-
     private void bindRoomRates(int accmid, int Totpax, int agid, DateTime chkin, DateTime chkout, int norooms, int RtypeId)
     {
         try
@@ -366,8 +369,6 @@ public partial class ClientUI_Booking : ClientBasePage
         {
         }
     }
-
-
 
     protected void Page_PreRender(object sender, EventArgs e)
     {
@@ -711,6 +712,7 @@ public partial class ClientUI_Booking : ClientBasePage
             SessionServices.DeleteSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes);
         }
     }
+
     private void ClearControls()
     {
         txtStartDate.Text = string.Empty;
@@ -725,6 +727,7 @@ public partial class ClientUI_Booking : ClientBasePage
         rdProposedBookingYes.Checked = false;
         rdProposedBookingNo.Checked = true;
     }
+
     private void PrepareRoomChart()
     {
         PrepareRoomChart(DateTime.MinValue, DateTime.MinValue, 0, false);
@@ -739,7 +742,6 @@ public partial class ClientUI_Booking : ClientBasePage
     {
         PrepareRoomChart(dtStartDate, EndDate, iAccomID, true);
     }
-
 
     private void PrepareRoomChartpgload(DateTime dtStartDate, DateTime EndDate, int iAccomID)
     {
@@ -812,9 +814,6 @@ public partial class ClientUI_Booking : ClientBasePage
         }
     }
 
-
-
-
     private void PrepareRoomChart(DateTime dtStartDate, DateTime dtEndDate, int iAccomID, bool PrepareFromDB)
     {
         BookedRooms[] oBookedRooms;
@@ -853,6 +852,7 @@ public partial class ClientUI_Booking : ClientBasePage
         }
 
     }
+
     private Table PrepareChart(BookedRooms[] oAllRooms)
     {
         int iRoomsAvailable = 0, iRoomsBookedWithThisId = 0, iRoomsWaitListed = 0, iRBMain = 0, iRAMain = 0, iRWLMain = 0;
@@ -1358,6 +1358,7 @@ public partial class ClientUI_Booking : ClientBasePage
         p.Controls.Add(tRooms);
         return p;
     }
+
     private HtmlGenericControl AddCategory(string Category)
     {
         //Panel pCat = new Panel();
@@ -1378,6 +1379,7 @@ public partial class ClientUI_Booking : ClientBasePage
         //return pCat;
         return divCategory;
     }
+
     private Panel AddRoomTypePanel(string Category, string RoomType)
     {
         Panel pCat = new Panel();
@@ -1494,6 +1496,7 @@ public partial class ClientUI_Booking : ClientBasePage
         ddlNoOfRoomsAvailable.SelectedIndex = 0;
         ddlNoOfRoomsAvailable.AutoPostBack = true;
         ddlNoOfRoomsAvailable.SelectedIndexChanged += new EventHandler(ddlNoOfRoomsAvailable_SelectedIndexChanged);
+        totalEventHandlersAdded++;
         scmgrBooking.RegisterAsyncPostBackControl(ddlNoOfRoomsAvailable);
         tc.Controls.Add(ddlNoOfRoomsAvailable);
         return tc;
@@ -1722,6 +1725,7 @@ public partial class ClientUI_Booking : ClientBasePage
             lbl.Text = "Rooms Requested: " + RoomsBooked.ToString();
         }
     }
+
     private void SetRoomsAvailableLabel(Table tblParent, int Roomsavailable, string Category, string RoomType)
     {
         Control ctrl = null;
@@ -1734,6 +1738,7 @@ public partial class ClientUI_Booking : ClientBasePage
             lbl.Text = "Rooms Available: " + Roomsavailable.ToString();
         }
     }
+
     private void SetRoomsWaitlistedLabel(Table tblParent, int Roomswaitlisted, string Category, string RoomType)
     {
         Control ctrl = null;
@@ -1747,6 +1752,7 @@ public partial class ClientUI_Booking : ClientBasePage
             lbl.Text = "Waitlisted Rooms : " + Roomswaitlisted.ToString();
         }
     }
+
     private void SetRoomsPaxLabel(Table tblParent, int Pax, string Category, string RoomType)
     {
         Control ctrl = null;
@@ -1772,7 +1778,6 @@ public partial class ClientUI_Booking : ClientBasePage
             lbl.Text = "Total: " + Pax.ToString();
         }
     }
-
 
     private void SetTotalRoomsBookedLabel(Table tblParent, int RoomsBooked, string Category, string RoomType)
     {
@@ -1834,6 +1839,7 @@ public partial class ClientUI_Booking : ClientBasePage
             }
         }
     }
+
     private void keepRoomDropDownsSelectedIndex(string dropDownId, int selectedItemIndex)
     {
         SortedList sl = null;
@@ -1847,21 +1853,37 @@ public partial class ClientUI_Booking : ClientBasePage
             sl.Add(dropDownId, selectedItemIndex.ToString());
         SessionServices.Booking_DdlSelectedIndexes = sl;
     }
+
     private void ddlNoOfRoomsAvailable_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         //This is the event handler to handle the no. of rooms selected for booking
         DropDownList ddl = null;
         int iRoomsToBeBooked = 0, iRoomsLeftToBeBooked = 0, iRoomsBooked = 0, iPax = 0, iTotalPax = 0;
         string[] sName;
         string sCtrlName = "", sCategory = "", sType = "";
-        sCtrlName = GetPostBackControlID();
 
+        sCtrlName = GetPostBackControlID();
+        eventCounter++;
         if (sCtrlName != string.Empty)
         {
             Control ctrl = FindControl(sCtrlName);
             ddl = (DropDownList)ctrl;
             int.TryParse(ddl.SelectedItem.Text, out iRoomsToBeBooked);
+
+            if (addRoomEventingTrackers.Exists(t => string.Compare(t.ControlName, sCtrlName, StringComparison.OrdinalIgnoreCase) == 0 && (t.Value == iRoomsToBeBooked)))            
+            {
+                if (eventCounter == totalEventHandlersAdded)
+                {
+                    addRoomEventingTrackers.Clear();
+                }
+                return;
+            }
+            else
+            {
+                AddRoomEventingTracker tracker = new AddRoomEventingTracker { ControlName = sCtrlName, Value = iRoomsToBeBooked };
+                addRoomEventingTrackers.Add(tracker);
+            }
+
             sName = ddl.ID.Split('*');
             if (sName.Length > 0)
                 sCategory = sName[1].Trim().Replace("~", " ");
@@ -1872,7 +1894,6 @@ public partial class ClientUI_Booking : ClientBasePage
             SetRoomsWaitListeDataObject(tblMaster, sCategory, sType, iRoomsLeftToBeBooked, iBookingId);
             SetRoomStatus(tblMaster);
             SetRoomDropDownIndex();
-
         }
     }
 
@@ -2450,6 +2471,7 @@ public partial class ClientUI_Booking : ClientBasePage
         txtNoOfPersons.Text = string.Empty;
         txtNoOfPersons.Text = iTotalPax.ToString();
     }
+
     private void SetCheckBoxStatus(Control ParentControl, string ControlId, bool value)
     {
         //This Method is called when the dropdown of the rooms available is clicked on the booking screen. 
@@ -2463,7 +2485,6 @@ public partial class ClientUI_Booking : ClientBasePage
         if (ch != null)
             ch.Checked = value;
     }
-
 
     private BookingDTMail[] BookDetailsformail(int bookingId)
     {
@@ -2653,6 +2674,7 @@ public partial class ClientUI_Booking : ClientBasePage
             oBookingManager.DeleteBooking(iBookingId);
         }
     }
+
     private void CancelBooking()
     {
         if (base.ValidateIfCommandAllowed(Request.Url.ToString(), ENums.PageCommand.Cancel))
@@ -2910,7 +2932,6 @@ public partial class ClientUI_Booking : ClientBasePage
         SessionServices.DeleteSession(Constants._Booking_TotalNights);
         SessionServices.DeleteSession(Constants._Booking_RoomsStatus);
     }
-
 
     public double CalcaulateRates(int roomCatId, int roomtypeid, int pax)
     {
@@ -3438,6 +3459,11 @@ public partial class ClientUI_Booking : ClientBasePage
         #endregion
     }
     #endregion Helper Methods
+}
 
+public class AddRoomEventingTracker
+{
+    public string ControlName { get; set; }
+    public int Value { get; set; }
 }
 
