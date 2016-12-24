@@ -191,7 +191,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
-                string filename = uploadLogo.PostedFile.FileName;
+                string filename = GetFileName(uploadLogo.PostedFile.FileName);
                 if (uploadLogo.PostedFile.ContentLength > 0)
                 {
                     string uploadPath = "../RoomImages/";
@@ -203,15 +203,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                     uploadLogo.PostedFile.SaveAs(newpath);
                     UploadFileToFTP(newpath);
                     string newfilename = Path.GetFileName(newpath);
-                    blPackage.ImagePath = uploadPath + newfilename;
-
-
-                    //using (System.Net.WebClient client = new System.Net.WebClient())
-                    //{
-                    //    client.Credentials = new System.Net.NetworkCredential("UploadImage","Augurs@123");
-                    //    client.UploadFile("ftp.hrpws.com" + "/" + new FileInfo(uploadPath + newfilename).Name, "STOR", newfilename);
-                    //}
-
+                    blPackage.ImagePath = uploadPath + newfilename;                    
                 }
                 else
                 {
@@ -264,7 +256,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
-                string filename = uploadLogo.PostedFile.FileName;
+                string filename = GetFileName(uploadLogo.PostedFile.FileName);
                 if (uploadLogo.PostedFile.ContentLength > 0)
                 {
                     string uploadPath = "../RoomImages/";
@@ -313,6 +305,17 @@ public partial class Rate_PackageMaster : MasterBasePage
         }
     }
 
+    private string GetFileName(string fileName)
+    {
+        string extractedFileName = fileName;
+        if (!string.IsNullOrEmpty(fileName) && fileName.Contains(@"\"))
+        {
+            extractedFileName = Path.GetFileName(fileName);
+            //var arr = fileName.Split('\\');
+            //extractedFileName = arr.Last();
+        }
+        return extractedFileName;
+    }
 
     private void UploadFileToFTP(string filename)
     {

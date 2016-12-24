@@ -96,7 +96,7 @@ public partial class response : System.Web.UI.Page
                     return;
                 }
                 //    Response.Redirect("HotelInvoice.aspx");
-                MyNewMethod();
+                CrcValidator();
             }
             catch
             {
@@ -104,7 +104,7 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-    private void MyNewMethod()
+    private void CrcValidator()
     {
         try
         {
