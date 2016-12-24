@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 
 namespace FarHorizon.Reservations.DataBaseManager
@@ -25,7 +26,6 @@ namespace FarHorizon.Reservations.DataBaseManager
             : base(ConnectionString)
         {
 
-        }
-
+        }        
     }
 }
