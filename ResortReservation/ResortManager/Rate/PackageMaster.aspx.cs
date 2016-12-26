@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using FarHorizon.Reservations.Bases.BasePages;
+using System.Configuration;
 
 public partial class Rate_PackageMaster : MasterBasePage
 {
@@ -321,9 +322,13 @@ public partial class Rate_PackageMaster : MasterBasePage
     {
         FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create("ftp://ftp.adventureresortscruises.in/" + Path.GetFileName(filename) + "");
 
+
+        string uId = ConfigurationManager.AppSettings.Get("FtpUid");
+        string pwd = ConfigurationManager.AppSettings.Get("FtpPwd");
+
         ftpReq.UseBinary = true;
         ftpReq.Method = WebRequestMethods.Ftp.UploadFile;
-        ftpReq.Credentials = new NetworkCredential("UploadImage", "Augurs@123");
+        ftpReq.Credentials = new NetworkCredential(uId, pwd);
 
         byte[] b = File.ReadAllBytes(filename);
         ftpReq.ContentLength = b.Length;
@@ -556,7 +561,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 if (Convert.ToInt32(dtGetReturnedData.Rows[0][0]) > 0)
                 {
 
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Child package(s) exist for this package,delete them first')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Child package(s) exist for this package, delete them first')", true);
                 }
                 else
                 {
@@ -566,19 +571,19 @@ public partial class Rate_PackageMaster : MasterBasePage
             }
             if (res > 0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('package  Deleted')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package  Deleted')", true);
                 BindGridPackages();
             }
             else
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('package could not be  Deleted')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted')", true);
             }
 
         }
 
         catch
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('package could not be  Deleted')", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted')", true);
         }
     }
     protected void GridPackages_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -610,8 +615,6 @@ public partial class Rate_PackageMaster : MasterBasePage
                         txtItineraryLink.Text = dtGetReturnedData.Rows[0]["ItineraryLink"].ToString();
                         btnSbmit.Text = "Update";
                         BindNights(packgid);
-
-
                     }
                     else
                     {
