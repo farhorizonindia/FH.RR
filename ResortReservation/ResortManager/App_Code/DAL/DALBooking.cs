@@ -5,6 +5,7 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using FarHorizon.Reservations.Common;
 
 public class DALBooking
 {
@@ -32,10 +33,10 @@ public class DALBooking
 
             da.SelectCommand.Parameters.AddWithValue("@sBookingRef", obj._sBookingRef);
             da.SelectCommand.Parameters.AddWithValue("@dtStartDate", obj._dtStartDate);
-            da.SelectCommand.Parameters.AddWithValue("@dtEndDate",obj._dtEndDate);
-            da.SelectCommand.Parameters.AddWithValue("@iAccomTypeId",obj._iAccomTypeId);
+            da.SelectCommand.Parameters.AddWithValue("@dtEndDate", obj._dtEndDate);
+            da.SelectCommand.Parameters.AddWithValue("@iAccomTypeId", obj._iAccomTypeId);
             da.SelectCommand.Parameters.AddWithValue("@iAccomId", obj._iAccomId);
-            da.SelectCommand.Parameters.AddWithValue("@iBookingId",obj._iBookingId);
+            da.SelectCommand.Parameters.AddWithValue("@iBookingId", obj._iBookingId);
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
             da.SelectCommand.ExecuteReader();
@@ -43,10 +44,10 @@ public class DALBooking
             DataTable dt = new DataTable();
             da.Fill(dt);
             iBookingReferenceCount = Convert.ToInt32(da.SelectCommand.ExecuteScalar());
-    
-           
-            
-          
+
+
+
+
         }
         catch (Exception exp)
         {
@@ -56,7 +57,7 @@ public class DALBooking
         }
         finally
         {
-            
+
         }
         return iBookingReferenceCount;
     }
@@ -176,6 +177,7 @@ public class DALBooking
             return null;
         }
     }
+
     public DataTable GetMaxBookingId(BALBooking obj)
     {
         try
@@ -201,6 +203,59 @@ public class DALBooking
             return null;
         }
     }
+
+    public bool UpdateBookingStatus(int bookingId, BookingStatusTypes status)
+    {
+        try
+        {
+            SqlConnection cn = new SqlConnection(strCon);
+
+            string query = string.Empty;
+            int proposed = status == BookingStatusTypes.PROPOSED ? 1 : 0;
+            query = string.Format("update tblBooking set BookingStatusId = {0} and ProposedBooking = {1} where BookingId = {2}", (int)status, proposed, bookingId);
+
+            SqlCommand cmd = new SqlCommand(query, cn);
+            cmd.CommandType = CommandType.Text;
+            cn.Open();
+            int rowsEffected = cmd.ExecuteNonQuery();
+            cn.Close();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    public BALBooking GetBookingDetails(int bookingId)
+    {
+        try
+        {
+            SqlConnection cn = new SqlConnection(strCon);
+            SqlCommand cmd = new SqlCommand(string.Format("select BookingID, BookingCode, StartDate, EndDate from tblBooking where BookingId = {0}", bookingId), cn);
+            cmd.CommandType = CommandType.Text;
+            cn.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            BALBooking booking = new BALBooking
+            {
+                _iBookingId = reader.GetInt16(0),
+                BookingCode = reader.GetString(1),
+                _dtStartDate = reader.GetDateTime(2),
+                _dtEndDate = reader.GetDateTime(3)
+            };
+            reader.Close();
+            cn.Close();
+
+            return booking;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     public int getRoomCategory(BALBooking obj)
     {
         try
@@ -258,12 +313,15 @@ public class DALBooking
 
             da.InsertCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
-            int Status = da.InsertCommand.ExecuteNonQuery();
+            //int Status = da.InsertCommand.ExecuteNonQuery();
+            var returnValue = da.InsertCommand.ExecuteScalar();
             cn.Close();
-            if (Status > 0)
-                return Status;
-            else
-                return 0;
+
+            int bookingId = -1;
+            if (returnValue != null)
+                int.TryParse(returnValue.ToString(), out bookingId);
+
+            return bookingId;
         }
         catch (Exception)
         {
@@ -304,7 +362,7 @@ public class DALBooking
             return 0;
         }
     }
-  
+
     #endregion
 
 
@@ -322,7 +380,7 @@ public class DALBooking
             da.SelectCommand.Parameters.AddWithValue("@AgentId", obj._iAgentId);
 
             da.SelectCommand.Parameters.AddWithValue("@startdate", obj._dtStartDate);
-        
+
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
             da.SelectCommand.ExecuteReader();

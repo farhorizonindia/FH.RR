@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="PaymentGatewayResponse.aspx.cs" Inherits="response" EnableEventValidation="false" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script runat="server">
     protected void Button1_Click(object sender, EventArgs e)
@@ -7,7 +6,7 @@
 
     }
 </script>
-<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"> </script>    
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"> </script>
 <script type="text/javascript">
     function MyFunction() {
         document.getElementById("divDisplay").style.display = "none";
@@ -27,7 +26,6 @@
 
     <script type="text/javascript" src="resources/js/jquery.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
     <title>:: Invoice ::</title>
 
     <script type="text/javascript">
@@ -47,11 +45,12 @@
         ga('send', 'pageview');
     </script>
 
-    <style type="text/css">
+    <style>
         html, body {
             margin: 0;
             height: 100%;
         }
+
 
         .rightalign {
             text-align: center;
@@ -184,63 +183,63 @@
 </head>
 <body>
     <span id="DivInvoice" runat="server">
+
         <form id="form1" runat="server">
             <% 
-// This is landing page where you will receive response from airpay. 
-// The name of the page should be as per you have configured in airpay system
-// All columns are mandatory    
+                // This is landing page where you will receive response from airpay. 
+                // The name of the page should be as per you have configured in airpay system
+                // All columns are mandatory    
 
 
-// Generating Secure Hash
-// $mercid = 	Merchant Id, $username = username
-// You will find above two keys on the settings page, which we have defined here in config.php
+                // Generating Secure Hash
+                // $mercid = 	Merchant Id, $username = username
+                // You will find above two keys on the settings page, which we have defined here in config.php
+                try
+                {
+                    string username = ConfigurationManager.AppSettings.Get("username").ToString();
+                    string password = ConfigurationManager.AppSettings.Get("password").ToString();
+                    string secretKey = ConfigurationManager.AppSettings.Get("secret").ToString();
+                    string MID = ConfigurationManager.AppSettings.Get("mercid").ToString();
+                    string error = "";
+                    string TRANSACTIONSTATUS = Request.Params.Get("TRANSACTIONSTATUS").Trim();
+                    string APTRANSACTIONID = Request.Params.Get("APTRANSACTIONID").Trim();
+                    string MESSAGE = Request.Params.Get("MESSAGE").Trim();
+                    string TRANSACTIONID = Request.Params.Get("TRANSACTIONID").Trim();
+                    string AMOUNT = Request.Params.Get("AMOUNT").Trim();
+                    string ap_SecureHash = Request.Params.Get("ap_SecureHash").Trim();
+                    if (TRANSACTIONSTATUS == "" || APTRANSACTIONID == "" || TRANSACTIONID == "" || AMOUNT == "" || ap_SecureHash == "")
+                    {
+                        if (TRANSACTIONID == "") { error = "TRANSACTIONID"; }
+                        if (APTRANSACTIONID == "") { error = "APTRANSACTIONID"; }
+                        if (AMOUNT == "") { error = "AMOUNT"; }
+                        if (TRANSACTIONSTATUS == "") { error = "TRANSACTIONSTATUS"; }
+                        if (ap_SecureHash == "") { error = "ap_SecureHash"; }
+                    }
+                    //comparing Secure Hash with Hash sent by Airpay
+                    string sTemp = TRANSACTIONID + ":" + APTRANSACTIONID + ":" + AMOUNT + ":" + TRANSACTIONSTATUS + ":" + MESSAGE + ":" + MID + ":" + username;
+                    string strCRC = CRCCode(sTemp, ap_SecureHash, TRANSACTIONSTATUS, APTRANSACTIONID, MESSAGE, TRANSACTIONID, AMOUNT);
+                    if (error == "")
+                    {
+                        if (TRANSACTIONSTATUS == "200")
+                        {
+                            // Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Success</td></tr></table>";
 
-//try
-//{
-//    string username = ConfigurationManager.AppSettings.Get("username").ToString();
-//    string password = ConfigurationManager.AppSettings.Get("password").ToString();
-//    string secretKey = ConfigurationManager.AppSettings.Get("secret").ToString();
-//    string MID = ConfigurationManager.AppSettings.Get("mercid").ToString();
-//    string error = "";
-//    string TRANSACTIONSTATUS = Request.Params.Get("TRANSACTIONSTATUS").Trim();
-//    string APTRANSACTIONID = Request.Params.Get("APTRANSACTIONID").Trim();
-//    string MESSAGE = Request.Params.Get("MESSAGE").Trim();
-//    string TRANSACTIONID = Request.Params.Get("TRANSACTIONID").Trim();
-//    string AMOUNT = Request.Params.Get("AMOUNT").Trim();
-//    string ap_SecureHash = Request.Params.Get("ap_SecureHash").Trim();
-//    if (TRANSACTIONSTATUS == "" || APTRANSACTIONID == "" || TRANSACTIONID == "" || AMOUNT == "" || ap_SecureHash == "")
-//    {
-//        if (TRANSACTIONID == "") { error = "TRANSACTIONID"; }
-//        if (APTRANSACTIONID == "") { error = "APTRANSACTIONID"; }
-//        if (AMOUNT == "") { error = "AMOUNT"; }
-//        if (TRANSACTIONSTATUS == "") { error = "TRANSACTIONSTATUS"; }
-//        if (ap_SecureHash == "") { error = "ap_SecureHash"; }
-//    }
-//    //comparing Secure Hash with Hash sent by Airpay
-//    string sTemp = TRANSACTIONID + ":" + APTRANSACTIONID + ":" + AMOUNT + ":" + TRANSACTIONSTATUS + ":" + MESSAGE + ":" + MID + ":" + username;
-//    string strCRC = CRCCode(sTemp, ap_SecureHash, TRANSACTIONSTATUS, APTRANSACTIONID, MESSAGE, TRANSACTIONID, AMOUNT);
-//    if (error == "")
-//    {
-//        if (TRANSACTIONSTATUS == "200")
-//        {
-//            // Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Success</td></tr></table>";
-
-//        }
-//        else
-//        {
-//            //  Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Failed</td></tr></table>";
-//        }
-//    }
-//    else
-//    {
-//        //  Literal1.Text = "<table width='100%'><tr><td align='center'>Variable(s) " + error + " is/are empty.</td></tr></table>";
-//    }
-//}
-//catch
-//{
-//    //  Response.Write("Airpay response is unreadable.");
-//    // Response.Write("<br/>Booking Added");
-//}
+                        }
+                        else
+                        {
+                            //  Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Failed</td></tr></table>";
+                        }
+                    }
+                    else
+                    {
+                        //  Literal1.Text = "<table width='100%'><tr><td align='center'>Variable(s) " + error + " is/are empty.</td></tr></table>";
+                    }
+                }
+                catch
+                {
+                    //  Response.Write("Airpay response is unreadable.");
+                    // Response.Write("<br/>Booking Added");
+                }
             %>
 
             <center>
@@ -248,6 +247,7 @@
                     <asp:Literal ID="Literal1" runat="server"></asp:Literal>
                 </div>
             </center>
+
 
             <%--   <div>
             <table>
@@ -314,6 +314,7 @@
         </p>
             --%>
 
+
             <div class="Invoice_Wrp" id="mydiv">
                 <div class="Invoice_Wrp_header">
                     <div class="Invoice_header_L">
@@ -323,11 +324,17 @@
                         <div>New Delhi-110019</div>
                         <div>PAN: AAACF6111G</div>
                         <div>Service Tax No. AAACF6111GSD002</div>
+
+
                     </div>
                     <div class="Invoice_header_R">
+
                         <img style="margin-left: 31%;" src="http://adventureresortscruises.in/Cruise/booking/img_logo.png" alt="" />
+
+
                     </div>
                     <div class="clear"></div>
+
                 </div>
                 <!--Invoice_Wrp_header-->
                 <div class="Invoice_Wrp_body">
@@ -372,14 +379,24 @@
                                         <asp:Label ID="lbBookinDate" runat="server"></asp:Label></td>
                                 </tr>
                             </table>
+
+
+
+
                         </div>
+
                         <div class="clear"></div>
+
                     </div>
                     <!--PROFORMA_div-->
+
+
+
                     <div class="Invoice_Package">
                         <strong><%--Package: 7 nights 8 days Upstream Cruise, 7 nights--%>
                             <asp:Label ID="lbpackageName" runat="server" Font-Underline="True"></asp:Label></strong>
                         <div class="clear"></div>
+
                         <div class="Invoice_Package_L">
                             <div>
                                 <asp:Label ID="lblVessel" runat="server"></asp:Label><%-- MV Mahabaahu--%>
@@ -388,8 +405,11 @@
                             <div>
                                 <asp:Label ID="lbStrtEnd" runat="server" Text=""></asp:Label>
                             </div>
+
                         </div>
                         <div class="Invoice_Package_R">
+
+
                             <div>
                                 <div>
                                     <table style="width: 100%">
@@ -398,7 +418,11 @@
                                             <td style="text-align: left">
                                                 <asp:Label ID="lblArrvDate" runat="server"></asp:Label></td>
                                         </tr>
+
                                     </table>
+
+
+
                                 </div>
                                 <div>
                                     <table style="width: 100%">
@@ -407,14 +431,21 @@
                                             <td style="text-align: left">
                                                 <asp:Label ID="lblDepartDate" runat="server"></asp:Label></td>
                                         </tr>
+
                                     </table>
+
+
+
                                 </div>
+
                             </div>
                             <!--Invoice_Package_R-->
+
                             <div class="clear"></div>
                         </div>
                     </div>
                     <!--Invoice_Package-->
+
                     <div class="Invoice_Wrp_Tbl" style="display: table-cell; padding-top: 30px; padding-bottom: 30px; width: 900px;">
                         <%--<table width="100%" border="1" cellspacing="0" cellpadding="5">
                         <tr>
@@ -470,32 +501,48 @@
                             <td>979 </td>
                         </tr>
                     </table>--%>
+
                         <asp:GridView ID="gdvCruiseRooms" DataKeyNames="Bed Configuration,RoomNumber" runat="server" AutoGenerateColumns="False" Width="100%" ShowFooter="True" OnRowDataBound="gdvCruiseRooms_RowDataBound">
                             <Columns>
+
+
+
                                 <asp:BoundField DataField="categoryName" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="Particulars" />
                                 <asp:BoundField DataField="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Pax" />
                                 <asp:BoundField DataField="Price" HeaderText="Rate in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="166px" />
                                 <asp:BoundField DataField="Price" HeaderText="Total in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="118px" />
+
+
                             </Columns>
                             <FooterStyle BackColor="#CCCCCC" CssClass="ralign" />
                             <HeaderStyle BackColor="#CCCCCC" />
                         </asp:GridView>
+
                         <asp:GridView ID="gdvSelectedRooms" runat="server" Width="100%" AutoGenerateColumns="false" ShowFooter="True" Font-Size="Medium">
                             <Columns>
+
                                 <asp:BoundField DataField="categoryName" HeaderText="Particulars" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" />
                                 <asp:BoundField DataField="Pax" HeaderText="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
                                 <asp:BoundField DataField="Price" HeaderText="Rate in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="166px" />
                                 <asp:BoundField DataField="Total" HeaderText="Total in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="118px" />
+
+
                             </Columns>
                             <FooterStyle BackColor="#CCCCCC" CssClass="ralign" />
                             <HeaderStyle BackColor="#CCCCCC" />
+
                         </asp:GridView>
+
                     </div>
 
                     <!--Invoice_Wrp_Tbl-->
+
                     <strong>Amount in Words :</strong> <%--INR Nine Hundred and Seventy Nine Only--%>
                     <asp:Label ID="lbRuppeeinwords" runat="server" Text="......"></asp:Label>
                     <div class="Payment_details">
+
+
+
                         <%--     <div class="Payment_details_L">
                         <div></div>
             <div></div>
@@ -504,7 +551,9 @@
         </div>
         <!--Payment_details_L-->
         <div class="Payment_details_R">
-         <div>             
+         <div>
+
+             
          </div>
             <div>
                 </div>
@@ -512,34 +561,49 @@
                        </strong></div>
             <div></div>
         </div>--%>
+
                         <div><strong>&nbsp;Payment details:</strong></div>
                         <table style="width: 550px">
                             <tr style="display: none">
                                 <td class="auto-style3">Total Amout(after adding VAT(4.50%)(in INR)</td>
                                 <td class="ralign">
                                     <asp:Label ID="lblTotAMt" runat="server"></asp:Label></td>
+
+
                             </tr>
                             <tr>
                                 <td class="auto-style4">Total Amout Paid (in INR)</td>
                                 <td class="ralign">
                                     <asp:Label ID="lblTotPaid" runat="server"></asp:Label></td>
+
+
                             </tr>
+
                             <tr>
                                 <td class="auto-style5">Total Due (In INR)</td>
                                 <td class="ralign">
                                     <asp:Label ID="lblBalance" runat="server"></asp:Label></td>
+
+
                             </tr>
+
                             <tr>
                                 <td class="auto-style4">Balance Due On</td>
                                 <td class="ralign">
                                     <asp:Label ID="lbBalanceDueIn" runat="server"></asp:Label></td>
+
+
                             </tr>
+
                         </table>
+
+
 
                         <!--Payment_details_R-->
                         <div class="clear"></div>
                     </div>
                     <!--Payment_details-->
+
 
                     <!--Invoice_Wrp_body-->
                     <div class="Invoice_Wrp_footer">
@@ -553,6 +617,8 @@
             </div>
             <%-- <input type="button" value="Print" onclick="PrintElem('#mydiv')" />--%>
             <div style="margin-top: 100px" style="display: dwew;">
+
+
                 <center>
                     <div id="divDisplay">
                         <asp:Button ID="btnBack" runat="server" Text="Home" OnClick="btnBack_Click" />
@@ -560,7 +626,11 @@
                     </div>
                     <%--  <asp:Button ID="btnPrint" runat="server" Text="Print" OnClientClick="MyFunction()"  />--%>
                 </center>
+
             </div>
+
+
+
         </form>
     </span>
 </body>

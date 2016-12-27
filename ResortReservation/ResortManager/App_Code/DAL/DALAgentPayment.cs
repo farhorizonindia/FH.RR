@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Data;
-
-using FarHorizon.Reservations.Common;
-
-
-using FarHorizon.Reservations.DataBaseManager;
-using FarHorizon.Reservations.Common.DataEntities.Masters;
+using System.Data.SqlClient;
 public class DALAgentPayment
 {
     string strCon = string.Empty;

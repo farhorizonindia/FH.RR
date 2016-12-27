@@ -323,9 +323,9 @@
                                 <div class="text-right btncox" id="ButtonsDiv" runat="server">
                                     <asp:Button ID="Button1" runat="server" CssClass="btn btn-info rightMargin15 font16 pricePanelBtn" Text="Back" OnClick="Button1_Click" />
                                     &nbsp;&nbsp;
-                    <asp:Button ID="Button2" runat="server" CssClass="btn btn-info rightMargin15 font16 pricePanelBtn" Text="Next" OnClick="Button2_Click" />
+                                    <asp:Button ID="Button2" runat="server" CssClass="btn btn-info rightMargin15 font16 pricePanelBtn" Text="Next" OnClick="Button2_Click" />
                                     &nbsp;&nbsp;
-                    <asp:Button ID="Button3" runat="server" CssClass="btn btn-info rightMargin15 font16 pricePanelBtn" Text="Reload" OnClick="Button3_Click" />
+                                    <asp:Button ID="Button3" runat="server" CssClass="btn btn-info rightMargin15 font16 pricePanelBtn" Text="Reload" OnClick="Button3_Click" />
                                 </div>
                                 <asp:GridView ID="GridView1" Visible="false" runat="server"
                                     OnRowDataBound="GridView1_RowDataBound" ShowFooter="True" CellPadding="4" ForeColor="#333333" GridLines="Both">

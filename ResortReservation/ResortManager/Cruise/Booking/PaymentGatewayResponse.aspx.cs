@@ -1,18 +1,27 @@
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Spire.Pdf;
-using Spire.Pdf.HtmlConverter;
 using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.Collections;
+using System.Web;
+using System.Web.UI;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
+using System.Web.UI.WebControls;
+using System.Text;
+using System.Diagnostics;
+using System.Globalization;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
+using System.Security.Cryptography;
 using System.Net.Mail;
-using System.Text;
+using System.Configuration;
+using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
 using System.Threading;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
+using System.Net;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using FarHorizon.Reservations.Common;
 
 public partial class response : System.Web.UI.Page
 {
@@ -32,7 +41,6 @@ public partial class response : System.Web.UI.Page
     SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
 
     DataTable dtbkdetails;
-
     int iagentid = 0;
     int iAccomId = 0;
     int iaccomtypeid = 0;
@@ -52,14 +60,11 @@ public partial class response : System.Web.UI.Page
             dated.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
         }
 
-
         lblBuyerName.Text = Session["InvName"].ToString();
         if (Session["Address"] != null)
         {
             lblBuyerAddress.Text = Session["Address"].ToString();
         }
-
-        //GenrateBill("a");
 
         if (Session["Hotel"] != null)
         {
@@ -84,19 +89,15 @@ public partial class response : System.Web.UI.Page
                 blsr._sBookingRef = bookref;
                 blsr._dtStartDate = chkin;
                 blsr._dtEndDate = chkout;
-
                 blsr._iAccomTypeId = iaccomtypeid;
                 blsr._iAccomId = iAccomId;
 
                 int iBRC = dlsr.GetBookingReferenceCount(blsr);
-
                 if (iBRC > 0)
                 {
                     System.Web.UI.ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "AlertBox", "alert('The Booking Reference mentioned by you is not unique. Please enter a different reference number.');", true);
                     return;
                 }
-                //    Response.Redirect("HotelInvoice.aspx");
-                CrcValidator();
             }
             catch
             {
@@ -104,123 +105,9 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-    private void CrcValidator()
-    {
-        try
-        {
-            string username = ConfigurationManager.AppSettings.Get("username").ToString();
-            string password = ConfigurationManager.AppSettings.Get("password").ToString();
-            string secretKey = ConfigurationManager.AppSettings.Get("secret").ToString();
-            string MID = ConfigurationManager.AppSettings.Get("mercid").ToString();
-            string error = "";
-            string TRANSACTIONSTATUS = Request.Params.Get("TRANSACTIONSTATUS").Trim();
-            string APTRANSACTIONID = Request.Params.Get("APTRANSACTIONID").Trim();
-            string MESSAGE = Request.Params.Get("MESSAGE").Trim();
-            string TRANSACTIONID = Request.Params.Get("TRANSACTIONID").Trim();
-            string AMOUNT = Request.Params.Get("AMOUNT").Trim();
-            string ap_SecureHash = Request.Params.Get("ap_SecureHash").Trim();
-            if (TRANSACTIONSTATUS == "" || APTRANSACTIONID == "" || TRANSACTIONID == "" || AMOUNT == "" || ap_SecureHash == "")
-            {
-                if (TRANSACTIONID == "") { error = "TRANSACTIONID"; }
-                if (APTRANSACTIONID == "") { error = "APTRANSACTIONID"; }
-                if (AMOUNT == "") { error = "AMOUNT"; }
-                if (TRANSACTIONSTATUS == "") { error = "TRANSACTIONSTATUS"; }
-                if (ap_SecureHash == "") { error = "ap_SecureHash"; }
-            }
-            //comparing Secure Hash with Hash sent by Airpay
-            string sTemp = TRANSACTIONID + ":" + APTRANSACTIONID + ":" + AMOUNT + ":" + TRANSACTIONSTATUS + ":" + MESSAGE + ":" + MID + ":" + username;
-            string strCRC = CRCCode(sTemp, ap_SecureHash, TRANSACTIONSTATUS, APTRANSACTIONID, MESSAGE, TRANSACTIONID, AMOUNT);
-            if (error == "")
-            {
-                if (TRANSACTIONSTATUS == "200")
-                {
-                    // Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Success</td></tr></table>";
-
-                }
-                else
-                {
-                    //  Literal1.Text = "<table width='100%'><tr width='100%'><td align='left' width='50%'>Transaction Id</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Airpay Transaction Id</td><td align='left' width='50%' style='color:black;'>" + APTRANSACTIONID + "</td></tr><tr width='100%'><td align='left' width='50%'>Amount</td><td align='left' width='50%' style='color:black;'>" + AMOUNT + "</td></tr><tr width='100%'><td align='left' width='50%'>Transaction Status Code</td><td align='left' width='50%' style='color:black;'>" + TRANSACTIONSTATUS + "</td></tr><tr width='100%'><td align='left' width='50%'>Message</td><td align='left' width='50%' style='color:black;'>" + MESSAGE + "</td></tr><tr width='100%'><td align='left' width='50%'>Status</td><td align='left' width='50%' style='color:green;'>Failed</td></tr></table>";
-                }
-            }
-            else
-            {
-                //  Literal1.Text = "<table width='100%'><tr><td align='center'>Variable(s) " + error + " is/are empty.</td></tr></table>";
-            }
-        }
-        catch
-        {
-            //  Response.Write("Airpay response is unreadable.");
-            // Response.Write("<br/>Booking Added");
-        }
-    }
-
-    public void sendMail(string TRANSACTIONID)
-    {
-        try
-        {
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
-            con.Open();
-            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo',NoOfNights   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
-            SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
-            DataTable dtGetPackageDetails = new DataTable();
-            adp.Fill(dtGetPackageDetails);
-
-            lbpackageName.Text = "Package: " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + ", " + dtGetPackageDetails.Rows[0]["NoOfNights"].ToString() + " Nights";
-            lbStrtEnd.Text = "Cruise starts from " + dtGetPackageDetails.Rows[0]["BoardFrom"].ToString() + "  and ends at " + dtGetPackageDetails.Rows[0]["BoardTo"].ToString();
-
-            con.Close();
-
-            // MailMessage mail = new MailMessage();
-            // SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
-
-            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
-            if (Session["AgentMailId"] != null)
-            {
-                mail.To.Add(Session["AgentMailId"].ToString());
-            }
-            else
-            {
-                mail.To.Add(Session["CustMailId"].ToString());
-            }
-            blsr.action = "getmaxbookingcode";
-            DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
-
-            string bref = Session["BookingRef"].ToString();
-
-            string l = Session["SubInvName"].ToString();
-            mail.Subject = "Reservation - " + Session["SubInvName"].ToString() + " - " + dtbkcode.Rows[0][0].ToString() + "";
-
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append("<div>");
-            sb.Append("<div>Booking No:" + dtbkcode.Rows[0].ItemArray[0].ToString() + "</div>  <div> Date of Booking: " + Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy") + " </div> <div><br/> </div> <div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div> Namaskar! Greetings from Assam, India!</div> <div><br/> </div><div> Thank you for booking " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + " on MV Mahabaahu.</div> <div><br/></div> ");
-            sb.Append(" <div>The cruise showcases Living, Natural and Cultural History where silk and cotton vie your attention. A cup of famous Assam tea beckons you over to the little known north eastern part of India.</div> <div><br/> </div> <div> This pristine destination unfolds the history of an ancient civilisation of the Tibeto - Burman Ahoms who reigned in the region for more than 600 years. The river brings you up close to the simplistic ways of a speckled tribal and multiracial life. </div><div> We take this opportunity to inform you that the final confirmation for the cruise is to be completed prior to day - 90. You will receive an automated e - reminder on day - 110 and another on day - 100. Please ignore if paid.<br/> </div>  <div><br/> </div>  <div> We look forward to your confirmation.</div> <div><br/>   </div> <div> Appreciations!</div> <div><br/>  </div> <div> TheMahabaahu Team!</div> ");
-            sb.Append("</div>");
-            sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
-            sb.Append("<div>The booking policy of the cruise can be referred to at<a href='http://www.mahabaahucruiseindia.com/cruise-policy' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=en&amp;q=http://www.mahabaahucruiseindia.com/cruise-policy&amp;source=gmail&amp;ust=1470139247045000&amp;usg=AFQjCNH3vyzjL507K4FspRY6TihAfogUug'>http://www.mahabaahucruiseindia.com/cruise-policy </a>.</div><div><br/></div><div> Enclosure:</div><div> Invoice for your booking is attached with this email.</div> ");
-
-            mail.IsBodyHtml = true;
-            mail.Body = sb.ToString();
-            mail.CC.Add("reservations@adventureresortscruises.com");
-
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
-            SmtpServer.EnableSsl = false;
-
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
-
-        }
-        catch (Exception ex)
-        {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
-        }
-    }
-
     protected override void Render(HtmlTextWriter writer)
     {
         if (ViewState["sentMail"] == "0")
-        //if (ViewState["sentMail"] != null && ViewState["sentMail"].ToString() == "0")
         {
             Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
             PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
@@ -294,13 +181,52 @@ public partial class response : System.Web.UI.Page
         return newFullPath;
     }
 
+
+    /// <summary>
+    /// This method will move the booking from Proposed state to Booked state.
+    /// As payment is confirmed. Else the booking will stay as proposed booking for back-office operations.
+    /// </summary>
+    private void BookCruiseBooking()
+    {
+        try
+        {
+            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            DALBooking dlr = new DALBooking();
+            dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
+
+            BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
+            ShowCruiseBookingDetails(bookingDetail);
+        }
+        catch
+        {
+        }
+    }
+
+    private void ShowCruiseBookingDetails(BALBooking bookingDetail)
+    {
+        lbBookingNo.Text = bookingDetail.BookingCode;
+
+        DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+        gdvCruiseRooms.DataSource = GridRoomPaxDetail;
+        gdvCruiseRooms.DataBind();
+        // hidecolumns();
+
+        lblacm.Text = "M V Mahabaahu";
+        lblVessel.Text = "Vessel: ";
+        lbPax.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Pax)", string.Empty)).ToString();
+        //    lblTotoAmt.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
+
+        lblDepartDate.Text = bookingDetail._dtStartDate.ToString("d MMMM, yyyy");
+        lblArrvDate.Text = bookingDetail._dtEndDate.ToString("d MMMM, yyyy");
+        hfBookingId.Value = bookingDetail._iBookingId.ToString();
+    }
+
     private void InsertParentTableData()
     {
         try
         {
             if (Session["UserCode"] != null)
             {
-
                 blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
             }
             else
@@ -314,9 +240,7 @@ public partial class response : System.Web.UI.Page
                 {
                     blsr.CustomerId = "0";
                 }
-
             }
-
 
             blsr.action = "GetDepartureDetails";
             blsr._iBookingId = 0;
@@ -336,9 +260,7 @@ public partial class response : System.Web.UI.Page
             blsr._proposedBooking = false;
             blsr._chartered = false;
 
-
             Session.Add("tblBookingBAL", blsr);
-
             int iBRC = dlsr.GetBookingReferenceCount(blsr);
 
             if (iBRC > 0)
@@ -350,7 +272,6 @@ public partial class response : System.Web.UI.Page
         }
         catch
         {
-
         }
     }
 
@@ -390,12 +311,12 @@ public partial class response : System.Web.UI.Page
 
             BookedId = MaxBookingId;
             blsr._iBookingId = MaxBookingId;
+
             DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
 
             gdvCruiseRooms.DataSource = GridRoomPaxDetail;
             gdvCruiseRooms.DataBind();
             // hidecolumns();
-
 
             lblacm.Text = "M V Mahabaahu";
             lblVessel.Text = "Vessel: ";
@@ -410,7 +331,6 @@ public partial class response : System.Web.UI.Page
             {
                 for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
                 {
-
                     blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
                     blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
                     blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());
@@ -424,7 +344,9 @@ public partial class response : System.Web.UI.Page
                     blsr._Paid = Convert.ToDouble(Session["Paid"]);
                     int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
                     if (GetQueryResponse > 0)
+                    {
                         LoopInsertStatus++;
+                    }
                     else
                     {
                         //do nothing
@@ -464,10 +386,6 @@ public partial class response : System.Web.UI.Page
             UInt32 Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
             UInt32 Output1 = UInt32.Parse(key);
 
-            //##################### - Amit
-            Output1 = Output;
-            //###########################
-            
             if (Output1 == Output)
             {
                 if (Session["Hotel"] != null)
@@ -489,7 +407,8 @@ public partial class response : System.Web.UI.Page
                 }
                 else
                 {
-                    lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
+                    lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##"); ;
+
                     GenrateBill(TRANSACTIONID);
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
                     con.Open();
@@ -501,25 +420,19 @@ public partial class response : System.Web.UI.Page
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
                         FiilPackage();
                     }
-
                     DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+
                     gdvCruiseRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b>";
                     gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblTotAMt.Text = Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-
-
                     lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
 
-                    //gdvCruiseRooms.FooterRow.Cells[1].Text = "Total </br> Service Tax @ 4.50%";
-                    //gdvCruiseRooms.FooterRow.Cells[3].Text = Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
-                    //lblTotAMt.Text = (Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString();
-                    //lblBalance.Text = (Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text)).ToString();
                     Session["BookedRooms"] = null;
                     Session["PackageId"] = null;
                     Session["BookingRef"] = null;
                 }
-                lbRuppeeinwords.Text = NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
+                lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
             }
             else
             {
@@ -556,73 +469,18 @@ public partial class response : System.Web.UI.Page
 
     private void GenrateBill(string transactionId)
     {
-        this.InsertParentTableData();
-        this.InsertChildTableData();
+        //this.InsertParentTableData();
+        //this.InsertChildTableData();
+
+        BookCruiseBooking();
         sendMail(transactionId);
     }
 
-    public static string NumbersToWords(int inputNumber)
+    private void GenrateBill1(string transactionId)
     {
-        int inputNo = inputNumber;
-
-        if (inputNo == 0)
-            return "Zero";
-
-        int[] numbers = new int[4];
-        int first = 0;
-        int u, h, t;
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        if (inputNo < 0)
-        {
-            sb.Append("Minus ");
-            inputNo = -inputNo;
-        }
-
-        string[] words0 = {"" ,"One ", "Two ", "Three ", "Four ",
-            "Five " ,"Six ", "Seven ", "Eight ", "Nine "};
-        string[] words1 = {"Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ",
-            "Fifteen ","Sixteen ","Seventeen ","Eighteen ", "Nineteen "};
-        string[] words2 = {"Twenty ", "Thirty ", "Forty ", "Fifty ", "Sixty ",
-            "Seventy ","Eighty ", "Ninety "};
-        string[] words3 = { "Thousand ", "Lakh ", "Crore " };
-
-        numbers[0] = inputNo % 1000; // units
-        numbers[1] = inputNo / 1000;
-        numbers[2] = inputNo / 100000;
-        numbers[1] = numbers[1] - 100 * numbers[2]; // thousands
-        numbers[3] = inputNo / 10000000; // crores
-        numbers[2] = numbers[2] - 100 * numbers[3]; // lakhs
-
-        for (int i = 3; i > 0; i--)
-        {
-            if (numbers[i] != 0)
-            {
-                first = i;
-                break;
-            }
-        }
-        for (int i = first; i >= 0; i--)
-        {
-            if (numbers[i] == 0) continue;
-            u = numbers[i] % 10; // ones
-            t = numbers[i] / 10;
-            h = numbers[i] / 100; // hundreds
-            t = t - 10 * h; // tens
-            if (h > 0) sb.Append(words0[h] + "Hundred ");
-            if (u > 0 || t > 0)
-            {
-                if (h > 0 || i == 0) sb.Append("and ");
-                if (t == 0)
-                    sb.Append(words0[u]);
-                else if (t == 1)
-                    sb.Append(words1[u]);
-                else
-                    sb.Append(words2[t - 2] + words0[u]);
-            }
-            if (i != 0) sb.Append(words3[i - 1]);
-        }
-        return "INR " + sb.ToString().TrimEnd() + " Only";
+        this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
+        this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
+        sendMail1(transactionId);
     }
 
     public void sendMail1(string TRANSACTIONID)
@@ -681,11 +539,71 @@ public partial class response : System.Web.UI.Page
         }
     }
 
+    public void sendMail(string TRANSACTIONID)
+    {
+        try
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
+            con.Open();
+            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo',NoOfNights   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+            SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
+            DataTable dtGetPackageDetails = new DataTable();
+            adp.Fill(dtGetPackageDetails);
+
+            lbpackageName.Text = "Package: " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + ", " + dtGetPackageDetails.Rows[0]["NoOfNights"].ToString() + " Nights";
+            lbStrtEnd.Text = "Cruise starts from " + dtGetPackageDetails.Rows[0]["BoardFrom"].ToString() + "  and ends at " + dtGetPackageDetails.Rows[0]["BoardTo"].ToString();
+
+            con.Close();
+
+            // MailMessage mail = new MailMessage();
+            // SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
+
+            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
+            if (Session["AgentMailId"] != null)
+            {
+                mail.To.Add(Session["AgentMailId"].ToString());
+            }
+            else
+            {
+                mail.To.Add(Session["CustMailId"].ToString());
+            }
+            blsr.action = "getmaxbookingcode";
+            DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
+
+            string bref = Session["BookingRef"].ToString();
+
+            string l = Session["SubInvName"].ToString();
+            mail.Subject = "Reservation - " + Session["SubInvName"].ToString() + " - " + dtbkcode.Rows[0][0].ToString() + "";
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("<div>");
+            sb.Append("<div>Booking No:" + dtbkcode.Rows[0].ItemArray[0].ToString() + "</div>  <div> Date of Booking: " + Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy") + " </div> <div><br/> </div> <div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div> Namaskar! Greetings from Assam, India!</div> <div><br/> </div><div> Thank you for booking " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + " on MV Mahabaahu.</div> <div><br/></div> ");
+            sb.Append(" <div>The cruise showcases Living, Natural and Cultural History where silk and cotton vie your attention. A cup of famous Assam tea beckons you over to the little known north eastern part of India.</div> <div><br/> </div> <div> This pristine destination unfolds the history of an ancient civilisation of the Tibeto - Burman Ahoms who reigned in the region for more than 600 years. The river brings you up close to the simplistic ways of a speckled tribal and multiracial life. </div><div> We take this opportunity to inform you that the final confirmation for the cruise is to be completed prior to day - 90. You will receive an automated e - reminder on day - 110 and another on day - 100. Please ignore if paid.<br/> </div>  <div><br/> </div>  <div> We look forward to your confirmation.</div> <div><br/>   </div> <div> Appreciations!</div> <div><br/>  </div> <div> TheMahabaahu Team!</div> ");
+            sb.Append("</div>");
+            sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
+            sb.Append("<div>The booking policy of the cruise can be referred to at<a href='http://www.mahabaahucruiseindia.com/cruise-policy' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=en&amp;q=http://www.mahabaahucruiseindia.com/cruise-policy&amp;source=gmail&amp;ust=1470139247045000&amp;usg=AFQjCNH3vyzjL507K4FspRY6TihAfogUug'>http://www.mahabaahucruiseindia.com/cruise-policy </a>.</div><div><br/></div><div> Enclosure:</div><div> Invoice for your booking is attached with this email.</div> ");
+
+            mail.IsBodyHtml = true;
+            mail.Body = sb.ToString();
+            mail.CC.Add("reservations@adventureresortscruises.com");
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
+            SmtpServer.EnableSsl = false;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
+        }
+        catch (Exception ex)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
+        }
+    }
+
     private int InsertBookingTableData(int acmid, int acmtpid, int agid, string bkref, DateTime cin, DateTime cout, DataTable vsdetails)
     {
         try
         {
-
             dtbkdetails = new DataTable();
             dtbkdetails = Session["Bookingdt"] as DataTable;
 
@@ -716,7 +634,6 @@ public partial class response : System.Web.UI.Page
             int GetQueryResponse = dlsr.AddParentBookingDetail(blsr);
             if (GetQueryResponse > 0)
                 return 1;
-
             else
                 return 0;
         }
@@ -739,7 +656,6 @@ public partial class response : System.Web.UI.Page
 
             int MaxBookingId = Convert.ToInt32(dtmaxId.Rows[0].ItemArray[0].ToString());
 
-
             blsr.action = "getmaxbookingcode";
             DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
 
@@ -752,7 +668,6 @@ public partial class response : System.Web.UI.Page
 
             for (int LoopCounter = 0; LoopCounter < dtbkdetails.Rows.Count; LoopCounter++)
             {
-
                 blsr._dtStartDate = cin;
                 blsr._dtEndDate = cout;
                 blsr._iPaxStaying = Convert.ToInt32(dtbooking.Rows[LoopCounter][3].ToString());
@@ -767,6 +682,7 @@ public partial class response : System.Web.UI.Page
 
                 blsr._Amt = Convert.ToDecimal(arr[1]);
                 blsr.PaymentId = Session["BookingPayId"].ToString();
+
                 int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
 
                 if (GetQueryResponse > 0)
@@ -785,14 +701,12 @@ public partial class response : System.Web.UI.Page
             Bookingdt = new DataTable();
             Bookingdt = Session["Bookingdt"] as DataTable;
 
-
             gdvSelectedRooms.DataSource = Bookingdt;
             gdvSelectedRooms.DataBind();
 
             gdvSelectedRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b> ";
 
             gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
-
 
             lbPax.Text = Convert.ToInt32(Bookingdt.Compute("SUM(Pax)", "[Pax] > 0")).ToString(); ;
             lblTotAMt.Text = Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##");
@@ -814,17 +728,7 @@ public partial class response : System.Web.UI.Page
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
             return 0;
-
         }
-
-
-    }
-
-    private void GenrateBill1(string transactionId)
-    {
-        this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
-        this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
-        sendMail1(transactionId);
     }
 
     protected void gdvCruiseRooms_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -833,12 +737,8 @@ public partial class response : System.Web.UI.Page
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-
-
                 e.Row.Cells[0].Text = e.Row.Cells[0].Text + " (" + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["Bed Configuration"].ToString() + "), Cabin no " + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["RoomNumber"].ToString();
-
             }
-
         }
         catch
         { }
@@ -854,7 +754,6 @@ public partial class response : System.Web.UI.Page
         try
         {
             btnBack.Visible = false;
-            //  btnPrint.Visible = false;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "MyFunction()", true);
         }
         catch

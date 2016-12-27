@@ -45,7 +45,7 @@
         // Load the departure dates and lead in prices
         */
         function LeadInPricePanel() {
-            PageMethods.LeadInPricePanel(productId, LeadInPricePanelOK, LeadInPricePanelErr);
+            //PageMethods.LeadInPricePanel(productId, LeadInPricePanelOK, LeadInPricePanelErr);
         }
 
         function LeadInPricePanelOK(result) {
@@ -312,26 +312,29 @@
             $("#LoadingDeckplan").html(result);
         }
 
-        $('#Cruises_PriceTable').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bSort": false,
-            "bProcessing": false,
-            "bInfo": false,
-            "scrollX": false,
-            "iDisplayLength": 100,
-            "language": {
-                "decimal": ".",
-                "thousands": ","
-            }
-        });
+        //$('#Cruises_PriceTable').dataTable({
+        //    "bPaginate": false,
+        //    "bLengthChange": false,
+        //    "bFilter": false,
+        //    "bSort": false,
+        //    "bProcessing": false,
+        //    "bInfo": false,
+        //    "scrollX": false,
+        //    "iDisplayLength": 100,
+        //    "language": {
+        //        "decimal": ".",
+        //        "thousands": ","
+        //    }
+        //});
 
         function CruiseInformation(DepartureId) {
             PageMethods.PricePanel(DepartureId, CruiseInformationOK, CruiseInformationErr);
         }
 
         function CruiseInformationOK(result) {
+            if ($("#Cruises_PriceTable").length <= 0)
+                return;
+
             var dataTable = $("#Cruises_PriceTable").dataTable();
             var CruiseInformationArray = [];
             var item = jQuery.parseJSON(result)

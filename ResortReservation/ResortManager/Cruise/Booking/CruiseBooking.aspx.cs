@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Globalization;
 
 public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 {
@@ -22,6 +18,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     DataTable dtGetReturnedData;
     BALPackageRateCard blRate = new BALPackageRateCard();
     DALPackageRateCard dlRate = new DALPackageRateCard();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         BindCruiseRoomRates();
@@ -29,10 +26,9 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         {
             try
             {
-              
                 ImageButton imgbtn = (ImageButton)GridRoomPaxDetail.Rows[k].FindControl("imgbtnDelete");
                 ScriptManager.GetCurrent(this).RegisterPostBackControl(imgbtn);
-            
+
             }
             catch
             {
@@ -41,8 +37,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-
-
             Session.Add("PackageId", Request.QueryString["PackId"].ToString());
             ddlConvert.SelectedIndex = 1;
             ddlpax1rm.SelectedIndex = 2;
@@ -51,7 +45,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             if (Session["BookedRooms"] != null)
             {
                 ViewState["VsRoomDetails"] = Session["BookedRooms"];
-               
+
                 bindRoomRates();
 
                 GridRoomPaxDetail.DataSource = (DataTable)Session["BookedRooms"];
@@ -65,17 +59,10 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 {
                     ButtonsDiv.Style.Add("display", "none");
                 }
-
                 calculateTotal();
-
             }
 
-
-         
-           
-          
-   
-            if (Session["UserCode"] != null||Session["CustomerCode"]!=null)
+            if (Session["UserCode"] != null || Session["CustomerCode"] != null)
             {
                 lnkLogout.Visible = true;
             }
@@ -85,11 +72,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             }
 
         }
-ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockArea();", true);
+        ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockArea();", true);
     }
-
-  
-
 
     private void setImageMap()
     {
@@ -99,10 +83,9 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
 
             dtRoomsdata = bindroomddl();
             PolygonHotSpot hotSpot;
-           
+
             foreach (DataRow dr in dtRoomsdata.Rows)
             {
-
                 hotSpot = new PolygonHotSpot();
                 if (dr["BookedStatus"].ToString() == "Available")
                 {
@@ -111,13 +94,11 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 else
                 {
                     hotSpot.HotSpotMode = HotSpotMode.Inactive;
-                   
-                   
                 }
-      
+
                 hotSpot.AlternateText = dr["BookedStatus"].ToString();
                 hotSpot.Coordinates = dr["Coordinates"].ToString();
-              
+
                 hotSpot.PostBackValue = dr["RoomNo"].ToString();
                 ImageMap1.HotSpots.Add(hotSpot);
             }
@@ -127,33 +108,28 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
         }
     }
 
-  
+
     #region UDF
     public void bindRoomRates()
     {
         try
         {
-
             if (Session["UserCode"] != null)
             {
-
                 blsr.action = "RoomRates";
                 blsr.AgentId = Convert.ToInt32(Session["UserCode"].ToString());
             }
             else
             {
-
                 blsr.action = "RoomRatesCustAgent";
             }
             blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
 
             blsr.PackageId = Session["PackId"].ToString();
-           
+
             blsr.totpax = Int32.TryParse(Session["totpax"].ToString(), out totpax) ? totpax : 0;
 
             dt = new DataTable();
-
-
             dt = dlsr.GetRoomCategoryWiseRates(blsr);
 
 
@@ -168,18 +144,15 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     Session["Rrate"] = sortedDT;
                     gdvRoomCategories.DataSource = sortedDT;
                     gdvRoomCategories.DataBind();
-              
+
                     div1.Style.Remove("display");
-
-
-                    roundoff(); 
+                    roundoff();
                 }
                 else
                 {
                     gdvRoomCategories.DataSource = null;
                     gdvRoomCategories.DataBind();
                     div1.Style.Add("display", "none");
-                 
                 }
             }
             else
@@ -187,9 +160,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 gdvRoomCategories.DataSource = null;
                 gdvRoomCategories.DataBind();
                 div1.Style.Add("display", "none");
-
             }
-
         }
         catch
         {
@@ -199,10 +170,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
 
     public void roundoff()
     {
-        foreach(GridViewRow row in gdvRoomCategories.Rows)
+        foreach (GridViewRow row in gdvRoomCategories.Rows)
         {
 
-           
+
             for (int k = 0; k < row.Cells.Count; k++)
             {
                 try
@@ -275,7 +246,6 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
     {
         try
         {
-
             string[] arr = view.ToTable().Rows[0][2].ToString().Split(' ');
             string[] arr1 = view.ToTable().Rows[0][1].ToString().Split(' ');
 
@@ -336,11 +306,6 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     hidecolumn(GridView1, 3);
                     ViewState["dt"] = dt;
                     this.RoomNumberWiseDetail(dv, roomcateId);
-
-
-
-
-
                 }
             }
             else
@@ -365,7 +330,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 }
                 else
                 {
-                    
+
 
                     dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr1[1]));
                 }
@@ -419,7 +384,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 lblTotalCabins.Text = dt1.Rows.Count.ToString();
                 TotalCabins.Text = "Cabins Selected";
                 GridRoomPaxDetail.FooterRow.Cells[3].Text = "<strong style='font-weight: bolder; color: Black;'>Total :</strong>";
-                GridRoomPaxDetail.FooterRow.Cells[5].Text = "<strong style='font-weight: bolder; color: Black;'> INR" + " " + Totamt.ToString()+" </strong>";
+                GridRoomPaxDetail.FooterRow.Cells[5].Text = "<strong style='font-weight: bolder; color: Black;'> INR" + " " + Totamt.ToString() + " </strong>";
 
 
             }
@@ -447,7 +412,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 Session["DepartureId"] = Request.QueryString["DepartureId"].ToString();
             }
             blsr.DepartureId = Convert.ToInt32(Session["DepartureId"]);
-          
+
             if (Session["UserCode"] != null)
             {
                 blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
@@ -462,7 +427,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
             else
             {
                 return null;
-             
+
             }
         }
         catch
@@ -582,17 +547,17 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
             dtInsertable.Columns.Add("Pax", typeof(int));
             dtInsertable.Columns.Add("Bed Configuration", typeof(string));
             dtInsertable.Columns.Add("Price", typeof(decimal));
-           
+
             dtInsertable.Columns.Add("Tax", typeof(decimal));
             dtInsertable.Columns.Add("Currency", typeof(string));
             dtInsertable.Columns.Add("Convertable", typeof(string));
             dtInsertable.Columns.Add("CRPrice", typeof(string));
-       
+
             if (ViewState["VsRoomDetails"] == null)
             {
                 DataRow dr = dtInsertable.NewRow();
 
-               
+
                 dr["RoomNumber"] = hfRoomId.Value;
                 dr["RoomCategoryId"] = RoomcateId;
                 dr["Pax"] = Convert.ToInt32(ddlpax1rm.SelectedItem.Text.ToString());
@@ -608,12 +573,12 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 }
                 else
                 {
-                    dr["Bed Configuration"] = view.ToTable().Rows[0][9].ToString()+" Beds";
+                    dr["Bed Configuration"] = view.ToTable().Rows[0][9].ToString() + " Beds";
                 }
 
-              
+
                 dr["Convertable"] = ddlConvert.SelectedValue.ToString();
-            
+
                 //dr["Price"] = Convert.ToDecimal(Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(view.ToTable().Rows[0][2]));
                 if (Convert.ToInt32(ddlpax1rm.SelectedValue) >= 2)
                 {
@@ -621,10 +586,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     string TaxValue = (view.ToTable().Rows[0][6].ToString());
                     //if (TaxStatus == "Tax Applied")
                     //{
-                        arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
-                        dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                        dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                        dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
+                    arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
                     //else if (TaxStatus == "Not Applied")
@@ -641,10 +606,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     string TaxValue = (view.ToTable().Rows[0][6].ToString());
                     //if (TaxStatus == "Tax Applied")
                     //{
-                        arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
-                        dr["CRPrice"] = arrWZ[0].ToString() +" "+ Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                        dr["Price"] =  Convert.ToDouble(arrtx[1]);
-                        dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
+                    arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
+                    dr["Price"] = Convert.ToDouble(arrtx[1]);
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
                     //else if (TaxStatus == "Not Applied")
@@ -656,9 +621,9 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     //}
                 }
                 if (ddlpax1rm.SelectedItem.Text == "2")
-                    dr["categoryName"] = view.ToTable().Rows[0][0].ToString() ;
+                    dr["categoryName"] = view.ToTable().Rows[0][0].ToString();
                 else
-                    dr["categoryName"] = view.ToTable().Rows[0][0].ToString() ;
+                    dr["categoryName"] = view.ToTable().Rows[0][0].ToString();
                 dtInsertable.Rows.Add(dr);
                 ViewState["VsRoomDetails"] = dtInsertable;
 
@@ -682,7 +647,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 }
                 else
                 {
-                     dr["Bed Configuration"]=view.ToTable().Rows[0][9].ToString()+" Beds";
+                    dr["Bed Configuration"] = view.ToTable().Rows[0][9].ToString() + " Beds";
                 }
                 dr["Currency"] = view.ToTable().Rows[0][8].ToString();
                 if (ddlpax1rm.SelectedItem.Text == "2")
@@ -697,10 +662,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     string TaxValue = (view.ToTable().Rows[0][6].ToString());
                     //if (TaxStatus == "Tax Applied")
                     //{
-                        arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
-                        dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                        dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                        dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
+                    arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
                     //else if (TaxStatus == "Not Applied")
@@ -719,10 +684,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                     //if (TaxStatus == "Tax Applied")
                     //{
 
-                        arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
-                        dr["CRPrice"] = arrWZ[0].ToString() +" "+ Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                        dr["Price"] =  Convert.ToDouble(arrtx[1]);
-                        dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
+                    arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
+                    dr["Price"] = Convert.ToDouble(arrtx[1]);
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
                     //else if (TaxStatus == "Not Applied")
@@ -760,8 +725,6 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                 ViewState["VsRoomDetails"] = dtInsertable;
                 GridRoomPaxDetail.DataSource = dtInsertable;
                 GridRoomPaxDetail.DataBind();
-
-              
             }
 
 
@@ -781,7 +744,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
     }
     protected void ddlpax_SelectedIndexChanged(object sender, EventArgs e)
     {
-       
+
 
     }
     protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -823,17 +786,17 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
 
                 DataTable RoomDetails = ViewState["VsRoomDetails"] as DataTable;
 
-               
+
 
 
                 Session.Add("BookedRooms", RoomDetails);
                 ///    
-              
+
                 //Response.Redirect("sendtoairpay.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString());
                 if (Session["Redirecturl"] == null)
                 {
 
-                    if (Convert.ToInt32(RoomDetails.Compute("SUM(Pax)", string.Empty))>= Convert.ToInt32(Session["totpax"]))
+                    if (Convert.ToInt32(RoomDetails.Compute("SUM(Pax)", string.Empty)) >= Convert.ToInt32(Session["totpax"]))
                     {
                         string Redirecturl = "SummarizedDetails.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString() + "&PackId=" + Session["PackageId"].ToString();
                         Session["Redirecturl"] = Redirecturl;
@@ -843,9 +806,9 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('You have not selected enough Rooms to Accomodate all Guests ')", true);
                     }
                 }
-               
+
                 Response.Redirect(Session["Redirecturl"].ToString());
-                
+
                 #endregion
             }
 
@@ -864,7 +827,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-       
+
     }
     #endregion
 
@@ -878,10 +841,10 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
         System.Web.Security.FormsAuthentication.SignOut();
         Response.Redirect("SearchProperty.aspx");
     }
-  
+
     protected void GridRoomPaxDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
-       
+
     }
     protected void GridRoomPaxDetail_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -915,7 +878,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
     {
         try
         {
-          
+
         }
 
         catch
@@ -924,7 +887,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
     }
     protected void txtPassengers_TextChanged(object sender, EventArgs e)
     {
-        
+
     }
     protected void btnShow_Click(object sender, EventArgs e)
     {
@@ -940,8 +903,6 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
 
         try
         {
-
-         
             //  bindroomddl();
             bindRoomRates();
             setImageMap();
@@ -1011,7 +972,7 @@ ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockAre
                         blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
                         dtGetReturnedData = new DataTable();
                         dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
-                        if (dtGetReturnedData != null)
+                        if (dtGetReturnedData != null && dtGetReturnedData.Rows.Count > 0)
                         {
                             if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
                             {

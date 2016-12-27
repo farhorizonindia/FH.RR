@@ -48,7 +48,7 @@ public class BALBooking
 
     public string CustomerId { get; set; }
 
-
+    public string BookingCode { get; set; }
 
     #endregion
 
