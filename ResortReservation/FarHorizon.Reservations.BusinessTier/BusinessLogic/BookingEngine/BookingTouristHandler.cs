@@ -47,7 +47,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingId", DbType.Int32, oBookingTouristDTO.BookingId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, oBookingTouristDTO.BookingCode);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, oBookingTouristDTO.BookingCode == null ? string.Empty : oBookingTouristDTO.BookingCode);
                 if (oAction == Action.update)
                     oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TouristNo", DbType.Int32, oBookingTouristDTO.TouristNo);
 
@@ -72,7 +72,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportMode", DbType.String, String.Empty);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomDetails", DbType.String, oBookingTouristDTO.RoomDetails);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@NextDestination", DbType.String, String.Empty);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureDateTime", DbType.DateTime, null);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureDateTime", DbType.DateTime, GF.HandleMaxMinDates(DateTime.MinValue, false));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmployedinIndia", DbType.Boolean, oBookingTouristDTO.EmployedinIndia);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisitPurpose", DbType.String, oBookingTouristDTO.VisitPurpose);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PermanentAddressInIndia", DbType.String, oBookingTouristDTO.PermanentAddressInIndia);

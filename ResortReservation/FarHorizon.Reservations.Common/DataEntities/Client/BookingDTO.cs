@@ -62,6 +62,38 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
 
         #endregion
 
+        public BookingDTO()
+        {
+            _sBookingCode = string.Empty;
+            _sBookingRef = string.Empty;
+            _sTourID = string.Empty;
+            _sStartDate = string.Empty;
+            _sEndDate = string.Empty;
+            _sAccomType = string.Empty;
+
+            _sAccomName = string.Empty;
+
+            _sAgentName = string.Empty;
+            _sBookingStatus = string.Empty;
+            _sExOrderNo = string.Empty;
+            _sArrivalTransport = string.Empty;
+
+            _sArrivalVehicleNo = string.Empty;
+            _ArrivalVehicleNameType = string.Empty;
+            _sArrivalTransportCompany = string.Empty;
+            _ArrivalTransportCompanyPhoneNo = string.Empty;
+            _ArrivalDriverPhoneNo = string.Empty;
+            _sDepartureTransport = string.Empty;
+
+            _sDepartureVehicleNo = string.Empty;
+            _DepartureVehicleNameType = string.Empty;
+            _sDepartureTransportCompany = string.Empty;
+            _DepartureTransportCompanyPhoneNo = string.Empty;
+            _DepartureDriverPhoneNo = string.Empty;
+            _arrivalcity = string.Empty;
+            _departurecity = string.Empty;
+        }
+
         #region Booking Data Members
 
         public bool Chartered
@@ -69,11 +101,6 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _chartered; }
             set { _chartered = value; }
         }
-
-
-
-
-
 
         public string ArrivalCity
         {
@@ -152,16 +179,12 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set { _sStartDate = value; }
         }
 
-
         public string EDate
         {
             //It is the string representation of the EndDate
             get { return _sEndDate; }
             set { _sEndDate = value; }
         }
-
-
-
 
         public int AccomodationTypeId
         {
@@ -436,7 +459,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private double _bookingamt;
         private bool _PaymentStatus;
         private double _paidamt;
-        private  double _invoiceamt;
+        private double _invoiceamt;
 
 
         #endregion
