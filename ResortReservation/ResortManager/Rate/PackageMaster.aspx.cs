@@ -60,7 +60,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 getQueryResponse = dlPakage.AddPackageNights(blPackage);
                 if (getQueryResponse > 0)
                 {
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Created')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Created');", true);
                 }
             }
             catch (Exception sqe)
@@ -192,24 +192,8 @@ public partial class Rate_PackageMaster : MasterBasePage
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
-                string filename = GetFileName(uploadLogo.PostedFile.FileName);
-                if (uploadLogo.PostedFile.ContentLength > 0)
-                {
-                    string uploadPath = "../RoomImages/";
-                    string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
-                    string savepath = rootedpath + filename;
+                blPackage.ImagePath = UploadImage();
 
-                    string newpath = rename(savepath);
-
-                    uploadLogo.PostedFile.SaveAs(newpath);
-                    UploadFileToFTP(newpath);
-                    string newfilename = Path.GetFileName(newpath);
-                    blPackage.ImagePath = uploadPath + newfilename;                    
-                }
-                else
-                {
-                    blPackage.ImagePath = null;
-                }
                 //  blPackage.Direction = ddlDirection.SelectedValue;
                 if (ddlPackageType.SelectedItem.Text == "Child Package")
                     blPackage._MasterPackageId = ddlMasterPackage.SelectedItem.Value;
@@ -233,7 +217,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                     {
                     }
                     this.ClearControls();
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Added Successfully')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Added Successfully');", true);
                     txtPackageName.Text = "";
                     ddlBoardingFrom.ClearSelection();
                     ddlBoardingTo.ClearSelection();
@@ -246,45 +230,22 @@ public partial class Rate_PackageMaster : MasterBasePage
 
                 }
                 else
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Not  Added')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Not  Added');", true);
             }
             else
             {
-
                 blPackage._packageName = txtPackageName.Text.ToString();
                 blPackage._Action = "UpdatePackage";
                 blPackage._packageId = hfId.Value.ToString();
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
-                string filename = GetFileName(uploadLogo.PostedFile.FileName);
-                if (uploadLogo.PostedFile.ContentLength > 0)
-                {
-                    string uploadPath = "../RoomImages/";
-                    string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
-                    string savepath = rootedpath + filename;
-
-                    string newpath = rename(savepath);
-
-                    uploadLogo.PostedFile.SaveAs(newpath);
-                    UploadFileToFTP(newpath);
-                    string newfilename = Path.GetFileName(newpath);
-                    blPackage.ImagePath = uploadPath + newfilename;
-                    //using (System.Net.WebClient client = new System.Net.WebClient())
-                    //{
-                    //    client.Credentials = new System.Net.NetworkCredential("UploadImage","Augurs@123");
-                    //    client.UploadFile("ftp.hrpws.com" + "/" + new FileInfo(uploadPath + newfilename).Name, "STOR", newfilename);
-                    //}
-                }
-                else
-                {
-                    blPackage.ImagePath = null;
-                }
+                blPackage.ImagePath = UploadImage();
 
                 int res = dlPakage.UpdatePackage(blPackage);
                 if (res > 0)
                 {
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Info Updated')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package Info Updated');", true);
                     btnSbmit.Text = "Submit";
                     txtPackageName.Text = "";
                     ddlBoardingFrom.SelectedIndex = 0;
@@ -295,7 +256,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 }
                 else
                 {
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package info could  not be updated')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package info could  not be updated');", true);
                 }
             }
         }
@@ -306,39 +267,64 @@ public partial class Rate_PackageMaster : MasterBasePage
         }
     }
 
-    private string GetFileName(string fileName)
+    private string UploadImage()
     {
-        string extractedFileName = fileName;
-        if (!string.IsNullOrEmpty(fileName) && fileName.Contains(@"\"))
+        string imagePath = null;
+        try
         {
-            extractedFileName = Path.GetFileName(fileName);
-            //var arr = fileName.Split('\\');
-            //extractedFileName = arr.Last();
+            string filename = Path.GetFileName(uploadLogo.PostedFile.FileName);
+            if (uploadLogo.PostedFile.ContentLength > 0)
+            {
+                string uploadPath = "../RoomImages/";
+                string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
+
+                string savepath = rootedpath + filename;
+                string newpath = rename(savepath);
+
+                string newFileName = Path.GetFileName(newpath);
+                imagePath = uploadPath + newFileName;
+
+                byte[] fileBytes = new BinaryReader(uploadLogo.PostedFile.InputStream).ReadBytes(uploadLogo.PostedFile.ContentLength);
+                string fn = Path.GetFileName(newpath);
+                UploadFileToFTP(fn, fileBytes);
+            }
         }
-        return extractedFileName;
+        catch (Exception exp)
+        {
+            string msg = exp.Message.Replace(@"\", "_");
+            msg = msg.Replace("'", "");
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert(' error: " + msg + "');", true);
+        }
+        return imagePath;
     }
 
-    private void UploadFileToFTP(string filename)
-    {
-        FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create("ftp://ftp.adventureresortscruises.in/" + Path.GetFileName(filename) + "");
+    private void UploadFileToFTP(string filename, byte[] fileBytes)
+    {        
+        string imageFolder = "RoomImages";
 
+        string rootedpath = HttpContext.Current.Server.MapPath("..");
+        var siteDirectory = new DirectoryInfo(rootedpath).Name;
+
+        string savepath = string.Format(@"{0}\{1}\{2}", siteDirectory, imageFolder, filename);
+        string newpath = rename(savepath);
+
+        string ftpUri = "ftp://ftp.adventureresortscruises.in/" + newpath + "";        
 
         string uId = ConfigurationManager.AppSettings.Get("FtpUid");
         string pwd = ConfigurationManager.AppSettings.Get("FtpPwd");
 
+        FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create(ftpUri);
         ftpReq.UseBinary = true;
         ftpReq.Method = WebRequestMethods.Ftp.UploadFile;
         ftpReq.Credentials = new NetworkCredential(uId, pwd);
-
-        byte[] b = File.ReadAllBytes(filename);
-        ftpReq.ContentLength = b.Length;
+        
+        ftpReq.ContentLength = fileBytes.Length;
         using (Stream s = ftpReq.GetRequestStream())
         {
-            s.Write(b, 0, b.Length);
+            s.Write(fileBytes, 0, fileBytes.Length);
         }
 
         FtpWebResponse ftpResp = (FtpWebResponse)ftpReq.GetResponse();
-
         if (ftpResp != null)
         {
             if (ftpResp.StatusDescription.StartsWith("226"))
@@ -347,7 +333,6 @@ public partial class Rate_PackageMaster : MasterBasePage
             }
         }
     }
-
 
     public string rename(string fullpath)
     {
@@ -561,7 +546,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                 if (Convert.ToInt32(dtGetReturnedData.Rows[0][0]) > 0)
                 {
 
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Child package(s) exist for this package, delete them first')", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Child package(s) exist for this package, delete them first');", true);
                 }
                 else
                 {
@@ -571,19 +556,19 @@ public partial class Rate_PackageMaster : MasterBasePage
             }
             if (res > 0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package  Deleted')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package  Deleted');", true);
                 BindGridPackages();
             }
             else
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted');", true);
             }
 
         }
 
         catch
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted')", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Package could not be  Deleted');", true);
         }
     }
     protected void GridPackages_RowCommand(object sender, GridViewCommandEventArgs e)
