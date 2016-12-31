@@ -286,7 +286,7 @@ public partial class Rate_PackageMaster : MasterBasePage
 
                 byte[] fileBytes = new BinaryReader(uploadLogo.PostedFile.InputStream).ReadBytes(uploadLogo.PostedFile.ContentLength);
                 string fn = Path.GetFileName(newpath);
-                UploadFileToFTP(fn, fileBytes);
+                UploadFileToSites(fn, fileBytes);
             }
         }
         catch (Exception exp)
@@ -298,17 +298,38 @@ public partial class Rate_PackageMaster : MasterBasePage
         return imagePath;
     }
 
-    private void UploadFileToFTP(string filename, byte[] fileBytes)
-    {        
+    private void UploadFileToSites(string filename, byte[] fileBytes)
+    {
         string imageFolder = "RoomImages";
 
-        string rootedpath = HttpContext.Current.Server.MapPath("..");
-        var siteDirectory = new DirectoryInfo(rootedpath).Name;
+        //string rootedpath = HttpContext.Current.Server.MapPath("..");
+        //var siteDirectory = new DirectoryInfo(rootedpath).Name;
 
+        #region Upload To Admin Section
+        var siteDirectory = "admin.adventureresortcruises.in";
         string savepath = string.Format(@"{0}\{1}\{2}", siteDirectory, imageFolder, filename);
         string newpath = rename(savepath);
+        FTPImage(fileBytes, newpath);
+        #endregion
 
-        string ftpUri = "ftp://ftp.adventureresortscruises.in/" + newpath + "";        
+        #region Upload To Admin Section
+        siteDirectory = "httpdocs";
+        savepath = string.Format(@"{0}\{1}\{2}", siteDirectory, imageFolder, filename);
+        newpath = rename(savepath);
+        FTPImage(fileBytes, newpath);
+        #endregion
+
+        #region Upload To Admin Section
+        siteDirectory = "test.adventureresortscruises.in";
+        savepath = string.Format(@"{0}\{1}\{2}", siteDirectory, imageFolder, filename);
+        newpath = rename(savepath);
+        FTPImage(fileBytes, newpath);
+        #endregion
+    }
+
+    private static void FTPImage(byte[] fileBytes, string newpath)
+    {
+        string ftpUri = "ftp://ftp.adventureresortscruises.in/" + newpath + "";
 
         string uId = ConfigurationManager.AppSettings.Get("FtpUid");
         string pwd = ConfigurationManager.AppSettings.Get("FtpPwd");
@@ -317,7 +338,7 @@ public partial class Rate_PackageMaster : MasterBasePage
         ftpReq.UseBinary = true;
         ftpReq.Method = WebRequestMethods.Ftp.UploadFile;
         ftpReq.Credentials = new NetworkCredential(uId, pwd);
-        
+
         ftpReq.ContentLength = fileBytes.Length;
         using (Stream s = ftpReq.GetRequestStream())
         {
