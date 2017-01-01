@@ -212,7 +212,7 @@ public class DALBooking
 
             string query = string.Empty;
             int proposed = status == BookingStatusTypes.PROPOSED ? 1 : 0;
-            query = string.Format("update tblBooking set BookingStatusId = {0} and ProposedBooking = {1} where BookingId = {2}", (int)status, proposed, bookingId);
+            query = string.Format("update tblBooking set BookingStatusId = {0}, ProposedBooking = {1} where BookingId = {2}", (int)status, proposed, bookingId);
 
             SqlCommand cmd = new SqlCommand(query, cn);
             cmd.CommandType = CommandType.Text;
@@ -222,9 +222,9 @@ public class DALBooking
 
             return true;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return false;
+            throw exp;
         }
     }
 
@@ -238,21 +238,23 @@ public class DALBooking
             cn.Open();
             SqlDataReader reader = cmd.ExecuteReader();
 
-            BALBooking booking = new BALBooking
+            BALBooking booking = null;
+            if (reader.HasRows)
             {
-                _iBookingId = reader.GetInt16(0),
-                BookingCode = reader.GetString(1),
-                _dtStartDate = reader.GetDateTime(2),
-                _dtEndDate = reader.GetDateTime(3)
-            };
+                reader.Read();
+                booking = new BALBooking();
+                booking._iBookingId = reader.GetValue(0) == DBNull.Value ? -1 : int.Parse(reader.GetValue(0).ToString());
+                booking.BookingCode = reader.GetValue(1) == DBNull.Value ? string.Empty : reader.GetValue(0).ToString();
+                booking._dtStartDate = reader.GetValue(2) == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader.GetValue(2).ToString());
+                booking._dtEndDate = reader.GetValue(3) == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader.GetValue(3).ToString());
+            }
             reader.Close();
             cn.Close();
-
             return booking;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return null;
+            throw exp;
         }
     }
 

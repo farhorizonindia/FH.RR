@@ -25,6 +25,7 @@ using FarHorizon.Reservations.Common;
 
 public partial class response : System.Web.UI.Page
 {
+    #region Variable(s)
     BALBooking blsr = new BALBooking();
     DALBooking dlsr = new DALBooking();
     public string packageid = string.Empty;
@@ -46,9 +47,9 @@ public partial class response : System.Web.UI.Page
     int iaccomtypeid = 0;
     DateTime chkin;
     DateTime chkout;
-    int custId = 0;
-
+    int custId = 0;    
     string bookref;
+    #endregion
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -384,7 +385,7 @@ public partial class response : System.Web.UI.Page
             byte[] mybytes = Encoding.UTF8.GetBytes(ClearString);
             foreach (byte b in crc32.ComputeHash(mybytes)) hash += b.ToString("x2");
             UInt32 Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
-            UInt32 Output1 = UInt32.Parse(key);
+            UInt32 Output1 = UInt32.Parse(key);            
 
             if (Output1 == Output)
             {
