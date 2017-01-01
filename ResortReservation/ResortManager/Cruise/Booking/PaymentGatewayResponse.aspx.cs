@@ -292,12 +292,7 @@ public partial class response : System.Web.UI.Page
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
 
                     GenrateBill1(TRANSACTIONID);
-                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand("insert into tblTransactionDetails values('" + hfBookingId.Value + "', '" + TRANSACTIONID + "','" + APTRANSACTIONID + "' , '" + Convert.ToDecimal(AMOUNT) + "','" + TRANSACTIONSTATUS + "','" + System.DateTime.Now + "')", con);
-                    int QueryResponse = cmd.ExecuteNonQuery();
-
-                    con.Close();
+                    int QueryResponse = AddTransactionDetails(TRANSACTIONSTATUS, APTRANSACTIONID, TRANSACTIONID, AMOUNT);
                     if (QueryResponse > 0)
                     {
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
@@ -309,11 +304,8 @@ public partial class response : System.Web.UI.Page
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##"); ;
 
                     GenrateBill(TRANSACTIONID);
-                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand("insert into tblTransactionDetails values('" + hfBookingId.Value + "', '" + TRANSACTIONID + "','" + APTRANSACTIONID + "' , '" + Convert.ToDecimal(AMOUNT) + "','" + TRANSACTIONSTATUS + "','" + System.DateTime.Now + "')", con);
-                    int QueryResponse = cmd.ExecuteNonQuery();
-                    con.Close();
+
+                    int QueryResponse = AddTransactionDetails(TRANSACTIONSTATUS, APTRANSACTIONID, TRANSACTIONID, AMOUNT);
                     if (QueryResponse > 0)
                     {
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
@@ -343,6 +335,17 @@ public partial class response : System.Web.UI.Page
         {
             return null;
         }
+    }
+
+    private int AddTransactionDetails(string TRANSACTIONSTATUS, string APTRANSACTIONID, string TRANSACTIONID, string AMOUNT)
+    {
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
+        con.Open();
+        SqlCommand cmd = new SqlCommand("insert into tblTransactionDetails values('" + hfBookingId.Value + "', '" + TRANSACTIONID + "','" + APTRANSACTIONID + "' , '" + Convert.ToDecimal(AMOUNT) + "','" + TRANSACTIONSTATUS + "','" + System.DateTime.Now + "')", con);
+        int QueryResponse = cmd.ExecuteNonQuery();
+        con.Close();
+
+        return QueryResponse;
     }
 
     private void FiilPackage()

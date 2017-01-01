@@ -1,6 +1,7 @@
 ﻿using FarHorizon.Reservations.Common;
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
 using System.Web.UI;
@@ -265,11 +266,17 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                         arr = FirstName.Split(' ');
                     }
 
-                    //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
-                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);
-
+                    if (Debugger.IsAttached)
+                    {
+                        RedirectToPaymentGatewayResponse();
+                    }
+                    else
+                    {
+                        //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
+                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);
+                    }
                     #endregion
                 }
                 else
@@ -314,10 +321,16 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                         arr = FirstName.Split(' ');
                     }
 
-
-                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016
-                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);                         
+                    if (Debugger.IsAttached)
+                    {
+                        RedirectToPaymentGatewayResponse();
+                    }
+                    else
+                    {
+                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016
+                        //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);                         
+                    }
                     #endregion
                 }
             }
@@ -344,6 +357,19 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         {
 
         }
+    }
+
+    private void RedirectToPaymentGatewayResponse()
+    {
+        string ts = "TRANSACTIONSTATUS=200";
+        string apt = "APTRANSACTIONID=1234";
+        string msg = "MESSAGE=success";
+        string tid = "TRANSACTIONID=100";
+        string amt = "AMOUNT=50";
+        string ash = "ap_SecureHash=abc";
+
+        string qs = string.Format("{0}&{1}&{2}&{3}&{4}&{5}", ts, apt, msg, tid, amt, ash);
+        Response.Redirect("~/Cruise/Booking/PaymentGatewayResponse.aspx?" + qs);
     }
 
     protected void btnSmbt_Click(object sender, EventArgs e)
@@ -811,7 +837,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             blsr._iBookingId = bookingId;
 
             Session["tblBookingBAL"] = blsr;
-            return bookingId;            
+            return bookingId;
         }
         catch (Exception ex)
         {
@@ -846,8 +872,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 blsr.action = "AddPriceDetailsToo";
                 string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');
                 blsr._Amt = Convert.ToDecimal(arr[1]);
-                                
-                int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);                
+
+                int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
             }
             return 1;
         }

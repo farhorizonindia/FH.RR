@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using FarHorizon.Reservations.Common;
+using System;
 using System.Data;
-using System.Configuration;
-using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
-using FarHorizon.Reservations.Common;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 {
+    #region Variable(s)
     DataTable Bookingdt;
     DataTable bookingmealdt;
     double TotalPaybleAmt = 0;
@@ -30,10 +27,11 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
     BALCustomers blcus = new BALCustomers();
     DALCustomers dlcus = new DALCustomers();
-    DataTable dtGetReturnedData;
+    //DataTable dtGetReturnedData;
     int getQueryResponse = 0;
 
     int CountryId = 0;
+    #endregion
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -263,21 +261,19 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     blagentpayment._EmailId = Session["AgentMailId"].ToString();
                     blagentpayment._Password = Session["Password"].ToString();
 
-                    dtGetReturnedData = dlagentpayment.BindControls(blagentpayment);
-                    if (dtGetReturnedData.Rows.Count > 0)
+                    DataTable dtAgent = dlagentpayment.BindControls(blagentpayment);
+                    if (dtAgent.Rows.Count > 0)
                     {
                         lblAgentName.Text = Session["UserName"].ToString();
-                        lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
-                        lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                        hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Phone"].ToString();
-                        hdnfCreditLimit.Value = dtGetReturnedData.Rows[0]["CreditLimit"].ToString();
-                        bool oncredit = Convert.ToBoolean(dtGetReturnedData.Rows[0]["ChkCredit"].ToString());
-
-
+                        lblBillingAddress.Text = dtAgent.Rows[0]["BillingAddress"].ToString();
+                        lbPaymentMethod.Text = dtAgent.Rows[0]["PaymentMethod"].ToString();
+                        hdnfPhoneNumber.Value = dtAgent.Rows[0]["Phone"].ToString();
+                        hdnfCreditLimit.Value = dtAgent.Rows[0]["CreditLimit"].ToString();
+                        bool oncredit = Convert.ToBoolean(dtAgent.Rows[0]["ChkCredit"].ToString());
+                        
                         pnlFullDetails.Visible = true;
                         pnlBookButton.Visible = true;
-
-
+                        
                         if (oncredit)
                         {
                             panelwithoutCreditAgent.Visible = false;
@@ -289,10 +285,6 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                             panelwithoutCreditAgent.Visible = true;
                             btnPayProceed.Text = "Proceed For Payment";
                         }
-
-
-
-
                     }
                     else
                     {
@@ -317,21 +309,20 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 blcus.Email = Session["CustomerMailId"].ToString();
                 blcus.Password = Session["CustPassword"].ToString();
                 blcus.action = "LoginCust";
-                dtGetReturnedData = new DataTable();
-                dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-                if (dtGetReturnedData != null)
+                DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+                if (dtCustomer != null)
                 {
                     ViewState["Pass"] = txtCustPass.Text.Trim();
 
                     Session["CustMailId"] = Session["CustomerMailId"].ToString();
-                    lblAgentName.Text = dtGetReturnedData.Rows[0]["FirstName"].ToString() + " " + dtGetReturnedData.Rows[0]["LastName"].ToString();
-                    lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
-                    lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                    hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Telephone"].ToString();
-                    Session["CustId"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
+                    lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
+                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
+                    lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
+                    hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
+                    Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
 
-                    string BookRef = dtGetReturnedData.Rows[0]["FirstName"].ToString() + dtGetReturnedData.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
+                    string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
                     lbPaymentMethod.Text = "Online";
                     pnlFullDetails.Visible = true;
@@ -339,11 +330,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     pnlBookButton.Visible = true;
                     customerLogin.Visible = false;
                 }
-
             }
-            catch
+            catch(Exception ex)
             {
-
+                throw ex;
             }
         }
         else
@@ -363,17 +353,15 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     {
         try
         {
-
             blagentpayment._Action = "MailValidate";
             blagentpayment._EmailId = Session["AgentMailId"].ToString();
             blagentpayment._Password = Session["Password"].ToString();
-            dtGetReturnedData = dlagentpayment.BindControls(blagentpayment);
-            if (dtGetReturnedData.Rows.Count > 0)
+            DataTable dtAgent = dlagentpayment.BindControls(blagentpayment);
+            if (dtAgent.Rows.Count > 0)
             {
-
-                lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
-                lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Phone"].ToString();
+                lblBillingAddress.Text = dtAgent.Rows[0]["BillingAddress"].ToString();
+                lbPaymentMethod.Text = dtAgent.Rows[0]["PaymentMethod"].ToString();
+                hdnfPhoneNumber.Value = dtAgent.Rows[0]["Phone"].ToString();
                 pnlFullDetails.Visible = true;
             }
         }
@@ -409,7 +397,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     #region Book The Tour as Proposed Booking
                     //If everything looks good then book a proposed booking and confirm that on the next screen
-                    BookTheTour();
+                    BookTheCruise();
                     #endregion
 
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs Technologies Pvt. Ltd.: 12345
@@ -438,9 +426,17 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     {
                         arr = FirstName.Split(' ');
                     }
-                    //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
-                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+
+                    if (Debugger.IsAttached)
+                    {
+                        RedirectToPaymentGatewayResponse();
+                    }
+                    else
+                    {
+                        //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
+                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                    }
                     #endregion
                 }
                 else
@@ -461,7 +457,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     #region Book The Tour as Proposed Booking
                     //If everything looks good then book a proposed booking and confirm that on the next screen
-                    BookTheTour();
+                    BookTheCruise();
                     #endregion
 
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
@@ -484,15 +480,16 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     Session["SubInvName"] = dtCustomerData.Rows[0]["LastName"].ToString() + ", " + dtCustomerData.Rows[0]["Title"].ToString() + " " + FirstName;
 
-                    //string[] arr = { };
-                    //if (FirstName != "" && FirstName != null)
-                    //{
-                    //    arr = FirstName.Split(' ');
-                    //}
-
-                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //  Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                    //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016                    
+                    if (Debugger.IsAttached)
+                    {
+                        RedirectToPaymentGatewayResponse();
+                    }
+                    else
+                    {
+                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //  Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                        //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016                    
+                    }
                     #endregion
                 }
                 #endregion
@@ -519,6 +516,19 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         {
 
         }
+    }
+
+    private void RedirectToPaymentGatewayResponse()
+    {
+        string ts = "TRANSACTIONSTATUS=200";
+        string apt = "APTRANSACTIONID=1234";
+        string msg = "MESSAGE=success";
+        string tid = "TRANSACTIONID=100";
+        string amt = "AMOUNT=50";
+        string ash = "ap_SecureHash=abc";
+
+        string qs = string.Format("{0}&{1}&{2}&{3}&{4}&{5}", ts, apt, msg, tid, amt, ash);
+        Response.Redirect("PaymentGatewayResponse.aspx?" + qs);
     }
 
     //protected void btnPayProceed_Click(object sender, EventArgs e)
@@ -668,27 +678,25 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             blcus.Email = txtCustMailId.Text.Trim();
             blcus.Password = txtCustPass.Text.Trim();
             blcus.action = "LoginCust";
-            dtGetReturnedData = new DataTable();
-            dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-            if (dtGetReturnedData != null)
+            DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+            if (dtCustomer != null)
             {
-
-                if (dtGetReturnedData.Rows.Count > 0)
+                if (dtCustomer.Rows.Count > 0)
                 {
                     ViewState["Pass"] = txtCustPass.Text.Trim();
 
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
-                    lblAgentName.Text = dtGetReturnedData.Rows[0]["FirstName"].ToString() + " " + dtGetReturnedData.Rows[0]["LastName"].ToString();
-                    lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
-                    lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                    hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Telephone"].ToString();
-                    Session["CustId"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
-                    Session["CustomerCode"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
-                    Session.Add("CustomerMailId", dtGetReturnedData.Rows[0]["Email"].ToString());
-                    Session.Add("CustPassword", dtGetReturnedData.Rows[0]["Password"].ToString());
+                    lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
+                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
+                    lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
+                    hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
+                    Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
+                    Session["CustomerCode"] = dtCustomer.Rows[0]["CustId"].ToString();
+                    Session.Add("CustomerMailId", dtCustomer.Rows[0]["Email"].ToString());
+                    Session.Add("CustPassword", dtCustomer.Rows[0]["Password"].ToString());
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
 
-                    string BookRef = dtGetReturnedData.Rows[0]["FirstName"].ToString() + dtGetReturnedData.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
+                    string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
                     lbPaymentMethod.Text = "Online";
                     pnlFullDetails.Visible = true;
@@ -836,10 +844,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             {
                 blcus.action = "chkDuplicate";
                 blcus.Email = txtMailAddress.Text.Trim();
-                dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-                if (dtGetReturnedData != null)
+                DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+                if (dtCustomer != null)
                 {
-                    if (dtGetReturnedData.Rows.Count > 0)
+                    if (dtCustomer.Rows.Count > 0)
                     {
                         lblError.Text = "This Email Id already Exists";
                         txtMailAddress.Text = "";
@@ -881,10 +889,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         try
         {
             blOpenDates._Action = "GetCountry";
-            dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
-            if (dtGetReturnedData.Rows.Count > 0)
+            DataTable dtCountries = dlOpenDates.BindControls(blOpenDates);
+            if (dtCountries.Rows.Count > 0)
             {
-                ddlCountry.DataSource = dtGetReturnedData;
+                ddlCountry.DataSource = dtCountries;
                 ddlCountry.DataTextField = "CountryName";
                 ddlCountry.DataValueField = "CountryId";
                 ddlCountry.DataBind();
@@ -954,43 +962,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
 
-    private void BookTheTour()
+    private void BookTheCruise()
     {
         int bookingId = InsertParentTableData();
-        InsertChildTableData(bookingId);
-
-        // int iAccomId = 0;
-        // int iaccomtypeid = 0;
-        // DateTime chkin, chkout;
-
-        // Int32.TryParse(Session["AccomId"].ToString(), out iAccomId);
-        // Int32.TryParse(Session["iAccomtypeId"].ToString(), out iaccomtypeid);
-
-        // DateTime.TryParse(Session["Chkin"].ToString(), out chkin);
-        // DateTime.TryParse(Session["chkout"].ToString(), out chkout);
-
-        // string bookref = Session["BookingRef"].ToString();
-        // int iagentid = 0;
-
-        // if (Session["Hotel"] != null)
-        // {
-        //     try
-        //     {
-        //         if (Session["Usercode"] != null)
-        //         {
-        //             Int32.TryParse(Session["AId"].ToString(), out iagentid);
-        //         }
-        //         else if (Session["CustId"] != null)
-        //         {
-        //             iagentid = 248;
-        //         }
-        //     }
-        //     catch
-        //     {
-        //     }
-        // }
-        //int bookingId = InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout);
-        // InsertRoomBookingTableData(null,  bookingId, chkin, chkout, iAccomId);
+        InsertChildTableData(bookingId);        
     }
 
     private int InsertParentTableData()
@@ -1020,14 +995,14 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             blsr.action = "GetDepartureDetails";
             blsr._iBookingId = 0;
             blsr.PackageId = Session["PackageId"].ToString();
-            dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
+            DataTable dtDepartureDetails = dlsr.GetDepartureDetails(blsr);
             blsr._sBookingRef = Session["BookingRef"] == null ? string.Empty : Session["BookingRef"].ToString();
-            blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
-            blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
-            blsr._iAccomTypeId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomTypeId"]);
-            blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
+            blsr._dtStartDate = Convert.ToDateTime(dtDepartureDetails.Rows[0]["CheckInDate"]);
+            blsr._dtEndDate = Convert.ToDateTime(dtDepartureDetails.Rows[0]["CheckOutDate"]);
+            blsr._iAccomTypeId = Convert.ToInt32(dtDepartureDetails.Rows[0]["AccomTypeId"]);
+            blsr._iAccomId = Convert.ToInt32(dtDepartureDetails.Rows[0]["AccomId"]);
 
-            blsr._iNights = Convert.ToInt32(dtGetReturnedData.Rows[0]["NoOfNights"]);
+            blsr._iNights = Convert.ToInt32(dtDepartureDetails.Rows[0]["NoOfNights"]);
 
             DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
             blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
@@ -1052,8 +1027,8 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
         catch
         {
-        }
-        return -1;
+            throw;
+        }        
     }
 
     private void InsertChildTableData(int bookingId)
@@ -1061,18 +1036,19 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         BALBooking blsr = new BALBooking();
         DALBooking dlsr = new DALBooking();
 
-        if (dtGetReturnedData != null)
+        BALBooking booking = dlsr.GetBookingDetails(bookingId);
+
+        if (booking != null)
         {
             DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
-
             int LoopInsertStatus = 0;
             try
             {
                 blsr._iBookingId = bookingId;
                 for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
                 {
-                    blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
-                    blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
+                    blsr._dtStartDate = booking._dtStartDate;
+                    blsr._dtEndDate = booking._dtEndDate;
                     blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());
 
                     blsr._bConvertTo_Double_Twin = GridRoomPaxDetail.Rows[LoopCounter]["Convertable"].ToString() == "1" ? true : false;
@@ -1093,13 +1069,13 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             }
             catch
             {
+                throw;
             }
-        }
-        else
-        {
         }
     }
 
+    #region Obsolete Method(s)
+    [Obsolete]
     private int InsertBookingTableData(int acmid, int acmtpid, int agid, string bkref, DateTime cin, DateTime cout)
     {
         try
@@ -1146,6 +1122,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
 
+    [Obsolete]
     private int InsertRoomBookingTableData(DataTable dtbooking, int bookingId, DateTime cin, DateTime cout, int acmid)
     {
         try
@@ -1200,4 +1177,5 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             return 0;
         }
     }
+    #endregion
 }
