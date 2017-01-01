@@ -1,27 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Web;
-using System.Web.UI;
-using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
-using System.Web.UI.WebControls;
-using System.Text;
-using System.Diagnostics;
-using System.Globalization;
-using System.Data;
-using System.Data.SqlClient;
-using System.Security.Cryptography;
-using System.Net.Mail;
-using System.Configuration;
+using FarHorizon.Reservations.Common;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Spire.Pdf;
 using Spire.Pdf.HtmlConverter;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Net.Mail;
+using System.Text;
 using System.Threading;
-using System.Net;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
-using FarHorizon.Reservations.Common;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class response : System.Web.UI.Page
 {
@@ -182,12 +173,11 @@ public partial class response : System.Web.UI.Page
         return newFullPath;
     }
 
-
     /// <summary>
     /// This method will move the booking from Proposed state to Booked state.
     /// As payment is confirmed. Else the booking will stay as proposed booking for back-office operations.
     /// </summary>
-    private void BookCruiseBooking()
+    private void UpdateCruiseBookingToBooked()
     {
         try
         {
@@ -200,6 +190,7 @@ public partial class response : System.Web.UI.Page
         }
         catch
         {
+
         }
     }
 
@@ -222,60 +213,52 @@ public partial class response : System.Web.UI.Page
         hfBookingId.Value = bookingDetail._iBookingId.ToString();
     }
 
-    private void InsertParentTableData()
+    /// <summary>
+    /// This method will move the booking from Proposed state to Booked state.
+    /// As payment is confirmed. Else the booking will stay as proposed booking for back-office operations.
+    /// </summary>
+    private void UpdateHotelBookingToBooked()
     {
         try
         {
-            if (Session["UserCode"] != null)
-            {
-                blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
-            }
-            else
-            {
-                if (Session["CustId"] != null && Session["UserCode"] == null)
-                {
-                    blsr.CustomerId = Session["CustId"].ToString();
-                    blsr._iAgentId = 247;
-                }
-                else
-                {
-                    blsr.CustomerId = "0";
-                }
-            }
+            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            DALBooking dlr = new DALBooking();
+            dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
 
-            blsr.action = "GetDepartureDetails";
-            blsr._iBookingId = 0;
-            blsr.PackageId = Session["PackageId"].ToString();
-            dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
-            blsr._sBookingRef = Session["BookingRef"].ToString();
-            blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
-            blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
-            blsr._iAccomTypeId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomTypeId"]);
-            blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
-
-            blsr._iNights = Convert.ToInt32(dtGetReturnedData.Rows[0]["NoOfNights"]);
-            DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
-            blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
-            blsr._BookingStatusId = 1;
-            blsr._SeriesId = 0;
-            blsr._proposedBooking = false;
-            blsr._chartered = false;
-
-            Session.Add("tblBookingBAL", blsr);
-            int iBRC = dlsr.GetBookingReferenceCount(blsr);
-
-            if (iBRC > 0)
-            {
-                System.Web.UI.ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "AlertBox", "alert('The Booking Reference mentioned by you is not unique. Please enter a different reference number.');", true);
-                return;
-            }
-            int GetQueryResponse = dlsr.AddParentBookingDetail(blsr);
+            //BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
+            ShowHotelBookingDetails(blsr._iBookingId);
         }
-        catch
+        catch(Exception ex)
         {
+            throw ex;
         }
     }
 
+    private void ShowHotelBookingDetails(int bookingId)
+    {
+        lblArrvDate.Text = Convert.ToDateTime(Session["Chkin"]).ToString("d MMMM, yyyy");
+        lblDepartDate.Text = Convert.ToDateTime(Session["chkout"]).ToString("d MMMM, yyyy");
+        lblacm.Text = "Accomodation Name: " + Session["AccomName"].ToString();
+
+        DataTable Bookingdt;
+        Bookingdt = new DataTable();
+        Bookingdt = Session["Bookingdt"] as DataTable;
+
+        gdvSelectedRooms.DataSource = Bookingdt;
+        gdvSelectedRooms.DataBind();
+
+        gdvSelectedRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b> ";
+
+        gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
+
+        lbPax.Text = Convert.ToInt32(Bookingdt.Compute("SUM(Pax)", "[Pax] > 0")).ToString(); ;
+        lblTotAMt.Text = Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##");
+
+        lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
+        lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+        hfBookingId.Value = bookingId.ToString();
+    }
+    
     public void hidecolumns()
     {
         try
@@ -290,92 +273,7 @@ public partial class response : System.Web.UI.Page
         {
         }
     }
-
-    private void InsertChildTableData()
-    {
-        #region Fetching Departure Details
-        blsr.action = "GetDepartureDetails";
-        blsr.PackageId = Session["PackageId"].ToString();
-        dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
-        blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
-        #endregion
-        blsr.action = "getMaxBookId";
-        DataTable dtmaxId = dlsr.GetMaxBookingId(blsr);
-
-        if (dtGetReturnedData != null)
-        {
-            int MaxBookingId = Convert.ToInt32(dtmaxId.Rows[0].ItemArray[0].ToString());
-            blsr.action = "getmaxbookingcode";
-            DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
-
-            lbBookingNo.Text = dtbkcode.Rows[0].ItemArray[0].ToString();
-
-            BookedId = MaxBookingId;
-            blsr._iBookingId = MaxBookingId;
-
-            DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
-
-            gdvCruiseRooms.DataSource = GridRoomPaxDetail;
-            gdvCruiseRooms.DataBind();
-            // hidecolumns();
-
-            lblacm.Text = "M V Mahabaahu";
-            lblVessel.Text = "Vessel: ";
-            lbPax.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Pax)", string.Empty)).ToString();
-            //    lblTotoAmt.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
-
-            lblDepartDate.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]).ToString("d MMMM, yyyy");
-            lblArrvDate.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]).ToString("d MMMM, yyyy");
-
-            int LoopInsertStatus = 0;
-            try
-            {
-                for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
-                {
-                    blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
-                    blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
-                    blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());
-
-                    blsr._bConvertTo_Double_Twin = GridRoomPaxDetail.Rows[LoopCounter]["Convertable"].ToString() == "1" ? true : false;
-                    blsr._cRoomStatus = "B";
-                    blsr._sRoomNo = GridRoomPaxDetail.Rows[LoopCounter]["RoomNumber"].ToString();
-                    blsr.action = "AddPriceDetailsToo";
-                    blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
-                    blsr.PaymentId = Session["BookingPayId"].ToString();
-                    blsr._Paid = Convert.ToDouble(Session["Paid"]);
-                    int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
-                    if (GetQueryResponse > 0)
-                    {
-                        LoopInsertStatus++;
-                    }
-                    else
-                    {
-                        //do nothing
-                    }
-                }
-                hfBookingId.Value = MaxBookingId.ToString();
-
-            }
-            catch
-            {
-            }
-        }
-        else
-        {
-        }
-    }
-
-    public void calculatePAx()
-    {
-        try
-        {
-
-        }
-        catch
-        {
-        }
-    }
-
+    
     public string CRCCode(String ClearString, String key, string TRANSACTIONSTATUS, string APTRANSACTIONID, string MESSAGE, string TRANSACTIONID, string AMOUNT)
     {
         try
@@ -470,17 +368,15 @@ public partial class response : System.Web.UI.Page
 
     private void GenrateBill(string transactionId)
     {
-        //this.InsertParentTableData();
-        //this.InsertChildTableData();
-
-        BookCruiseBooking();
+        UpdateCruiseBookingToBooked();
         sendMail(transactionId);
     }
 
     private void GenrateBill1(string transactionId)
     {
-        this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
-        this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
+        //this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
+        //this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
+        UpdateHotelBookingToBooked();
         sendMail1(transactionId);
     }
 
@@ -598,6 +494,167 @@ public partial class response : System.Web.UI.Page
         catch (Exception ex)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
+        }
+    }    
+
+    protected void gdvCruiseRooms_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        try
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                e.Row.Cells[0].Text = e.Row.Cells[0].Text + " (" + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["Bed Configuration"].ToString() + "), Cabin no " + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["RoomNumber"].ToString();
+            }
+        }
+        catch
+        { }
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("SearchProperty.aspx");
+    }
+
+    protected void btnPrint_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            btnBack.Visible = false;
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "MyFunction()", true);
+        }
+        catch
+        {
+        }
+    }
+
+    #region Obsolete Method(s)
+    [Obsolete]
+    private void InsertParentTableData()
+    {
+        try
+        {
+            if (Session["UserCode"] != null)
+            {
+                blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
+            }
+            else
+            {
+                if (Session["CustId"] != null && Session["UserCode"] == null)
+                {
+                    blsr.CustomerId = Session["CustId"].ToString();
+                    blsr._iAgentId = 247;
+                }
+                else
+                {
+                    blsr.CustomerId = "0";
+                }
+            }
+
+            blsr.action = "GetDepartureDetails";
+            blsr._iBookingId = 0;
+            blsr.PackageId = Session["PackageId"].ToString();
+            dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
+            blsr._sBookingRef = Session["BookingRef"].ToString();
+            blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
+            blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
+            blsr._iAccomTypeId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomTypeId"]);
+            blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
+
+            blsr._iNights = Convert.ToInt32(dtGetReturnedData.Rows[0]["NoOfNights"]);
+            DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+            blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
+            blsr._BookingStatusId = 1;
+            blsr._SeriesId = 0;
+            blsr._proposedBooking = false;
+            blsr._chartered = false;
+
+            Session.Add("tblBookingBAL", blsr);
+            int iBRC = dlsr.GetBookingReferenceCount(blsr);
+
+            if (iBRC > 0)
+            {
+                System.Web.UI.ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "AlertBox", "alert('The Booking Reference mentioned by you is not unique. Please enter a different reference number.');", true);
+                return;
+            }
+            int GetQueryResponse = dlsr.AddParentBookingDetail(blsr);
+        }
+        catch
+        {
+        }
+    }
+
+    [Obsolete]
+    private void InsertChildTableData()
+    {
+        #region Fetching Departure Details
+        blsr.action = "GetDepartureDetails";
+        blsr.PackageId = Session["PackageId"].ToString();
+        dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
+        blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
+        #endregion
+        blsr.action = "getMaxBookId";
+        DataTable dtmaxId = dlsr.GetMaxBookingId(blsr);
+
+        if (dtGetReturnedData != null)
+        {
+            int MaxBookingId = Convert.ToInt32(dtmaxId.Rows[0].ItemArray[0].ToString());
+            blsr.action = "getmaxbookingcode";
+            DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
+
+            lbBookingNo.Text = dtbkcode.Rows[0].ItemArray[0].ToString();
+
+            BookedId = MaxBookingId;
+            blsr._iBookingId = MaxBookingId;
+
+            DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+
+            gdvCruiseRooms.DataSource = GridRoomPaxDetail;
+            gdvCruiseRooms.DataBind();
+            // hidecolumns();
+
+            lblacm.Text = "M V Mahabaahu";
+            lblVessel.Text = "Vessel: ";
+            lbPax.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Pax)", string.Empty)).ToString();
+            //    lblTotoAmt.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
+
+            lblDepartDate.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]).ToString("d MMMM, yyyy");
+            lblArrvDate.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]).ToString("d MMMM, yyyy");
+
+            int LoopInsertStatus = 0;
+            try
+            {
+                for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
+                {
+                    blsr._dtStartDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckInDate"]);
+                    blsr._dtEndDate = Convert.ToDateTime(dtGetReturnedData.Rows[0]["CheckOutDate"]);
+                    blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());
+
+                    blsr._bConvertTo_Double_Twin = GridRoomPaxDetail.Rows[LoopCounter]["Convertable"].ToString() == "1" ? true : false;
+                    blsr._cRoomStatus = "B";
+                    blsr._sRoomNo = GridRoomPaxDetail.Rows[LoopCounter]["RoomNumber"].ToString();
+                    blsr.action = "AddPriceDetailsToo";
+                    blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
+                    blsr.PaymentId = Session["BookingPayId"].ToString();
+                    blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                    int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
+                    if (GetQueryResponse > 0)
+                    {
+                        LoopInsertStatus++;
+                    }
+                    else
+                    {
+                        //do nothing
+                    }
+                }
+                hfBookingId.Value = MaxBookingId.ToString();
+
+            }
+            catch
+            {
+            }
+        }
+        else
+        {
         }
     }
 
@@ -731,34 +788,5 @@ public partial class response : System.Web.UI.Page
             return 0;
         }
     }
-
-    protected void gdvCruiseRooms_RowDataBound(object sender, GridViewRowEventArgs e)
-    {
-        try
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                e.Row.Cells[0].Text = e.Row.Cells[0].Text + " (" + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["Bed Configuration"].ToString() + "), Cabin no " + gdvCruiseRooms.DataKeys[e.Row.RowIndex].Values["RoomNumber"].ToString();
-            }
-        }
-        catch
-        { }
-    }
-
-    protected void btnBack_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("SearchProperty.aspx");
-    }
-
-    protected void btnPrint_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            btnBack.Visible = false;
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "CallMyFunction", "MyFunction()", true);
-        }
-        catch
-        {
-        }
-    }
+    #endregion
 }

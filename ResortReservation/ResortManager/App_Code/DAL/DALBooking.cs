@@ -233,7 +233,7 @@ public class DALBooking
         try
         {
             SqlConnection cn = new SqlConnection(strCon);
-            SqlCommand cmd = new SqlCommand(string.Format("select BookingID, BookingCode, StartDate, EndDate from tblBooking where BookingId = {0}", bookingId), cn);
+            SqlCommand cmd = new SqlCommand(string.Format("select BookingID, BookingCode, StartDate, EndDate, NoOfPersons from tblBooking where BookingId = {0}", bookingId), cn);
             cmd.CommandType = CommandType.Text;
             cn.Open();
             SqlDataReader reader = cmd.ExecuteReader();
@@ -244,9 +244,10 @@ public class DALBooking
                 reader.Read();
                 booking = new BALBooking();
                 booking._iBookingId = reader.GetValue(0) == DBNull.Value ? -1 : int.Parse(reader.GetValue(0).ToString());
-                booking.BookingCode = reader.GetValue(1) == DBNull.Value ? string.Empty : reader.GetValue(0).ToString();
+                booking.BookingCode = reader.GetValue(1) == DBNull.Value ? string.Empty : reader.GetValue(1).ToString();
                 booking._dtStartDate = reader.GetValue(2) == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader.GetValue(2).ToString());
                 booking._dtEndDate = reader.GetValue(3) == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader.GetValue(3).ToString());
+                booking._iPaxStaying = reader.GetValue(4) == DBNull.Value ? -1 : int.Parse(reader.GetValue(4).ToString());
             }
             reader.Close();
             cn.Close();

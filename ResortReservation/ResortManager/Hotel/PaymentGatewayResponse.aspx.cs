@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Web;
-using System.Web.UI;
-using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
-using System.Web.UI.WebControls;
-using System.Text;
-using System.Diagnostics;
-using System.Globalization;
+﻿using FarHorizon.Reservations.Common;
+using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
 using System.Net.Mail;
-using System.Configuration;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 
 public partial class response : System.Web.UI.Page
 {
+    #region Variable(s)
     BALBooking blsr = new BALBooking();
     DALBooking dlsr = new DALBooking();
     public string packageid = string.Empty;
@@ -30,17 +23,7 @@ public partial class response : System.Web.UI.Page
     double Totamt = 0;
     public int BookedId = 0;
     DataTable dtGetReturnedData;
-
-
-
-
-
     DataTable dtbkdetails;
-
-
-
-
-
 
     int iagentid = 0;
     int iAccomId = 0;
@@ -48,8 +31,8 @@ public partial class response : System.Web.UI.Page
     DateTime chkin;
     DateTime chkout;
     int custId = 0;
-
-    string bookref;
+    string bookref; 
+    #endregion
 
 
     protected void Page_Load(object sender, EventArgs e)
@@ -204,9 +187,6 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-
-
-
     private void InsertParentTableData()
     {
         try
@@ -270,6 +250,7 @@ public partial class response : System.Web.UI.Page
         dtGetReturnedData = dlsr.GetDepartureDetails(blsr);
         blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
         #endregion
+
         blsr.action = "getMaxBookId";
         DataTable dtmaxId = dlsr.GetMaxBookingId(blsr);
 
@@ -318,7 +299,6 @@ public partial class response : System.Web.UI.Page
                     }
                 }
                 hfBookingId.Value = MaxBookingId.ToString();
-
             }
             catch
             {
@@ -344,8 +324,6 @@ public partial class response : System.Web.UI.Page
     {
         try
         {
-
-
             Crc32 crc32 = new Crc32();
             String hash = String.Empty;
             byte[] mybytes = Encoding.UTF8.GetBytes(ClearString);
@@ -353,12 +331,8 @@ public partial class response : System.Web.UI.Page
             UInt32 Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
             UInt32 Output1 = UInt32.Parse(key);
 
-
-
             if (Output1 == Output)
             {
-
-
                 if (Session["Hotel"] != null)
                 {
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
@@ -374,11 +348,7 @@ public partial class response : System.Web.UI.Page
                     {
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
                         //FiilPackage();
-
-
                     }
-
-
                 }
                 else
                 {
@@ -394,21 +364,14 @@ public partial class response : System.Web.UI.Page
                     {
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
                         FiilPackage();
-
-
                     }
                     DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
-
-
 
                     gdvCruiseRooms.FooterRow.Cells[1].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b>";
                     gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblTotAMt.Text = Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-
-
                     lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
-
 
                     //gdvCruiseRooms.FooterRow.Cells[1].Text = "Total </br> Service Tax @ 4.50%";
                     //gdvCruiseRooms.FooterRow.Cells[3].Text = Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
@@ -421,12 +384,7 @@ public partial class response : System.Web.UI.Page
                     Session["BookingRef"] = null;
 
                 }
-
-
-
-
-
-                lbRuppeeinwords.Text = NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
+                lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
             }
             else
             {
@@ -439,7 +397,6 @@ public partial class response : System.Web.UI.Page
             return null;
         }
     }
-
 
     private void FiilPackage()
     {
@@ -469,75 +426,7 @@ public partial class response : System.Web.UI.Page
         sendMail(transactionId);
 
     }
-
-
-    public static string NumbersToWords(int inputNumber)
-    {
-        int inputNo = inputNumber;
-
-        if (inputNo == 0)
-            return "Zero";
-
-        int[] numbers = new int[4];
-        int first = 0;
-        int u, h, t;
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        if (inputNo < 0)
-        {
-            sb.Append("Minus ");
-            inputNo = -inputNo;
-        }
-
-        string[] words0 = {"" ,"One ", "Two ", "Three ", "Four ",
-            "Five " ,"Six ", "Seven ", "Eight ", "Nine "};
-        string[] words1 = {"Ten ", "Eleven ", "Twelve ", "Thirteen ", "Fourteen ",
-            "Fifteen ","Sixteen ","Seventeen ","Eighteen ", "Nineteen "};
-        string[] words2 = {"Twenty ", "Thirty ", "Forty ", "Fifty ", "Sixty ",
-            "Seventy ","Eighty ", "Ninety "};
-        string[] words3 = { "Thousand ", "Lakh ", "Crore " };
-
-        numbers[0] = inputNo % 1000; // units
-        numbers[1] = inputNo / 1000;
-        numbers[2] = inputNo / 100000;
-        numbers[1] = numbers[1] - 100 * numbers[2]; // thousands
-        numbers[3] = inputNo / 10000000; // crores
-        numbers[2] = numbers[2] - 100 * numbers[3]; // lakhs
-
-        for (int i = 3; i > 0; i--)
-        {
-            if (numbers[i] != 0)
-            {
-                first = i;
-                break;
-            }
-        }
-        for (int i = first; i >= 0; i--)
-        {
-            if (numbers[i] == 0) continue;
-            u = numbers[i] % 10; // ones
-            t = numbers[i] / 10;
-            h = numbers[i] / 100; // hundreds
-            t = t - 10 * h; // tens
-            if (h > 0) sb.Append(words0[h] + "Hundred ");
-            if (u > 0 || t > 0)
-            {
-                if (h > 0 || i == 0) sb.Append("and ");
-                if (t == 0)
-                    sb.Append(words0[u]);
-                else if (t == 1)
-                    sb.Append(words1[u]);
-                else
-                    sb.Append(words2[t - 2] + words0[u]);
-            }
-            if (i != 0) sb.Append(words3[i - 1]);
-        }
-        return "INR " + sb.ToString().TrimEnd() + " Only";
-    }
-
-
-
-
+    
     public void sendMail1()
     {
         try
@@ -569,6 +458,7 @@ public partial class response : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
         }
     }
+
     private int InsertBookingTableData(int acmid, int acmtpid, int agid, string bkref, DateTime cin, DateTime cout, DataTable vsdetails)
     {
         try
@@ -621,7 +511,6 @@ public partial class response : System.Web.UI.Page
             return 0;
         }
     }
-
 
     private int InsertRoomBookingTableData(DataTable dtbooking, DateTime cin, DateTime cout, int acmid)
     {
@@ -743,17 +632,12 @@ public partial class response : System.Web.UI.Page
 
     }
 
-
     private void GenrateBill1(string transactionId)
     {
-
         this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
-
         this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
         sendMail1();
-
     }
-
 
     protected void gdvCruiseRooms_RowDataBound(object sender, GridViewRowEventArgs e)
     {

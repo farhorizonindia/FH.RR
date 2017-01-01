@@ -1,14 +1,14 @@
-﻿using System;
+﻿using FarHorizon.Reservations.Common;
+using System;
 using System.Data;
 using System.Net.Mail;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-
 public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 {
-
+    #region Variable(s)
     DataTable Bookingdt;
     DataTable bookingmealdt;
     double TotalPaybleAmt = 0;
@@ -23,20 +23,18 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
     BALCustomers blcus = new BALCustomers();
     DALCustomers dlcus = new DALCustomers();
-    DataTable dtGetReturnedData;
+    //DataTable dtGetReturnedData;
     int getQueryResponse = 0;
-
     int CountryId = 0;
+    #endregion
 
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
-
             Session["Redirection"] = "../../Hotel/AfterBookingDetails.aspx";
             if (Session["UserCode"] != null || Session["CustomerCode"] != null)
             {
-
                 if (Session["UserCode"] != null)
                 {
                     BookRef.Style.Remove("display");
@@ -47,7 +45,6 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     BookRef.Style.Add("display", "None");
                     ReqBookRef.Enabled = false;
                 }
-
                 lnkLogout.Visible = true;
             }
             else
@@ -216,6 +213,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         {
         }
     }
+
     protected void btnPayProceed_Click(object sender, EventArgs e)
     {
         try
@@ -225,6 +223,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             {
                 if (Session["UserCode"] != null)
                 {
+                    #region Book Via Agent
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs  Technologies Pvt. Ltd.: 12345
 
                     DataTable dtrpax = Session["Bookingdt"] as DataTable;
@@ -236,82 +235,90 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     blagentpayment._Action = "MailValidate";
                     blagentpayment._EmailId = Session["AgentMailId"].ToString();
                     blagentpayment._Password = Session["Password"].ToString();
-                    dtGetReturnedData = dlagentpayment.BindControls(blagentpayment);
-                    if (dtGetReturnedData.Rows.Count > 0)
+                    var dtAgentData = dlagentpayment.BindControls(blagentpayment);
+
+                    if (dtAgentData.Rows.Count <= 0)
                     {
-                        string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
-                        string Email = Session["AgentMailId"].ToString();
-                        string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-                        string FirstName = dtGetReturnedData.Rows[0]["FirstName"].ToString();
-                        string LastName = "XYZ";// dtGetReturnedData.Rows[0]["LastName"].ToString();
-                        string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
-                        string PaymentId = BookingPayId.ToString();
-                        string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
-                        Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
-
-                        Session["Address"] = lblBillingAddress.Text.Trim().ToString();
-                        Session["InvName"] = FirstName;
-
-                        Session["SubInvName"] = FirstName;
-                        string[] arr = { };
-                        if (FirstName != "" && FirstName != null)
-                        {
-                            arr = FirstName.Split(' ');
-                        }
-
-                        //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                        //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
-                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" +arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-                        //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);
-
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Agent not registered!!!')", true);
+                        return;
                     }
+
+                    BookTheHotel();
+
+                    string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
+                    string Email = Session["AgentMailId"].ToString();
+                    string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
+                    string FirstName = dtAgentData.Rows[0]["FirstName"].ToString();
+                    string LastName = "XYZ";// dtGetReturnedData.Rows[0]["LastName"].ToString();
+                    string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
+                    string PaymentId = BookingPayId.ToString();
+                    string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
+                    Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
+
+                    Session["Address"] = lblBillingAddress.Text.Trim().ToString();
+                    Session["InvName"] = FirstName;
+
+                    Session["SubInvName"] = FirstName;
+                    string[] arr = { };
+                    if (FirstName != "" && FirstName != null)
+                    {
+                        arr = FirstName.Split(' ');
+                    }
+
+                    //Response.Redirect("PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + FirstName.ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                    //http://adventureresortscruises.in/Cruise/booking/sendtoairpay.aspx?BookedId=0&PackName=7N8D+Downstream+Cruise&NoOfNights=7&CheckinDate=12%2f4%2f2016&PackId=Pack4
+                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);
+
+                    #endregion
                 }
                 else
                 {
-
-                   
-
-
+                    #region Book Via Customer
                     Session.Add("BookingRef", ViewState["BookRef"].ToString());
 
-
-                    blcus.Email =Session["CustomerMailId"].ToString();
+                    blcus.Email = Session["CustomerMailId"].ToString();
                     blcus.Password = Session["CustPassword"].ToString();
 
                     blcus.action = "LoginCust";
-                    dtGetReturnedData = new DataTable();
-                    dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
+                    var dtCustomerData = new DataTable();
+                    dtCustomerData = dlcus.checkDuplicateemail(blcus);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
-                    if (dtGetReturnedData.Rows.Count > 0)
+
+                    if (dtCustomerData.Rows.Count <= 0)
                     {
-                        Random rnd = new Random();
-                        string BookingPayId = rnd.Next(10000, 20000).ToString() + DateTime.Now.ToString("MMddhhmmssfff");
-                        Session["BookingPayId"] = BookingPayId;
-                        string Email = Session["CustomerMailId"].ToString();
-
-                        string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-
-                        string FirstName = dtGetReturnedData.Rows[0]["FirstName"].ToString();
-                        string LastName = "XYZ";// dtGetReturnedData.Rows[0]["LastName"].ToString();
-                        string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
-                        string PaymentId = BookingPayId.ToString();
-                        string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
-                        Session["Address"] = lblBillingAddress.Text.Trim().ToString();
-                        Session["InvName"] = dtGetReturnedData.Rows[0]["Title"].ToString() + " " + dtGetReturnedData.Rows[0]["LastName"].ToString();
-                        Session["SubInvName"] = dtGetReturnedData.Rows[0]["LastName"].ToString() + ", " + dtGetReturnedData.Rows[0]["Title"].ToString() + " " + FirstName;
-
-                        string[] arr = { };
-                        if (FirstName != "" && FirstName != null)
-                        {
-                            arr = FirstName.Split(' ');
-                        }
-
-                        Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
-
-                        //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016
-
-                        //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Customer not registered!!!')", true);
+                        return;
                     }
+
+                    BookTheHotel();
+
+                    Random rnd = new Random();
+                    string BookingPayId = rnd.Next(10000, 20000).ToString() + DateTime.Now.ToString("MMddhhmmssfff");
+                    Session["BookingPayId"] = BookingPayId;
+                    string Email = Session["CustomerMailId"].ToString();
+
+                    string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
+                    string FirstName = dtCustomerData.Rows[0]["FirstName"].ToString();
+                    string LastName = "XYZ";// dtGetReturnedData.Rows[0]["LastName"].ToString();
+                    string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
+                    string PaymentId = BookingPayId.ToString();
+                    string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
+                    Session["Address"] = lblBillingAddress.Text.Trim().ToString();
+                    Session["InvName"] = dtCustomerData.Rows[0]["Title"].ToString() + " " + dtCustomerData.Rows[0]["LastName"].ToString();
+                    Session["SubInvName"] = dtCustomerData.Rows[0]["LastName"].ToString() + ", " + dtCustomerData.Rows[0]["Title"].ToString() + " " + FirstName;
+
+                    string[] arr = { };
+                    if (FirstName != "" && FirstName != null)
+                    {
+                        arr = FirstName.Split(' ');
+                    }
+
+
+                    Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + Email.ToString() + "&PhoneNumber=" + PhoneNumber.ToString() + "&FirstName=" + arr[0].ToString() + "&LastName=" + LastName.ToString() + "&PaidAmt=" + PaidAmt.ToString() + "&BillingAddress=" + BillingAddress.ToString());
+                    //http://localhost:1897/ResortManager/Cruise/booking/SummerisedDetails.aspx?BookedId=0&PackName=Ganges+Exclusive&NoOfNights=5&CheckinDate=5%2f1%2f2016
+                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('not registered!!!')", true);                         
+                    #endregion
                 }
             }
             else
@@ -339,10 +346,6 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         }
     }
 
-    protected void btnSbmt_Click(object sender, EventArgs e)
-    {
-
-    }
     protected void btnSmbt_Click(object sender, EventArgs e)
     {
         pnlCustReg.Visible = false;
@@ -357,25 +360,22 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     blagentpayment._Action = "MailValidate";
                     blagentpayment._EmailId = Session["AgentMailId"].ToString();
                     blagentpayment._Password = Session["Password"].ToString();
-                    dtGetReturnedData = dlagentpayment.BindControls(blagentpayment);
-                    if (dtGetReturnedData.Rows.Count > 0)
+                    DataTable dtAgent = dlagentpayment.BindControls(blagentpayment);
+                    if (dtAgent.Rows.Count > 0)
                     {
                         lblAgentName.Text = Session["UserName"].ToString();
-                        lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
-                        lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                        hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Phone"].ToString();
-                        hdnfCreditLimit.Value = dtGetReturnedData.Rows[0]["CreditLimit"].ToString();
-                        bool oncredit = Convert.ToBoolean(dtGetReturnedData.Rows[0]["ChkCredit"].ToString());
-
+                        lblBillingAddress.Text = dtAgent.Rows[0]["BillingAddress"].ToString();
+                        lbPaymentMethod.Text = dtAgent.Rows[0]["PaymentMethod"].ToString();
+                        hdnfPhoneNumber.Value = dtAgent.Rows[0]["Phone"].ToString();
+                        hdnfCreditLimit.Value = dtAgent.Rows[0]["CreditLimit"].ToString();
+                        bool oncredit = Convert.ToBoolean(dtAgent.Rows[0]["ChkCredit"].ToString());
 
                         pnlFullDetails.Visible = true;
                         pnlBookButton.Visible = true;
 
-
                         if (oncredit)
                         {
                             panelwithoutCreditAgent.Visible = false;
-
                             btnPayProceed.Text = "Book";
                         }
                         else
@@ -396,7 +396,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             }
             catch (Exception sqe)
             {
-
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowError", "javascript:alert('" + sqe.Message + "')", true);
             }
         }
         else if (Session["CustomerCode"] != null)
@@ -406,23 +406,22 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 blcus.Email = Session["CustomerMailId"].ToString(); ;
                 blcus.Password = Session["CustPassword"].ToString();
                 blcus.action = "LoginCust";
-                dtGetReturnedData = new DataTable();
-                dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-                if (dtGetReturnedData != null)
+                DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+                if (dtCustomer != null)
                 {
                     Session["CustMailId"] = Session["CustomerMailId"].ToString();
 
                     ViewState["Pass"] = txtCustPass.Text.Trim();
-                    lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
+                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
 
-                    lblAgentName.Text = dtGetReturnedData.Rows[0]["FirstName"].ToString() + " " + dtGetReturnedData.Rows[0]["LastName"].ToString();
-                    lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                    hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Telephone"].ToString();
-                    Session["CustId"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
+                    lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
+                    lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
+                    hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
+                    Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
 
                     DataTable dtrpax = Session["Bookingdt"] as DataTable;
 
-                    string BookRef = dtGetReturnedData.Rows[0]["FirstName"].ToString() + dtGetReturnedData.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
+                    string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
                     lbPaymentMethod.Text = "Online";
 
@@ -435,21 +434,18 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 // preparetables(Bookingdt);
 
             }
-            catch
+            catch (Exception sqe)
             {
-
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowError", "javascript:alert('" + sqe.Message + "')", true);
             }
         }
         else
         {
             pnlLogin.Visible = false;
             customerLogin.Visible = true;
-
         }
-
-        //Bookingdt = Session["Bookingdt"] as DataTable;
-        //preparetables(Bookingdt);
     }
+
     protected void btnCustLogin_Click(object sender, EventArgs e)
     {
         try
@@ -457,31 +453,29 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             blcus.Email = txtCustMailId.Text.Trim();
             blcus.Password = txtCustPass.Text.Trim();
             blcus.action = "LoginCust";
-            dtGetReturnedData = new DataTable();
-            dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-            if (dtGetReturnedData != null)
+            DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+            if (dtCustomer != null)
             {
-
-                if (dtGetReturnedData.Rows.Count > 0)
+                if (dtCustomer.Rows.Count > 0)
                 {
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
 
 
                     ViewState["Pass"] = txtCustPass.Text.Trim();
-                    lblBillingAddress.Text = dtGetReturnedData.Rows[0]["BillingAddress"].ToString();
+                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
 
 
-                    lblAgentName.Text = dtGetReturnedData.Rows[0]["FirstName"].ToString() + " " + dtGetReturnedData.Rows[0]["LastName"].ToString();
-                    lbPaymentMethod.Text = dtGetReturnedData.Rows[0]["PaymentMethod"].ToString();
-                    hdnfPhoneNumber.Value = dtGetReturnedData.Rows[0]["Telephone"].ToString();
-                    Session["CustId"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
+                    lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
+                    lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
+                    hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
+                    Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
 
-                    Session["CustomerCode"] = dtGetReturnedData.Rows[0]["CustId"].ToString();
-                    Session.Add("CustomerMailId", dtGetReturnedData.Rows[0]["Email"].ToString());
-                    Session.Add("CustPassword", dtGetReturnedData.Rows[0]["Password"].ToString());
+                    Session["CustomerCode"] = dtCustomer.Rows[0]["CustId"].ToString();
+                    Session.Add("CustomerMailId", dtCustomer.Rows[0]["Email"].ToString());
+                    Session.Add("CustPassword", dtCustomer.Rows[0]["Password"].ToString());
                     DataTable dtrpax = Session["Bookingdt"] as DataTable;
 
-                    string BookRef = dtGetReturnedData.Rows[0]["FirstName"].ToString() + dtGetReturnedData.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
+                    string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
                     lbPaymentMethod.Text = "Online";
 
@@ -509,15 +503,16 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
         }
     }
+
     private void LoadCountries()
     {
         try
         {
             blOpenDates._Action = "GetCountry";
-            dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
-            if (dtGetReturnedData.Rows.Count > 0)
+            DataTable dtCountries = dlOpenDates.BindControls(blOpenDates);
+            if (dtCountries.Rows.Count > 0)
             {
-                ddlCountry.DataSource = dtGetReturnedData;
+                ddlCountry.DataSource = dtCountries;
                 ddlCountry.DataTextField = "CountryName";
                 ddlCountry.DataValueField = "CountryId";
                 ddlCountry.DataBind();
@@ -575,10 +570,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         //    {
         //        ScriptManager.RegisterStartupScript(upd1, typeof(string), "alertscipt", "alert('Customer could not be Added ')", true);
         //    }
-
-
         //}
-
         //catch
         //{
         //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please check entries')", true);
@@ -636,10 +628,10 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             {
                 blcus.action = "chkDuplicate";
                 blcus.Email = txtMailAddress.Text.Trim();
-                dtGetReturnedData = dlcus.checkDuplicateemail(blcus);
-                if (dtGetReturnedData != null)
+                DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+                if (dtCustomer != null)
                 {
-                    if (dtGetReturnedData.Rows.Count > 0)
+                    if (dtCustomer.Rows.Count > 0)
                     {
                         lblError.Text = "This Email Id already Exists";
                         txtMailAddress.Text = "";
@@ -654,7 +646,6 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             {
                 lblError.Text = "Invalid Email Id";
             }
-
         }
         catch
         {
@@ -755,5 +746,120 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please check entries')", true);
         }
+    }
+
+    public void BookTheHotel()
+    {
+        int iAccomId = 0;
+        int iaccomtypeid = 0;
+        int iagentid = 0;
+        DateTime chkin, chkout;
+
+        if (Session["Usercode"] != null)
+        {
+            Int32.TryParse(Session["AId"].ToString(), out iagentid);
+        }
+        Int32.TryParse(Session["AccomId"].ToString(), out iAccomId);
+        Int32.TryParse(Session["iAccomtypeId"].ToString(), out iaccomtypeid);
+
+        DateTime.TryParse(Session["Chkin"].ToString(), out chkin);
+        DateTime.TryParse(Session["chkout"].ToString(), out chkout);
+
+        string bookref = Session["BookingRef"].ToString();
+
+        int bookingId = InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout);
+        InsertRoomBookingTableData(bookingId);
+    }
+
+    private int InsertBookingTableData(int acmid, int acmtpid, int agid, string bkref, DateTime cin, DateTime cout)
+    {
+        try
+        {
+            BALBooking blsr = new BALBooking();
+            DALBooking dlsr = new DALBooking();
+
+            DataTable dtbkdetails = new DataTable();
+            dtbkdetails = Session["Bookingdt"] as DataTable;
+
+            blsr._sBookingRef = bkref;
+            blsr._dtStartDate = cin;
+            blsr._dtEndDate = cout;
+
+            if (Session["CustId"] != null && Session["UserCode"] == null)
+            {
+                blsr.CustomerId = Session["CustId"].ToString();
+            }
+            else
+            {
+                blsr.CustomerId = "0";
+            }
+
+            blsr._iAccomTypeId = acmtpid;
+            blsr._iAccomId = acmid;
+            blsr._iAgentId = agid;
+
+            blsr._iNights = Convert.ToInt32((cout - cin).TotalDays);
+            blsr._iPersons = Convert.ToInt32(dtbkdetails.Compute("SUM(Pax)", string.Empty));
+            blsr._BookingStatusId = 1;
+            blsr._SeriesId = 0;
+            blsr._proposedBooking = false;
+            blsr._chartered = false;
+            blsr._BookingStatusId = (int)BookingStatusTypes.PROPOSED;
+            blsr._proposedBooking = true;
+
+            int bookingId = dlsr.AddParentBookingDetail(blsr);
+            blsr._iBookingId = bookingId;
+
+            Session["tblBookingBAL"] = blsr;
+            return bookingId;            
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    private int InsertRoomBookingTableData(int bookingId)
+    {
+        try
+        {
+            BALBooking blsr = new BALBooking();
+            DALBooking dlsr = new DALBooking();
+
+            DataTable dtbkdetails = Session["Bookingdt"] as DataTable;
+            BALBooking booking = dlsr.GetBookingDetails(bookingId);
+
+            Session["maxBookId"] = bookingId;
+
+            //int LoopInsertStatus = 0;
+            for (int LoopCounter = 0; LoopCounter < dtbkdetails.Rows.Count; LoopCounter++)
+            {
+                blsr._dtStartDate = booking._dtStartDate;
+                blsr._dtEndDate = booking._dtEndDate;
+                blsr._iPaxStaying = booking._iPaxStaying;
+                blsr._bConvertTo_Double_Twin = Convert.ToBoolean(dtbkdetails.Rows[LoopCounter]["ConvDouble"].ToString());
+                blsr._cRoomStatus = "B";
+
+                blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
+                blsr._Paid = Convert.ToDouble(Session["Paid"]);
+
+                blsr.action = "AddPriceDetailsToo";
+                string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');
+                blsr._Amt = Convert.ToDecimal(arr[1]);
+                                
+                int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);                
+            }
+            return 1;
+        }
+        catch (Exception ex)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
+            throw ex;
+        }
+    }
+
+    protected void btnSbmt_Click(object sender, EventArgs e)
+    {
+
     }
 }
