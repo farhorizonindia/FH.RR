@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            var fileNames = Directory.EnumerateFiles(@"C:\Users\854151\Documents\Visual Studio 2015\Projects\AP.WRM.WeAreMoving\AP.WRM.DataModels\V1\Amenities").ToList();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in fileNames)
+            {
+                var fileName = item.Replace(@"C:\Users\854151\Documents\Visual Studio 2015\Projects\AP.WRM.WeAreMoving\AP.WRM.DataModels\V1\Amenities", "");
+                fileName = fileName.Replace(".cs", "");
+                fileName = fileName.Replace("\\", "");
+
+                sb.AppendLine("<AmenityCategories>");                
+                sb.AppendLine("<AmenityCategory Name = '" + fileName + "'>");
+                sb.AppendLine("<SubCategories>");
+                sb.AppendLine("<Category Name='' DisaplyText=''>");
+
+                sb.AppendLine("<Search Engine='Google'>");
+                sb.AppendLine("<SearchText Text=''/>");
+                sb.AppendLine("</Search>");
+                sb.AppendLine("</Category>");
+                sb.AppendLine("</SubCategories>");
+                sb.AppendLine("</AmenityCategory>");
+                sb.AppendLine("</AmenityCategories>");
+            }
+            string names = sb.ToString();
+
+
+
+  //            <AmenityCategory Name = "Airport" Text="Airport">    
+                //  <SubCategories>
+                //    <Category Name="InternationalAirport" Text="International Airport">
+                //      <Search Engine="Google">
+                //        <SearchText Text="International Airport"/>          
+                //      </Search>
+                //    </Category>
+                //  </SubCategories>
+                //</AmenityCategory>
+        }
+    }
+}
