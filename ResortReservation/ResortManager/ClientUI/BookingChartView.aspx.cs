@@ -343,54 +343,67 @@ public partial class _Default : ClientBasePage
 
     private void StartAfterMonths(int Months)
     {
-        Table t;
-        DateTime StartDate;
-        DateTime EndDate;
-        t = (Table)SessionServices.BookingChart_TableBookingTable;
-        if (t != null)
+        try
         {
-            DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
-            if (StartDate != DateTime.MinValue)
+            Table t;
+            DateTime StartDate;
+            DateTime EndDate;
+            t = (Table)SessionServices.BookingChart_TableBookingTable;
+            if (t != null)
             {
-                StartDate = StartDate.AddMonths(Months);
-                StartDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + "01");
-                TotalDaysInChart = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
-                EndDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + TotalDaysInChart.ToString());
-                t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
-                t.Rows[1].Cells[t.Rows[1].Cells.Count - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
+                DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
+                if (StartDate != DateTime.MinValue)
+                {
+                    StartDate = StartDate.AddMonths(Months);
+                    StartDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + "01");
+                    TotalDaysInChart = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
+                    EndDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + TotalDaysInChart.ToString());
+                    t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
+                    t.Rows[1].Cells[t.Rows[1].Cells.Count - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
+                    
+                    //t.Rows[1].Cells[GridEndCol - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
+                    SessionServices.BookingChart_TableBookingTable = t;
+                    FillBookingChartView();
+                    //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
+                    txtFromDate.Text = GF.GetMonthName(StartDate.Month) + " " + StartDate.Year.ToString();
 
-
-                //t.Rows[1].Cells[GridEndCol - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
-                SessionServices.BookingChart_TableBookingTable = t;
-                FillBookingChartView();
-                //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
-                txtFromDate.Text = GF.GetMonthName(StartDate.Month) + " " + StartDate.Year.ToString();
-
+                }
             }
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
         }
     }
     private void StartAferDays(int Days)
     {
-        //This Function will move the chart by adding the no. of paramter to the current start date
-        //It can also receive -ive value as a paramter to move to previous dates.
-        Table t;
-        DateTime StartDate;
-        DateTime EndDate;
-        t = (Table)SessionServices.BookingChart_TableBookingTable;
-        if (t != null)
+        try
         {
-            DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
-            if (StartDate != DateTime.MinValue)
+            //This Function will move the chart by adding the no. of paramter to the current start date
+            //It can also receive -ive value as a paramter to move to previous dates.
+            Table t;
+            DateTime StartDate;
+            DateTime EndDate;
+            t = (Table)SessionServices.BookingChart_TableBookingTable;
+            if (t != null)
             {
-                StartDate = StartDate.AddDays(Days);
-                EndDate = StartDate.AddMonths(1).AddDays(-1);
-                t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
-                int cellCount = t.Rows[1].Cells.Count - 1;
-                t.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
-                SessionServices.BookingChart_TableBookingTable = t;
-                FillBookingChartView();
-                //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
+                DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
+                if (StartDate != DateTime.MinValue)
+                {
+                    StartDate = StartDate.AddDays(Days);
+                    EndDate = StartDate.AddMonths(1).AddDays(-1);
+                    t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
+                    int cellCount = t.Rows[1].Cells.Count - 1;
+                    t.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
+                    SessionServices.BookingChart_TableBookingTable = t;
+                    FillBookingChartView();
+                    //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
+                }
             }
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
         }
     }
     private void GetStartandEndDate(out DateTime StartDate, out DateTime EndDate)
@@ -1088,10 +1101,10 @@ public partial class _Default : ClientBasePage
                     bookingDetail.BookingStatusType = (BookingStatusTypes)Enum.Parse(typeof(BookingStatusTypes), oRBDDW[i].BookingStatusType);
                     //bookingDetail.bookingStatusType = oRBDDW[i].BookingStatusType;
 
-                    if (bookingDetailList.Exists(delegate(ChartViewBookingDetail bd) { return bd.key == bookingDetail.key; }))
+                    if (bookingDetailList.Exists(delegate (ChartViewBookingDetail bd) { return bd.key == bookingDetail.key; }))
                     {
                         ChartViewBookingDetail currentBookingDetail;
-                        currentBookingDetail = bookingDetailList.Find(delegate(ChartViewBookingDetail bd) { return bd.key == bookingDetail.key; });
+                        currentBookingDetail = bookingDetailList.Find(delegate (ChartViewBookingDetail bd) { return bd.key == bookingDetail.key; });
                         int index = bookingDetailList.IndexOf(currentBookingDetail);
                         currentBookingDetail.bookingDetailHtml += "</br><span/>" + bookingDetail.bookingDetailHtml;
 
