@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using System.Data.SqlClient;
+using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
-using FarHorizon.Reservations.BusinessTier.BusinessLogic;
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.MasterServices;
+using System;
+using System.Collections.Generic;
+using System.Data;
+
 namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 {
     internal class BookingTouristHandler
@@ -51,17 +50,17 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 if (oAction == Action.update)
                     oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TouristNo", DbType.Int32, oBookingTouristDTO.TouristNo);
 
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@FirstName", DbType.String, oBookingTouristDTO.FirstName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MiddleName", DbType.String, oBookingTouristDTO.MiddleName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@LastName", DbType.String, oBookingTouristDTO.LastName);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@FirstName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.FirstName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MiddleName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.MiddleName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@LastName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.LastName));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Gender", DbType.String, oBookingTouristDTO.Gender);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@NationalityId", DbType.Int32, oBookingTouristDTO.NationalityId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PassportNo", DbType.String, oBookingTouristDTO.PassportNo);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PassportNo", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.PassportNo));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DOB", DbType.DateTime, oBookingTouristDTO.DateOfBirth);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PlaceofBirth", DbType.String, oBookingTouristDTO.PlaceofBirth);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PPIssueDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.PassportIssueDate, false));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PPExpiryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.PassportExpiryDate, false));
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisaNo", DbType.String, oBookingTouristDTO.VisaNo);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisaNo", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.VisaNo));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisaExpiryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.VisaExpiryDate, false));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@IndiaEntryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.IndiaEntryDate, false));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ProposedStayInIndia", DbType.String, oBookingTouristDTO.ProposedStayInIndia);
@@ -192,17 +191,17 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         oBookingTouristDTO[i].BookingId = dr.ItemArray.GetValue(0) != DBNull.Value ? Convert.ToInt32(dr.ItemArray.GetValue(0)) : 0;
                         oBookingTouristDTO[i].BookingCode = dr.ItemArray.GetValue(1) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(1)) : "";
                         oBookingTouristDTO[i].TouristNo = dr.ItemArray.GetValue(2) != DBNull.Value ? Convert.ToInt32(dr.ItemArray.GetValue(2)) : 0;
-                        oBookingTouristDTO[i].FirstName = dr.ItemArray.GetValue(3) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(3)) : "";
-                        oBookingTouristDTO[i].MiddleName = dr.ItemArray.GetValue(4) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(4)) : "";
-                        oBookingTouristDTO[i].LastName = dr.ItemArray.GetValue(5) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(5)) : "";
+                        oBookingTouristDTO[i].FirstName = dr.ItemArray.GetValue(3) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(3))) : "";
+                        oBookingTouristDTO[i].MiddleName = dr.ItemArray.GetValue(4) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(4))) : "";
+                        oBookingTouristDTO[i].LastName = dr.ItemArray.GetValue(5) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(5))) : "";
                         oBookingTouristDTO[i].Gender = dr.ItemArray.GetValue(6) != DBNull.Value ? Convert.ToChar(dr.ItemArray.GetValue(6)) : '\0';
                         oBookingTouristDTO[i].NationalityId = dr.ItemArray.GetValue(7) != DBNull.Value ? Convert.ToInt32(dr.ItemArray.GetValue(7)) : 0;
-                        oBookingTouristDTO[i].PassportNo = dr.ItemArray.GetValue(8) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(8)) : "";
+                        oBookingTouristDTO[i].PassportNo = dr.ItemArray.GetValue(8) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(8))) : "";
                         oBookingTouristDTO[i].DateOfBirth = dr.ItemArray.GetValue(9) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(9).ToString()) : DateTime.MinValue;
                         oBookingTouristDTO[i].PlaceofBirth = dr.ItemArray.GetValue(10) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(10)) : "";
                         oBookingTouristDTO[i].PassportIssueDate = dr.ItemArray.GetValue(11) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(11).ToString()) : DateTime.MinValue;
                         oBookingTouristDTO[i].PassportExpiryDate = dr.ItemArray.GetValue(12) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(12).ToString()) : DateTime.MinValue;
-                        oBookingTouristDTO[i].VisaNo = dr.ItemArray.GetValue(13) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(13)) : "";
+                        oBookingTouristDTO[i].VisaNo = dr.ItemArray.GetValue(13) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(13))) : "";
                         oBookingTouristDTO[i].VisaExpiryDate = dr.ItemArray.GetValue(14) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(14).ToString()) : DateTime.MinValue;
                         oBookingTouristDTO[i].IndiaEntryDate = dr.ItemArray.GetValue(15) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(15).ToString()) : DateTime.MinValue;
                         oBookingTouristDTO[i].ProposedStayInIndia = dr.ItemArray.GetValue(16) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(16)) : "";
@@ -283,11 +282,11 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         if (dr.ItemArray.GetValue(2) != DBNull.Value)
                             oBookingTouristDTO[i].TouristNo = Convert.ToInt32(dr.ItemArray.GetValue(2));
                         if (dr.ItemArray.GetValue(3) != DBNull.Value)
-                            oBookingTouristDTO[i].FirstName = Convert.ToString(dr.ItemArray.GetValue(3));
+                            oBookingTouristDTO[i].FirstName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(3)));
                         if (dr.ItemArray.GetValue(4) != DBNull.Value)
-                            oBookingTouristDTO[i].MiddleName = Convert.ToString(dr.ItemArray.GetValue(4));
+                            oBookingTouristDTO[i].MiddleName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(4)));
                         if (dr.ItemArray.GetValue(5) != DBNull.Value)
-                            oBookingTouristDTO[i].LastName = Convert.ToString(dr.ItemArray.GetValue(5));
+                            oBookingTouristDTO[i].LastName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(5)));
                     }
                 }
             }
@@ -295,7 +294,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
         }
 
 
-        public BookingTouristDTO[] GetTouristsftr(string bcode, string email, string ppno, string name, DateTime chkin, DateTime chkout,int accomid)
+        public BookingTouristDTO[] GetTouristsftr(string bcode, string email, string ppno, string firstName, DateTime chkin, DateTime chkout, int accomid)
         {
             DataSet ds;
             DataRow dr;
@@ -310,9 +309,9 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, bcode);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@name", DbType.String, name);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, email);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@passportNo", DbType.String, ppno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@name", DbType.String, DataSecurityManager.Encrypt(firstName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, DataSecurityManager.Encrypt(email));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@passportNo", DbType.String, DataSecurityManager.Encrypt(ppno));
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@chkindate", DbType.Date, chkin);
 
@@ -342,15 +341,15 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         if (dr.ItemArray.GetValue(1) != DBNull.Value)
                             oBookingTouristDTO[i].BookingRef = Convert.ToString(dr.ItemArray.GetValue(1));
                         if (dr.ItemArray.GetValue(2) != DBNull.Value)
-                            oBookingTouristDTO[i].AgentName = Convert.ToString(dr.ItemArray.GetValue(2));
-                        if (dr.ItemArray.GetValue(3) != DBNull.Value)
-                            oBookingTouristDTO[i].ClientName = Convert.ToString(dr.ItemArray.GetValue(3));
+                            oBookingTouristDTO[i].AgentName = dr.ItemArray.GetValue(2) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(2))) : string.Empty;
+                        //if (dr.ItemArray.GetValue(3) != DBNull.Value)
+                        //    oBookingTouristDTO[i].ClientName = Convert.ToString(dr.ItemArray.GetValue(3));
                         if (dr.ItemArray.GetValue(4) != DBNull.Value)
                             oBookingTouristDTO[i].Gender = Convert.ToChar(dr.ItemArray.GetValue(4));
                         if (dr.ItemArray.GetValue(5) != DBNull.Value)
                             oBookingTouristDTO[i].DateOfBirth = Convert.ToDateTime(dr.ItemArray.GetValue(5));
                         if (dr.ItemArray.GetValue(6) != DBNull.Value)
-                            oBookingTouristDTO[i].Nationality  = Convert.ToString (dr.ItemArray.GetValue(6));
+                            oBookingTouristDTO[i].Nationality = Convert.ToString(dr.ItemArray.GetValue(6));
                         if (dr.ItemArray.GetValue(7) != DBNull.Value)
                             oBookingTouristDTO[i].PassportNo = Convert.ToString(dr.ItemArray.GetValue(7));
                         if (dr.ItemArray.GetValue(8) != DBNull.Value)
@@ -367,14 +366,17 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         if (dr.ItemArray.GetValue(13) != DBNull.Value)
                             oBookingTouristDTO[i].TouristNo = Convert.ToInt32(dr.ItemArray.GetValue(13));
 
+                        if (dr.ItemArray.GetValue(14) != DBNull.Value)
+                            oBookingTouristDTO[i].FirstName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(14)));
+                        if (dr.ItemArray.GetValue(15) != DBNull.Value)
+                            oBookingTouristDTO[i].MiddleName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(15)));
+                        if (dr.ItemArray.GetValue(16) != DBNull.Value)
+                            oBookingTouristDTO[i].LastName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(16)));
                     }
                 }
             }
             return oBookingTouristDTO;
         }
-
-
-
 
         public BookingTouristDTO[] SearchTourists(string Firstname, string Lastname, string Passportno, int Nationality)
         {
@@ -389,9 +391,9 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 sProcName = "up_SearchTourists";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
 
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sFirstName", DbType.String, Firstname);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sLastName", DbType.String, Lastname);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPassportNo", DbType.String, Passportno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sFirstName", DbType.String, DataSecurityManager.Encrypt(Firstname));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sLastName", DbType.String, DataSecurityManager.Encrypt(Lastname));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPassportNo", DbType.String, DataSecurityManager.Encrypt(Passportno));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNationalityid", DbType.Int32, Nationality);
 
                 ds = oDB.ExecuteDataSet(oDB.DbCmd);
@@ -480,11 +482,11 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         if (dr.ItemArray.GetValue(0) != DBNull.Value)
                             oBookingTouristDTO[i].TouristNo = Convert.ToInt32(dr.ItemArray.GetValue(0));
                         if (dr.ItemArray.GetValue(1) != DBNull.Value)
-                            oBookingTouristDTO[i].FirstName = Convert.ToString(dr.ItemArray.GetValue(1));
+                            oBookingTouristDTO[i].FirstName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(1)));
                         if (dr.ItemArray.GetValue(2) != DBNull.Value)
-                            oBookingTouristDTO[i].LastName = Convert.ToString(dr.ItemArray.GetValue(2));
+                            oBookingTouristDTO[i].LastName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(2)));
                         if (dr.ItemArray.GetValue(3) != DBNull.Value)
-                            oBookingTouristDTO[i].PassportNo = Convert.ToString(dr.ItemArray.GetValue(3));
+                            oBookingTouristDTO[i].PassportNo = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(3)));
                         if (dr.ItemArray.GetValue(4) != DBNull.Value)
                             oBookingTouristDTO[i].Nationality = Convert.ToString(dr.ItemArray.GetValue(4));
 

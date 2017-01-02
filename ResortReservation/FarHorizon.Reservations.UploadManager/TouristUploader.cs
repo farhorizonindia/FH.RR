@@ -8,6 +8,7 @@ using System.Data;
 using System.Configuration.Internal;
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.Common;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.UploadManager
 {
@@ -179,6 +180,8 @@ namespace FarHorizon.Reservations.UploadManager
                                     xmlFieldMapper.IsBool = !String.IsNullOrEmpty(fieldNode.Attributes["BoolField"].Value) ? Boolean.Parse(fieldNode.Attributes["BoolField"].Value) : false;
                                 if (fieldNode.Attributes.GetNamedItem("FetchTouristNo") != null)
                                     xmlFieldMapper.FetchTouristNo = !String.IsNullOrEmpty(fieldNode.Attributes["FetchTouristNo"].Value) ? Boolean.Parse(fieldNode.Attributes["FetchTouristNo"].Value) : false;
+                                if (fieldNode.Attributes.GetNamedItem("Encrypt") != null)
+                                    xmlFieldMapper.Encrypt = !String.IsNullOrEmpty(fieldNode.Attributes["Encrypt"].Value) ? Boolean.Parse(fieldNode.Attributes["Encrypt"].Value) : false;
                                 xmlFieldMapperList.Add(xmlFieldMapper);
                             }
                         }
@@ -240,7 +243,7 @@ namespace FarHorizon.Reservations.UploadManager
                         {
                             foreach (XMLFieldMapper xmlFieldMapper in readPattern.XmlFieldMapperList)
                             {
-                                Cells cell = row.CellList.Find(delegate(Cells c) { return c.ColNum == xmlFieldMapper.ExcelColumn; });
+                                Cells cell = row.CellList.Find(delegate (Cells c) { return c.ColNum == xmlFieldMapper.ExcelColumn; });
                                 if (cell != null)
                                 {
                                     #region Formatting to Date if it date field
@@ -306,8 +309,9 @@ namespace FarHorizon.Reservations.UploadManager
                                         }
                                         else
                                         {
-                                            insertQuery2.Append("'" + cell.CellValue + "', ");
-                                            updateQuery.Append(xmlFieldMapper.DbField + " = '" + cell.CellValue + "', ");
+                                            string val = xmlFieldMapper.Encrypt ? DataSecurityManager.Encrypt(cell.CellValue) : cell.CellValue;
+                                            insertQuery2.Append("'" + val + "', ");
+                                            updateQuery.Append(xmlFieldMapper.DbField + " = '" + val + "', ");
                                         }
                                     }
                                     else
@@ -329,10 +333,10 @@ namespace FarHorizon.Reservations.UploadManager
                             string prevValue = string.Empty;
                             foreach (Row columnarRow in rowList)
                             {
-                                XMLFieldMapper xmlFieldMapper = readPattern.XmlFieldMapperList.Find(delegate(XMLFieldMapper fm) { return fm.ExcelRow == columnarRow.RowNum; });
+                                XMLFieldMapper xmlFieldMapper = readPattern.XmlFieldMapperList.Find(delegate (XMLFieldMapper fm) { return fm.ExcelRow == columnarRow.RowNum; });
                                 if (xmlFieldMapper != null)
                                 {
-                                    Cells cell = columnarRow.CellList.Find(delegate(Cells c) { return c.ColNum == xmlFieldMapper.ExcelColumn; });
+                                    Cells cell = columnarRow.CellList.Find(delegate (Cells c) { return c.ColNum == xmlFieldMapper.ExcelColumn; });
                                     if (cell != null)
                                     {
                                         #region Formatting to Date if it is date field
@@ -481,7 +485,7 @@ namespace FarHorizon.Reservations.UploadManager
                         else
                         {
                             InsertRecord(insertQuery1.ToString());
-                            
+
                         }
                     }
                     #endregion
@@ -748,6 +752,7 @@ namespace FarHorizon.Reservations.UploadManager
         bool _JoinToPrev;
         bool _IsBool;
         bool _FetchTouristNo;
+        bool _Encrypt;
 
         public XMLFieldMapper()
         {
@@ -838,6 +843,12 @@ namespace FarHorizon.Reservations.UploadManager
         {
             get { return _FetchTouristNo; }
             set { _FetchTouristNo = value; }
+        }
+
+        public bool Encrypt
+        {
+            get { return _Encrypt; }
+            set { _Encrypt = value; }
         }
     }
 }

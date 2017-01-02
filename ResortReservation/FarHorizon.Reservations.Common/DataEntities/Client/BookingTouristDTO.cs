@@ -80,12 +80,9 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
 
         public string ClientName
         {
-            get { return _clientName; }
+            get { return string.Format("{0} {1} {2}", FirstName, MiddleName, LastName); }
             set { _clientName = value; }
         }
-
-
-
 
         public string EmailId
         {
@@ -237,7 +234,6 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _cFormNo; }
             set { _cFormNo = value; }
         }
-
         #endregion Properties
     }
 
