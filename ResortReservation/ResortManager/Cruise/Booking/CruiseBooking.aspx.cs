@@ -246,8 +246,21 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     {
         try
         {
-            string[] arr = view.ToTable().Rows[0][2].ToString().Split(' ');
+            //The value coming from the stored procedure is like "INR 50000". That's why such a string is splitted to extract quantity from it.
             string[] arr1 = view.ToTable().Rows[0][1].ToString().Split(' ');
+            string[] arr = view.ToTable().Rows[0][2].ToString().Split(' ');
+
+            double pricePerPersonSharing = 0;
+            double pricePerPersonSingleUse = 0;
+
+            if (arr1.Length > 1)
+            {
+                double.TryParse(arr1[1], out pricePerPersonSharing);
+            }
+            if (arr.Length > 1)
+            {
+                double.TryParse(arr[1], out pricePerPersonSingleUse);
+            }
 
             int count = 0;
             dt = new DataTable();
@@ -263,9 +276,9 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                         dr["RoomCategory"] = view.ToTable().Rows[0][0].ToString() + " Single Use";
                     dr["NoofRooms"] = 1;
                     if (Convert.ToInt32(ddlpax1rm.SelectedValue) < 2)
-                        dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr[1]));
+                        dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSingleUse);
                     else
-                        dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr1[1]));
+                        dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSharing);
                     dr["roomcategoryid"] = view.ToTable().Rows[0][3].ToString();
 
                     foreach (DataRow dr1 in dt.Rows)
@@ -276,7 +289,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                             {
                                 if (Convert.ToInt32(dr1["Pax"]) == Convert.ToInt32(ddlpax1rm.SelectedValue))
                                 {
-                                    dr1["Total"] = Convert.ToDouble(dr1["Total"]) + (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr[1]));
+                                    dr1["Total"] = Convert.ToDouble(dr1["Total"]) + (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSingleUse);
                                     dr1["NoofRooms"] = Convert.ToInt32(dr1["NoofRooms"]) + 1;
                                     dr["RoomCategory"] = view.ToTable().Rows[0][0].ToString() + " Single Use";
                                     count++;
@@ -286,7 +299,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                             {
                                 if (Convert.ToInt32(dr1["Pax"]) == Convert.ToInt32(ddlpax1rm.SelectedValue))
                                 {
-                                    dr1["Total"] = Convert.ToDouble(dr1["Total"]) + (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr1[1]));
+                                    dr1["Total"] = Convert.ToDouble(dr1["Total"]) + (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSharing);
                                     dr1["NoofRooms"] = Convert.ToInt32(dr1["NoofRooms"]) + 1;
                                     dr["RoomCategory"] = view.ToTable().Rows[0][0].ToString() + " Sharing";
                                     count++;
@@ -314,9 +327,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 DataRow dr = dt.NewRow();
                 if (ddlpax1rm.SelectedItem.Text == "2")
                 {
-
                     dr["RoomCategory"] = view.ToTable().Rows[0][0].ToString() + " Sharing";
-
                 }
                 else
                 {
@@ -325,14 +336,11 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 dr["NoofRooms"] = 1;
                 if (Convert.ToInt32(ddlpax1rm.SelectedValue) < 2)
                 {
-
-                    dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr[1]));
+                    dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSharing);
                 }
                 else
                 {
-
-
-                    dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(arr1[1]));
+                    dr["Total"] = (Convert.ToInt32(ddlpax1rm.SelectedValue) * pricePerPersonSingleUse);
                 }
                 dr["roomcategoryid"] = view.ToTable().Rows[0][3].ToString();
                 dr["Pax"] = ddlpax1rm.SelectedItem.Text;
@@ -532,13 +540,34 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     {
         try
         {
-
             string[] arrWZ;
             string[] arr = view.ToTable().Rows[0][2].ToString().Split(' ');
+            double arrr = 0;
+            if (arr.Length > 1)
+            {
+                double.TryParse(arr[1], out arrr);
+            }
+
             string[] arr1 = view.ToTable().Rows[0][1].ToString().Split(' ');
+            double arrr1 = 0;
+            if (arr1.Length > 1)
+            {
+                double.TryParse(arr1[1], out arrr1);
+            }
 
             string[] arrtx = view.ToTable().Rows[0][5].ToString().Split(' ');
+            double arrrtx = 0;
+            if (arrtx.Length > 1)
+            {
+                double.TryParse(arrtx[1], out arrrtx);
+            }
+
             string[] arr1tx = view.ToTable().Rows[0][4].ToString().Split(' ');
+            double arrr1tx = 0;
+            if (arr1tx.Length > 1)
+            {
+                double.TryParse(arr1tx[1], out arrr1tx);
+            }
 
             DataTable dtInsertable = new DataTable();
             dtInsertable.Columns.Add("RoomNumber", typeof(string));
@@ -556,7 +585,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             if (ViewState["VsRoomDetails"] == null)
             {
                 DataRow dr = dtInsertable.NewRow();
-
 
                 dr["RoomNumber"] = hfRoomId.Value;
                 dr["RoomCategoryId"] = RoomcateId;
@@ -587,8 +615,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     //if (TaxStatus == "Tax Applied")
                     //{
                     arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
-                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                    dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Price"] = (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue));
                     dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
@@ -608,7 +636,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     //{
                     arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    dr["Price"] = Convert.ToDouble(arrtx[1]);
+                    dr["Price"] = arrrtx;
                     dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
@@ -663,8 +691,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     //if (TaxStatus == "Tax Applied")
                     //{
                     arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
-                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                    dr["Price"] = (Convert.ToDouble(arr1tx[1]) * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
+                    dr["Price"] = (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
                     dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}
@@ -686,7 +714,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
                     arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    dr["Price"] = Convert.ToDouble(arrtx[1]);
+                    dr["Price"] = arrrtx;
                     dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
 
                     //}

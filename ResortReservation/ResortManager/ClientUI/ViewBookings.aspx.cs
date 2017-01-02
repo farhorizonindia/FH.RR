@@ -1,24 +1,17 @@
-using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using System.Collections.Generic;
+using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
-using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.Common.DataEntities.Client;
-using FarHorizon.Reservations.MasterServices;
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
-using System.Data.SqlClient;
-
 using FarHorizon.Reservations.Common.DataEntities.InputOutput;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
+using FarHorizon.Reservations.MasterServices;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 public partial class ViewBookings : ClientBasePage
 {

@@ -16,7 +16,7 @@
 
     <script type="text/javascript" src="../../js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="../../js/bootstrap.min.js"></script>
-        
+
     <style type="text/css">
         /*.button-link
         {
@@ -25,20 +25,17 @@
             color: #FFF;
             font-size: medium;
         }*/
-        table.PerformanceTable
-        {
+        table.PerformanceTable {
             table-layout: fixed;
             width: 500px;
         }
 
-            table.PerformanceTable td.PerformanceCell
-            {
+            table.PerformanceTable td.PerformanceCell {
                 width: 75px;
             }
 
 
-        .CSSTableGenerator
-        {
+        .CSSTableGenerator {
             margin: 0px;
             padding: 0px;
             width: 100%;
@@ -58,13 +55,11 @@
             border-top-left-radius: 0px;
         }
 
-        th
-        {
+        th {
             text-align: center;
         }
 
-        .CSSTableGenerator table
-        {
+        .CSSTableGenerator table {
             border-collapse: collapse;
             border-spacing: 0;
             width: 100%;
@@ -73,41 +68,35 @@
             padding: 0px;
         }
 
-        .CSSTableGenerator tr:last-child td:last-child
-        {
+        .CSSTableGenerator tr:last-child td:last-child {
             -moz-border-radius-bottomright: 0px;
             -webkit-border-bottom-right-radius: 0px;
             border-bottom-right-radius: 0px;
         }
 
-        .CSSTableGenerator table tr:first-child td:first-child
-        {
+        .CSSTableGenerator table tr:first-child td:first-child {
             -moz-border-radius-topleft: 0px;
             -webkit-border-top-left-radius: 0px;
             border-top-left-radius: 0px;
         }
 
-        .CSSTableGenerator table tr:first-child td:last-child
-        {
+        .CSSTableGenerator table tr:first-child td:last-child {
             -moz-border-radius-topright: 0px;
             -webkit-border-top-right-radius: 0px;
             border-top-right-radius: 0px;
         }
 
-        .CSSTableGenerator tr:last-child td:first-child
-        {
+        .CSSTableGenerator tr:last-child td:first-child {
             -moz-border-radius-bottomleft: 0px;
             -webkit-border-bottom-left-radius: 0px;
             border-bottom-left-radius: 0px;
         }
 
-        .CSSTableGenerator tr:hover td
-        {
+        .CSSTableGenerator tr:hover td {
             background-color: #ffffff;
         }
 
-        .CSSTableGenerator td
-        {
+        .CSSTableGenerator td {
             /*vertical-align: middle;
                 background: -o-linear-gradient(bottom, #ffaa56 5%, #ffffff 100%);
                 background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a9cae3), color-stop(1, #ffffff) );
@@ -127,23 +116,19 @@
             border: 1px solid #000;
         }
 
-        .CSSTableGenerator tr:last-child td
-        {
+        .CSSTableGenerator tr:last-child td {
             border-width: 0px 1px 0px 0px;
         }
 
-        .CSSTableGenerator tr td:last-child
-        {
+        .CSSTableGenerator tr td:last-child {
             border-width: 0px 0px 1px 0px;
         }
 
-        .CSSTableGenerator tr:last-child td:last-child
-        {
+        .CSSTableGenerator tr:last-child td:last-child {
             border-width: 0px 0px 0px 0px;
         }
 
-        .CSSTableGenerator tr:first-child td
-        {
+        .CSSTableGenerator tr:first-child td {
             /*background: -o-linear-gradient(bottom, #ff7f00 5%, #bf5f00 100%);
                 background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a9cae3), color-stop(1, #a9cae3) );
                 background: -moz-linear-gradient( center top, #ff7f00 5%, #bf5f00 100% );
@@ -159,8 +144,7 @@
             color: #ffffff;*/
         }
 
-        .CSSTableGenerator tr:first-child:hover td
-        {
+        .CSSTableGenerator tr:first-child:hover td {
             background: -o-linear-gradient(bottom, #ff7f00 5%, #bf5f00 100%);
             background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a9cae3), color-stop(1, #a9cae3) );
             background: -moz-linear-gradient( center top, #ff7f00 5%, #bf5f00 100% );
@@ -169,82 +153,68 @@
             background-color: #ff7f00;
         }
 
-        .CSSTableGenerator tr:first-child td:first-child
-        {
+        .CSSTableGenerator tr:first-child td:first-child {
             border-width: 0px 0px 1px 0px;
         }
 
-        .CSSTableGenerator tr:first-child td:last-child
-        {
+        .CSSTableGenerator tr:first-child td:last-child {
             border-width: 0px 0px 1px 1px;
         }
 
-        .auto-style1
-        {
+        .auto-style1 {
             height: 30px;
         }
 
-        .auto-style2
-        {
+        .auto-style2 {
             height: 23px;
         }
 
-        p
-        {
+        p {
             font-size: 20px;
             text-align: left;
         }
 
 
 
-        ul
-        {
+        ul {
             list-style-type: none;
             padding: 0px;
         }
 
-        li
-        {
+        li {
             padding: 0px;
             margin: 0px;
         }
 
-        li
-        {
+        li {
             font-size: 16px;
             font-family: 'Times New Roman';
             padding: 8px;
             margin: 0px;
         }
 
-        h1
-        {
+        h1 {
             font-size: 34px;
         }
 
-        h3
-        {
+        h3 {
             font-size: 17px;
         }
 
-        h2
-        {
+        h2 {
             font-size: 17px;
         }
 
-        .auto-style3
-        {
+        .auto-style3 {
             width: 41%;
             height: 19px;
         }
 
-        .auto-style4
-        {
+        .auto-style4 {
             height: 19px;
         }
 
-        .auto-style5
-        {
+        .auto-style5 {
             width: 194px;
         }
     </style>
@@ -266,26 +236,15 @@
 
                                 <h2>Final Booking Details <span class=" pull-right">
                                     <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton></span></h2>
-
-
-
                                 <div class=" clearfix"></div>
-
-
-
-
-
-
                             </div>
                         </div>
                         <div class=" clearfix"></div>
                     </div>
                 </div>
-
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 White-Box">
-
                             <ul>
                                 <li style="font-family: 'Times New Roman'; font-style: italic; font-weight: bold; font-size: 21px;">
                                     <asp:Label ID="lblPackName" runat="server" Text="Label">Package: <%Response.Write(Request.QueryString["PackName"]); %></asp:Label>
@@ -302,22 +261,11 @@
 
                                 </li>
                             </ul>
-
-
                         </div>
                     </div>
                 </div>
-
-
-
-
-
                 <div>
-
-
-
                     <div class="booking-online-box White-Box2 padding2">
-
                         <div class="CSSTableGenerator1 booking-online2">
                             <table style="display: none">
                                 <tr style="color: White; font-weight: bold;" class="GridHeader">
@@ -339,23 +287,13 @@
                                         <%Response.Write(Convert.ToDateTime(Request.QueryString["CheckinDate"]).ToString("dddd, MMMM d, yyyy")); %>
                                     </td>
                                 </tr>
-
                             </table>
                         </div>
-
-
-
-
-
-
-
-
                         <br />
                         <div class="booking-online2">
                             <div>
                                 <center><h3 style="font-family:'Times New Roman';font-weight:bold">Cabin Details</h3></center>
                             </div>
-
 
                             <asp:GridView ID="GridRoomPaxDetail" AutoGenerateColumns="False" runat="server" Font-Size="12px" Font-Italic="false" ShowFooter="True">
                                 <HeaderStyle ForeColor="Black" />
@@ -456,8 +394,6 @@
                                 </Columns>
                             </asp:GridView>
 
-
-
                             <div class=" clear"></div>
                             <div id="DivContinue" class=" btn-summerised">
                                 <asp:HiddenField ID="hdnfTotalPaybleAmt" runat="server" />
@@ -489,40 +425,28 @@
                             </asp:Panel>
                             <div style="height: 30px;"></div>
                             <asp:Panel ID="customerLogin" runat="server">
-
                                 <table id="tableVerify" runat="server" visible="false">
-
                                     <tr>
                                         <td style="text-align: center;">
                                             <asp:TextBox ID="txtCode" placeholder="Enter Code" runat="server"></asp:TextBox>
                                             <asp:Button ID="btnVerify" runat="server" OnClick="btnVerify_Click" Text="Verify" />
-
                                         </td>
                                         <td></td>
                                     </tr>
                                 </table>
-
-
                                 <asp:HiddenField ID="hfVCode" runat="server" />
                                 <table id="TableCust" style="width: 23%;" runat="server">
-
                                     <tr>
                                         <td>Enter your Email</td>
                                         <td>
                                             <asp:TextBox ID="txtCustMailId" runat="server"></asp:TextBox></td>
-
-
                                     </tr>
-
                                     <tr>
                                         <td>Enter password</td>
                                         <td>
                                             <asp:TextBox ID="txtCustPass" runat="server" TextMode="Password"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtCustPass" ValidationGroup="CustLogin"></asp:RequiredFieldValidator>
                                         </td>
-
-
-
                                     </tr>
                                     <tr>
                                         <td>
@@ -532,28 +456,14 @@
                         <asp:Button runat="server" ID="btnCustLogin" Text="Login" ValidationGroup="CustLogin" OnClick="btnCustLogin_Click" />
                                         </td>
                                     </tr>
-
                                 </table>
-
                             </asp:Panel>
 
                             <asp:Panel ID="pnlCustReg" runat="server">
-
-
-
-
-
                                 <div id="formTop" class="row noSideMargin backgroundPaperDark innerDropShadow topbotPadding">
-
                                     <div class="col-sm-8 col-xs-8 m3" style="margin-top: 50px;">
-
-
-
                                         <h1 style="font-size: 30px; text-align: center; margin-bottom: 30px;"><span>NEW USER REGISTER</span></h1>
-
                                         <div class=" clearfix"></div>
-
-
                                         <table>
                                             <tr>
                                                 <td>
@@ -725,17 +635,10 @@
                                             </tr>
 
                                         </table>
-
                                     </div>
                                     <div class=" clearfix"></div>
                                     <div class="puller"></div>
-
                                 </div>
-
-
-
-
-
                             </asp:Panel>
                             <div>
                                 <center>
@@ -843,6 +746,8 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
             </section>
     </form>
 </body>

@@ -7,6 +7,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Mail;
 using System.Text;
@@ -151,7 +152,10 @@ public partial class response : System.Web.UI.Page
             document.Close();
 
             mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
-            SmtpServer.Send(mail);
+            if (!Debugger.IsAttached)
+            {
+                SmtpServer.Send(mail);
+            }
             ViewState["sentMail"] = "1";
         }
     }
@@ -376,9 +380,7 @@ public partial class response : System.Web.UI.Page
     }
 
     private void GenrateBill1(string transactionId)
-    {
-        //this.InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout, dtbkdetails);
-        //this.InsertRoomBookingTableData(dtbkdetails, chkin, chkout, iAccomId);
+    {        
         UpdateHotelBookingToBooked();
         sendMail1(transactionId);
     }
@@ -430,7 +432,10 @@ public partial class response : System.Web.UI.Page
             SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
             SmtpServer.EnableSsl = false;
 
-            //SmtpServer.Send(mail);
+            if (!Debugger.IsAttached)
+            {
+                SmtpServer.Send(mail);
+            }
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
         }
         catch (Exception ex)
@@ -492,6 +497,10 @@ public partial class response : System.Web.UI.Page
             SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
             SmtpServer.EnableSsl = false;
 
+            if (!Debugger.IsAttached)
+            {
+                SmtpServer.Send(mail);
+            }
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
         }
         catch (Exception ex)
