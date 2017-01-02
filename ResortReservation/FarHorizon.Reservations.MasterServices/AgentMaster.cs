@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Collections;
 using System.Text;
 using System.Data;
@@ -9,6 +9,7 @@ using FarHorizon.Reservations.Common;
 
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.MasterServices
 {
@@ -16,49 +17,49 @@ namespace FarHorizon.Reservations.MasterServices
     {
         #region IMaster Members
 
-        public bool Insert(AgentDTO oAgentData)
+        public int Insert(AgentDTO oAgentData)
         {
-            string sProcName;
             DatabaseManager oDB;
+            int agentId = -1;
             try
-            {
-                oDB = new DatabaseManager();
-                sProcName = "up_Ins_AgentMaster";
+            {                
+                oDB = new DatabaseManager();             
+                string sProcName = "up_Ins_AgentMaster";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentCode", DbType.String, oAgentData.AgentCode);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, oAgentData.AgentName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, oAgentData.EmailId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, oAgentData.Password);
-                oDB.ExecuteNonQuery(oDB.DbCmd);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, DataSecurityManager.Encrypt(oAgentData.EmailId));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oAgentData.Password));
+
+                agentId = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
+                //oDB.ExecuteNonQuery(oDB.DbCmd);
             }
             catch (Exception exp)
             {
                 oDB = null;
                 GF.LogError("clsAgentMaster.Insert", exp.Message);
-                return false;
+                return -1;
             }
             finally
             {
                 oDB = null;
             }
-            return true;
+            return agentId;
         }
 
         public bool Update(AgentDTO oAgentData)
         {
-            string sProcName;
             DatabaseManager oDB;
             try
             {
                 oDB = new DatabaseManager();
-
-                sProcName = "up_Upd_AgentMaster";
+                string sProcName = "up_Upd_AgentMaster";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentId", DbType.Int32, oAgentData.AgentId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentCode", DbType.String, oAgentData.AgentCode);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, oAgentData.AgentName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, oAgentData.EmailId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, oAgentData.Password);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, DataSecurityManager.Encrypt(oAgentData.EmailId));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oAgentData.Password));
                 oDB.ExecuteNonQuery(oDB.DbCmd);
             }
             catch (Exception exp)
@@ -115,7 +116,7 @@ namespace FarHorizon.Reservations.MasterServices
             {
                 query += " and AgentId=" + AgentId;
             }
-            query += " order by AgentName";
+            //query += " order by AgentName";
 
             ds = GetDataFromDB(query);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -126,12 +127,14 @@ namespace FarHorizon.Reservations.MasterServices
                     oAgentData[i] = new AgentDTO();
                     oAgentData[i].AgentId = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
                     oAgentData[i].AgentCode = Convert.ToString(ds.Tables[0].Rows[i][1]);
-                    oAgentData[i].AgentName = Convert.ToString(ds.Tables[0].Rows[i][2]);
-                    oAgentData[i].EmailId = Convert.ToString(ds.Tables[0].Rows[i][3]);
-                    oAgentData[i].Password = Convert.ToString(ds.Tables[0].Rows[i][4]);
+                    oAgentData[i].AgentName = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][2]));
+                    oAgentData[i].EmailId = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][3]));
+                    oAgentData[i].Password = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][4]));
                 }
             }
-            return oAgentData;
+
+            AgentDTO[] orderedData = oAgentData.OrderBy(a => a.AgentName).ToArray();
+            return orderedData;
         }
 
         private DataSet GetDataFromDB(string Query)

@@ -84,7 +84,7 @@ namespace WindowsFormsApplication1
                 return;
             }
             txtResult.Text = DataSecurityManager.Encrypt(txtPlainText.Text);
-
+            lblTotalLength.Text = txtResult.Text.Length.ToString();
         }
 
         private void btnDecryptText_Click(object sender, EventArgs e)
@@ -95,6 +95,7 @@ namespace WindowsFormsApplication1
                 return;
             }
             txtResult.Text = DataSecurityManager.Decrypt(txtEncryptedText.Text);
+            lblTotalLength.Text = txtResult.Text.Length.ToString();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -147,44 +148,52 @@ namespace WindowsFormsApplication1
             TreeNode rootNode = treeView1.Nodes[0];
             List<ParentItem> items = new List<ParentItem>();
 
-            foreach (TreeNode table in rootNode.Nodes)
+            try
             {
-                bool isAnyColumnSelected = false;
-                foreach (TreeNode column in table.Nodes)
+                foreach (TreeNode table in rootNode.Nodes)
                 {
-                    if (column.Checked)
-                        isAnyColumnSelected = true;
-                }
-                if (!isAnyColumnSelected)
-                {
-                    continue;
-                }
-
-                string tableName = table.Text;
-                foreach (TreeNode column in table.Nodes)
-                {
-                    ParentItem pi = items.FirstOrDefault(parentItem => string.Compare(parentItem.ItemName, tableName, true) == 0);
-                    if (pi == null)
+                    bool isAnyColumnSelected = false;
+                    foreach (TreeNode column in table.Nodes)
                     {
-                        pi = new ParentItem { ItemName = tableName };
-                        items.Add(pi);
+                        if (column.Checked)
+                            isAnyColumnSelected = true;
                     }
-                    string columnName = column.Text;
-
-                    ChildItem ci = pi.Children.FirstOrDefault(childItem => string.Compare(childItem.ItemName, columnName, true) == 0);
-                    if (ci == null)
+                    if (!isAnyColumnSelected)
                     {
-                        ci = new ChildItem { ItemName = columnName, Selected = column.Checked };
-                        pi.Children.Add(ci);
+                        continue;
                     }
 
+                    string tableName = table.Text;
+                    foreach (TreeNode column in table.Nodes)
+                    {
+                        ParentItem pi = items.FirstOrDefault(parentItem => string.Compare(parentItem.ItemName, tableName, true) == 0);
+                        if (pi == null)
+                        {
+                            pi = new ParentItem { ItemName = tableName };
+                            items.Add(pi);
+                        }
+                        string columnName = column.Text;
+
+                        ChildItem ci = pi.Children.FirstOrDefault(childItem => string.Compare(childItem.ItemName, columnName, true) == 0);
+                        if (ci == null)
+                        {
+                            ci = new ChildItem { ItemName = columnName, Selected = column.Checked };
+                            pi.Children.Add(ci);
+                        }
+
+                    }
                 }
+                if (dm == null)
+                {
+                    dm = new DataManager(txtConnectionString.Text);
+                }
+                dm.EncryptData(items);
+                MessageBox.Show("Completed");
             }
-            if (dm == null)
+            catch (Exception exp)
             {
-                dm = new DataManager(txtConnectionString.Text);
+                MessageBox.Show(exp.Message);
             }
-            dm.EncryptData(items);
         }
     }
 }

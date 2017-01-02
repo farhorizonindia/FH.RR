@@ -93,6 +93,10 @@
     <Compile Include="UserRoleMaster.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\DataSecurity\FarHorizon.DataSecurity\FarHorizon.DataSecurity.csproj">
+      <Project>{d690e3b0-445c-4b6f-9211-5c2151e22239}</Project>
+      <Name>FarHorizon.DataSecurity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FarHorizon.Reservations.Common\FarHorizon.Reservations.Common.csproj">
       <Project>{2CF66C59-D704-4C60-BD41-1B3141F73E12}</Project>
       <Name>FarHorizon.Reservations.Common</Name>

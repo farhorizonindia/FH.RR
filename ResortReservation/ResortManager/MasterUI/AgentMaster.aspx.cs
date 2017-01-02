@@ -69,13 +69,11 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             lblStatus.Text = "Add action initiated.";
             Save();
-
         }
         else
         {
             lblStatus.Text = "Update action initiated.";
             Update();
-
         }
         hfId.Value = "";
         RefreshGrid();
@@ -181,36 +179,36 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         if (!base.ValidateIfCommandAllowed(Request.Url.AbsoluteUri, ENums.PageCommand.Add))
             return;
 
-        bool bActionCompleted;
+        int agentId;
         AgentDTO oAgentData = new AgentDTO();
         oAgentData.AgentCode = Convert.ToString(txtAgentCode.Text.Trim());
         oAgentData.AgentName = Convert.ToString(txtAgentName.Text.Trim());
         oAgentData.EmailId = txtAgentEmailId.Text.Trim();
         oAgentData.Password = txtPassword.Text.Trim();
         AgentMaster oAgentMaster = new AgentMaster();
-        bActionCompleted = oAgentMaster.Insert(oAgentData);
-        if (bActionCompleted == true)
+        agentId = oAgentMaster.Insert(oAgentData);
+
+        if (agentId > -1)
         {
             base.DisplayAlert("The record has been inserted successfully");
-            PaymentInfo();
+            PaymentInfo(agentId);
             ClearControls();
         }
         else
             lblStatus.Text = "Error Occured while insertion: Please refer to the error log.";
     }
 
-    private void PaymentInfo()
+    private void PaymentInfo(int agentId)
     {
         try
         {
             //dtGetReturenedData = new DataTable();
             //dtGetReturenedData = dlAgentpayment.getagentmasterinfo(Convert.ToInt32(ddlAgent.SelectedValue));
 
-
-
             blAgentpayment._Action = "AddDetails";
             blAgentpayment._FirstName = txtAgentName.Text;
             blAgentpayment._LastName = "";
+            blAgentpayment._AgentCode = agentId;
             blAgentpayment._PaymentMethod = ddlpaymentMethod.SelectedItem.Text;
             blAgentpayment._EmailId = txtAgentEmailId.Text.Trim();
             //   blAgentpayment._AgentCode = Convert.ToInt32(dtGetReturenedData.Rows[0]["AgentId"].ToString());
@@ -221,9 +219,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             blAgentpayment.OnCredit = chkOnCredit.Checked;
             blAgentpayment.CreditLimit = Convert.ToDecimal(txtCreditLimit.Text.Trim() == "" ? "0" : txtCreditLimit.Text.Trim());
 
-
             GetQueryResponse = dlAgentpayment.AddpaymentDetails(blAgentpayment);
-
             if (GetQueryResponse > 0)
             {
                 //  ClearAllControls();
@@ -236,9 +232,6 @@ public partial class MasterUI_AgentMaster : MasterBasePage
                 lbStatus.Text = "Not Saved.. Please check ur entries once";
                 lbStatus.ForeColor = System.Drawing.Color.Red;
             }
-
-
-
         }
         catch (Exception sqe)
         {
@@ -255,7 +248,6 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             //dtGetReturenedData = new DataTable();
             //dtGetReturenedData = dlAgentpayment.getagentmasterinfo(Convert.ToInt32(ddlAgent.SelectedValue));
             int Id;
-
             int.TryParse(hfId.Value, out Id);
 
             blAgentpayment._Action = "updatepaymenInfo";
@@ -267,7 +259,6 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             blAgentpayment.Phone = txtPhone.Text.Trim();
             if (txtPassword.Text != "")
             {
-
                 blAgentpayment._Password = txtPassword.Text.Trim();
             }
             else
@@ -275,29 +266,22 @@ public partial class MasterUI_AgentMaster : MasterBasePage
                 blAgentpayment._Password = null;
             }
 
-
             blAgentpayment._BillingAddress = txtBillingAddress.Text.Trim().ToString();
             blAgentpayment.OnCredit = chkOnCredit.Checked;
             blAgentpayment.CreditLimit = Convert.ToDecimal(txtCreditLimit.Text.Trim() == "" ? "0" : txtCreditLimit.Text.Trim());
-
-
+            
             GetQueryResponse = dlAgentpayment.UpdatepaymentDetails(blAgentpayment);
-
             if (GetQueryResponse > 0)
             {
                 //  ClearAllControls();
                 lbStatus.Text = "Payment details saved successfully.";
                 lbStatus.ForeColor = System.Drawing.Color.Green;
-
             }
             else
             {
                 lbStatus.Text = "Not Saved.. Please check ur entries once";
                 lbStatus.ForeColor = System.Drawing.Color.Red;
             }
-
-
-
         }
         catch (Exception sqe)
         {
@@ -333,7 +317,6 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         oAgentData.EmailId = txtAgentEmailId.Text.Trim();
         if (txtPassword.Text != "")
         {
-
             oAgentData.Password = txtPassword.Text.Trim();
         }
         else

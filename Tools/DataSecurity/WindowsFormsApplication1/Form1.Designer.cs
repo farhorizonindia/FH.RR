@@ -59,11 +59,12 @@
             this.userRoleIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userEmailIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnEncryptTheColumns = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtConnectionString = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnEncryptTheColumns = new System.Windows.Forms.Button();
+            this.lblTotalLength = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tblUserMasterBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cruiseDataSet)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -103,6 +104,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.Controls.Add(this.lblTotalLength);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.txtResult);
             this.tabPage1.Controls.Add(this.btnDecryptText);
@@ -356,6 +358,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Encrypt/ Decrypt Tables";
             // 
+            // btnEncryptTheColumns
+            // 
+            this.btnEncryptTheColumns.Location = new System.Drawing.Point(380, 51);
+            this.btnEncryptTheColumns.Name = "btnEncryptTheColumns";
+            this.btnEncryptTheColumns.Size = new System.Drawing.Size(230, 31);
+            this.btnEncryptTheColumns.TabIndex = 7;
+            this.btnEncryptTheColumns.Text = "Encrypt The Columns";
+            this.btnEncryptTheColumns.UseVisualStyleBackColor = true;
+            this.btnEncryptTheColumns.Click += new System.EventHandler(this.btnEncryptTheColumns_Click);
+            // 
             // treeView1
             // 
             this.treeView1.CheckBoxes = true;
@@ -392,15 +404,14 @@
             this.label6.TabIndex = 3;
             this.label6.Text = "Plain Text";
             // 
-            // btnEncryptTheColumns
+            // lblTotalLength
             // 
-            this.btnEncryptTheColumns.Location = new System.Drawing.Point(380, 51);
-            this.btnEncryptTheColumns.Name = "btnEncryptTheColumns";
-            this.btnEncryptTheColumns.Size = new System.Drawing.Size(230, 31);
-            this.btnEncryptTheColumns.TabIndex = 7;
-            this.btnEncryptTheColumns.Text = "Encrypt The Columns";
-            this.btnEncryptTheColumns.UseVisualStyleBackColor = true;
-            this.btnEncryptTheColumns.Click += new System.EventHandler(this.btnEncryptTheColumns_Click);
+            this.lblTotalLength.AutoSize = true;
+            this.lblTotalLength.Location = new System.Drawing.Point(19, 572);
+            this.lblTotalLength.Name = "lblTotalLength";
+            this.lblTotalLength.Size = new System.Drawing.Size(67, 13);
+            this.lblTotalLength.TabIndex = 8;
+            this.lblTotalLength.Text = "Total Length";
             // 
             // Form1
             // 
@@ -463,6 +474,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button btnEncryptTheColumns;
+        private System.Windows.Forms.Label lblTotalLength;
     }
 }
 

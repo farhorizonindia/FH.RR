@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 
 namespace WindowsFormsApplication1
 {
@@ -63,6 +64,8 @@ namespace WindowsFormsApplication1
 
         internal void EncryptData(List<ParentItem> items)
         {
+            StringBuilder sb = new StringBuilder();
+
             List<string> updateQueryCollection = new List<string>();
             string updateQuery = string.Empty;
 
@@ -97,21 +100,46 @@ namespace WindowsFormsApplication1
                         columnDetails.Add(cd);
                     }
 
+                    #region Prepare the update part of the query
+                    updateQuery = "update " + tableName + " set ";
                     foreach (var columnToBeEncrypted in parentItem.Children.Where(c => c.Selected))
                     {
                         ColumnDetail cd = columnDetails.FirstOrDefault(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) == 0);
-
-                        updateQuery = "update " + tableName + " set " + columnToBeEncrypted.ItemName + " = '" + DataSecurityManager.Encrypt(cd.Value.ToString()) + "' where 1 = 1";
-
-                        foreach (var otherColumn in columnDetails.Where(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) != 0))
-                        {
-                            updateQuery += " and " + otherColumn.ColumnName + " = " + DecorateForSQlQuery(otherColumn.ColumnType, otherColumn.Value.ToString());
-                        }
-                        updateQueryCollection.Add(updateQuery);
+                        updateQuery += columnToBeEncrypted.ItemName + " = '" + DataSecurityManager.Encrypt(cd.Value.ToString()) + "', ";
                     }
+
+                    if (updateQuery.Trim().EndsWith(","))
+                    {
+                        updateQuery = updateQuery.Trim().Substring(0, updateQuery.Trim().Length - 1);
+                    } 
+                    #endregion
+
+
+                    #region Prepare The Where Clause
+                    updateQuery += " where 1 = 1 ";
+                    foreach (var columnToBeEncrypted in parentItem.Children.Where(c => c.Selected))
+                    {
+                        var otherColumn = columnDetails.FirstOrDefault(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) == 0);
+
+                        if (otherColumn == null)
+                            continue;
+
+                        string value = otherColumn.Value == DBNull.Value ? "NULL" : otherColumn.Value.ToString();
+                        //Console.WriteLine(otherColumn.Value.ToString());
+                        
+                        updateQuery += " and " + otherColumn.ColumnName + DecorateForSQlQuery(otherColumn.ColumnType, value);
+                    } 
+                    #endregion
+
+                    updateQuery += ";";
+
+                    updateQueryCollection.Add(updateQuery);
+                    sb.AppendLine(updateQuery);
                 }
                 reader.Close();
             }
+
+            string qc = sb.ToString();
 
             foreach (var q in updateQueryCollection)
             {
@@ -132,23 +160,34 @@ namespace WindowsFormsApplication1
             int maxLength = 0;
             int.TryParse(ml.ToString(), out maxLength);
 
-            if (maxLength < 150)
+            //If the column size is varchar(MAX) then CHARACTER_MAXIMUM_LENGTH will be -1
+
+            if (maxLength != -1)
             {
-                query = "Alter table " + tableName + " Alter column " + columnName + " varchar(150)";
+                query = "Alter table " + tableName + " Alter column " + columnName + " varchar(MAX)";
                 ExecuteNonQuery(query);
             }
         }
 
-
         private string DecorateForSQlQuery(Type type, string text)
         {
+            if (text.Contains("'"))
+            {
+                text = text.Replace("'", "''");
+            }
+
+            if (text == "NULL")
+            {
+                return " IS NULL ";
+            }
+
             if (type == typeof(string) || type == typeof(DateTime))
             {
-                return "'" + text + "'";
+                return " = '" + text + "'";
             }
             if (type == typeof(bool))
             {
-                return string.Compare(text, Boolean.TrueString, true) == 0 ? "1" : "0";
+                return string.Compare(text, Boolean.TrueString, true) == 0 ? " = 1" : " = 0";
             }
             return text;
         }
@@ -182,12 +221,19 @@ namespace WindowsFormsApplication1
 
         private void ExecuteNonQuery(string query)
         {
-            using (SqlCommand cmd = new SqlCommand())
+            try
             {
-                cmd.Connection = _connection;
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = _connection;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception exp)
+            {
+                throw exp;
             }
         }
     }

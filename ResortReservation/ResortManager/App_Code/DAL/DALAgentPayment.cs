@@ -56,7 +56,7 @@ public class DALAgentPayment
             da.InsertCommand.Parameters.AddWithValue("@AgentCode", obj._AgentCode);
             da.InsertCommand.Parameters.AddWithValue("@billingAddress", obj._BillingAddress);
             da.InsertCommand.Parameters.AddWithValue("@PaymentMethod", obj._PaymentMethod);
-            da.InsertCommand.Parameters.AddWithValue("@OnCredit", obj.OnCredit);
+            da.InsertCommand.Parameters.AddWithValue("@OnCredit", obj.OnCredit == true ? 1 : 0);
             da.InsertCommand.Parameters.AddWithValue("@CreditLimit", obj.CreditLimit);
             da.InsertCommand.Parameters.AddWithValue("@phoneNumber", obj.Phone);
             da.InsertCommand.CommandType = CommandType.StoredProcedure;
@@ -68,9 +68,10 @@ public class DALAgentPayment
             else
                 return 0;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return 0;
+            throw exp;
+            //return 0;
         }
     }
 
@@ -103,9 +104,9 @@ public class DALAgentPayment
             else
                 return 0;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return 0;
+            throw exp;
         }
     }
 
