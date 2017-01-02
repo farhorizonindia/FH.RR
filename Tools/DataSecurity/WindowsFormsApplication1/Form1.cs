@@ -46,8 +46,8 @@ namespace WindowsFormsApplication1
             foreach (DataGridViewRow row in dgDB.Rows)
             {
                 UserMaster um = row.DataBoundItem as UserMaster;
-                um.UserName = dsm.Encrypt(um.UserName);
-                um.Password = dsm.Encrypt(um.Password);
+                um.UserName = DataSecurityManager.Encrypt(um.UserName);
+                um.Password = DataSecurityManager.Encrypt(um.Password);
                 userMasterEncryptedList.Add(um);
             }
             dgEncrypted.DataSource = userMasterEncryptedList;
@@ -64,8 +64,8 @@ namespace WindowsFormsApplication1
                 {
                     Id = um.Id,
                     UserId = um.UserId,
-                    UserName = dsm.Decrypt(um.UserName),
-                    Password = dsm.Decrypt(um.Password),
+                    UserName = DataSecurityManager.Decrypt(um.UserName),
+                    Password = DataSecurityManager.Decrypt(um.Password),
                     userEmailId = um.userEmailId,
                     Active = um.Active,
                     Administrator = um.Administrator,
@@ -83,7 +83,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("Please enter the plain text to encrypt");
                 return;
             }
-            txtResult.Text = dsm.Encrypt(txtPlainText.Text);
+            txtResult.Text = DataSecurityManager.Encrypt(txtPlainText.Text);
 
         }
 
@@ -94,7 +94,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("Please enter the encrypted text to decrypt");
                 return;
             }
-            txtResult.Text = dsm.Decrypt(txtEncryptedText.Text);
+            txtResult.Text = DataSecurityManager.Decrypt(txtEncryptedText.Text);
         }
 
         private void btnConnect_Click(object sender, EventArgs e)

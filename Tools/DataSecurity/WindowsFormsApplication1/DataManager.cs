@@ -3,13 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace WindowsFormsApplication1
 {
     public class DataManager
     {
-        string _connectionString;
         SqlConnection _connection;
         List<ParentItem> tablesAndColumns = new List<ParentItem>();
 
@@ -66,7 +64,6 @@ namespace WindowsFormsApplication1
         internal void EncryptData(List<ParentItem> items)
         {
             List<string> updateQueryCollection = new List<string>();
-            DataSecurityManager dsm = new DataSecurityManager();
             string updateQuery = string.Empty;
 
             List<string> columnNames = new List<string>();
@@ -104,7 +101,7 @@ namespace WindowsFormsApplication1
                     {
                         ColumnDetail cd = columnDetails.FirstOrDefault(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) == 0);
 
-                        updateQuery = "update " + tableName + " set " + columnToBeEncrypted.ItemName + " = '" + dsm.Encrypt(cd.Value.ToString()) + "' where 1 = 1";
+                        updateQuery = "update " + tableName + " set " + columnToBeEncrypted.ItemName + " = '" + DataSecurityManager.Encrypt(cd.Value.ToString()) + "' where 1 = 1";
 
                         foreach (var otherColumn in columnDetails.Where(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) != 0))
                         {
@@ -185,7 +182,6 @@ namespace WindowsFormsApplication1
 
         private void ExecuteNonQuery(string query)
         {
-            object response = null;
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = _connection;
