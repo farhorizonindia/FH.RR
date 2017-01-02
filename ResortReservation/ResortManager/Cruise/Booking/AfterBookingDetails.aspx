@@ -217,12 +217,7 @@
         <div class=" clearfix"></div>
 
         <div class="RoomRatesBox2 White-Box2 m2" style="padding: 20px;">
-
-
-
             <div>
-
-
                 <%--  <table style="border: thin solid #000000;width:30%">
                    <tr style="background-color: #5BC0DE">
                        <td>Check in </td>
@@ -236,32 +231,25 @@
                    </tr>
                    </table>--%>
             </div>
-
             <asp:UpdatePanel ID="upd1" runat="server">
                 <ContentTemplate>
                     <h2 style="font-family: 'Times New Roman'; font-style: italic; font-weight: bold; font-size: 17px;">Selected Rooms</h2>
                     <asp:Panel ID="pnlRooms" runat="server">
                     </asp:Panel>
                     <div style="display: none">
-
-
                         <h2>Selected Rooms</h2>
                         <asp:GridView ID="gdvSelectedRooms" runat="server" Width="50%" CellPadding="4" ForeColor="#333333" GridLines="None" AutoGenerateColumns="False" Font-Size="Medium">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
-
                                 <asp:TemplateField>
                                     <ItemTemplate>
-
                                         <asp:HiddenField ID="hdnRmno" runat="server" Value='<%#Eval("RoomCategoryId") %>' />
                                     </ItemTemplate>
 
                                 </asp:TemplateField>
-
                                 <asp:BoundField DataField="categoryName" HeaderText="categoryName" />
                                 <asp:BoundField DataField="Pax" HeaderText="Pax" />
                                 <asp:BoundField DataField="Price" HeaderText="Price" />
-
                                 <asp:BoundField DataField="Nights" HeaderText="Nights" />
                                 <asp:BoundField DataField="Total" HeaderText="Total" />
                             </Columns>
@@ -276,9 +264,6 @@
                             <SortedDescendingCellStyle BackColor="#D4DFE1" />
                             <SortedDescendingHeaderStyle BackColor="#15524A" />
                         </asp:GridView>
-
-
-
                     </div>
                     <div class=" clear"></div>
                     <div id="DivContinue" class=" btn-summerised">
@@ -300,7 +285,6 @@
                                     <asp:TextBox ID="txtPasswoprd" Width="250px" Height="27px" runat="server" TextMode="Password"></asp:TextBox>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td></td>
                                 <td class="auto-style2" style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -309,10 +293,8 @@
                             </tr>
                         </table>
                     </asp:Panel>
-
                     <asp:Panel ID="customerLogin" runat="server">
                         <table id="tableVerify" runat="server" visible="false">
-
                             <tr>
                                 <td>
                                     <asp:TextBox ID="txtCode" placeholder="Enter Code" runat="server"></asp:TextBox>
@@ -322,40 +304,24 @@
                                 <td></td>
                             </tr>
                         </table>
-
-
                         <asp:HiddenField ID="hfVCode" runat="server" />
-
-
-
                         <table id="TableCust" runat="server" style="margin: 30px auto; float: none;">
-
                             <tr>
                                 <td>Enter your Email</td>
                                 <td>
                                     <asp:TextBox ID="txtCustMailId" runat="server"></asp:TextBox></td>
-
-
                             </tr>
-
                             <tr>
                                 <td>Enter password</td>
                                 <td>
                                     <asp:TextBox ID="txtCustPass" runat="server" TextMode="Password"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1ee" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtCustPass" ValidationGroup="CustLogin"></asp:RequiredFieldValidator>
-
                                 </td>
-
-
-
                             </tr>
-
-
                             <tr>
                                 <td>
                                     <div style="height: 30px;"></div>
                                 </td>
-
                                 <td>
                                     <div style="height: 30px;"></div>
                                 </td>
@@ -369,47 +335,30 @@
                         <asp:Button runat="server" CssClass="btn btn-info btnWidth100 btnFont" ID="btnCustLogin" ValidationGroup="CustLogin" Text="Login" OnClick="btnCustLogin_Click" />
                                 </td>
                             </tr>
-
                         </table>
-
                     </asp:Panel>
-
                     <asp:Panel ID="pnlCustReg" runat="server">
                         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
                         <section>
-
                             <div class="row">
-
                                 <div class="col-md-12 text-center topbotPadding">
-
                                     <h2 class="goldLine"><span>NEW USER REGISTER</span></h2>
-
                                 </div>
-
                                 <div class="col-md-12 text-left noTopPadding">
-
                                     <div class="insideSkin bottomPadding30">
-
                                         <p></p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </section>
-
-
-
                         <div id="formTop" class="row noSideMargin backgroundPaperDark innerDropShadow topbotPadding">
-
                             <div class="col-xs-12">
                             </div>
                             <table style="margin: 0 auto; float: none; width: 51%;">
                                 <tr>
                                     <td>
-                                        <label for="ddlTitle" class="control-label">Title</label></td>
+                                        <label for="ddlTitle" class="control-label">Title</label>
+                                    </td>
                                     <td>
                                         <asp:DropDownList ID="ddltitle" runat="server" class="form-control" Style="margin-bottom: 15px">
                                             <asp:ListItem></asp:ListItem>
@@ -417,11 +366,9 @@
                                             <asp:ListItem>Mrs</asp:ListItem>
                                             <asp:ListItem>Miss</asp:ListItem>
                                             <asp:ListItem>Ms</asp:ListItem>
-
-                                        </asp:DropDownList></td>
-
+                                        </asp:DropDownList>
+                                    </td>
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtName" class="control-label">Firstname</label></td>
@@ -432,21 +379,14 @@
                                     </td>
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtName" class="control-label">Lastname</label></td>
                                     <td>
                                         <asp:TextBox ID="txtLastName" runat="server" class="form-control"></asp:TextBox>
-
-
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtLastName" ValidationGroup="Cust"></asp:RequiredFieldValidator>
-
                                     </td>
-
-
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtEmailAddress" class="control-label">Email Address</label></td>
@@ -456,42 +396,30 @@
                                         <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
 
                                     </td>
-
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtEmailAddress" class="control-label">Telephone</label></td>
                                     <td>
                                         <asp:TextBox ID="txtTelephone" runat="server" class="form-control"></asp:TextBox>
-
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtTelephone" ValidationGroup="Cust"></asp:RequiredFieldValidator>
-
                                     </td>
-
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtAddress1" class="control-label">Address 1</label></td>
                                     <td>
                                         <asp:TextBox ID="txtAddress1" runat="server" class="form-control"></asp:TextBox>
-
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtAddress1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
-
                                     </td>
-
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtAddress2" class="control-label">Address 2</label></td>
                                     <td>
-                                        <asp:TextBox ID="txtaddress2" runat="server" class="form-control" Style="margin-bottom: 15px"></asp:TextBox></td>
-
-
+                                        <asp:TextBox ID="txtaddress2" runat="server" class="form-control" Style="margin-bottom: 15px"></asp:TextBox>
+                                    </td>
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtCity" class="control-label">City</label></td>
@@ -505,7 +433,6 @@
 
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtState" class="control-label">State</label></td>
@@ -515,7 +442,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtState" ValidationGroup="Cust"></asp:RequiredFieldValidator></td>
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtPostcode" class="control-label">Postcode</label></td>
@@ -525,7 +451,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtPostcode" ValidationGroup="Cust"></asp:RequiredFieldValidator></td>
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtPassword" class="control-label">Password</label></td>
@@ -538,7 +463,6 @@
 
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="ddlCountry" class="control-label">Country</label></td>
@@ -552,7 +476,6 @@
 
 
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <label for="txtPaymentMethod" class="control-label">Payment Method</label></td>
@@ -566,7 +489,6 @@
 
 
                                 </tr>
-
                                 <tr style="text-align: center">
 
                                     <td colspan="2">
@@ -577,18 +499,9 @@
                                     </td>
 
                                 </tr>
-
                             </table>
-
-
                             <div class="puller"></div>
-
                         </div>
-
-
-
-
-
                     </asp:Panel>
                     <div style="width: 70%; margin: 0 auto; float: none;">
                         <asp:Panel ID="pnlFullDetails" class="CSSTableGenerator" Width="100%" runat="server">
@@ -600,32 +513,15 @@
                                             <asp:TextBox ID="txtBookRef" runat="server" Width="281px"></asp:TextBox>
 
                                             <asp:RequiredFieldValidator ID="ReqBookRef" runat="server" ControlToValidate="txtBookRef" ErrorMessage="*" ValidationGroup="Pay"></asp:RequiredFieldValidator></td>
-
                                     </tr>
-
                                 </table>
-
-
-
-
-
-
-
-
                             </div>
-
                             <h2 style="font-family: 'Times New Roman'; font-style: italic; font-weight: bold; font-size: 17px;">Payment Details</h2>
-
-
-
-
-
                             <table style="border: thin solid #000000; width: 80%; margin: 0 auto;">
                                 <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
                                     <td style="border: thin solid #000000; font-weight: bold; width: 22%;">Invoice To</td>
                                     <td style="border: thin solid #000000">
                                         <asp:Label ID="lblAgentName" runat="server"></asp:Label></td>
-
                                 </tr>
                                 <tr style="background-color: #EFF3FB;">
                                     <td style="border: thin solid #000000; font-weight: bold">
@@ -651,8 +547,6 @@
                                 </tr>
                             </table>
                             <br />
-
-
                             <br />
                             <div style="height: 40px"></div>
                             <asp:Panel ID="panelwithoutCreditAgent" Width="100%" runat="server" Font-Size="Medium">
@@ -682,57 +576,34 @@
                                     </table>
                                     <br />
                                     <div style="float: left"></div>
-
-
                                 </div>
-
-
                                 <br />
-
-
-
                             </asp:Panel>
-
-
                         </asp:Panel>
                         <div style="height: 40px"></div>
-
-
-
                         <%--    <asp:Panel ID="fhtfr"  Width="70%" runat="server">
             <div>
                   <p> Amount</p>
                      <p><asp:TextBox ID="txtPaidAmt" runat="server"></asp:TextBox>
                          <asp:Label ID="lblCurrency" runat="server" Text="Label"></asp:Label>
-                     </p> 
-
-             </div>
+                     </p>
+                            </div>
 
                  
                     <br />
-                
-
-
     </asp:Panel>--%>
                         <div style="height: 40px"></div>
                         <center>
-     <asp:Panel ID="pnlBookButton"  Width="70%" runat="server">
+                        <asp:Panel ID="pnlBookButton" Width="70%" runat="server">
 
-
-         <asp:Button ID="btnPayProceed" runat="server" Text="Proceed For Payment" CssClass="btn btn-info btnWidth100 btnFont" OnClick="btnPayProceed_Click" ValidationGroup="Pay" Font-Size="Medium" />
-             <asp:Label ID="lblPaymentErr" runat="server" ForeColor="#FF3300"></asp:Label>
-             <asp:HiddenField ID="hftxtpaidamt" runat="server" />
-             <br />
-         </asp:Panel>
-
-    </center>
-
-
-
-
+                            <asp:Button ID="btnPayProceed" runat="server" Text="Proceed For Payment" CssClass="btn btn-info btnWidth100 btnFont" OnClick="btnPayProceed_Click" ValidationGroup="Pay" Font-Size="Medium" />
+                            <asp:Label ID="lblPaymentErr" runat="server" ForeColor="#FF3300"></asp:Label>
+                            <asp:HiddenField ID="hftxtpaidamt" runat="server" />
+                            <br />
+                        </asp:Panel>
+                        </center>
                     </div>
-                    </div>
-
+                    <%--</div>--%>
                 </ContentTemplate>
                 <Triggers>
                     <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -740,6 +611,7 @@
 
                 </Triggers>
             </asp:UpdatePanel>
+        </div>
     </form>
 </body>
 </html>

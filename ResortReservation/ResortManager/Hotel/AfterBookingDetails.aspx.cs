@@ -438,7 +438,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     Session["CustMailId"] = Session["CustomerMailId"].ToString();
 
                     ViewState["Pass"] = txtCustPass.Text.Trim();
-                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
+                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
 
                     lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
                     lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
@@ -486,10 +486,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 {
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
 
-
                     ViewState["Pass"] = txtCustPass.Text.Trim();
-                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
-
+                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
 
                     lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
                     lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();

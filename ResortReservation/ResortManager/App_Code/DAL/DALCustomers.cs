@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using FarHorizon.DataSecurity;
+using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 
 /// <summary>
 /// Summary description for DALCustomers
@@ -19,7 +17,6 @@ public class DALCustomers
     }
 
     #region AddCustomers
-
     public int AddCustomers(BALCustomers obj)
     {
         try
@@ -28,19 +25,19 @@ public class DALCustomers
             SqlDataAdapter da = new SqlDataAdapter();
             da.InsertCommand = new SqlCommand("[dbo].[sp_customers]", cn);
             da.InsertCommand.Parameters.AddWithValue("@action", obj.action);
-            da.InsertCommand.Parameters.AddWithValue("@Address1", obj.Address1);
-            da.InsertCommand.Parameters.AddWithValue("@Address2", obj.Address2);
-            da.InsertCommand.Parameters.AddWithValue("@City", obj.City);
+            da.InsertCommand.Parameters.AddWithValue("@Address1", DataSecurityManager.Encrypt(obj.Address1));
+            da.InsertCommand.Parameters.AddWithValue("@Address2", DataSecurityManager.Encrypt(obj.Address2));
+            da.InsertCommand.Parameters.AddWithValue("@City", DataSecurityManager.Encrypt(obj.City));
             da.InsertCommand.Parameters.AddWithValue("@CountryId", obj.CountryId);
-            da.InsertCommand.Parameters.AddWithValue("@Password", obj.Password);
-            da.InsertCommand.Parameters.AddWithValue("@Email", obj.Email);
-            da.InsertCommand.Parameters.AddWithValue("@FirstName", obj.FirstName);
-            da.InsertCommand.Parameters.AddWithValue("@LastName", obj.LastName);
-            da.InsertCommand.Parameters.AddWithValue("@PostalCode", obj.PostalCode);
-            da.InsertCommand.Parameters.AddWithValue("@State", obj.State);
-            da.InsertCommand.Parameters.AddWithValue("@Telephone", obj.Telephone);
-            da.InsertCommand.Parameters.AddWithValue("@Title", obj.Title);
-            da.InsertCommand.Parameters.AddWithValue("@PaymentMethod", obj.PaymentMethod);
+            da.InsertCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(obj.Password));
+            da.InsertCommand.Parameters.AddWithValue("@Email", DataSecurityManager.Encrypt(obj.Email));
+            da.InsertCommand.Parameters.AddWithValue("@FirstName", DataSecurityManager.Encrypt(obj.FirstName));
+            da.InsertCommand.Parameters.AddWithValue("@LastName", DataSecurityManager.Encrypt(obj.LastName));
+            da.InsertCommand.Parameters.AddWithValue("@PostalCode", DataSecurityManager.Encrypt(obj.PostalCode));
+            da.InsertCommand.Parameters.AddWithValue("@State", DataSecurityManager.Encrypt(obj.State));
+            da.InsertCommand.Parameters.AddWithValue("@Telephone", DataSecurityManager.Encrypt(obj.Telephone));
+            da.InsertCommand.Parameters.AddWithValue("@Title", DataSecurityManager.Encrypt(obj.Title));
+            da.InsertCommand.Parameters.AddWithValue("@PaymentMethod", DataSecurityManager.Encrypt(obj.PaymentMethod));
  
             da.InsertCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
@@ -58,7 +55,6 @@ public class DALCustomers
     }
     #endregion
 
-
     public DataTable checkDuplicateemail(BALCustomers obj)
     {
         try
@@ -69,8 +65,8 @@ public class DALCustomers
             da.SelectCommand = new SqlCommand("[dbo].[sp_customers]", cn);
             da.SelectCommand.Parameters.Clear();
             da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
-            da.SelectCommand.Parameters.AddWithValue("@Email", obj.Email);
-            da.SelectCommand.Parameters.AddWithValue("@Password", obj.Password);
+            da.SelectCommand.Parameters.AddWithValue("@Email", DataSecurityManager.Encrypt(obj.Email));
+            da.SelectCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(obj.Password));
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
             da.SelectCommand.ExecuteReader();
@@ -117,7 +113,6 @@ public class DALCustomers
         }
     }
 
-
     public DataTable GetBookingByCustId(BALCustomers obj)
     {
         try
@@ -147,4 +142,20 @@ public class DALCustomers
         }
     }
 
+    public string GetBillingAddress(DataRow dataRow)
+    {
+        string address1;
+        string address2;
+        string city;
+        string state;
+        string postalCode;
+
+        address1 = DataSecurityManager.Decrypt(dataRow["Address1"].ToString());
+        address2 = DataSecurityManager.Decrypt(dataRow["Address2"].ToString());
+        city = DataSecurityManager.Decrypt(dataRow["City"].ToString());
+        state = DataSecurityManager.Decrypt(dataRow["State"].ToString());
+        postalCode = DataSecurityManager.Decrypt(dataRow["PostalCode"].ToString());
+
+        return string.Format("{0} {1}, {2} {3} {4}", address1, address2, city, state, postalCode);
+    }
 }

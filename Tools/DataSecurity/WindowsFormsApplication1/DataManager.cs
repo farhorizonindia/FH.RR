@@ -111,7 +111,7 @@ namespace WindowsFormsApplication1
                     if (updateQuery.Trim().EndsWith(","))
                     {
                         updateQuery = updateQuery.Trim().Substring(0, updateQuery.Trim().Length - 1);
-                    } 
+                    }
                     #endregion
 
 
@@ -126,9 +126,9 @@ namespace WindowsFormsApplication1
 
                         string value = otherColumn.Value == DBNull.Value ? "NULL" : otherColumn.Value.ToString();
                         //Console.WriteLine(otherColumn.Value.ToString());
-                        
+
                         updateQuery += " and " + otherColumn.ColumnName + DecorateForSQlQuery(otherColumn.ColumnType, value);
-                    } 
+                    }
                     #endregion
 
                     updateQuery += ";";
@@ -184,6 +184,10 @@ namespace WindowsFormsApplication1
             if (type == typeof(string) || type == typeof(DateTime))
             {
                 return " = '" + text + "'";
+            }
+            if (type == typeof(int))
+            {
+                return " = " + text;
             }
             if (type == typeof(bool))
             {

@@ -1,4 +1,5 @@
-﻿using FarHorizon.Reservations.Common;
+﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.Common;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -316,7 +317,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     Session["CustMailId"] = Session["CustomerMailId"].ToString();
                     lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
-                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
+                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
                     lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
                     hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
                     Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
@@ -409,7 +410,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
                     string Email = Session["AgentMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-                    string FirstName = dtAgentData.Rows[0]["FirstName"].ToString();
+                    string FirstName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString());
                     string LastName = "XYZ"; //dtGetReturnedData.Rows[0]["LastName"].ToString();
                     string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
                     string PaymentId = BookingPayId.ToString();
@@ -686,17 +687,17 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     ViewState["Pass"] = txtCustPass.Text.Trim();
 
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
-                    lblAgentName.Text = dtCustomer.Rows[0]["FirstName"].ToString() + " " + dtCustomer.Rows[0]["LastName"].ToString();
-                    lblBillingAddress.Text = dtCustomer.Rows[0]["BillingAddress"].ToString();
-                    lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
-                    hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
+                    lblAgentName.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString());
+                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);  
+                    lbPaymentMethod.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["PaymentMethod"].ToString());
+                    hdnfPhoneNumber.Value = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Telephone"].ToString());
                     Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
                     Session["CustomerCode"] = dtCustomer.Rows[0]["CustId"].ToString();
-                    Session.Add("CustomerMailId", dtCustomer.Rows[0]["Email"].ToString());
-                    Session.Add("CustPassword", dtCustomer.Rows[0]["Password"].ToString());
+                    Session.Add("CustomerMailId", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Email"].ToString()));
+                    Session.Add("CustPassword", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Password"].ToString()));
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
 
-                    string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
+                    string BookRef = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString()) + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
                     lbPaymentMethod.Text = "Online";
                     pnlFullDetails.Visible = true;
@@ -714,13 +715,12 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Password or Email Id incorrect')", true);
             }
-
         }
-        catch
+        catch(Exception exp)
         {
-
+            throw exp;
         }
-    }
+    }    
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
