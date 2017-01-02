@@ -76,6 +76,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\DataSecurity\FarHorizon.DataSecurity\FarHorizon.DataSecurity.csproj">
+      <Project>{D690E3B0-445C-4B6F-9211-5C2151E22239}</Project>
+      <Name>FarHorizon.DataSecurity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FarHorizon.Reservations.Common\FarHorizon.Reservations.Common.csproj">
       <Project>{2CF66C59-D704-4C60-BD41-1B3141F73E12}</Project>
       <Name>FarHorizon.Reservations.Common</Name>

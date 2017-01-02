@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using FarHorizon.Reservations.DataBaseManager;
-using System.Data;
-using System.Data.SqlClient;
-using FarHorizon.Reservations.Common;
+using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
+using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.MasterServices;
 using FarHorizon.Reservations.SessionManager;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace FarHorizon.Reservations.UserManager
 {
@@ -20,11 +18,11 @@ namespace FarHorizon.Reservations.UserManager
             int iLoginId = 0;
             oDB = new DatabaseManager();
             try
-            {
+            {                
                 string sProcName = "up_ValidateUser";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserId", DbType.String, oUserData.UserId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPwd", DbType.String, oUserData.Password);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPwd", DbType.String, DataSecurityManager.Encrypt(oUserData.Password));
                 DataSet ds = oDB.ExecuteDataSet(oDB.DbCmd);
                 if (ds != null)
                 {
@@ -54,12 +52,12 @@ namespace FarHorizon.Reservations.UserManager
 
             LoggedInUser.User = user;
             if (user != null)
-            {                
+            {
                 RoleRightsMaster roleRightsMaster = new RoleRightsMaster();
                 List<RoleRightsDTO> roleRightsList = null;
                 if (user.UserRoleData != null && user.UserRoleData.UserRoleId != 0)
                     roleRightsList = roleRightsMaster.GetRoleRights(user.UserRoleData.UserRoleId);
-                LoggedInUser.RoleRigthsList = roleRightsList;                
+                LoggedInUser.RoleRigthsList = roleRightsList;
             }
             SessionHelper.LoggedInUser = LoggedInUser;
         }

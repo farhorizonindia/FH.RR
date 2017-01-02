@@ -7,6 +7,7 @@ using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.MasterServices;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.MasterServices
 {
@@ -26,12 +27,12 @@ namespace FarHorizon.Reservations.MasterServices
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserId", DbType.String, oUserData.UserId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserName", DbType.String, oUserData.UserName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, oUserData.Password);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserName", DbType.String, DataSecurityManager.Encrypt(oUserData.UserName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oUserData.Password));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Active", DbType.Boolean, oUserData.Active);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Administrator", DbType.Boolean, oUserData.Administrator);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserRoleId", DbType.Int32, oUserData.UserRoleData.UserRoleId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserEmailId", DbType.String, oUserData.EmailId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserEmailId", DbType.String, DataSecurityManager.Encrypt(oUserData.EmailId));
                 oDB.ExecuteNonQuery(oDB.DbCmd);
             }
             catch (Exception exp)
@@ -61,12 +62,12 @@ namespace FarHorizon.Reservations.MasterServices
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserId", DbType.String, oUserData.UserId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserName", DbType.String, oUserData.UserName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, oUserData.Password);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserName", DbType.String, DataSecurityManager.Encrypt( oUserData.UserName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oUserData.Password));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Active", DbType.Boolean, oUserData.Active);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Administrator", DbType.Boolean, oUserData.Administrator);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@userRoleId", DbType.Int32, oUserData.UserRoleData.UserRoleId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserEmailId", DbType.String, oUserData.EmailId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@UserEmailId", DbType.String, DataSecurityManager.Encrypt(oUserData.EmailId));
 
                 oDB.ExecuteNonQuery(oDB.DbCmd);
             }
@@ -149,11 +150,11 @@ namespace FarHorizon.Reservations.MasterServices
                 {
                     oUserData[i] = new UserDTO();
                     oUserData[i].UserId = Convert.ToString(ds.Tables[0].Rows[i][0]);
-                    oUserData[i].UserName = Convert.ToString(ds.Tables[0].Rows[i][1]);
-                    oUserData[i].Password = Convert.ToString(ds.Tables[0].Rows[i][2]);
+                    oUserData[i].UserName = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][1]));
+                    oUserData[i].Password = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][2]));
                     oUserData[i].Active = Convert.ToBoolean(ds.Tables[0].Rows[i][3]);
                     oUserData[i].Administrator = Convert.ToBoolean(ds.Tables[0].Rows[i][4]);
-                    oUserData[i].EmailId = ds.Tables[0].Rows[i][6] != DBNull.Value ? Convert.ToString(ds.Tables[0].Rows[i][6]) : String.Empty;
+                    oUserData[i].EmailId = ds.Tables[0].Rows[i][6] != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][6])) : String.Empty;
 
                     UserRoleDTO userRoleDto = new UserRoleDTO();
                     if (ds.Tables[0].Rows[i][5] != DBNull.Value)
