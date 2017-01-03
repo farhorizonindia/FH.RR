@@ -271,10 +271,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                         hdnfPhoneNumber.Value = dtAgent.Rows[0]["Phone"].ToString();
                         hdnfCreditLimit.Value = dtAgent.Rows[0]["CreditLimit"].ToString();
                         bool oncredit = Convert.ToBoolean(dtAgent.Rows[0]["ChkCredit"].ToString());
-                        
+
                         pnlFullDetails.Visible = true;
                         pnlBookButton.Visible = true;
-                        
+
                         if (oncredit)
                         {
                             panelwithoutCreditAgent.Visible = false;
@@ -332,7 +332,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     customerLogin.Visible = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -443,6 +443,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 else
                 {
                     #region Book Through Customer
+
 
                     blcus.Email = Session["CustomerMailId"].ToString();
                     blcus.Password = Session["CustPassword"].ToString();
@@ -688,7 +689,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
                     lblAgentName.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString());
-                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);  
+                    lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
                     lbPaymentMethod.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["PaymentMethod"].ToString());
                     hdnfPhoneNumber.Value = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Telephone"].ToString());
                     Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
@@ -716,11 +717,11 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Password or Email Id incorrect')", true);
             }
         }
-        catch(Exception exp)
+        catch (Exception exp)
         {
             throw exp;
         }
-    }    
+    }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -965,7 +966,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     private void BookTheCruise()
     {
         int bookingId = InsertParentTableData();
-        InsertChildTableData(bookingId);        
+        InsertChildTableData(bookingId);
     }
 
     private int InsertParentTableData()
@@ -992,20 +993,43 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 }
             }
 
+            DateTime startDate = Request.QueryString["CheckInDate"] != null ? Convert.ToDateTime(Request.QueryString["CheckInDate"].ToString()) : Convert.ToDateTime(Session["checkin"]);
+
             blsr.action = "GetDepartureDetails";
             blsr._iBookingId = 0;
             blsr.PackageId = Session["PackageId"].ToString();
             DataTable dtDepartureDetails = dlsr.GetDepartureDetails(blsr);
-            blsr._sBookingRef = Session["BookingRef"] == null ? string.Empty : Session["BookingRef"].ToString();
-            blsr._dtStartDate = Convert.ToDateTime(dtDepartureDetails.Rows[0]["CheckInDate"]);
-            blsr._dtEndDate = Convert.ToDateTime(dtDepartureDetails.Rows[0]["CheckOutDate"]);
-            blsr._iAccomTypeId = Convert.ToInt32(dtDepartureDetails.Rows[0]["AccomTypeId"]);
-            blsr._iAccomId = Convert.ToInt32(dtDepartureDetails.Rows[0]["AccomId"]);
 
-            blsr._iNights = Convert.ToInt32(dtDepartureDetails.Rows[0]["NoOfNights"]);
+            DataRow packageRow = null;
+            foreach (DataRow row in dtDepartureDetails.Rows)
+            {
+                if (DateTime.Compare(Convert.ToDateTime(row["CheckInDate"]), startDate) == 0)
+                {
+                    packageRow = row;
+                    break;
+                }
+            }
+
+            if (packageRow == null)
+                return -1;
 
             DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+            string customerEmail = Session["CustomerMailId"].ToString();
             blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
+
+            string bookingRef = string.Format("{0} X {1}", customerEmail, blsr._iPersons.ToString());
+            if (Session["BookingRef"] == null)
+                Session.Add("BookingRef", bookingRef);
+            else
+                Session["BookingRef"] = bookingRef;
+
+            blsr._sBookingRef = bookingRef;
+            blsr._dtStartDate = Convert.ToDateTime(packageRow["CheckInDate"]);
+            blsr._dtEndDate = Convert.ToDateTime(packageRow["CheckOutDate"]);
+            blsr._iAccomTypeId = Convert.ToInt32(packageRow["AccomTypeId"]);
+            blsr._iAccomId = Convert.ToInt32(packageRow["AccomId"]);
+
+            blsr._iNights = Convert.ToInt32(packageRow["NoOfNights"]);
             blsr._BookingStatusId = (int)BookingStatusTypes.PROPOSED; //This is a proposed booking and it will be marked as booked on the next page once the payment is received.
             blsr._SeriesId = 0;
             blsr._proposedBooking = true;
@@ -1028,7 +1052,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         catch
         {
             throw;
-        }        
+        }
     }
 
     private void InsertChildTableData(int bookingId)

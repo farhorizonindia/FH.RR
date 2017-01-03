@@ -59,7 +59,7 @@ public class DALCustomers
     {
         try
         {
-            SqlConnection cn = new SqlConnection(strCon);
+            SqlConnection cn = new SqlConnection(strCon);            
 
             SqlDataAdapter da = new SqlDataAdapter();
             da.SelectCommand = new SqlCommand("[dbo].[sp_customers]", cn);

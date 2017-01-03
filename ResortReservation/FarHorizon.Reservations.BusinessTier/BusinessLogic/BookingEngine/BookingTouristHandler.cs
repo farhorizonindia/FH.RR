@@ -351,7 +351,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         if (dr.ItemArray.GetValue(6) != DBNull.Value)
                             oBookingTouristDTO[i].Nationality = Convert.ToString(dr.ItemArray.GetValue(6));
                         if (dr.ItemArray.GetValue(7) != DBNull.Value)
-                            oBookingTouristDTO[i].PassportNo = Convert.ToString(dr.ItemArray.GetValue(7));
+                            oBookingTouristDTO[i].PassportNo = dr.ItemArray.GetValue(7) != DBNull.Value ? DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(7))) : string.Empty;
                         if (dr.ItemArray.GetValue(8) != DBNull.Value)
                             oBookingTouristDTO[i].AccomName = Convert.ToString(dr.ItemArray.GetValue(8));
                         if (dr.ItemArray.GetValue(9) != DBNull.Value)

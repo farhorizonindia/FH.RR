@@ -6,9 +6,9 @@
     <!--<mapper dbField="TouristNo" ExcelCell="1" ExcelFieldDescription="Sno."></mapper>-->
 
     <mapper dbField="Suffix" col="2" ExcelFieldDescription="Salutation" Alpha="true"></mapper>
-    <mapper dbField="FirstName" col="3" ExcelFieldDescription="First" idField="true" Alpha="true" FetchTouristNo="true"></mapper>
-    <mapper dbField="MiddleName" col="4" ExcelFieldDescription="Middle" idField="true" Alpha="true" FetchTouristNo="true"></mapper>
-    <mapper dbField="LastName" col="5" ExcelFieldDescription="Last" idField="true" Alpha="true" FetchTouristNo="true"></mapper>
+    <mapper dbField="FirstName" col="3" ExcelFieldDescription="First" idField="true" Alpha="true" FetchTouristNo="true" Encrypt="true"></mapper>
+    <mapper dbField="MiddleName" col="4" ExcelFieldDescription="Middle" idField="true" Alpha="true" FetchTouristNo="true" Encrypt="true"></mapper>
+    <mapper dbField="LastName" col="5" ExcelFieldDescription="Last" idField="true" Alpha="true" FetchTouristNo="true" Encrypt="true"></mapper>
     <mapper dbField="Gender" col="6" ExcelFieldDescription="Gender" Alpha="true" FetchTouristNo="true"></mapper>
 
     <mapper dbField="RoomDetails" col="7" ExcelFieldDescription="Type-SGL/DBL/TWN" Alpha="true"></mapper>
@@ -16,12 +16,12 @@
     <mapper dbField="RoomNo" col="8" ExcelFieldDescription="Room No." Alpha="true"></mapper>
 
     <mapper dbField="DOB" col="9" ExcelFieldDescription="D.O.B" idField="true" Alpha="true" DateField="true"></mapper>
-    <mapper dbField="PassportNo" col="10" ExcelFieldDescription="PassportNo" Alpha="true"></mapper>
+    <mapper dbField="PassportNo" col="10" ExcelFieldDescription="PassportNo" Alpha="true" Encrypt="true"></mapper>
     <mapper dbField="PPIssueDate" col="11" ExcelFieldDescription="IssueDate" Alpha="true" DateField="true"></mapper>
     <mapper dbField="PPExpiryDate" col="12" ExcelFieldDescription="ExpiryDate" Alpha="true" DateField="true"></mapper>
     <mapper dbField="NationalityId" col="13" ExcelFieldDescription="Nationality" MasterLookUpTable="tblNationalityMaster" MasterLookUpField="Nationality" MasterIdField="NationalityId" Alpha="false"></mapper>
     <mapper dbField="PlaceofBirth" col="14" ExcelFieldDescription="Place of Birth" Alpha="true"></mapper>
-    <mapper dbField="VisaNo" col="15" ExcelFieldDescription="Visa No" Alpha="true"></mapper>
+    <mapper dbField="VisaNo" col="15" ExcelFieldDescription="Visa No" Alpha="true" Encrypt="true"></mapper>
     <mapper dbField="VIssueDate" col="16" ExcelFieldDescription="VIssue Date" Alpha="true" DateField="true"></mapper>
     <mapper dbField="VisaExpiryDate" col="17" ExcelFieldDescription="VExpiry Date" Alpha="true" DateField="true"></mapper>
     <mapper dbField="Allergies" col="18" ExcelFieldDescription="Allergies / Precautions" Alpha="true"></mapper>
@@ -41,16 +41,9 @@
     <mapper dbField="DepartureTime" col="27" ExcelFieldDescription="Departure Time" Alpha="true"></mapper>
     <mapper dbField="DepartureCity" col="28" ExcelFieldDescription="Departure City" Alpha="true"></mapper>
 
-    <mapper dbField="EmailID" col="29" ExcelFieldDescription="Email ID" Alpha="true"></mapper>
-
-
-
-
-
-
-
-
+    <mapper dbField="EmailID" col="29" ExcelFieldDescription="Email ID" Alpha="true" Encrypt="true"></mapper>
   </readPattern>
+  
   <readPattern value="rowwise" startRow="4" startcol="31"  endcol="31">
     <mapper dbField="IndiaEntryDate" row="5" col="31" ExcelFieldDescription="Date of Entry into India" Alpha="true" DateField="true"></mapper>
     <mapper dbField="ProposedStayInIndia" row="6" col="31" ExcelFieldDescription="Proposed stay in India" Alpha="true"></mapper>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -83,6 +84,13 @@ namespace FarHorizon.DataSecurity
             if (string.IsNullOrEmpty(plainText))
             {
                 return plainText;
+            }
+
+            if (ConfigurationManager.AppSettings["EncryptionAllowed"] != null)
+            {
+                var encryptionAllowed = Convert.ToBoolean(ConfigurationManager.AppSettings["EncryptionAllowed"]);
+                if (!encryptionAllowed)
+                    return plainText;
             }
 
             // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
