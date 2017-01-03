@@ -403,7 +403,8 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs Technologies Pvt. Ltd.: 12345
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
-                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + Session["UserName"].ToString();
+                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() +  Session["UserName"] !=null ?  "-" + Session["UserName"].ToString() : string.Empty;
+
                     Session.Add("BookingRef", BRef);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
 
@@ -456,6 +457,13 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Customer not registered!!!')", true);
                         return;
                     }
+
+                    int persons = GetPax();
+                    string bookingRef = string.Format("{0} X {1}", blcus.Email, persons.ToString());
+                    if (Session["BookingRef"] == null)
+                        Session.Add("BookingRef", bookingRef);
+                    else
+                        Session["BookingRef"] = bookingRef;
 
                     #region Book The Tour as Proposed Booking
                     //If everything looks good then book a proposed booking and confirm that on the next screen
@@ -993,13 +1001,12 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 }
             }
 
-            DateTime startDate = Request.QueryString["CheckInDate"] != null ? Convert.ToDateTime(Request.QueryString["CheckInDate"].ToString()) : Convert.ToDateTime(Session["checkin"]);
-
             blsr.action = "GetDepartureDetails";
             blsr._iBookingId = 0;
             blsr.PackageId = Session["PackageId"].ToString();
             DataTable dtDepartureDetails = dlsr.GetDepartureDetails(blsr);
 
+            DateTime startDate = Request.QueryString["CheckInDate"] != null ? Convert.ToDateTime(Request.QueryString["CheckInDate"].ToString()) : Convert.ToDateTime(Session["checkin"]);
             DataRow packageRow = null;
             foreach (DataRow row in dtDepartureDetails.Rows)
             {
@@ -1013,17 +1020,8 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             if (packageRow == null)
                 return -1;
 
-            DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
-            string customerEmail = Session["CustomerMailId"].ToString();
-            blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
-
-            string bookingRef = string.Format("{0} X {1}", customerEmail, blsr._iPersons.ToString());
-            if (Session["BookingRef"] == null)
-                Session.Add("BookingRef", bookingRef);
-            else
-                Session["BookingRef"] = bookingRef;
-
-            blsr._sBookingRef = bookingRef;
+            blsr._iPersons = GetPax();
+            blsr._sBookingRef = Session["BookingRef"] == null ? string.Empty : Session["BookingRef"].ToString();
             blsr._dtStartDate = Convert.ToDateTime(packageRow["CheckInDate"]);
             blsr._dtEndDate = Convert.ToDateTime(packageRow["CheckOutDate"]);
             blsr._iAccomTypeId = Convert.ToInt32(packageRow["AccomTypeId"]);
@@ -1055,6 +1053,12 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
 
+    private int GetPax()
+    {
+        DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+        return Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
+    }
+
     private void InsertChildTableData(int bookingId)
     {
         BALBooking blsr = new BALBooking();
@@ -1071,6 +1075,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 blsr._iBookingId = bookingId;
                 for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
                 {
+                    blsr._iAccomId = booking._iAccomId;                    
                     blsr._dtStartDate = booking._dtStartDate;
                     blsr._dtEndDate = booking._dtEndDate;
                     blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());

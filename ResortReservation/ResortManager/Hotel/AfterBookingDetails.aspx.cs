@@ -227,9 +227,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     #region Book Via Agent
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs  Technologies Pvt. Ltd.: 12345
 
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
-
-                    string BookRef = txtBookRef.Text + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString();
+                    //DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    string BookRef = txtBookRef.Text + "X" + GetPax().ToString();
 
                     Session.Add("BookingRef", BookRef);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
@@ -286,6 +285,13 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
                     blcus.Email = Session["CustomerMailId"].ToString();
                     blcus.Password = Session["CustPassword"].ToString();
+
+                    int persons = GetPax();
+                    string bookingRef = string.Format("{0} X {1}", blcus.Email, persons.ToString());
+                    if (Session["BookingRef"] == null)
+                        Session.Add("BookingRef", bookingRef);
+                    else
+                        Session["BookingRef"] = bookingRef;                    
 
                     blcus.action = "LoginCust";
                     var dtCustomerData = new DataTable();
@@ -357,6 +363,12 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         {
 
         }
+    }
+
+    private int GetPax()
+    {
+        DataTable dtrpax = Session["Bookingdt"] as DataTable;
+        return Convert.ToInt16(dtrpax.Compute("SUM(Pax)", string.Empty));
     }
 
     private void RedirectToPaymentGatewayResponse()
