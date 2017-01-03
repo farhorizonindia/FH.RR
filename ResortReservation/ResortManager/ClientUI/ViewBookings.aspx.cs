@@ -421,17 +421,17 @@ public partial class ViewBookings : ClientBasePage
         {
             if (!String.IsNullOrEmpty(txtBookingCode.Text.Trim()) || (checkInDate != DateTime.MinValue && checkOutDate != DateTime.MinValue))
             {
-                newBookingStatusType = bookingStatusType;
-                if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
-                {
-                    newBookingStatusType = ENums.BookingStatusTypes.BOOKED;
-                }
+                //newBookingStatusType = bookingStatusType;
+                //if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
+                //{
+                //    newBookingStatusType = ENums.BookingStatusTypes.BOOKED;
+                //}
 
                 cdtGetBookingsInput getBookingsInput = new cdtGetBookingsInput();
                 getBookingsInput.AccomTypeId = AccomTypeId;
                 getBookingsInput.FromDate = checkInDate;
                 getBookingsInput.ToDate = checkOutDate;
-                getBookingsInput.BookingStatusType = newBookingStatusType;
+                getBookingsInput.BookingStatusType = bookingStatusType;
                 getBookingsInput.BookingCode = txtBookingCode.Text.Trim();
                 getBookingsInput.AgentId = Convert.ToInt32(ddlAgent.SelectedValue.ToString());
 
