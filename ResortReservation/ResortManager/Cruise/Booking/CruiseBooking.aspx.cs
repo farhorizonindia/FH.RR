@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,6 +20,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     DataTable dtGetReturnedData;
     BALPackageRateCard blRate = new BALPackageRateCard();
     DALPackageRateCard dlRate = new DALPackageRateCard();
+    string departureId;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -28,7 +31,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             {
                 ImageButton imgbtn = (ImageButton)GridRoomPaxDetail.Rows[k].FindControl("imgbtnDelete");
                 ScriptManager.GetCurrent(this).RegisterPostBackControl(imgbtn);
-
             }
             catch
             {
@@ -38,6 +40,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         if (!IsPostBack)
         {
             Session.Add("PackageId", Request.QueryString["PackId"].ToString());
+            departureId = Request.QueryString["DepartureId"].ToString();
+
             ddlConvert.SelectedIndex = 1;
             ddlpax1rm.SelectedIndex = 2;
             ButtonsDiv.Style.Add("display", "none");
@@ -107,7 +111,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         {
         }
     }
-
 
     #region UDF
     public void bindRoomRates()
@@ -196,7 +199,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             }
         }
     }
-
 
     private void GetRoomLimit()
     {
@@ -352,17 +354,13 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
                 this.RoomNumberWiseDetail(dv, roomcateId); // calling Insertable RoomDetail Function 
             }
-
             calculateTotal();
-
         }
-
         catch
         {
 
         }
     }
-
 
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
@@ -443,6 +441,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             return null;
         }
     }
+
     private int InsertParentTableData()
     {
         try
@@ -532,7 +531,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         else
             return 0;
     }
-
     #endregion
 
     #region Control Events
@@ -617,16 +615,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
                     dr["Price"] = (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue));
-                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
-
-                    //}
-                    //else if (TaxStatus == "Not Applied")
-                    //{
-                    //    arrWZ = view.ToTable().Rows[0][2].ToString().Split(' ');
-                    //    dr["CRPrice"] = arrWZ[0].ToString()+" " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    //    dr["Tax"] = 0;
-                    //    dr["Price"] =  Convert.ToDouble(arr[1]);
-                    //}
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());                    
                 }
                 else
                 {
@@ -637,16 +626,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
                     dr["Price"] = arrrtx;
-                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
-
-                    //}
-                    //else if (TaxStatus == "Not Applied")
-                    //{
-                    //    arrWZ = view.ToTable().Rows[0][1].ToString().Split(' ');
-                    //    dr["CRPrice"] = arrWZ[0].ToString() +" "+ Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    //    dr["Tax"] = 0;
-                    //    dr["Price"] =   Convert.ToDouble(arr1[1]);
-                    //}
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());                    
                 }
                 if (ddlpax1rm.SelectedItem.Text == "2")
                     dr["categoryName"] = view.ToTable().Rows[0][0].ToString();
@@ -688,44 +668,21 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 {
                     string TaxStatus = (view.ToTable().Rows[0][7].ToString());
                     string TaxValue = (view.ToTable().Rows[0][6].ToString());
-                    //if (TaxStatus == "Tax Applied")
-                    //{
+                    
                     arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
                     dr["Price"] = (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
-                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
-
-                    //}
-                    //else if (TaxStatus == "Not Applied")
-                    //{
-                    //    arrWZ = view.ToTable().Rows[0][2].ToString().Split(' ');
-
-                    //    dr["CRPrice"] = arrWZ[0].ToString() +" "+ Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    //    dr["Tax"] = 0;
-                    //    dr["Price"] =  Convert.ToDouble(arr[1]);
-                    //}
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());                    
                 }
                 else
                 {
                     string TaxStatus = (view.ToTable().Rows[0][7].ToString());
-                    string TaxValue = (view.ToTable().Rows[0][6].ToString());
-                    //if (TaxStatus == "Tax Applied")
-                    //{
+                    string TaxValue = (view.ToTable().Rows[0][6].ToString());                    
 
                     arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
                     dr["Price"] = arrrtx;
-                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());
-
-                    //}
-                    //else if (TaxStatus == "Not Applied")
-                    //{
-                    //    arrWZ = view.ToTable().Rows[0][1].ToString().Split(' ');
-
-                    //    dr["CRPrice"] = arrWZ[0].ToString() +" "+ Convert.ToDouble(arrWZ[1]).ToString("#.##");
-                    //    dr["Tax"] = 0;
-                    //    dr["Price"] =  Convert.ToDouble(arr1[1]);
-                    //}
+                    dr["Tax"] = 0;// Convert.ToDecimal(TaxValue.ToString());                    
                 }
                 int Counter = 0;
                 foreach (DataRow dr1 in dtInsertable.Rows)
@@ -740,7 +697,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     {
                         //do nothing
                     }
-
                 }
                 if (Counter > 0)
                 {
@@ -754,8 +710,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 GridRoomPaxDetail.DataSource = dtInsertable;
                 GridRoomPaxDetail.DataBind();
             }
-
-
             if (GridRoomPaxDetail.Rows.Count > 0)
             {
                 ButtonsDiv.Style.Remove("display");
@@ -813,20 +767,16 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 Session["cruiseBookingUrl"] = Request.Url.ToString();
 
                 DataTable RoomDetails = ViewState["VsRoomDetails"] as DataTable;
-
-
-
-
                 Session.Add("BookedRooms", RoomDetails);
-                ///    
 
+                LockTheBooking(RoomDetails);
+                ///    
                 //Response.Redirect("sendtoairpay.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString());
                 if (Session["Redirecturl"] == null)
                 {
-
                     if (Convert.ToInt32(RoomDetails.Compute("SUM(Pax)", string.Empty)) >= Convert.ToInt32(Session["totpax"]))
                     {
-                        string Redirecturl = "SummarizedDetails.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString() + "&PackId=" + Session["PackageId"].ToString();
+                        string Redirecturl = "SummarizedDetails.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString() + "&PackId=" + Session["PackageId"].ToString() + "&DepartureId=" + departureId;
                         Session["Redirecturl"] = Redirecturl;
                     }
                     else
@@ -834,32 +784,25 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('You have not selected enough Rooms to Accomodate all Guests ')", true);
                     }
                 }
-
                 Response.Redirect(Session["Redirecturl"].ToString());
-
                 #endregion
             }
-
             else
             {
-
-
                 pMessages.InnerText = "No rooms selected.";
             }
-
         }
         catch (Exception sqe)
         {
-
+            throw sqe;
         }
-    }
+    }    
+
     protected void btnAdd_Click(object sender, EventArgs e)
     {
 
     }
     #endregion
-
-
 
     protected void lnkLogout_Click(object sender, EventArgs e)
     {
@@ -925,7 +868,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         BindCruiseRoomRates();
     }
 
-
     public void BindCruiseRoomRates()
     {
 
@@ -944,17 +886,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     protected void ImageMap1_Click(object sender, ImageMapEventArgs e)
     {
         try
-        {
-
-            //DataTable dtRoomsdata;
-
-            //dtRoomsdata = bindroomddl();
-
-            //DataView dvr = new DataView(dtRoomsdata);
-            //dvr.RowFilter="RoomNo="+e.PostBackValue.ToString()+"";
-
-            //if (dvr.ToTable().Rows.Count > 0)
-            //{
+        {            
             if (gdvRoomCategories.Rows.Count > 1)
             {
                 dt = new DataTable();
@@ -988,8 +920,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                                 lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
                                 addrows(dv, roomCatId);
                             }
-
-
                         }
                     }
                     else
@@ -1017,19 +947,35 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
             }
-
-            //}
-            //else
-            //{
-            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('this room has already been booked .')", true);
-            //}
-
-
         }
         catch
         {
 
         }
+    }
 
+    private void LockTheBooking(DataTable roomDetails)
+    {
+        int lockDuration = ConfigurationManager.AppSettings["LockDuration"] != null ? Convert.ToInt16(ConfigurationManager.AppSettings["LockDuration"]) : 10;
+        BALBookingLock bl = new BALBookingLock();
+
+        int accomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
+        Session["AccomId"] = accomId;
+        Guid uniqueIdentifier = Guid.NewGuid();
+
+        bl.AccomId = accomId;
+        bl.LockIdentifier = uniqueIdentifier.ToString();
+        bl.LockExpireAt = DateTime.Now.AddMinutes(lockDuration);
+        bl.LockRooms = new List<LockRoom>();
+
+        foreach (DataRow row in roomDetails.Rows)
+        {
+            LockRoom lr = new LockRoom { RoomCategoryId = Convert.ToInt16(row["RoomCategoryId"]), RoomNo = row["RoomNumber"].ToString() };
+            bl.LockRooms.Add(lr);
+        }
+        DALBookingLock dbl = new DALBookingLock();
+        dbl.PlaceLock(bl);
+
+        Session["BookingLock"] = bl;
     }
 }

@@ -171,9 +171,6 @@ public partial class ViewBookings : ClientBasePage
                     e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
                     e.Item.Cells[0].ForeColor = System.Drawing.Color.White;
                 }
-
-
-
             }
             #endregion
 
@@ -225,9 +222,10 @@ public partial class ViewBookings : ClientBasePage
             }
             #endregion
 
-            #region Proposed
-            if (Boolean.Parse(e.Item.Cells[15].Text) == true)
+            #region Proposed            
+            if (Boolean.Parse(e.Item.Cells[15].Text) == true || string.Compare(e.Item.Cells[5].Text, "PROPOSED", true) == 0)
             {
+                e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
                 e.Item.Cells[8].Text = "";
                 e.Item.Cells[9].Text = "";
                 e.Item.Cells[10].Text = "";

@@ -257,7 +257,6 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
         }
 
         #endregion
-
     }
 
     protected void ddlDestination_SelectedIndexChanged(object sender, EventArgs e)
@@ -321,11 +320,11 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
             return 0;
         }
     }
+
     protected void btnSearchOthAccom_Click(object sender, EventArgs e)
     {
         try
         {
-
             if (Convert.ToDateTime(txtChkin.Text).Date >= System.DateTime.Now.Date)
             {
                 if (Session["UserCode"] != null)
@@ -373,8 +372,6 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 
         }
     }
-
-
 
     private void BindAccomType()
     {

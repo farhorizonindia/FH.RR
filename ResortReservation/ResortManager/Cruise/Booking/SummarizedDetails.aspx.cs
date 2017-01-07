@@ -1,6 +1,7 @@
 ﻿using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.Common;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Net.Mail;
@@ -32,6 +33,15 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     int getQueryResponse = 0;
 
     int CountryId = 0;
+
+    /// <summary>
+    /// These properties are required to preapre the return string to go to CruiseBooking Screen.
+    /// </summary>
+    string PackId; //=Pack1&
+    string PackageName; //=7 night 8 day MV Mahabaahu Upstream Cruise&
+    string NoOfNights; //=7&
+    string CheckIndate; //=2/19/2017&
+    string DepartureId; //=15
     #endregion
 
     protected void Page_Load(object sender, EventArgs e)
@@ -40,6 +50,12 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         {
             try
             {
+                PackId =Request.QueryString["PackId"]; 
+                PackageName = Request.QueryString["PackageName"];
+                NoOfNights = Request.QueryString["NoOfNights"];
+                CheckIndate = Request.QueryString["CheckIndate"];
+                DepartureId = Request.QueryString["DepartureId"];
+
                 Session["Redirection"] = "SummarizedDetails.aspx";
                 if (Session["UserCode"] != null || Session["CustomerCode"] != null)
                 {
@@ -52,7 +68,6 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 LoadCountries();
                 this.LoadBookedRoomDetails();
                 roomnosgrid();
-
 
                 getpackagesearchresults(Request.QueryString["PackId"]);
 
@@ -139,7 +154,6 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             DataTable dtres = dlsrch.GetResultBasedOnPackage(blsrch);
             lblChkin.Text = "Check-in at " + dtres.Rows[0]["AccomName"].ToString();
             lblChkout.Text = "Check-out at " + dtres.Rows[0]["AccomName"].ToString();
-
         }
         catch
         {
@@ -379,6 +393,32 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             Session["Hotel"] = null;
             if (btnPayProceed.Text == "Proceed For Payment")
             {
+                #region Check For Locked Booking
+                DataTable bookedRooms = Session["BookedRooms"] as DataTable;
+
+                BALBookingLock bl = new BALBookingLock();
+                bl.AccomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
+                bl.LockRooms = new List<LockRoom>();
+                foreach (DataRow row in bookedRooms.Rows)
+                {
+                    LockRoom lr = new LockRoom { RoomCategoryId = Convert.ToInt16(row["RoomCategoryId"]), RoomNo = row["RoomNumber"].ToString() };
+                    bl.LockRooms.Add(lr);
+                }
+
+                if (bl != null)
+                {
+                    DALBookingLock dbl = new DALBookingLock();
+                    if (dbl.IsLocked(bl))
+                    {
+                        lblBookingLockFound.Visible = true;
+                        lblBookingLockFound.Text = "The room(s) you are trying to book are no longer available. Please click on the link below to choose the rooms again.";
+                        lnkBackToCruiseBooking.Visible = true;
+                        lnkBackToCruiseBooking.NavigateUrl = string.Format("~/Cruise/Booking/CruiseBooking.aspx?PackId={0}&PackageName={1}&NoOfNights={2}&CheckIndate={3}&DepartureId={4}", PackId, PackageName, NoOfNights, CheckIndate);                        
+                        return;
+                    }
+                } 
+                #endregion
+
                 #region Proceed For Payment
                 if (Session["UserCode"] != null)
                 {
@@ -403,7 +443,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs Technologies Pvt. Ltd.: 12345
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
-                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() +  Session["UserName"] !=null ?  "-" + Session["UserName"].ToString() : string.Empty;
+                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + Session["UserName"] != null ? "-" + Session["UserName"].ToString() : string.Empty;
 
                     Session.Add("BookingRef", BRef);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
@@ -444,8 +484,6 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 else
                 {
                     #region Book Through Customer
-
-
                     blcus.Email = Session["CustomerMailId"].ToString();
                     blcus.Password = Session["CustPassword"].ToString();
 
@@ -522,9 +560,9 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 }
             }
         }
-        catch
+        catch (Exception exp)
         {
-
+            throw exp;
         }
     }
 
@@ -758,26 +796,12 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             blcus.Title = ddltitle.SelectedItem.Text;
             blcus.PaymentMethod = "Online";
 
-
             getQueryResponse = dlcus.AddCustomers(blcus);
-
-
             if (getQueryResponse > 0)
             {
-
-
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Verification Done! Please Login')", true);
-
-
             }
-            else
-            {
-
-            }
-
-
         }
-
         catch
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please check entries')", true);
@@ -788,16 +812,11 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     {
         try
         {
-
-
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
-
             mail.From = new MailAddress("reservations@adventureresortscruises.in");
 
             mail.To.Add(txtMailAddress.Text.Trim());
-
-
             mail.Subject = "Mail Verification";
 
             Random rnd = new Random();
@@ -805,22 +824,14 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             hfVCode.Value = Code;
 
             StringBuilder sb = new StringBuilder();
-
             sb.Append("<div>");
             sb.Append("<div> Dear " + txtFirstName.Text + ",</div> <div><br/></div><div>Thanks for your registering with us.</div> <div><br/> </div><div>For security reasons we have added this step so that we verify the email address before any booking details is sent across.</div> <div><br/></div> ");
             sb.Append(" <div>To verify your email address please enter the code " + Code + " in the registration screen. </div> <div><br/> </div><div>Do contact us if you have any issue at reservations@adventureresort</div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
             sb.Append("</div>");
             sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
 
-
             mail.IsBodyHtml = true;
-
-
             mail.Body = sb.ToString();
-
-
-
-
 
             SmtpServer.Port = 587;
             SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
@@ -1075,7 +1086,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 blsr._iBookingId = bookingId;
                 for (int LoopCounter = 0; LoopCounter < GridRoomPaxDetail.Rows.Count; LoopCounter++)
                 {
-                    blsr._iAccomId = booking._iAccomId;                    
+                    blsr._iAccomId = booking._iAccomId;
                     blsr._dtStartDate = booking._dtStartDate;
                     blsr._dtEndDate = booking._dtEndDate;
                     blsr._iPaxStaying = Convert.ToInt32(GridRoomPaxDetail.Rows[LoopCounter]["Pax"].ToString());
@@ -1101,7 +1112,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 throw;
             }
         }
-    }
+    }    
 
     #region Obsolete Method(s)
     [Obsolete]

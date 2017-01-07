@@ -642,108 +642,90 @@
                             </asp:Panel>
                             <div>
                                 <center>
-      
-   <asp:Panel ID="pnlFullDetails"  class="CSSTableGenerator" Width="70%" runat="server">
-        <div id="BookRef" runat="server"  >
-            <table style="border:1px solid; background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a9cae3), color-stop(1, #a9cae3) );">
-                <tr>
-                    <td class="auto-style5" > Enter Booking Reference Name.</td>
-                    <td style="text-align:left"> <asp:TextBox ID="txtBookRef" runat="server" Width="281px"></asp:TextBox>
-                   
-                           <asp:RequiredFieldValidator ID="ReqBookRef" runat="server" ControlToValidate="txtBookRef" ErrorMessage="*" ValidationGroup="Pay"></asp:RequiredFieldValidator></td>
+                                <asp:Panel ID="pnlFullDetails" class="CSSTableGenerator" Width="70%" runat="server">
+                                    <div id="BookRef" runat="server">
+                                        <table style="border: 1px solid; background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a9cae3), color-stop(1, #a9cae3) );">
+                                            <tr>
+                                                <td class="auto-style5">Enter Booking Reference Name.</td>
+                                                <td style="text-align: left">
+                                                    <asp:TextBox ID="txtBookRef" runat="server" Width="281px"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="ReqBookRef" runat="server" ControlToValidate="txtBookRef" ErrorMessage="*" ValidationGroup="Pay"></asp:RequiredFieldValidator></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br />
+                                    <h2 style="font-family: 'Times New Roman'; font-style: italic; font-weight: bold">Payment Details</h2>
+                                    <table style="border: thin solid #000000">
+                                        <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
+                                            <td style="border: thin solid #000000; font-weight: bold; width: 22%;">Invoice To</td>
+                                            <td style="border: thin solid #000000">
+                                                <asp:Label ID="lblAgentName" runat="server"></asp:Label></td>
 
-                </tr>
+                                        </tr>
+                                        <tr style="background-color: #EFF3FB;">
+                                            <td style="border: thin solid #000000; font-weight: bold">
+                                                <asp:Label ID="lblBilling" runat="server" Text="Billing Address : "></asp:Label></td>
+                                            <td style="border: thin solid #000000">
+                                                <asp:Label ID="lblBillingAddress" runat="server" Text=""></asp:Label></td>
 
-            </table>
-                          
-               
-                  
-                       
-                   
-               </div>  <br />
-            <h2 style="font-family:'Times New Roman';font-style:italic;font-weight:bold">Payment Details</h2>
-            
-            
-            
-            
-            
-            <table style="border: thin solid #000000">
-                    <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
-                        <td style="border: thin solid #000000;font-weight:bold;width: 22%;">Invoice To</td>
-                        <td style="border: thin solid #000000">
-                        <asp:Label ID="lblAgentName" runat="server" ></asp:Label></td>
+                                        </tr>
+                                        <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
+                                            <td style="border: thin solid #000000; font-weight: bold">
+                                                <asp:Label ID="lbPayment" runat="server" Text="Payment Method : "></asp:Label></td>
+                                            <td style="border: thin solid #000000">
+                                                <asp:Label ID="lbPaymentMethod" runat="server" Text=""></asp:Label><asp:HiddenField ID="hdnfPhoneNumber" runat="server" />
+                                            </td>
 
-                    </tr>
-                    <tr style="background-color: #EFF3FB;">
-                        <td style="border: thin solid #000000;font-weight:bold" ><asp:Label ID="lblBilling" runat="server" Text="Billing Address : "></asp:Label></td>
-                        <td style="border: thin solid #000000"><asp:Label ID="lblBillingAddress" runat="server" Text=""></asp:Label></td>
+                                        </tr>
+                                        <tr style="display: none;">
+                                            <td>&nbsp;</td>
+                                            <td>
+                                                <asp:HiddenField ID="hdnfCreditLimit" runat="server" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="height: 40px"></div>
+                                    <asp:Panel ID="panelwithoutCreditAgent" Width="100%" runat="server" Font-Size="Medium">
+                                        <div>
+                                            <table style="border: thin solid #000000;">
+                                                <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
+                                                    <td style="border: thin solid #000000; font-weight: bold; width: 22%;" class="auto-style3">Total Amount</td>
+                                                    <td style="border: thin solid #000000" class="auto-style4">
+                                                        <asp:Label ID="lbltotAmt" runat="server" Text="Label"></asp:Label></td>
 
-                    </tr>
-                    <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
-                        <td style="border: thin solid #000000;font-weight:bold"> <asp:Label ID="lbPayment" runat="server" Text="Payment Method : "></asp:Label></td>
-                        <td style="border: thin solid #000000"> <asp:Label ID="lbPaymentMethod" runat="server" Text=""></asp:Label><asp:HiddenField  ID="hdnfPhoneNumber" runat="server"/></td>
+                                                </tr>
+                                                <tr style="background-color: #EFF3FB;">
+                                                    <td style="border: thin solid #000000; font-weight: bold">Booking Amount</td>
+                                                    <td style="border: thin solid #000000">
+                                                        <asp:Label ID="lblCurrency" runat="server" Text="Label"></asp:Label><asp:Label ID="txtPaidAmt" runat="server"></asp:Label>
+                                                        <asp:Label ID="lblpertext" runat="server"></asp:Label>
+                                                    </td>
 
-                    </tr>
-                    
-                    <tr style="display:none;">
-                    <td>&nbsp;</td>
-                    <td>
-                        <asp:HiddenField ID="hdnfCreditLimit" runat="server" />
-                    </td>
-                </tr>
-                </table>  <div style="height:40px"></div>
-            <asp:Panel ID="panelwithoutCreditAgent"  Width="100%" runat="server" Font-Size="Medium">
-            <div>
-                <table style="border: thin solid #000000;">
-                    <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
-                        <td style="border: thin solid #000000;font-weight:bold;width: 22%;" class="auto-style3" >Total Amount</td>
-                        <td style="border: thin solid #000000" class="auto-style4"><asp:Label ID="lbltotAmt" runat="server" Text="Label"></asp:Label></td>
-
-                    </tr>
-                    <tr style="background-color: #EFF3FB;">
-                        <td style="border: thin solid #000000;font-weight:bold" >Booking Amount</td>
-                        <td style="border: thin solid #000000"><asp:Label ID="lblCurrency" runat="server" Text="Label"></asp:Label><asp:Label ID="txtPaidAmt" runat="server" ></asp:Label> <asp:Label ID="lblpertext" runat="server"></asp:Label> </td>
-
-                    </tr>
-                    <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
-                        <td style="border: thin solid #000000;font-weight:bold">Balance Amount</td>
-                        <td style="border: thin solid #000000"> <asp:Label ID="lblBalanceAmt" runat="server" Text="Label"></asp:Label> <asp:Label ID="Priorto" runat="server"></asp:Label> <asp:Label ID="lblPrToDate" runat="server" Text="Label"></asp:Label></td>
-
-                    </tr>
-
-                </table>
-                <br />
-              
-                 <div style="float:left">Note: Payment alert will be sent to you on Day-110.</div>
-
-             </div>
-                  
-                 
-                    <br />
-              
-
-
-    </asp:Panel>
-             
-             
-        </asp:Panel> 
-     
-    
-    <div style="height:40px"></div>
-     <asp:Panel ID="pnlBookButton"  Width="70%" runat="server">
-
-
-         <asp:Button ID="btnPayProceed" runat="server" Text="Proceed For Payment" OnClick="btnPayProceed_Click" ValidationGroup="Pay" Font-Size="Medium" />
-             <asp:Label ID="lblPaymentErr" runat="server" ForeColor="#FF3300"></asp:Label>
-             <br />
-         <asp:HiddenField ID="hftxtpaidamt" runat="server" />
-         </asp:Panel>
-
-
-    </center>
-
-
-
+                                                </tr>
+                                                <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
+                                                    <td style="border: thin solid #000000; font-weight: bold">Balance Amount</td>
+                                                    <td style="border: thin solid #000000">
+                                                        <asp:Label ID="lblBalanceAmt" runat="server" Text="Label"></asp:Label>
+                                                        <asp:Label ID="Priorto" runat="server"></asp:Label>
+                                                        <asp:Label ID="lblPrToDate" runat="server" Text="Label"></asp:Label></td>
+                                                </tr>
+                                            </table>
+                                            <br />
+                                            <div style="float: left">Note: Payment alert will be sent to you on Day-110.</div>
+                                        </div>
+                                        <br />
+                                    </asp:Panel>
+                                </asp:Panel>
+                                <div style="height: 40px"></div>
+                                <asp:Panel ID="pnlBookButton" Width="70%" runat="server">
+                                    <asp:Button ID="btnPayProceed" runat="server" Text="Proceed For Payment" OnClick="btnPayProceed_Click" ValidationGroup="Pay" Font-Size="Medium" />
+                                    <asp:Label ID="lblPaymentErr" runat="server" ForeColor="#FF3300"></asp:Label>
+                                    <asp:Label ID="lblBookingLockFound" runat="server" ForeColor="#FF3300" Visible="false"></asp:Label>
+                                    <asp:HyperLink ID="lnkBackToCruiseBooking" runat="server" CssClass="applink" Text="Back To Rooms Selection" Visible="false"></asp:HyperLink>
+                                    <br />
+                                    <asp:HiddenField ID="hftxtpaidamt" runat="server" />
+                                </asp:Panel>
+                                </center>
                             </div>
                         </div>
                     </div>

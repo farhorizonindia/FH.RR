@@ -30,17 +30,57 @@ public partial class response : System.Web.UI.Page
     public int BookedId = 0;
     DataTable dtGetReturnedData;
     byte[] pdfBytes;
-    MailMessage mail = new MailMessage();
-    SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
 
+    SmtpClient _smtpServer;
     DataTable dtbkdetails;
     int iagentid = 0;
     int iAccomId = 0;
     int iaccomtypeid = 0;
     DateTime chkin;
     DateTime chkout;
-    int custId = 0;    
+    int custId = 0;
     string bookref;
+    #endregion
+
+    #region Properties
+    string SmtpServerAddress
+    {
+        get
+        {
+            return (ConfigurationManager.AppSettings["SMTPServer"] != null ? ConfigurationManager.AppSettings["SMTPServer"] : "adventureresortscruises.in");
+        }
+    }
+
+    string SmtpUserId
+    {
+        get
+        {
+            return (ConfigurationManager.AppSettings["SMTPUserId"] != null ? ConfigurationManager.AppSettings["SMTPUserId"] : "reservations@adventureresortscruises.in");
+        }
+    }
+
+    string SmtpPassword
+    {
+        get
+        {
+            return (ConfigurationManager.AppSettings["SMTPUserId"] != null ? ConfigurationManager.AppSettings["SMTPPwd"] : "Augurs@123");
+        }
+    }
+
+    SmtpClient SmtpServer
+    {
+        get
+        {
+            if (_smtpServer == null)
+            {
+                _smtpServer = new SmtpClient(SmtpServerAddress);
+                _smtpServer.Port = 587;
+                _smtpServer.Credentials = new System.Net.NetworkCredential(SmtpUserId, SmtpPassword);
+                _smtpServer.EnableSsl = false;                
+            }
+            return _smtpServer;
+        }
+    }
     #endregion
 
     protected void Page_Load(object sender, EventArgs e)
@@ -53,11 +93,8 @@ public partial class response : System.Web.UI.Page
             dated.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
         }
 
-        lblBuyerName.Text = Session["InvName"].ToString();
-        if (Session["Address"] != null)
-        {
-            lblBuyerAddress.Text = Session["Address"].ToString();
-        }
+        lblBuyerName.Text = Session["InvName"] != null ? Session["InvName"].ToString() : string.Empty;
+        lblBuyerAddress.Text = Session["Address"] != null ? Session["Address"].ToString() : string.Empty;
 
         if (Session["Hotel"] != null)
         {
@@ -102,62 +139,94 @@ public partial class response : System.Web.UI.Page
     {
         if (ViewState["sentMail"] == "0")
         {
-            Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
-            PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
-            //webBrowser load html whether Waiting
-            htmlLayoutFormat.IsWaiting = false;
-            //page setting
-            PdfPageSettings setting = new PdfPageSettings();
-            setting.Size = PdfPageSize.A3;
-            string pageSource;
-
-            var sw1 = new StringWriter();
-            var hw = new HtmlTextWriter(sw1);
-
-            using (sw1)
-            using (hw)
+            try
             {
-                base.Render(hw);
-                pageSource = sw1.ToString();
+                GenerateInvoice(writer);
+                ViewInvoice();
+
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
+                string toEmailId = Session["AgentMailId"] != null ? Session["AgentMailId"].ToString() : Session["CustMailId"].ToString();
+
+                if (Debugger.IsAttached || string.IsNullOrEmpty(toEmailId))
+                { toEmailId = "rohit@farhorizonindia.com"; }
+
+                if (!string.IsNullOrEmpty(toEmailId))
+                {
+                    mail.Subject = "Invoice";
+                    mail.To.Add(toEmailId);
+                    mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
+                    try
+                    {
+                        SmtpServer.Send(mail);
+                    }
+                    catch (Exception exp)
+                    {
+                        Console.WriteLine(exp.Message);
+                    }
+                    ViewState["sentMail"] = "1";
+                }
             }
-            writer.Write(pageSource);
-
-            string htmlCode = pageSource.ToString();
-            htmlCode = htmlCode.Replace("dwew", "none");
-            //use single thread to generate the pdf from above html code
-            Thread thread = new Thread(() =>
-            { pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            thread.Join();
-
-            // Save the file to PDF and preview it.
-            pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf")));
-
-            int pageNumber = 1;
-
-            PdfReader reader = new PdfReader(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf"));
-            Rectangle cropbox = reader.GetCropBox(1);
-            iTextSharp.text.Rectangle size = new iTextSharp.text.Rectangle(cropbox.Width - 60, cropbox.Height - 12);
-            Document document = new Document(size);
-            iTextSharp.text.pdf.PdfWriter writer1 = PdfWriter.GetInstance(document,
-            new FileStream(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf").Replace(lbInvoiceNO.Text + ".pdf", lbInvoiceNO.Text + "File.pdf"),
-            FileMode.Create, FileAccess.Write));
-            document.Open();
-            PdfContentByte cb = writer1.DirectContent;
-            document.NewPage();
-            PdfImportedPage page = writer1.GetImportedPage(reader,
-            pageNumber);
-            cb.AddTemplate(page, 0, 0);
-            document.Close();
-
-            mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
-            if (!Debugger.IsAttached)
+            catch (Exception exp)
             {
-                SmtpServer.Send(mail);
+                throw exp;
             }
-            ViewState["sentMail"] = "1";
         }
+    }
+
+    private void GenerateInvoice(HtmlTextWriter writer)
+    {
+        Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
+        PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+        //webBrowser load html whether Waiting
+        htmlLayoutFormat.IsWaiting = false;
+        //page setting
+        PdfPageSettings setting = new PdfPageSettings();
+        setting.Size = PdfPageSize.A3;
+        string pageSource;
+
+        var sw1 = new StringWriter();
+        var hw = new HtmlTextWriter(sw1);
+
+        using (sw1)
+        using (hw)
+        {
+            base.Render(hw);
+            pageSource = sw1.ToString();
+        }
+        writer.Write(pageSource);
+
+        string htmlCode = pageSource.ToString();
+        htmlCode = htmlCode.Replace("dwew", "none");
+        //use single thread to generate the pdf from above html code
+        Thread thread = new Thread(() =>
+        { pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        thread.Join();
+
+        // Save the file to PDF.
+        pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf")));
+    }
+
+    private void ViewInvoice()
+    {
+        //View the PDF.
+        int pageNumber = 1;
+        PdfReader reader = new PdfReader(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf"));
+        Rectangle cropbox = reader.GetCropBox(1);
+        iTextSharp.text.Rectangle size = new iTextSharp.text.Rectangle(cropbox.Width - 60, cropbox.Height - 12);
+        Document document = new Document(size);
+        iTextSharp.text.pdf.PdfWriter writer1 = PdfWriter.GetInstance(document,
+        new FileStream(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf").Replace(lbInvoiceNO.Text + ".pdf", lbInvoiceNO.Text + "File.pdf"),
+        FileMode.Create, FileAccess.Write));
+        document.Open();
+        PdfContentByte cb = writer1.DirectContent;
+        document.NewPage();
+        PdfImportedPage page = writer1.GetImportedPage(reader,
+        pageNumber);
+        cb.AddTemplate(page, 0, 0);
+        document.Close();
     }
 
     public string rename(string fullpath)
@@ -232,7 +301,7 @@ public partial class response : System.Web.UI.Page
             //BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
             ShowHotelBookingDetails(blsr._iBookingId);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             throw ex;
         }
@@ -262,7 +331,7 @@ public partial class response : System.Web.UI.Page
         lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
         hfBookingId.Value = bookingId.ToString();
     }
-    
+
     public void hidecolumns()
     {
         try
@@ -277,7 +346,7 @@ public partial class response : System.Web.UI.Page
         {
         }
     }
-    
+
     public string CRCCode(String ClearString, String key, string TRANSACTIONSTATUS, string APTRANSACTIONID, string MESSAGE, string TRANSACTIONID, string AMOUNT)
     {
         try
@@ -287,7 +356,7 @@ public partial class response : System.Web.UI.Page
             byte[] mybytes = Encoding.UTF8.GetBytes(ClearString);
             foreach (byte b in crc32.ComputeHash(mybytes)) hash += b.ToString("x2");
             UInt32 Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
-            UInt32 Output1 = UInt32.Parse(key);            
+            UInt32 Output1 = UInt32.Parse(key);
 
             if (Output1 == Output)
             {
@@ -375,12 +444,14 @@ public partial class response : System.Web.UI.Page
 
     private void GenrateBill(string transactionId)
     {
+        ReleaseBookingLock();
         UpdateCruiseBookingToBooked();
         sendMail(transactionId);
-    }
+    }    
 
     private void GenrateBill1(string transactionId)
-    {        
+    {
+        ReleaseBookingLock();
         UpdateHotelBookingToBooked();
         sendMail1(transactionId);
     }
@@ -390,30 +461,29 @@ public partial class response : System.Web.UI.Page
         try
         {
             int noofpx = 0;
-
             for (int n = 0; n < gdvSelectedRooms.Rows.Count; n++)
             {
                 noofpx += Convert.ToInt32(gdvSelectedRooms.Rows[n].Cells[1].Text);
             }
-            //MailMessage mail = new MailMessage();
-            //SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
-
-            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
-            if (Session["AgentMailId"] != null)
-            {
-                mail.To.Add(Session["AgentMailId"].ToString());
-            }
-            else
-            {
-                mail.To.Add(Session["CustMailId"].ToString());
-            }
 
             blsr.action = "getmaxbookingcode";
             DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
+            string toEmailId = Session["AgentMailId"] != null ? Session["AgentMailId"].ToString() : Session["CustMailId"].ToString();
+
+            if (Debugger.IsAttached)
+                toEmailId = "rohit@farhorizonindia.com";
+
+            if (string.IsNullOrEmpty(toEmailId))
+                return;
+
+            mail.To.Add(toEmailId);
             mail.Subject = "Reservation -" + Session["SubInvName"].ToString() + " - " + dtbkcode.Rows[0].ItemArray[0].ToString() + "";
 
+            #region Email Body
             StringBuilder sb = new StringBuilder();
-
             sb.Append("<div>");
             sb.Append("<div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div>Greetings from " + Session["AccomName"].ToString() + "! </div> <div><br/> </div><div>Thank you for booking with us.</div> <div><br/></div> ");
             sb.Append(" <div>Check In :" + lblArrvDate.Text + " </div> <div></div> <div>Check Out :" + lblDepartDate.Text + "  </div>  <div><br/> </div>  <div><b>Accommodation Details</b></div> <div>  </div> <div> Number of Rooms: " + gdvSelectedRooms.Rows.Count.ToString() + "</div> <div> </div> <div>Number of Persons: " + noofpx + " </div> ");
@@ -423,18 +493,19 @@ public partial class response : System.Web.UI.Page
 
             sb.Append("</div>");
             sb.Append("<div></br><div><div>Enclosure: Invoice for your booking is attached with this email.<div>");
-
+            #endregion
 
             mail.IsBodyHtml = true;
             mail.Body = sb.ToString();
             mail.CC.Add("reservations@adventureresortscruises.com");
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
-            SmtpServer.EnableSsl = false;
 
-            if (!Debugger.IsAttached)
+            try
             {
                 SmtpServer.Send(mail);
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message);
             }
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
         }
@@ -460,28 +531,30 @@ public partial class response : System.Web.UI.Page
 
             con.Close();
 
-            // MailMessage mail = new MailMessage();
-            // SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
-
-            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
-            if (Session["AgentMailId"] != null)
-            {
-                mail.To.Add(Session["AgentMailId"].ToString());
-            }
-            else
-            {
-                mail.To.Add(Session["CustMailId"].ToString());
-            }
             blsr.action = "getmaxbookingcode";
             DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
 
             string bref = Session["BookingRef"].ToString();
-
             string l = Session["SubInvName"].ToString();
+
+
+            #region Preparing MailMessage
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
+            string toEmailId = Session["AgentMailId"] != null ? Session["AgentMailId"].ToString() : Session["CustMailId"].ToString();
+
+            if (Debugger.IsAttached)
+                toEmailId = "rohit@farhorizonindia.com";
+
+            if (string.IsNullOrEmpty(toEmailId))
+                return;
+
+            mail.To.Add(toEmailId);
             mail.Subject = "Reservation - " + Session["SubInvName"].ToString() + " - " + dtbkcode.Rows[0][0].ToString() + "";
+            #endregion
 
+            #region Email Body
             StringBuilder sb = new StringBuilder();
-
             sb.Append("<div>");
             sb.Append("<div>Booking No:" + dtbkcode.Rows[0].ItemArray[0].ToString() + "</div>  <div> Date of Booking: " + Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy") + " </div> <div><br/> </div> <div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div> Namaskar! Greetings from Assam, India!</div> <div><br/> </div><div> Thank you for booking " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + " on MV Mahabaahu.</div> <div><br/></div> ");
             sb.Append(" <div>The cruise showcases Living, Natural and Cultural History where silk and cotton vie your attention. A cup of famous Assam tea beckons you over to the little known north eastern part of India.</div> <div><br/> </div> <div> This pristine destination unfolds the history of an ancient civilisation of the Tibeto - Burman Ahoms who reigned in the region for more than 600 years. The river brings you up close to the simplistic ways of a speckled tribal and multiracial life. </div><div> We take this opportunity to inform you that the final confirmation for the cruise is to be completed prior to day - 90. You will receive an automated e - reminder on day - 110 and another on day - 100. Please ignore if paid.<br/> </div>  <div><br/> </div>  <div> We look forward to your confirmation.</div> <div><br/>   </div> <div> Appreciations!</div> <div><br/>  </div> <div> TheMahabaahu Team!</div> ");
@@ -489,17 +562,18 @@ public partial class response : System.Web.UI.Page
             sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
             sb.Append("<div>The booking policy of the cruise can be referred to at<a href='http://www.mahabaahucruiseindia.com/cruise-policy' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=en&amp;q=http://www.mahabaahucruiseindia.com/cruise-policy&amp;source=gmail&amp;ust=1470139247045000&amp;usg=AFQjCNH3vyzjL507K4FspRY6TihAfogUug'>http://www.mahabaahucruiseindia.com/cruise-policy </a>.</div><div><br/></div><div> Enclosure:</div><div> Invoice for your booking is attached with this email.</div> ");
 
+            #endregion
             mail.IsBodyHtml = true;
             mail.Body = sb.ToString();
             mail.CC.Add("reservations@adventureresortscruises.com");
 
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
-            SmtpServer.EnableSsl = false;
-
-            if (!Debugger.IsAttached)
+            try
             {
                 SmtpServer.Send(mail);
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message);
             }
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Payment Successfull, Please Print your Invoice, Booking Details have been sent to your e-mail.')", true);
         }
@@ -507,8 +581,18 @@ public partial class response : System.Web.UI.Page
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
         }
-    }    
+    }
 
+    private void ReleaseBookingLock()
+    {
+        BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
+
+        if (bl != null)
+        {
+            DALBookingLock dbl = new DALBookingLock();
+            dbl.ReleaseLock(bl);
+        }
+    }
     protected void gdvCruiseRooms_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         try
