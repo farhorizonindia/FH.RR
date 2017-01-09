@@ -289,7 +289,7 @@ public partial class response : System.Web.UI.Page
                     blsr.action = "AddPriceDetailsToo";
                     blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
                     blsr.PaymentId = Session["BookingPayId"].ToString();
-                    blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                    blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
                     int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
                     if (GetQueryResponse > 0)
                         LoopInsertStatus++;
@@ -552,7 +552,7 @@ public partial class response : System.Web.UI.Page
                 blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
 
               
-                blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
             
 
 

@@ -50,7 +50,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         {
             try
             {
-                PackId =Request.QueryString["PackId"]; 
+                PackId = Request.QueryString["PackId"];
                 PackageName = Request.QueryString["PackageName"];
                 NoOfNights = Request.QueryString["NoOfNights"];
                 CheckIndate = Request.QueryString["CheckIndate"];
@@ -385,7 +385,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
         }
     }
-
+    
     protected void btnPayProceed_Click(object sender, EventArgs e)
     {
         try
@@ -394,29 +394,10 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             if (btnPayProceed.Text == "Proceed For Payment")
             {
                 #region Check For Locked Booking
-                DataTable bookedRooms = Session["BookedRooms"] as DataTable;
-
-                BALBookingLock bl = new BALBookingLock();
-                bl.AccomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
-                bl.LockRooms = new List<LockRoom>();
-                foreach (DataRow row in bookedRooms.Rows)
+                if (!IsBookingAvailable())
                 {
-                    LockRoom lr = new LockRoom { RoomCategoryId = Convert.ToInt16(row["RoomCategoryId"]), RoomNo = row["RoomNumber"].ToString() };
-                    bl.LockRooms.Add(lr);
+                    return;
                 }
-
-                if (bl != null)
-                {
-                    DALBookingLock dbl = new DALBookingLock();
-                    if (dbl.IsLocked(bl))
-                    {
-                        lblBookingLockFound.Visible = true;
-                        lblBookingLockFound.Text = "The room(s) you are trying to book are no longer available. Please click on the link below to choose the rooms again.";
-                        lnkBackToCruiseBooking.Visible = true;
-                        lnkBackToCruiseBooking.NavigateUrl = string.Format("~/Cruise/Booking/CruiseBooking.aspx?PackId={0}&PackageName={1}&NoOfNights={2}&CheckIndate={3}&DepartureId={4}", PackId, PackageName, NoOfNights, CheckIndate);                        
-                        return;
-                    }
-                } 
                 #endregion
 
                 #region Proceed For Payment
@@ -436,6 +417,9 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                         return;
                     }
 
+                    string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
+                    Session["BookingPayId"] = BookingPayId;
+
                     #region Book The Tour as Proposed Booking
                     //If everything looks good then book a proposed booking and confirm that on the next screen
                     BookTheCruise();
@@ -448,7 +432,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     Session.Add("BookingRef", BRef);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
 
-                    string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
+                    
                     string Email = Session["AgentMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
                     string FirstName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString());
@@ -457,8 +441,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     string PaymentId = BookingPayId.ToString();
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
                     //Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
-
-                    Session["BookingPayId"] = BookingPayId;
+                                        
                     Session["Address"] = lblBillingAddress.Text.Trim().ToString(); ;
                     Session["InvName"] = FirstName;
                     Session["SubInvName"] = FirstName;
@@ -503,18 +486,18 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     else
                         Session["BookingRef"] = bookingRef;
 
+                    Random rnd = new Random();
+                    string BookingPayId = rnd.Next(10000, 20000).ToString() + DateTime.Now.ToString("MMddhhmmssfff");
+                    Session["BookingPayId"] = BookingPayId;
+
                     #region Book The Tour as Proposed Booking
                     //If everything looks good then book a proposed booking and confirm that on the next screen
                     BookTheCruise();
                     #endregion
 
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
-
-                    Random rnd = new Random();
-                    string BookingPayId = rnd.Next(10000, 20000).ToString() + DateTime.Now.ToString("MMddhhmmssfff");
-                    Session["BookingPayId"] = BookingPayId;
+                                        
                     string Email = Session["CustomerMailId"].ToString();
-
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
                     string FirstName = dtCustomerData.Rows[0]["FirstName"].ToString();
                     string LastName = "XYZ";// dtGetReturnedData.Rows[0]["LastName"].ToString();
@@ -566,6 +549,22 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
 
+    private bool IsBookingAvailable()
+    {
+        BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
+
+        DALBookingLock dbl = new DALBookingLock();
+        if (dbl.IsLocked(bl))
+        {
+            lblBookingLockFound.Visible = true;
+            lblBookingLockFound.Text = "The room(s) you are trying to book are no longer available. Please click on the link below to choose the rooms again.";
+            lnkBackToCruiseBooking.Visible = true;
+            lnkBackToCruiseBooking.NavigateUrl = string.Format("~/Cruise/Booking/CruiseBooking.aspx?PackId={0}&PackageName={1}&NoOfNights={2}&CheckIndate={3}&DepartureId={4}", PackId, PackageName, NoOfNights, CheckIndate, DepartureId);
+            return false;
+        }
+        return true;
+    }
+
     private void RedirectToPaymentGatewayResponse()
     {
         string ts = "TRANSACTIONSTATUS=200";
@@ -575,8 +574,9 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         string amt = "AMOUNT=50";
         string ash = "ap_SecureHash=abc";
 
-        string qs = string.Format("{0}&{1}&{2}&{3}&{4}&{5}", ts, apt, msg, tid, amt, ash);
-        Response.Redirect("PaymentGatewayResponse.aspx?" + qs);
+        string qs = string.Format("~/Cruise/Booking/PaymentGatewayResponse.aspx?{0}&{1}&{2}&{3}&{4}&{5}", ts, apt, msg, tid, amt, ash);
+        Response.Redirect(qs);
+        //Response.Redirect("PaymentGatewayResponse.aspx?" + qs);
     }
 
     //protected void btnPayProceed_Click(object sender, EventArgs e)
@@ -1095,10 +1095,9 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     blsr._cRoomStatus = "B";
                     blsr._sRoomNo = GridRoomPaxDetail.Rows[LoopCounter]["RoomNumber"].ToString();
                     blsr.action = "AddPriceDetailsToo";
-                    blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
 
-                    //blsr.PaymentId = Session["BookingPayId"].ToString();
-                    //blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                    blsr.PaymentId = Session["BookingPayId"].ToString();
+                    blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
 
                     int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
                     if (GetQueryResponse > 0)
@@ -1112,7 +1111,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 throw;
             }
         }
-    }    
+    }
 
     #region Obsolete Method(s)
     [Obsolete]
@@ -1183,7 +1182,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 blsr._cRoomStatus = "B";
 
                 blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
-                blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
 
                 blsr.action = "AddPriceDetailsToo";
                 string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');

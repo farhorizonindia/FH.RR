@@ -94,14 +94,16 @@ public class DALBookingLock
 
             foreach (var lockRoom in balBookingLock.LockRooms)
             {
-                string query = string.Format("select isnull(Id, 0) from tblBookingLock where AccomId = {0} and RoomCategoryId = {1} and RoomNo = {2} and LockExpireAt > {4}",
+                string query = string.Format("select Id from tblBookingLock where LockIdentifier <> '{0}' and AccomId = {1} and RoomCategoryId = {2} and RoomNo = {3} and LockExpireAt > '{4}'",
+                balBookingLock.LockIdentifier,
                 balBookingLock.AccomId,
                 lockRoom.RoomCategoryId,
-                lockRoom.RoomNo, DateTime.Now);
+                lockRoom.RoomNo,
+                DateTime.Now);
                 cmd.CommandText = query;
                 var exists = cmd.ExecuteScalar();
 
-                if (int.Parse(exists.ToString()) > 0)
+                if (exists != null)
                 {
                     lockFound = true;
                     break;

@@ -258,6 +258,10 @@ public partial class response : System.Web.UI.Page
             DALBooking dlr = new DALBooking();
             dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
 
+            SetPaymentDetails(blsr);
+
+            dlr.UpdatePaymentDetails(blsr);
+
             BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
             ShowCruiseBookingDetails(bookingDetail);
         }
@@ -265,6 +269,40 @@ public partial class response : System.Web.UI.Page
         {
 
         }
+    }
+
+    /// <summary>
+    /// This method will move the booking from Proposed state to Booked state.
+    /// As payment is confirmed. Else the booking will stay as proposed booking for back-office operations.
+    /// </summary>
+    private void UpdateHotelBookingToBooked()
+    {
+        try
+        {
+            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            DALBooking dlr = new DALBooking();
+            dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
+
+            SetPaymentDetails(blsr);
+            dlr.UpdatePaymentDetails(blsr);
+
+            //BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
+            ShowHotelBookingDetails(blsr._iBookingId);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    private void SetPaymentDetails(BALBooking blsr)
+    {
+        string amount = Request.Params.Get("AMOUNT");
+        double paidAmount;
+        double.TryParse(amount.Trim(), out paidAmount);
+
+        blsr._PaidAmount = paidAmount;
+        blsr.PaymentId = Session["BookingPayId"] != null ? Session["BookingPayId"].ToString() : "NO_PAYMENT_ID";
     }
 
     private void ShowCruiseBookingDetails(BALBooking bookingDetail)
@@ -284,28 +322,7 @@ public partial class response : System.Web.UI.Page
         lblDepartDate.Text = bookingDetail._dtStartDate.ToString("d MMMM, yyyy");
         lblArrvDate.Text = bookingDetail._dtEndDate.ToString("d MMMM, yyyy");
         hfBookingId.Value = bookingDetail._iBookingId.ToString();
-    }
-
-    /// <summary>
-    /// This method will move the booking from Proposed state to Booked state.
-    /// As payment is confirmed. Else the booking will stay as proposed booking for back-office operations.
-    /// </summary>
-    private void UpdateHotelBookingToBooked()
-    {
-        try
-        {
-            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
-            DALBooking dlr = new DALBooking();
-            dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
-
-            //BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
-            ShowHotelBookingDetails(blsr._iBookingId);
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-    }
+    }   
 
     private void ShowHotelBookingDetails(int bookingId)
     {
@@ -731,7 +748,7 @@ public partial class response : System.Web.UI.Page
                     blsr.action = "AddPriceDetailsToo";
                     blsr._Amt = Convert.ToDecimal(GridRoomPaxDetail.Rows[LoopCounter]["Price"].ToString());
                     blsr.PaymentId = Session["BookingPayId"].ToString();
-                    blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                    blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
                     int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
                     if (GetQueryResponse > 0)
                     {
@@ -754,6 +771,7 @@ public partial class response : System.Web.UI.Page
         }
     }
 
+    [Obsolete]
     private int InsertBookingTableData(int acmid, int acmtpid, int agid, string bkref, DateTime cin, DateTime cout, DataTable vsdetails)
     {
         try
@@ -797,6 +815,7 @@ public partial class response : System.Web.UI.Page
         }
     }
 
+    [Obsolete]
     private int InsertRoomBookingTableData(DataTable dtbooking, DateTime cin, DateTime cout, int acmid)
     {
         try
@@ -829,7 +848,7 @@ public partial class response : System.Web.UI.Page
                 blsr._cRoomStatus = "B";
 
                 blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
-                blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
 
                 blsr.action = "AddPriceDetailsToo";
                 string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');

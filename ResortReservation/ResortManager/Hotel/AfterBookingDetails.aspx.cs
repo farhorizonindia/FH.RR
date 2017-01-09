@@ -877,7 +877,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 blsr._cRoomStatus = "B";
 
                 blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
-                blsr._Paid = Convert.ToDouble(Session["Paid"]);
+                blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
 
                 blsr.action = "AddPriceDetailsToo";
                 string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');

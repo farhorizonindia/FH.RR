@@ -36,7 +36,7 @@ public partial class uploader : ClientBasePage
         if ((fileUploader.PostedFile != null) && (fileUploader.PostedFile.ContentLength > 0))
         {
             string fn = System.IO.Path.GetFileName(fileUploader.PostedFile.FileName);
-            if (!fn.ToUpper().StartsWith("FH_TOURISTDETAILS") && !fn.EndsWith(".csv"))
+            if (!fn.ToUpper().StartsWith("FH_TOURISTDETAILS") || !fn.EndsWith(".csv"))
             {
                 msg = "You can only select FH_TOURISTDETAILS_XXXXXXX.CSV to upload.";
                 System.IO.StringWriter sw = new System.IO.StringWriter();
@@ -69,7 +69,7 @@ public partial class uploader : ClientBasePage
 
             ENums.UploadXMLType uploadXMLType = (ENums.UploadXMLType)Enum.Parse(typeof(ENums.UploadXMLType), uploadType);
             UploadServices uploadServices = new UploadServices();
-            Response.Write("abc");
+            //Response.Write("abc");
             bool uploaded = uploadServices.HandleUploadedFile(BookingId, uploadXMLType, RecordList);
            
             #endregion

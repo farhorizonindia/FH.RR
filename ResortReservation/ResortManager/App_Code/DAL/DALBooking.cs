@@ -62,7 +62,6 @@ public class DALBooking
         return iBookingReferenceCount;
     }
 
-
     public DataTable GetRoomCategoryWiseRates(BALBooking obj)
     {
         try
@@ -291,6 +290,38 @@ public class DALBooking
             return 0;
         }
     }
+
+    public DataTable getMaxRoomsBookable(BALBooking obj)
+    {
+        try
+        {
+            SqlConnection cn = new SqlConnection(strCon);
+            SqlDataAdapter da = new SqlDataAdapter();
+            da.SelectCommand = new SqlCommand("[dbo].[sp_CruiseBooking]", cn);
+            da.SelectCommand.Parameters.Clear();
+            da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
+            da.SelectCommand.Parameters.AddWithValue("@accomid", obj.accomId);
+
+            da.SelectCommand.Parameters.AddWithValue("@AgentId", obj._iAgentId);
+
+            da.SelectCommand.Parameters.AddWithValue("@startdate", obj._dtStartDate);
+
+            da.SelectCommand.CommandType = CommandType.StoredProcedure;
+            cn.Open();
+            da.SelectCommand.ExecuteReader();
+            DataTable dtReturnData = new DataTable();
+            cn.Close();
+            da.Fill(dtReturnData);
+            if (dtReturnData != null)
+                return dtReturnData;
+            else
+                return null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
     #endregion
 
     #region Insert/Update Data
@@ -349,7 +380,7 @@ public class DALBooking
             da.InsertCommand.Parameters.AddWithValue("@cRoomStatus", obj._cRoomStatus);
             da.InsertCommand.Parameters.AddWithValue("@Amt", obj._Amt);
             da.InsertCommand.Parameters.AddWithValue("@Action", obj.action);
-            da.InsertCommand.Parameters.AddWithValue("@paidAmt", obj._Paid);
+            da.InsertCommand.Parameters.AddWithValue("@paidAmt", obj._PaidAmount);
             da.InsertCommand.Parameters.AddWithValue("@PaymentId", obj.PaymentId);
 
             da.InsertCommand.CommandType = CommandType.StoredProcedure;
@@ -367,40 +398,31 @@ public class DALBooking
         }
     }
 
-    #endregion
-
-
-    public DataTable getMaxRoomsBookable(BALBooking obj)
+    public void UpdatePaymentDetails(BALBooking balBookingPayment)
     {
         try
         {
             SqlConnection cn = new SqlConnection(strCon);
-            SqlDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = new SqlCommand("[dbo].[sp_CruiseBooking]", cn);
-            da.SelectCommand.Parameters.Clear();
-            da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
-            da.SelectCommand.Parameters.AddWithValue("@accomid", obj.accomId);
-
-            da.SelectCommand.Parameters.AddWithValue("@AgentId", obj._iAgentId);
-
-            da.SelectCommand.Parameters.AddWithValue("@startdate", obj._dtStartDate);
-
-            da.SelectCommand.CommandType = CommandType.StoredProcedure;
             cn.Open();
-            da.SelectCommand.ExecuteReader();
-            DataTable dtReturnData = new DataTable();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cn;
+            cmd.CommandType = CommandType.Text;
+            
+            string query = string.Format("update tblPayment set paymentId = '{0}', PaidAmt = {1}, PaymentDate = '{2}' where BookingId = {3} and paymentId = '{4}')",
+                balBookingPayment.PaymentId,
+                balBookingPayment._PaidAmount,
+                DateTime.Now,
+                balBookingPayment._iBookingId,
+                balBookingPayment.PaymentId);
+
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
             cn.Close();
-            da.Fill(dtReturnData);
-            if (dtReturnData != null)
-                return dtReturnData;
-            else
-                return null;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return null;
+            throw exp;
         }
     }
-
-
+    #endregion
 }

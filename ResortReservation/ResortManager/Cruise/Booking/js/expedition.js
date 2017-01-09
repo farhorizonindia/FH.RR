@@ -352,20 +352,20 @@
             alert(result);
         }
 
-        $('#Selected_PriceTable').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bSort": false,
-            "bProcessing": false,
-            "bInfo": false,
-            "scrollX": false,
-            "iDisplayLength": 100,
-            "language": {
-                "decimal": ".",
-                "thousands": ","
-            }
-        });
+        //$('#Selected_PriceTable').dataTable({
+        //    "bPaginate": false,
+        //    "bLengthChange": false,
+        //    "bFilter": false,
+        //    "bSort": false,
+        //    "bProcessing": false,
+        //    "bInfo": false,
+        //    "scrollX": false,
+        //    "iDisplayLength": 100,
+        //    "language": {
+        //        "decimal": ".",
+        //        "thousands": ","
+        //    }
+        //});
 
 
         /*
@@ -1099,15 +1099,13 @@
         // Functions to run when the page loads
         */
         LeadInPricePanel();
-        if (bookNow == 'True') {
-            setTimeout(showPricePanel, 500);
-        }
+        //if (bookNow == 'True') {
+        //    setTimeout(showPricePanel, 500);
+        //}
 
-        if (CartToken) {
-            BookingSummary(CartToken);
-        }
-
-
+        //if (CartToken) {
+        //    BookingSummary(CartToken);
+        //}
     });
 
 });

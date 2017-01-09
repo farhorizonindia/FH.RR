@@ -42,7 +42,7 @@ public class BALBooking
     public bool _bConvertTo_Double_Twin { get; set; }
     public string _cRoomStatus { get; set; }
     public decimal _Amt { get; set; }
-    public double _Paid { get; set; }
+    public double _PaidAmount { get; set; }
 
     public string PaymentId { get; set; }
 

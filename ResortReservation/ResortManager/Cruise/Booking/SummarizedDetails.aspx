@@ -720,7 +720,9 @@
                                 <asp:Panel ID="pnlBookButton" Width="70%" runat="server">
                                     <asp:Button ID="btnPayProceed" runat="server" Text="Proceed For Payment" OnClick="btnPayProceed_Click" ValidationGroup="Pay" Font-Size="Medium" />
                                     <asp:Label ID="lblPaymentErr" runat="server" ForeColor="#FF3300"></asp:Label>
+                                    <br />
                                     <asp:Label ID="lblBookingLockFound" runat="server" ForeColor="#FF3300" Visible="false"></asp:Label>
+                                    <br />
                                     <asp:HyperLink ID="lnkBackToCruiseBooking" runat="server" CssClass="applink" Text="Back To Rooms Selection" Visible="false"></asp:HyperLink>
                                     <br />
                                     <asp:HiddenField ID="hftxtpaidamt" runat="server" />
