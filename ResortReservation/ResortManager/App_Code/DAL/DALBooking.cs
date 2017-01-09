@@ -408,8 +408,7 @@ public class DALBooking
             cmd.Connection = cn;
             cmd.CommandType = CommandType.Text;
             
-            string query = string.Format("update tblPayment set paymentId = '{0}', PaidAmt = {1}, PaymentDate = '{2}' where BookingId = {3} and paymentId = '{4}')",
-                balBookingPayment.PaymentId,
+            string query = string.Format("update tblPayment set PaidAmt = {0}, PaymentDate = '{1}' where BookingId = {2} and paymentId = '{3}'",                
                 balBookingPayment._PaidAmount,
                 DateTime.Now,
                 balBookingPayment._iBookingId,

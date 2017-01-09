@@ -65,12 +65,12 @@ public class DALBookingLock
             cmd.CommandText = query;
             cn.Open();
 
-            cmd.ExecuteNonQuery();
+            int rowsDeleted = cmd.ExecuteNonQuery();
 
             #region Also Delete All the expired locks, if there are any.
-            query = string.Format("delete from tblBookingLock where LockExpireAt < {0}",
+            query = string.Format("delete from tblBookingLock where LockExpireAt < '{0}'",
                                 DateTime.Now);
-            cmd.ExecuteNonQuery();
+            rowsDeleted = cmd.ExecuteNonQuery();
             #endregion
 
             cn.Close();

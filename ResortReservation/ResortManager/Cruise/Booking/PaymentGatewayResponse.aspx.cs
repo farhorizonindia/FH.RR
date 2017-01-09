@@ -76,7 +76,7 @@ public partial class response : System.Web.UI.Page
                 _smtpServer = new SmtpClient(SmtpServerAddress);
                 _smtpServer.Port = 587;
                 _smtpServer.Credentials = new System.Net.NetworkCredential(SmtpUserId, SmtpPassword);
-                _smtpServer.EnableSsl = false;                
+                _smtpServer.EnableSsl = false;
             }
             return _smtpServer;
         }
@@ -141,92 +141,79 @@ public partial class response : System.Web.UI.Page
         {
             try
             {
-                GenerateInvoice(writer);
-                ViewInvoice();
+                #region Generate Invoice
+                Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
+                PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
+                //webBrowser load html whether Waiting
+                htmlLayoutFormat.IsWaiting = false;
+                //page setting
+                PdfPageSettings setting = new PdfPageSettings();
+                setting.Size = PdfPageSize.A3;
+                string pageSource;
 
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
-                string toEmailId = Session["AgentMailId"] != null ? Session["AgentMailId"].ToString() : Session["CustMailId"].ToString();
+                var sw1 = new StringWriter();
+                var hw = new HtmlTextWriter(sw1);
 
-                if (Debugger.IsAttached || string.IsNullOrEmpty(toEmailId))
-                { toEmailId = "rohit@farhorizonindia.com"; }
-
-                if (!string.IsNullOrEmpty(toEmailId))
+                using (sw1)
+                using (hw)
                 {
-                    mail.Subject = "Invoice";
-                    mail.To.Add(toEmailId);
-                    mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
-                    try
-                    {
-                        SmtpServer.Send(mail);
-                    }
-                    catch (Exception exp)
-                    {
-                        Console.WriteLine(exp.Message);
-                    }
-                    ViewState["sentMail"] = "1";
+                    base.Render(hw);
+                    pageSource = sw1.ToString();
                 }
+                writer.Write(pageSource);
+
+                string htmlCode = pageSource.ToString();
+                htmlCode = htmlCode.Replace("dwew", "none");
+                //use single thread to generate the pdf from above html code
+                Thread thread = new Thread(() =>
+                { pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                // Save the file to PDF.
+                //pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf")));
+                pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
+                #endregion
+
+                #region  ViewInvoice
+                ////View the PDF.
+                //int pageNumber = 1;
+                //PdfReader reader = new PdfReader(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf"));
+                //Rectangle cropbox = reader.GetCropBox(1);
+                //iTextSharp.text.Rectangle size = new iTextSharp.text.Rectangle(cropbox.Width - 60, cropbox.Height - 12);
+                //Document document = new Document(size);
+                //iTextSharp.text.pdf.PdfWriter writer1 = PdfWriter.GetInstance(document,
+                //new FileStream(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf").Replace(lbInvoiceNO.Text + ".pdf", lbInvoiceNO.Text + "File.pdf"),
+                //FileMode.Create, FileAccess.Write));
+                //document.Open();
+                //PdfContentByte cb = writer1.DirectContent;
+                //document.NewPage();
+                //PdfImportedPage page = writer1.GetImportedPage(reader,
+                //pageNumber);
+                //cb.AddTemplate(page, 0, 0);
+                //document.Close();
+                #endregion
+
+                if (Session["Hotel"] != null)
+                {
+                    sendMail1();
+                }
+                else
+                {
+                    sendMail();
+                }
+
+                Session["BookedRooms"] = null;
+                Session["PackageId"] = null;
+                Session["BookingRef"] = null;
             }
+
             catch (Exception exp)
             {
                 throw exp;
             }
         }
-    }
-
-    private void GenerateInvoice(HtmlTextWriter writer)
-    {
-        Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
-        PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
-        //webBrowser load html whether Waiting
-        htmlLayoutFormat.IsWaiting = false;
-        //page setting
-        PdfPageSettings setting = new PdfPageSettings();
-        setting.Size = PdfPageSize.A3;
-        string pageSource;
-
-        var sw1 = new StringWriter();
-        var hw = new HtmlTextWriter(sw1);
-
-        using (sw1)
-        using (hw)
-        {
-            base.Render(hw);
-            pageSource = sw1.ToString();
-        }
-        writer.Write(pageSource);
-
-        string htmlCode = pageSource.ToString();
-        htmlCode = htmlCode.Replace("dwew", "none");
-        //use single thread to generate the pdf from above html code
-        Thread thread = new Thread(() =>
-        { pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        thread.Join();
-
-        // Save the file to PDF.
-        pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf")));
-    }
-
-    private void ViewInvoice()
-    {
-        //View the PDF.
-        int pageNumber = 1;
-        PdfReader reader = new PdfReader(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf"));
-        Rectangle cropbox = reader.GetCropBox(1);
-        iTextSharp.text.Rectangle size = new iTextSharp.text.Rectangle(cropbox.Width - 60, cropbox.Height - 12);
-        Document document = new Document(size);
-        iTextSharp.text.pdf.PdfWriter writer1 = PdfWriter.GetInstance(document,
-        new FileStream(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf").Replace(lbInvoiceNO.Text + ".pdf", lbInvoiceNO.Text + "File.pdf"),
-        FileMode.Create, FileAccess.Write));
-        document.Open();
-        PdfContentByte cb = writer1.DirectContent;
-        document.NewPage();
-        PdfImportedPage page = writer1.GetImportedPage(reader,
-        pageNumber);
-        cb.AddTemplate(page, 0, 0);
-        document.Close();
     }
 
     public string rename(string fullpath)
@@ -256,14 +243,10 @@ public partial class response : System.Web.UI.Page
         {
             BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
             DALBooking dlr = new DALBooking();
+
             dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
-
             SetPaymentDetails(blsr);
-
             dlr.UpdatePaymentDetails(blsr);
-
-            BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
-            ShowCruiseBookingDetails(bookingDetail);
         }
         catch
         {
@@ -280,14 +263,12 @@ public partial class response : System.Web.UI.Page
         try
         {
             BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+
             DALBooking dlr = new DALBooking();
             dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
 
             SetPaymentDetails(blsr);
             dlr.UpdatePaymentDetails(blsr);
-
-            //BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
-            ShowHotelBookingDetails(blsr._iBookingId);
         }
         catch (Exception ex)
         {
@@ -322,7 +303,7 @@ public partial class response : System.Web.UI.Page
         lblDepartDate.Text = bookingDetail._dtStartDate.ToString("d MMMM, yyyy");
         lblArrvDate.Text = bookingDetail._dtEndDate.ToString("d MMMM, yyyy");
         hfBookingId.Value = bookingDetail._iBookingId.ToString();
-    }   
+    }
 
     private void ShowHotelBookingDetails(int bookingId)
     {
@@ -368,18 +349,27 @@ public partial class response : System.Web.UI.Page
     {
         try
         {
-            Crc32 crc32 = new Crc32();
+            UInt32 Output = 0;
+            UInt32 Output1 = 0;
             String hash = String.Empty;
-            byte[] mybytes = Encoding.UTF8.GetBytes(ClearString);
-            foreach (byte b in crc32.ComputeHash(mybytes)) hash += b.ToString("x2");
-            UInt32 Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
-            UInt32 Output1 = UInt32.Parse(key);
+
+            if (!Debugger.IsAttached)
+            {
+                Crc32 crc32 = new Crc32();
+                byte[] mybytes = Encoding.UTF8.GetBytes(ClearString);
+                foreach (byte b in crc32.ComputeHash(mybytes)) hash += b.ToString("x2");
+                Output = UInt32.Parse(hash, System.Globalization.NumberStyles.HexNumber);
+                Output1 = UInt32.Parse(key);
+            }
 
             if (Output1 == Output)
             {
                 if (Session["Hotel"] != null)
                 {
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
+
+                    BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+                    ShowHotelBookingDetails(blsr._iBookingId);
 
                     GenrateBill1(TRANSACTIONID);
                     int QueryResponse = AddTransactionDetails(TRANSACTIONSTATUS, APTRANSACTIONID, TRANSACTIONID, AMOUNT);
@@ -392,6 +382,14 @@ public partial class response : System.Web.UI.Page
                 else
                 {
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##"); ;
+
+                    #region Show The Details
+                    BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+                    DALBooking dlr = new DALBooking();
+
+                    BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
+                    ShowCruiseBookingDetails(bookingDetail);
+                    #endregion
 
                     GenrateBill(TRANSACTIONID);
 
@@ -407,11 +405,7 @@ public partial class response : System.Web.UI.Page
                     gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblTotAMt.Text = Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
                     lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-                    lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
-
-                    Session["BookedRooms"] = null;
-                    Session["PackageId"] = null;
-                    Session["BookingRef"] = null;
+                    lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");                    
                 }
                 lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
             }
@@ -463,17 +457,17 @@ public partial class response : System.Web.UI.Page
     {
         ReleaseBookingLock();
         UpdateCruiseBookingToBooked();
-        sendMail(transactionId);
-    }    
+        //sendMail(transactionId);
+    }
 
     private void GenrateBill1(string transactionId)
     {
         ReleaseBookingLock();
         UpdateHotelBookingToBooked();
-        sendMail1(transactionId);
+        //sendMail1(transactionId);
     }
 
-    public void sendMail1(string TRANSACTIONID)
+    public void sendMail1()
     {
         try
         {
@@ -515,6 +509,7 @@ public partial class response : System.Web.UI.Page
             mail.IsBodyHtml = true;
             mail.Body = sb.ToString();
             mail.CC.Add("reservations@adventureresortscruises.com");
+            mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
 
             try
             {
@@ -532,28 +527,37 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-    public void sendMail(string TRANSACTIONID)
+    public void sendMail()
     {
         try
         {
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
-            con.Open();
-            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo',NoOfNights   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
-            SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
-            DataTable dtGetPackageDetails = new DataTable();
-            adp.Fill(dtGetPackageDetails);
+            string packId = Session["PackageId"] != null ? Session["PackageId"].ToString() : string.Empty;
+            string packageName = string.Empty;
 
-            lbpackageName.Text = "Package: " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + ", " + dtGetPackageDetails.Rows[0]["NoOfNights"].ToString() + " Nights";
-            lbStrtEnd.Text = "Cruise starts from " + dtGetPackageDetails.Rows[0]["BoardFrom"].ToString() + "  and ends at " + dtGetPackageDetails.Rows[0]["BoardTo"].ToString();
+            if (!string.IsNullOrEmpty(packId))
+            {
+                string sqlQuery = "SELECT [PackageName], (select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as'BoardTo', NoOfNights FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+                SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
+                con.Open();
+                SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
+                DataTable dtGetPackageDetails = new DataTable();
 
-            con.Close();
+                adp.Fill(dtGetPackageDetails);
+                if (string.Compare(packageName, dtGetPackageDetails.Rows[0]["PackageName"].ToString(), true) != 0)
+                {
+                    packageName = dtGetPackageDetails.Rows[0]["PackageName"].ToString();
+                }
+
+                lbpackageName.Text = "Package: " + packageName + ", " + dtGetPackageDetails.Rows[0]["NoOfNights"].ToString() + " Nights";
+                lbStrtEnd.Text = "Cruise starts from " + dtGetPackageDetails.Rows[0]["BoardFrom"].ToString() + "  and ends at " + dtGetPackageDetails.Rows[0]["BoardTo"].ToString();
+                con.Close();
+            }
 
             blsr.action = "getmaxbookingcode";
             DataTable dtbkcode = dlsr.GetMaxBookingId(blsr);
 
             string bref = Session["BookingRef"].ToString();
             string l = Session["SubInvName"].ToString();
-
 
             #region Preparing MailMessage
             MailMessage mail = new MailMessage();
@@ -573,7 +577,7 @@ public partial class response : System.Web.UI.Page
             #region Email Body
             StringBuilder sb = new StringBuilder();
             sb.Append("<div>");
-            sb.Append("<div>Booking No:" + dtbkcode.Rows[0].ItemArray[0].ToString() + "</div>  <div> Date of Booking: " + Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy") + " </div> <div><br/> </div> <div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div> Namaskar! Greetings from Assam, India!</div> <div><br/> </div><div> Thank you for booking " + dtGetPackageDetails.Rows[0]["PackageName"].ToString() + " on MV Mahabaahu.</div> <div><br/></div> ");
+            sb.Append("<div>Booking No:" + dtbkcode.Rows[0].ItemArray[0].ToString() + "</div>  <div> Date of Booking: " + Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy") + " </div> <div><br/> </div> <div> Dear " + Session["InvName"].ToString() + ",</div> <div><br/></div><div> Namaskar! Greetings from Assam, India!</div> <div><br/> </div><div> Thank you for booking " + packageName + " on MV Mahabaahu.</div> <div><br/></div> ");
             sb.Append(" <div>The cruise showcases Living, Natural and Cultural History where silk and cotton vie your attention. A cup of famous Assam tea beckons you over to the little known north eastern part of India.</div> <div><br/> </div> <div> This pristine destination unfolds the history of an ancient civilisation of the Tibeto - Burman Ahoms who reigned in the region for more than 600 years. The river brings you up close to the simplistic ways of a speckled tribal and multiracial life. </div><div> We take this opportunity to inform you that the final confirmation for the cruise is to be completed prior to day - 90. You will receive an automated e - reminder on day - 110 and another on day - 100. Please ignore if paid.<br/> </div>  <div><br/> </div>  <div> We look forward to your confirmation.</div> <div><br/>   </div> <div> Appreciations!</div> <div><br/>  </div> <div> TheMahabaahu Team!</div> ");
             sb.Append("</div>");
             sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
@@ -583,6 +587,7 @@ public partial class response : System.Web.UI.Page
             mail.IsBodyHtml = true;
             mail.Body = sb.ToString();
             mail.CC.Add("reservations@adventureresortscruises.com");
+            mail.Attachments.Add(new Attachment(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
 
             try
             {

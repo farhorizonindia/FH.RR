@@ -50,7 +50,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         {
             try
             {
-                PackId = Request.QueryString["PackId"];
+                Session["PackageId"] = PackId = Request.QueryString["PackId"];
                 PackageName = Request.QueryString["PackageName"];
                 NoOfNights = Request.QueryString["NoOfNights"];
                 CheckIndate = Request.QueryString["CheckIndate"];
@@ -385,7 +385,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
         }
     }
-    
+
     protected void btnPayProceed_Click(object sender, EventArgs e)
     {
         try
@@ -427,21 +427,24 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs Technologies Pvt. Ltd.: 12345
                     DataTable dtrpax = Session["BookedRooms"] as DataTable;
-                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + Session["UserName"] != null ? "-" + Session["UserName"].ToString() : string.Empty;
 
+                    string agentFirstName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString());
+                    string agentLastName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["LastName"].ToString());
+
+                    string BRef = txtBookRef.Text.Trim().ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + Session["UserName"] != null ? "-" + Session["UserName"].ToString() : string.Empty;
                     Session.Add("BookingRef", BRef);
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
 
-                    
                     string Email = Session["AgentMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-                    string FirstName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString());
-                    string LastName = "XYZ"; //dtGetReturnedData.Rows[0]["LastName"].ToString();
+                    string FirstName = agentFirstName;
+
+                    string LastName = agentLastName; //dtGetReturnedData.Rows[0]["LastName"].ToString();
                     string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
                     string PaymentId = BookingPayId.ToString();
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
-                    //Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
-                                        
+                                                                    //Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
+
                     Session["Address"] = lblBillingAddress.Text.Trim().ToString(); ;
                     Session["InvName"] = FirstName;
                     Session["SubInvName"] = FirstName;
@@ -480,7 +483,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     }
 
                     int persons = GetPax();
-                    string bookingRef = string.Format("{0} X {1}", blcus.Email, persons.ToString());
+                    string bookingRef = string.Format("{0} {1} X {2}", dtCustomerData.Rows[0]["FirstName"], dtCustomerData.Rows[0]["LastName"], persons.ToString());
                     if (Session["BookingRef"] == null)
                         Session.Add("BookingRef", bookingRef);
                     else
@@ -496,7 +499,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     #endregion
 
                     Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
-                                        
+
                     string Email = Session["CustomerMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
                     string FirstName = dtCustomerData.Rows[0]["FirstName"].ToString();
