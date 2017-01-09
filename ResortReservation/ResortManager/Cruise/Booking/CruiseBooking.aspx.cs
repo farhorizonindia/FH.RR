@@ -782,6 +782,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                     else
                     {
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('You have not selected enough Rooms to Accomodate all Guests ')", true);
+                        return;
                     }
                 }
                 Response.Redirect(Session["Redirecturl"].ToString());
