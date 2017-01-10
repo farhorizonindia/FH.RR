@@ -8,8 +8,6 @@ using System.Data;
 
 public partial class Hotel_HotelBooking : System.Web.UI.Page
 {
-
-
     BALBooking blsr = new BALBooking();
     DALBooking dlsr = new DALBooking();
 
@@ -32,8 +30,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
 
     int noofrooms = 0;
     double totAmt = 0;
-
-
 
     DateTime chkin;
     DateTime chkout;
@@ -195,8 +191,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
         }
     }
 
-
-
     private void bindRoomRates(int accmid, int Totpax, int agid, DateTime chkin, DateTime chkout, int norooms, int RtypeId)
     {
         try
@@ -247,7 +241,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
         {
         }
     }
-
 
     public void bindRatesOnly(int accmid, int Totpax, int agid, DateTime chkin, DateTime chkout, int norooms, int RtypeId, int Rindex)
     {
@@ -301,8 +294,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
         }
     }
 
-
-
     private void bindServiceRates(int acmid)
     {
         try
@@ -326,8 +317,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
         {
         }
     }
-
-
 
     //public void noofpax(string roomno)
     //{
@@ -990,21 +979,12 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
     }
     protected void btnBook_Click(object sender, EventArgs e)
     {
-
-
-
-
         try
         {
-
             int rowindex = 0;
             Button chk = (Button)sender;
-
             GridViewRow Grow = (GridViewRow)chk.NamingContainer;
-
             rowindex = Grow.RowIndex;
-
-
 
             int rcatid = 0;
             int rtypeid = 0;
@@ -1014,14 +994,11 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             DropDownList ddlConv = (DropDownList)Grow.FindControl("ddlConvert");
             DropDownList ddlGuests = (DropDownList)Grow.FindControl("ddlGuests");
 
-
             Int32.TryParse(hdnctid.Value.ToString(), out rcatid);
             Int32.TryParse(hfntpid.Value.ToString(), out rtypeid);
 
             ViewState["rcatid"] = rcatid;
             ViewState["rtypeid"] = rtypeid;
-
-
 
             int al = gdvSelectedRooms.Rows.Count + 1;
             int pax = 0;
@@ -1038,7 +1015,6 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             {
                 if (Session["UserCode"] != null)
                 {
-
                     DateTime.TryParse(Session["HCheckin"].ToString(), out chkin);
                     Int32.TryParse(Session["AcId"].ToString(), out iAccomId);
                     blsr.accomId = iAccomId;
@@ -1089,18 +1065,13 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 DivRmRate.Style.Add("display", "None");
 
             }
-
-
-
-
-
         }
         catch
         {
 
         }
-
     }
+
     protected void ddlGuests_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
