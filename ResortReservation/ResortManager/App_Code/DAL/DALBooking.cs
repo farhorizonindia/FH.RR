@@ -363,6 +363,7 @@ public class DALBooking
             return 0;
         }
     }
+
     public int AddRoomBookingDetails(BALBooking obj)
     {
         try
@@ -392,9 +393,9 @@ public class DALBooking
             else
                 return 0;
         }
-        catch (Exception)
+        catch (Exception exp)
         {
-            return 0;
+            throw exp;
         }
     }
 
