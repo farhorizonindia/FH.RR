@@ -185,6 +185,15 @@
     <span id="DivInvoice" runat="server">
 
         <form id="form1" runat="server">
+            <div style="margin-top: 100px; display: dwew;">
+                <center>
+                    <div id="divDisplay">
+                        <asp:Button ID="btnBack" runat="server" Text="Home" OnClick="btnBack_Click" />
+                        <asp:Button ID="btnPrint" runat="server" Text="Print" OnClientClick="MyFunction()" />
+                    </div>
+                    <%--  <asp:Button ID="btnPrint" runat="server" Text="Print" OnClientClick="MyFunction()"  />--%>
+                </center>
+            </div>
             <% 
                 // This is landing page where you will receive response from airpay. 
                 // The name of the page should be as per you have configured in airpay system
@@ -530,7 +539,7 @@
                                     <asp:Label ID="lblBalance" runat="server"></asp:Label></td>
                             </tr>
                             <tr>
-                                <td class="auto-style4">Balance Due On</td>
+                                <td class="auto-style4"><asp:Label ID="lblBalanceDueOn" runat="server" Text="Balance Due On"></asp:Label></td>
                                 <td class="ralign">
                                     <asp:Label ID="lbBalanceDueIn" runat="server"></asp:Label></td>
                             </tr>
@@ -549,16 +558,7 @@
                 </div>
                 <asp:HiddenField ID="hfBookingId" runat="server" />
             </div>
-            <%-- <input type="button" value="Print" onclick="PrintElem('#mydiv')" />--%>
-            <div style="margin-top: 100px; display: dwew;">
-                <center>
-                    <div id="divDisplay">
-                        <asp:Button ID="btnBack" runat="server" Text="Home" OnClick="btnBack_Click" />
-                        <asp:Button ID="btnPrint" runat="server" Text="Print" OnClientClick="MyFunction()" />
-                    </div>
-                    <%--  <asp:Button ID="btnPrint" runat="server" Text="Print" OnClientClick="MyFunction()"  />--%>
-                </center>
-            </div>
+            <%-- <input type="button" value="Print" onclick="PrintElem('#mydiv')" />--%>            
         </form>
     </span>
 </body>

@@ -574,7 +574,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         string apt = "APTRANSACTIONID=1234";
         string msg = "MESSAGE=success";
         string tid = "TRANSACTIONID=100";
-        string amt = "AMOUNT=50";
+        string amt = "AMOUNT=104";
         string ash = "ap_SecureHash=abc";
 
         string qs = string.Format("~/Cruise/Booking/PaymentGatewayResponse.aspx?{0}&{1}&{2}&{3}&{4}&{5}", ts, apt, msg, tid, amt, ash);

@@ -318,15 +318,36 @@ public partial class response : System.Web.UI.Page
         gdvSelectedRooms.DataSource = Bookingdt;
         gdvSelectedRooms.DataBind();
 
-        gdvSelectedRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b> ";
+        gdvSelectedRooms.FooterRow.Cells[2].Text = "Total <br> Service Tax @ 4.50% </r> <b> Grand Total </b> ";
 
-        gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
+        double totalAmount = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")));
+
+        string amountText = string.Format("{0}<br>{1}<br>{2}",
+                totalAmount.ToString("#.##"),
+                "Included",
+                totalAmount.ToString("#.##"));
+        gdvSelectedRooms.FooterRow.Cells[3].Text = amountText;
+
+
+        //gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
 
         lbPax.Text = Convert.ToInt32(Bookingdt.Compute("SUM(Pax)", "[Pax] > 0")).ToString(); ;
-        lblTotAMt.Text = Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##");
+        //lblTotAMt.Text = Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##");
 
-        lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-        lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+        lblTotAMt.Text = totalAmount.ToString("#.##");
+
+        double balanceAmount = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text)));
+        if (balanceAmount > 0)
+        {
+            lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
+            lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+        }
+        else
+        {
+            lblBalance.Text = "0";
+            lbBalanceDueIn.Text = string.Empty;
+            lblBalanceDueOn.Visible = false;
+        }
         hfBookingId.Value = bookingId.ToString();
     }
 
@@ -401,11 +422,34 @@ public partial class response : System.Web.UI.Page
                     }
                     DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
 
-                    gdvCruiseRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b>";
-                    gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
-                    lblTotAMt.Text = Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
-                    lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-                    lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");                    
+                    double totalAmount = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)));
+
+                    gdvCruiseRooms.FooterRow.Cells[2].Text = "Total <br> Service Tax @ 4.50% <br> <b> Grand Total </b>";
+
+                    string amountText = string.Format("{0}<br>{1}<br>{2}",
+                        totalAmount.ToString("#.##"),
+                        "Included",
+                        totalAmount.ToString("#.##"));
+
+                    gdvCruiseRooms.FooterRow.Cells[3].Text = amountText;
+
+                    //gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
+                    //lblTotAMt.Text = Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
+
+                    lblTotAMt.Text = totalAmount.ToString("#.##");
+
+                    double balanceAmount = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text)));
+                    if (balanceAmount > 0)
+                    {
+                        lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
+                        lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+                    }
+                    else
+                    {
+                        lblBalance.Text = "0";
+                        lbBalanceDueIn.Text = string.Empty;
+                        lblBalanceDueOn.Visible = false;
+                    }
                 }
                 lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblTotAMt.Text));
             }
@@ -503,7 +547,7 @@ public partial class response : System.Web.UI.Page
             sb.Append("<div>" + Session["AccomName"].ToString() + " Team <div><div><br/><div>");
 
             sb.Append("</div>");
-            sb.Append("<div></br><div><div>Enclosure: Invoice for your booking is attached with this email.<div>");
+            sb.Append("<div><br/><div><div>Enclosure: Invoice for your booking is attached with this email.<div>");
             #endregion
 
             mail.IsBodyHtml = true;
@@ -882,15 +926,33 @@ public partial class response : System.Web.UI.Page
             gdvSelectedRooms.DataSource = Bookingdt;
             gdvSelectedRooms.DataBind();
 
-            gdvSelectedRooms.FooterRow.Cells[2].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b> ";
+            gdvSelectedRooms.FooterRow.Cells[2].Text = "Total <br> Service Tax @ 4.50% <br> <b> Grand Total </b> ";
+            //gdvSelectedRooms.FooterRow.Cells[3].Text = "Included" + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
 
-            gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
+            string amountText = string.Format("{0}<br>{1}<br>{2}",
+                Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##"),
+                "Included",
+                Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##"));
+            gdvSelectedRooms.FooterRow.Cells[3].Text = amountText;
+
+            //gdvSelectedRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0"))).ToString("#.##") + " </br> " + Math.Round((4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##") + " ";
 
             lbPax.Text = Convert.ToInt32(Bookingdt.Compute("SUM(Pax)", "[Pax] > 0")).ToString(); ;
             lblTotAMt.Text = Math.Round((Convert.ToDouble(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) + (4.5 * (Convert.ToInt32(Bookingdt.Compute("SUM(Total1)", "[Total1] > 0")) / 100)))).ToString("#.##");
 
-            lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-            lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+            double balanceAmount = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text)));
+
+            if (balanceAmount > 0)
+            {
+                lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
+                lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+            }
+            else
+            {
+                lblBalanceDueOn.Visible = false;
+                lblBalance.Text = "0";
+                lbBalanceDueIn.Text = string.Empty;
+            }
             hfBookingId.Value = MaxBookingId.ToString();
 
             if (LoopInsertStatus == dtbooking.Rows.Count)
