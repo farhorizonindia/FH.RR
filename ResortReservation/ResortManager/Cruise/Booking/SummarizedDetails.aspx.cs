@@ -245,8 +245,6 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 lblPrToDate.Text = Convert.ToDateTime(Request.QueryString["CheckinDate"]).AddDays(-90).ToString("dddd, MMMM d, yyyy");
             }
 
-
-
             hftxtpaidamt.Value = Convert.ToDouble(txtPaidAmt.Text).ToString("N2").Replace(",", "");
 
             lblBalanceAmt.Text = dtGetBookedRooms.Rows[0]["Currency"].ToString() + " " + Math.Round((TotalPaybleAmt - Convert.ToDecimal(txtPaidAmt.Text))).ToString();
@@ -437,9 +435,9 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
                     string Email = Session["AgentMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-                    string FirstName = agentFirstName;
+                    string FirstName = agentFirstName;                    
 
-                    string LastName = agentLastName; //dtGetReturnedData.Rows[0]["LastName"].ToString();
+                    string LastName = "XYZ";//agentLastName; //dtGetReturnedData.Rows[0]["LastName"].ToString();
                     string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
                     string PaymentId = BookingPayId.ToString();
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();

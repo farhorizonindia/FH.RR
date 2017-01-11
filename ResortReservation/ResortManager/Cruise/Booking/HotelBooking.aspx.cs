@@ -1058,7 +1058,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                         }
                         else
                         {
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot any more rooms. Please contact our office.')", true);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot book any more rooms. Please contact our reservations office to make additional bookings.')", true);
                         }
                     }
                 }

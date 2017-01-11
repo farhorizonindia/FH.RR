@@ -668,15 +668,20 @@
                                         <tr style="background-color: #EFF3FB;">
                                             <td style="border: thin solid #000000; font-weight: bold">Booking Amount</td>
                                             <td style="border: thin solid #000000">
-                                                <asp:Label ID="lblCurrency" runat="server" Text="Label"></asp:Label><asp:Label ID="txtPaidAmt" runat="server"></asp:Label>
-                                                (25% of total)</td>
+                                                <asp:Label ID="lblCurrency" runat="server" Text="Label"></asp:Label>
+                                                <asp:Label ID="txtPaidAmt" runat="server"></asp:Label>
+                                                <%--(25% of total)--%>
+                                            </td>
 
                                         </tr>
                                         <tr style="background-color: rgba(149, 190, 222, 0.8) !important">
                                             <td style="border: thin solid #000000; font-weight: bold">Balance Amount</td>
                                             <td style="border: thin solid #000000">
                                                 <asp:Label ID="lblBalanceAmt" runat="server" Text="Label"></asp:Label>
-                                                (75% of total) to be paid prior to <%Response.Write(Convert.ToDateTime(System.DateTime.Now).AddDays(-90).ToString("dddd, MMMM d, yyyy")); %></td>
+
+                                                <%--(75% of total) to be paid prior to <%Response.Write(Convert.ToDateTime(System.DateTime.Now).AddDays(-90).ToString("dddd, MMMM d, yyyy")); %>--%>
+
+                                            </td>
 
                                         </tr>
 

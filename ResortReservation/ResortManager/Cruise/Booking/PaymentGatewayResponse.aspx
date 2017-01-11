@@ -185,7 +185,7 @@
     <span id="DivInvoice" runat="server">
 
         <form id="form1" runat="server">
-            <div style="margin-top: 100px; display: dwew;">
+            <div style="display: dwew; float:right; margin-right:10px;">
                 <center>
                     <div id="divDisplay">
                         <asp:Button ID="btnBack" runat="server" Text="Home" OnClick="btnBack_Click" />

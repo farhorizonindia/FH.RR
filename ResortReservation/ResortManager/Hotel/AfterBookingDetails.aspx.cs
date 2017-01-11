@@ -199,16 +199,36 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             }
             hdnfTotalPaybleAmt.Value = TotalPaybleAmt.ToString();
 
-            txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("N2");
             Bookingdt = Session["Bookingdt"] as DataTable;
-
             lbltotAmt.Text = Bookingdt.Rows[0]["Currency"].ToString() + " " + TotalPaybleAmt.ToString();
             lblCurrency.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " ";
-            txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("#.##");
-            hftxtpaidamt.Value = Convert.ToDouble(txtPaidAmt.Text).ToString("N2").Replace(",", "");
 
-            lblBalanceAmt.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " " + Math.Round((TotalPaybleAmt - Convert.ToDouble(txtPaidAmt.Text))).ToString();
+            DateTime checkInDate = Convert.ToDateTime(Session["Chkin"]);
+            double paidAmt = 0;
+            if (checkInDate.AddDays(-30) < System.DateTime.Now)
+            {
+                //txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("N2");
+                txtPaidAmt.Text = Math.Round(((100 * TotalPaybleAmt) / 100)).ToString("#.##");
+                paidAmt = Math.Round(((100 * TotalPaybleAmt) / 100));
+            }
+            else
+            {
+                //txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("N2");                
+                txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("#.##")  + " (25 % of total)";
+                paidAmt = Math.Round(((25 * TotalPaybleAmt) / 100));
+            }
 
+            hftxtpaidamt.Value = paidAmt.ToString("N2").Replace(",", "");
+            double balanceAmt = Math.Round((TotalPaybleAmt - paidAmt));
+
+            if (balanceAmt > 0)
+            {
+                lblBalanceAmt.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " " + balanceAmt.ToString() + " (75% of total) to be paid prior to " + checkInDate.AddDays(-30).ToString("MMM-dd-yyyy");
+            }
+            else
+            {
+                lblBalanceAmt.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " " + balanceAmt.ToString();
+            }
             //   lbltotAmt.Text = dtGetBookedRooms.Rows[0]["Currency"].ToString() + " " + TotalPaybleAmt.ToString();
         }
         catch
@@ -232,7 +252,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     string BookRef = txtBookRef.Text + "X" + GetPax().ToString();
 
                     Session.Add("BookingRef", BookRef);
-                    Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
+                    Session["Paid"] = Convert.ToDouble(hftxtpaidamt.Value.Trim() == "" ? "0" : hftxtpaidamt.Value.Trim());
                     blagentpayment._Action = "MailValidate";
                     blagentpayment._EmailId = Session["AgentMailId"].ToString();
                     blagentpayment._Password = Session["Password"].ToString();
@@ -252,7 +272,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     string Email = Session["AgentMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
                     string FirstName =  dtAgentData.Rows[0]["FirstName"] != DBNull.Value ? DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString()) : "First Name";
-                    string LastName = dtAgentData.Rows[0]["LastName"] != DBNull.Value ? DataSecurityManager.Decrypt(dtAgentData.Rows[0]["LastName"].ToString()) : "XYZ";
+                    string LastName = "XYZ"; //dtAgentData.Rows[0]["LastName"] != DBNull.Value ? DataSecurityManager.Decrypt(dtAgentData.Rows[0]["LastName"].ToString()) : "XYZ";
                     string PaidAmt = hftxtpaidamt.Value.Trim().ToString();                    
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();                    
 
@@ -290,7 +310,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     blcus.action = "LoginCust";
                     var dtCustomerData = new DataTable();
                     dtCustomerData = dlcus.checkDuplicateemail(blcus);
-                    Session["Paid"] = Convert.ToDouble(txtPaidAmt.Text.Trim() == "" ? "0" : txtPaidAmt.Text.Trim());
+                    Session["Paid"] = Convert.ToDouble(hftxtpaidamt.Value.Trim() == "" ? "0" : hftxtpaidamt.Value.Trim());
 
                     if (dtCustomerData.Rows.Count <= 0)
                     {
@@ -317,8 +337,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
                     string Email = Session["CustomerMailId"].ToString();
                     string PhoneNumber = "9999999999";// hdnfPhoneNumber.Value.Trim().ToString();
-                    string FirstName = dtCustomerData.Rows[0]["FirstName"].ToString();
-                    string LastName = dtCustomerData.Rows[0]["LastName"] == DBNull.Value ? dtCustomerData.Rows[0]["LastName"].ToString() : "XYZ";
+                    string FirstName = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["FirstName"].ToString());
+                    string LastName = dtCustomerData.Rows[0]["LastName"] == DBNull.Value ? DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString()) : "XYZ";
 
                     string PaidAmt = hftxtpaidamt.Value.Trim().ToString();
                     string PaymentId = BookingPayId.ToString();
@@ -348,7 +368,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             }
             else
             {
-                if (Convert.ToDecimal(txtPaidAmt.Text) <= Convert.ToDecimal(hdnfCreditLimit.Value))
+                if (Convert.ToDecimal(hftxtpaidamt.Value) <= Convert.ToDecimal(hdnfCreditLimit.Value))
                 {
                     string BookingPayId = lbPaymentMethod.Text.Trim().Substring(0, 2) + DateTime.Now.ToString("MMddhhmmssfff");
                     Session["BookingPayId"] = BookingPayId;

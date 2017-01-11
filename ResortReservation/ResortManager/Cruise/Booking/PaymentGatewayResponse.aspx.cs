@@ -197,11 +197,11 @@ public partial class response : System.Web.UI.Page
 
                 if (Session["Hotel"] != null)
                 {
-                    sendMail1();
+                    SendHotelMail();
                 }
                 else
                 {
-                    sendMail();
+                    SendCruiseMail();
                 }
 
                 Session["BookedRooms"] = null;
@@ -300,13 +300,16 @@ public partial class response : System.Web.UI.Page
         lbPax.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Pax)", string.Empty)).ToString();
         //    lblTotoAmt.Text = Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)).ToString();
 
-        lblDepartDate.Text = bookingDetail._dtStartDate.ToString("d MMMM, yyyy");
-        lblArrvDate.Text = bookingDetail._dtEndDate.ToString("d MMMM, yyyy");
+        lblArrvDate.Text = bookingDetail._dtStartDate.ToString("d MMMM, yyyy");
+        lblDepartDate.Text = bookingDetail._dtEndDate.ToString("d MMMM, yyyy");
         hfBookingId.Value = bookingDetail._iBookingId.ToString();
     }
 
-    private void ShowHotelBookingDetails(int bookingId)
+    private void ShowHotelBookingDetails(BALBooking booking)
     {
+        lbBookingNo.Text = booking.BookingCode;
+        hfBookingId.Value = booking._iBookingId.ToString();
+
         lblArrvDate.Text = Convert.ToDateTime(Session["Chkin"]).ToString("d MMMM, yyyy");
         lblDepartDate.Text = Convert.ToDateTime(Session["chkout"]).ToString("d MMMM, yyyy");
         lblacm.Text = "Accomodation Name: " + Session["AccomName"].ToString();
@@ -340,15 +343,14 @@ public partial class response : System.Web.UI.Page
         if (balanceAmount > 0)
         {
             lblBalance.Text = Math.Round((Convert.ToDouble(lblTotAMt.Text) - Convert.ToDouble(lblTotPaid.Text))).ToString("#.##");
-            lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-90).ToString("d MMMM, yyyy");
+            lbBalanceDueIn.Text = Convert.ToDateTime(lblArrvDate.Text).AddDays(-30).ToString("d MMMM, yyyy");
         }
         else
         {
             lblBalance.Text = "0";
             lbBalanceDueIn.Text = string.Empty;
             lblBalanceDueOn.Visible = false;
-        }
-        hfBookingId.Value = bookingId.ToString();
+        }        
     }
 
     public void hidecolumns()
@@ -390,9 +392,9 @@ public partial class response : System.Web.UI.Page
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
 
                     BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
-                    ShowHotelBookingDetails(blsr._iBookingId);
+                    ShowHotelBookingDetails(blsr);
 
-                    GenrateBill1(TRANSACTIONID);
+                    GenrateHotelBill(TRANSACTIONID);
                     int QueryResponse = AddTransactionDetails(TRANSACTIONSTATUS, APTRANSACTIONID, TRANSACTIONID, AMOUNT);
                     if (QueryResponse > 0)
                     {
@@ -412,7 +414,7 @@ public partial class response : System.Web.UI.Page
                     ShowCruiseBookingDetails(bookingDetail);
                     #endregion
 
-                    GenrateBill(TRANSACTIONID);
+                    GenerateCruiseBill(TRANSACTIONID);
 
                     int QueryResponse = AddTransactionDetails(TRANSACTIONSTATUS, APTRANSACTIONID, TRANSACTIONID, AMOUNT);
                     if (QueryResponse > 0)
@@ -497,21 +499,21 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-    private void GenrateBill(string transactionId)
+    private void GenerateCruiseBill(string transactionId)
     {
         ReleaseBookingLock();
         UpdateCruiseBookingToBooked();
         //sendMail(transactionId);
     }
 
-    private void GenrateBill1(string transactionId)
+    private void GenrateHotelBill(string transactionId)
     {
         ReleaseBookingLock();
         UpdateHotelBookingToBooked();
         //sendMail1(transactionId);
     }
 
-    public void sendMail1()
+    public void SendHotelMail()
     {
         try
         {
@@ -571,7 +573,7 @@ public partial class response : System.Web.UI.Page
         }
     }
 
-    public void sendMail()
+    public void SendCruiseMail()
     {
         try
         {
