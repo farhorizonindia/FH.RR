@@ -2524,10 +2524,9 @@ public partial class ClientUI_Booking : ClientBasePage
     {
         blsr.action = "AddPriceDetailsToo";
         blsr._Amt = amt;
-        blsr.PaymentId = Session["BookingPayId"].ToString();
-        blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
+        blsr.PaymentId =  Session["BookingPayId"] == null ? Session["BookingPayId"].ToString() : string.Empty;
+        blsr._PaidAmount = Session["Paid"] != null ? Convert.ToDouble(Session["Paid"]) : 0;
         int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
-
     }
 
     private void SaveBooking()
