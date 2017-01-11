@@ -668,7 +668,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 {
                     string TaxStatus = (view.ToTable().Rows[0][7].ToString());
                     string TaxValue = (view.ToTable().Rows[0][6].ToString());
-                    
+
                     arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
                     dr["Price"] = (arrr1tx * Convert.ToInt32(ddlpax1rm.SelectedValue)).ToString("#.##");
@@ -677,7 +677,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 else
                 {
                     string TaxStatus = (view.ToTable().Rows[0][7].ToString());
-                    string TaxValue = (view.ToTable().Rows[0][6].ToString());                    
+                    string TaxValue = (view.ToTable().Rows[0][6].ToString());
 
                     arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                     dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("#.##");
@@ -797,7 +797,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         {
             throw sqe;
         }
-    }    
+    }
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
@@ -887,7 +887,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     protected void ImageMap1_Click(object sender, ImageMapEventArgs e)
     {
         try
-        {            
+        {
             if (gdvRoomCategories.Rows.Count > 1)
             {
                 dt = new DataTable();
@@ -906,40 +906,20 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 dv = new DataView(dt, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
                 if (ddlpax1rm.SelectedIndex > 0)
                 {
-                    if (Session["UserCode"] != null)
+                    blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;                    
+                    blsr.action = "Getmaxrooms";
+                    blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
+                    dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
+                    if (dtGetReturnedData != null)
                     {
-                        blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
-
-                        blsr.action = "Getmaxrooms";
-                        blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
-                        dtGetReturnedData = new DataTable();
-                        dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
-                        if (dtGetReturnedData != null)
+                        if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
                         {
-                            if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
-                            {
-                                lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
-                                addrows(dv, roomCatId);
-                            }
+                            lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
+                            addrows(dv, roomCatId);
                         }
-                    }
-                    else
-                    {
-                        blsr._iAgentId = 247;
-
-                        blsr.action = "Getmaxrooms";
-                        blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
-                        dtGetReturnedData = new DataTable();
-                        dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
-                        if (dtGetReturnedData != null && dtGetReturnedData.Rows.Count > 0)
+                        else
                         {
-                            if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
-                            {
-                                lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
-                                addrows(dv, roomCatId);
-                            }
-
-
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot any more rooms. Please contact our office.')", true);
                         }
                     }
                 }

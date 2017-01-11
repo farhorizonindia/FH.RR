@@ -1056,8 +1056,10 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                             addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
                             CalculateRoomRates();
                         }
-
-
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot any more rooms. Please contact our office.')", true);
+                        }
                     }
                 }
                 else

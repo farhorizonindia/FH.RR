@@ -180,9 +180,9 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
         {
             try
             {
-                string[] arr=  row.Cells[10].Text.ToString().Split(' ');
+                string[] arr = row.Cells[10].Text.ToString().Split(' ');
 
-                row.Cells[10].Text = arr[0].ToString() +" "+ Convert.ToDouble(arr[1]).ToString("#.##");
+                row.Cells[10].Text = arr[0].ToString() + " " + Convert.ToDouble(arr[1]).ToString("#.##");
             }
 
             catch
@@ -230,7 +230,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 }
                 else
                     //avl.InnerHtml = "No Rooms Available";
-                RemoveZeroes();
+                    RemoveZeroes();
                 ViewState["Rrate"] = Returndt;
             }
 
@@ -287,7 +287,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             }
             else
                 //avl.InnerHtml = "No Rooms Available";           
-            RemoveZeroes();
+                RemoveZeroes();
         }
         catch
         {
@@ -440,7 +440,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
 
             dtInsertable.Columns.Add("Nights", typeof(Int32));
             dtInsertable.Columns.Add("Total1", typeof(decimal));
-         
+
             dtInsertable.Columns.Add("RoomNo", typeof(string));
             dtInsertable.Columns.Add("Currency", typeof(string));
 
@@ -456,7 +456,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 dr["Pax"] = pax;
 
                 dr["Currency"] = view.ToTable().Rows[0]["Currency"].ToString();
-                dr["Price"] =view.ToTable().Rows[0]["Currency"].ToString()+" "+ Convert.ToDouble(view.ToTable().Rows[0]["Amt"]).ToString();
+                dr["Price"] = view.ToTable().Rows[0]["Currency"].ToString() + " " + Convert.ToDouble(view.ToTable().Rows[0]["Amt"]).ToString();
 
                 DateTime.TryParse(Session["HCheckin"].ToString(), out chkin);
                 DateTime.TryParse(Session["HCheckout"].ToString().ToString(), out chkout);
@@ -464,7 +464,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 dr["Nights"] = inights;
                 dr["Total1"] = inights * Convert.ToDouble(view.ToTable().Rows[0]["Amt"]);
 
-                dr["Total"] =view.ToTable().Rows[0]["Currency"].ToString()+" "+( inights * Convert.ToDouble(view.ToTable().Rows[0]["Amt"])).ToString();
+                dr["Total"] = view.ToTable().Rows[0]["Currency"].ToString() + " " + (inights * Convert.ToDouble(view.ToTable().Rows[0]["Amt"])).ToString();
                 dr["categoryName"] = view.ToTable().Rows[0][4].ToString();
                 dr["ConvDouble"] = conv == "1" ? "false" : "true";
                 dtInsertable.Rows.Add(dr);
@@ -493,7 +493,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 dr["Pax"] = pax;
 
                 dr["Currency"] = view.ToTable().Rows[0]["Currency"].ToString();
-                dr["Price"] = view.ToTable().Rows[0]["Currency"].ToString()+" "+ Convert.ToDouble(view.ToTable().Rows[0][3]).ToString();
+                dr["Price"] = view.ToTable().Rows[0]["Currency"].ToString() + " " + Convert.ToDouble(view.ToTable().Rows[0][3]).ToString();
 
 
 
@@ -503,7 +503,7 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                 dr["Nights"] = inights;
                 dr["Total1"] = inights * Convert.ToDouble(view.ToTable().Rows[0]["Amt"]);
 
-                dr["Total"] = view.ToTable().Rows[0]["Currency"].ToString() + " " +( inights * Convert.ToDouble(view.ToTable().Rows[0][3])).ToString();
+                dr["Total"] = view.ToTable().Rows[0]["Currency"].ToString() + " " + (inights * Convert.ToDouble(view.ToTable().Rows[0][3])).ToString();
                 dr["ConvDouble"] = conv == "1" ? "false" : "true";
 
 
@@ -1013,52 +1013,29 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             dv = new DataView(Returndt, "RoomCategoryId='" + roomCatId + "' and RoomTypeId='" + roomtypeid + "'", "RoomCategoryId,RoomTypeId", DataViewRowState.CurrentRows);
             if (pax > 0 && gdvSelectedRooms.Rows.Count < Convert.ToInt32(dv.ToTable().Rows[0]["rcount"]))
             {
-                if (Session["UserCode"] != null)
-                {
-                    DateTime.TryParse(Session["HCheckin"].ToString(), out chkin);
-                    Int32.TryParse(Session["AcId"].ToString(), out iAccomId);
-                    blsr.accomId = iAccomId;
-                    blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
-                    blsr.action = "getmaxroomsHotel";
-                    blsr._dtStartDate = chkin;
+                blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 248;
 
-                    Returndt = new DataTable();
-                    Returndt = dlsr.getMaxRoomsBookable(blsr);
-                    if (Returndt != null)
+                DateTime.TryParse(Session["HCheckin"].ToString(), out chkin);
+                Int32.TryParse(Session["AcId"].ToString(), out iAccomId);
+                blsr.accomId = iAccomId;
+                blsr.action = "getmaxroomsHotel";
+                blsr._dtStartDate = chkin;
+
+                Returndt = new DataTable();
+                Returndt = dlsr.getMaxRoomsBookable(blsr);
+                if (Returndt != null)
+                {
+                    if (gdvSelectedRooms.Rows.Count < Convert.ToInt32(Returndt.Rows[0][0]))
                     {
-                        if (gdvSelectedRooms.Rows.Count < Convert.ToInt32(Returndt.Rows[0][0]))
-                        {
-                            addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
-                            CalculateRoomRates();
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "Quota Full", "javascript:alert('You cannot book any more rooms. Please contact at our office.')", true);
-                            return;
-                        }
+                        addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
+                        CalculateRoomRates();
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Quota Full", "javascript:alert('You cannot book any more rooms. Please contact at our office.')", true);
+                        return;
                     }
                 }
-                else
-                {
-                    DateTime.TryParse(Session["HCheckin"].ToString(), out chkin);
-                    Int32.TryParse(Session["AcId"].ToString(), out iAccomId);
-                    blsr.accomId = iAccomId;
-                    blsr._iAgentId = 248;
-                    blsr.action = "getmaxroomsHotel";
-                    blsr._dtStartDate = chkin;
-
-                    Returndt = new DataTable();
-                    Returndt = dlsr.getMaxRoomsBookable(blsr);
-                    if (Returndt != null)
-                    {
-                        if (gdvSelectedRooms.Rows.Count < Convert.ToInt32(Returndt.Rows[0][0]))
-                        {
-                            addrows(dv, roomCatId, pax, ddlConv.SelectedIndex.ToString());
-                            CalculateRoomRates();
-                        }
-                    }
-                }
-
             }
 
             if (gdvSelectedRooms.Rows.Count > 0)

@@ -166,11 +166,11 @@ public partial class ViewBookings : ClientBasePage
                 e.Item.Cells[10].Text = "";
                 e.Item.Cells[11].Text = "";
                 e.Item.Cells[14].Text = "";
-                if (string.Compare(e.Item.Cells[15].Text.ToUpper(), "TRUE", true) == 0)
-                {
-                    e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
-                    e.Item.Cells[0].ForeColor = System.Drawing.Color.White;
-                }
+                //if (string.Compare(e.Item.Cells[15].Text.ToUpper(), "TRUE", true) == 0)
+                //{
+                //    e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
+                //    e.Item.Cells[0].ForeColor = System.Drawing.Color.White;
+                //}
             }
             #endregion
 
@@ -223,7 +223,7 @@ public partial class ViewBookings : ClientBasePage
             #endregion
 
             #region Proposed            
-            if (Boolean.Parse(e.Item.Cells[15].Text) == true || string.Compare(e.Item.Cells[5].Text, "PROPOSED", true) == 0)
+            else if (Boolean.Parse(e.Item.Cells[15].Text) == true || string.Compare(e.Item.Cells[5].Text, "PROPOSED", true) == 0)
             {
                 e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
                 e.Item.Cells[8].Text = "";
