@@ -10,6 +10,7 @@ using System.Web;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALBookingLock
     {
         public int AccomId { get; set; }
@@ -19,6 +20,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public List<LockRoom> LockRooms { get; set; }
     }
 
+    [Serializable]
     public class LockRoom
     {
         public int RoomCategoryId { get; set; }

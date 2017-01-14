@@ -8,6 +8,7 @@ using System.Web;
 /// </summary>
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALPackageMaster
     {
         public BALPackageMaster()

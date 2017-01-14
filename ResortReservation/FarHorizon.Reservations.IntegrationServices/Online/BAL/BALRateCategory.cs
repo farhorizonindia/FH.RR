@@ -5,6 +5,7 @@ using System.Web;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALRateCategory
     {
         public BALRateCategory()

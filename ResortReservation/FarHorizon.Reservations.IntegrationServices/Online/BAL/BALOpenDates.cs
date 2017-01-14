@@ -8,6 +8,7 @@ using System.Configuration;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALOpenDates
     {
         public BALOpenDates()

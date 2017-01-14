@@ -1,9 +1,11 @@
-﻿/// <summary>
+﻿
+using System;
+/// <summary>
 /// Summary description for BALCustomers
 /// </summary>
-
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALCustomers
     {
         public BALCustomers()

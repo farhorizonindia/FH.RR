@@ -1,5 +1,8 @@
-﻿namespace FarHorizon.Reservations.BusinessServices.Online.BAL
+﻿using System;
+
+namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALAgentPayment
     {
         public BALAgentPayment()

@@ -13,6 +13,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
         {
             strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
         }
+
         #region Get Data
         public DataTable BindControls(BALAgentPayment obj)
         {
@@ -43,6 +44,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
         }
 
         #endregion
+
         #region Insert / Update Data
 
         public int AddpaymentDetails(BALAgentPayment obj)

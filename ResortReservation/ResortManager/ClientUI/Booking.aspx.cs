@@ -330,32 +330,24 @@ public partial class ClientUI_Booking : ClientBasePage
             blht.Checkout = chkout;
             blht.RoomTypeId = RtypeId;
 
-
             blht.agentid = agid;
-            Returndt = new DataTable();
             Returndt = dlht.GetHotelRates(blht);
-
 
             if (Returndt != null)
             {
                 Session["RoomInfo"] = Returndt;
 
                 //  dv.RowFilter = "ActualRoomTypeId<>0";
-
                 if (Returndt.Rows.Count > 0)
                 {
-
                     gdvRatesHotel.DataSource = Returndt;
                     gdvRatesHotel.DataBind();
                 }
                 else
                 {
-
                     gdvRatesHotel.DataSource = null;
                     gdvRatesHotel.DataBind();
                 }
-
-
                 ViewState["Rrate"] = Returndt;
             }
             else
@@ -363,10 +355,7 @@ public partial class ClientUI_Booking : ClientBasePage
                 gdvRatesHotel.DataSource = null;
                 gdvRatesHotel.DataBind();
             }
-
-
         }
-
         catch
         {
         }
@@ -419,8 +408,6 @@ public partial class ClientUI_Booking : ClientBasePage
             base.DisplayAlert(msg);
             return;
         }
-
-
         SaveBooking();
     }
     protected void btnReset_Click(object sender, EventArgs e)

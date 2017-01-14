@@ -9,6 +9,7 @@ using System.Web;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 {
+    [Serializable]
     public class BALSearch
     {
         public BALSearch()
