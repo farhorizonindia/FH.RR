@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class AccomTypeDTO 
     {
         private int _iAccomTypeId;

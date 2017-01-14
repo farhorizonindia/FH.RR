@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class NationalityDTO 
     {
         private int _iNationalityID;

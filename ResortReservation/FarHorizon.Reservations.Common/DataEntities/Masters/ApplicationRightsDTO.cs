@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class ApplicationRightsDTO 
     {
         string _operationType;
@@ -22,6 +23,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         }
     }
 
+    [Serializable]
     public class PageWiseRights
     {
         string _pageId;
@@ -46,8 +48,9 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
             get { return _rights; }
             set { _rights = value; }
         }
-    }    
-
+    }
+    
+    [Serializable]
     public class Rights
     {
         string _id;

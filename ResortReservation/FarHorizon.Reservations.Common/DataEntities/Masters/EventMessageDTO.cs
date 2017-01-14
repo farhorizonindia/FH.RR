@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class EventMessageDTO 
     {
         int _MessageId;

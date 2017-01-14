@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common
 {
+    [Serializable]
     public static class Constants
     {
         #region Control Ids Constants

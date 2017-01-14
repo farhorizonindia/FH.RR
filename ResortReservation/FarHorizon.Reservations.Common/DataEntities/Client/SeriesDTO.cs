@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class SeriesDTO
     {
         private int _iBookingId;
@@ -134,6 +135,8 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set { _sAccomodation = value; }
         }
     }
+
+    [Serializable]
     public class SeriesBookingDates
     {
         private DateTime _dtStartDate;
@@ -159,6 +162,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         }        
     }
 
+    [Serializable]
     public class clsSeriesBookingDTO
     {
         #region Data Members

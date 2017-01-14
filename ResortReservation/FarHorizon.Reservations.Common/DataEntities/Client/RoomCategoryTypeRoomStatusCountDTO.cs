@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class RoomCategoryTypeRoomStatusCountDTO
     {
         int _RoomCategoryId;

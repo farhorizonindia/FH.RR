@@ -5,6 +5,7 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class BookingChartTreeDTO
     {
         RegionDTO _oRegion;

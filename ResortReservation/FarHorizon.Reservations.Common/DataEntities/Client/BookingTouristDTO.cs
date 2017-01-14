@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class BookingTouristDTO
     {
         #region Variables
@@ -237,6 +238,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion Properties
     }
 
+    [Serializable]
     public class clsTouristCountDTO
     {
         private int _iAccomTypeId;

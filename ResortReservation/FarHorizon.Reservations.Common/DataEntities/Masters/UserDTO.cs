@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class UserDTO 
     {
         #region Variables        
@@ -119,6 +120,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         #endregion
     }
 
+    [Serializable]
     public class LoggedInUser
     {
         UserDTO _user;
@@ -137,6 +139,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         }
     }
 
+    [Serializable]
     public class UserRoleDTO
     {        
         private int _roleId;
@@ -154,6 +157,8 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
             set { _roleName = value; }
         }
     }
+
+    [Serializable]
     public class UserRightsData
     {
         private int _iUserID;

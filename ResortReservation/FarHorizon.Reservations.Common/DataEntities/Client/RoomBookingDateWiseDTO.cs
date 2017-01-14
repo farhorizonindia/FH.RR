@@ -4,6 +4,7 @@ using FarHorizon.Reservations.Common;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class RoomBookingDateWiseDTO : IComparable
     {
         private int _iAccomId;

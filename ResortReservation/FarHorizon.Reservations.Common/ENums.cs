@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common
 {
+    [Serializable]
     public enum BookingStatusTypes
     {
         NONE = 0,
@@ -14,6 +15,7 @@ namespace FarHorizon.Reservations.Common
         PROPOSED = 5
     }
 
+    [Serializable]
     public static class ENums
     {
         public enum BookingStatusTypes

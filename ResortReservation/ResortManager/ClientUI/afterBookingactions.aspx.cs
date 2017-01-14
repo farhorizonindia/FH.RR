@@ -39,7 +39,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             if (status == "confirmed")
             {
                 lblSubject.Text = "Booking Confirmed";
-                if (Session["confirmDet"] == null)
+                if (SessionServices.RetrieveSession("confirmDet") == null)
                 {
                     Table tblparent = new Table();
                     TableRow tr;
@@ -77,7 +77,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     tc.Controls.Add(BookDetailsformail(iBookingId, ""));
                     tr.Cells.Add(tc);
                     tblparent.Rows.Add(tr);
-                    BookingDTO[] objcon = Session["confirmDet"] as BookingDTO[];
+                    BookingDTO[] objcon = SessionServices.RetrieveSession("confirmDet") as BookingDTO[];
 
                     tr = new TableRow();
                     tc = new TableCell();
@@ -115,8 +115,8 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             if ((status == "waitlisted" || status == "booked") && updated == true)
             {
                 lblSubject.Text = "Booking Updated";
-                BookingDTMail[] obd = Session["BookDetMail"] as BookingDTMail[];
-                BookingRoomReportsDTO[] orrbd = Session["BookroomDetmail"] as BookingRoomReportsDTO[];
+                BookingDTMail[] obd = SessionServices.RetrieveSession("BookDetMail") as BookingDTMail[];
+                BookingRoomReportsDTO[] orrbd = SessionServices.RetrieveSession("BookroomDetmail") as BookingRoomReportsDTO[];
 
                 Table tblparent = new Table();
                 TableRow tr;

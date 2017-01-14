@@ -3,6 +3,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class BookingDTO
     {
         #region Data Members
@@ -431,6 +432,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion
     }
 
+    [Serializable]
     public class ViewBookingDTO
     {
         #region Data Members

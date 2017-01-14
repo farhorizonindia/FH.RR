@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class UserAgentMapperDTO
     {
         String _userId;
@@ -22,6 +23,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         }        
     }
 
+    [Serializable]
     public class AgentUserMapperDTO
     {
         AgentDTO _agent;

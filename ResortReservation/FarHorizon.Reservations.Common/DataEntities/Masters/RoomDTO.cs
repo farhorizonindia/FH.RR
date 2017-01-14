@@ -5,6 +5,7 @@ using FarHorizon.Reservations.Common.DataEntities.Client;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class RoomDTO 
     {
         #region Variables
@@ -133,7 +134,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         #endregion Properties
     }
 
-
+    [Serializable]
     public class roommaintainDTO
     {
         int _AccomodationId;

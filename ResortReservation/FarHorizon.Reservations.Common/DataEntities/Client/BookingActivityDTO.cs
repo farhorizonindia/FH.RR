@@ -4,13 +4,14 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class BookingActivityDTO
     {
         int _iBookingId;
         int _iAccomId;
-        string _sAccomodation;                
+        string _sAccomodation;
         int _iActivityId;
-        string _sActivityName;        
+        string _sActivityName;
         DateTime _dOperationDate;
 
         public int BookingId

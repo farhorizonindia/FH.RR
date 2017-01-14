@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class BookingRoomReportsDTO
     {
         private string _sRoomCategory;
@@ -62,6 +63,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
 
     }
 
+    [Serializable]
     public class BookingDTMail
     {
         private int _bookingid;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Masters
 {
+    [Serializable]
     public class AccomodationDTO 
     {
         private int _AccomId;
@@ -70,6 +71,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         }
     }
 
+    [Serializable]
     public class AccomodationSeasonDTO
     {
         int _AccomodationId;

@@ -5,29 +5,38 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public struct RoomsAvailable
     {
         public RoomTypeDTO oRoomTypeData;
         public int NoOfRoomsAvailable;
     }
+
+    [Serializable]
     public struct RoomTypewiseRooms
     {
         public int RoomTypeId;
         public string RoomType;
         public int NoOfRoomsBooked;
     }
+
+    [Serializable]
     public struct AvailableRoomNos
     {
         public int RoomTypeID;
         public string RoomType;
         public int RoomNo;
     }
+
+    [Serializable]
     public struct RoomsDeletionInfo
     {
         public int BookingID;
         public int AccomodationID;
         public int RoomTypeId;
     }
+
+    [Serializable]
     public class RoomTypeDetails
     {
         private int _iRoomTypeId;
@@ -45,6 +54,8 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set { _iRoomsBooked = value; }
         }
     }
+
+    [Serializable]
     public class RoomBookingInfo
     {
         private int _iBookingID;
@@ -64,7 +75,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         }
     }
 
-
+    [Serializable]
     public class BookedRooms
     {
         #region Variables
@@ -286,6 +297,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion Properties
     }
 
+    [Serializable]
     public class BookedRoomsTotal
     {
         #region Variables
@@ -317,6 +329,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion Properties
     }
 
+    [Serializable]
     public class RoomBookingInfoDTO
     {
         private RoomBookingInfo[] oRoomBookingInfo;

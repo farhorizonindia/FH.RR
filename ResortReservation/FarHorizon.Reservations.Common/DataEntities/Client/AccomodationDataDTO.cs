@@ -6,6 +6,7 @@ using FarHorizon.Reservations.Common.DataEntities.Client;
 
 namespace FarHorizon.Reservations.Common.DataEntities.Client
 {
+    [Serializable]
     public class Accomodation
     {
         #region Variables
@@ -28,6 +29,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion
     }
 
+    [Serializable]
     public class AccomodationRoomCategory
     {
         #region Variables
@@ -51,6 +53,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion
     }
 
+    [Serializable]
     public class AccomodationRoomType
     {
         #region Variables
@@ -73,6 +76,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         #endregion
     }
 
+    [Serializable]
     public class AccomodationRoom
     {
         #region Variables
