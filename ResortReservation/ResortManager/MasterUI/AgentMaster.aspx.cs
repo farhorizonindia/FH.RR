@@ -16,6 +16,8 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class MasterUI_AgentMaster : MasterBasePage
 {

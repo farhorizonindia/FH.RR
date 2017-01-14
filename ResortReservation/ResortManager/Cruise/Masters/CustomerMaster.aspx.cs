@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using System.Net.Mail;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
 
 public partial class Cruise_Masters_CustomerMaster : System.Web.UI.Page
 {

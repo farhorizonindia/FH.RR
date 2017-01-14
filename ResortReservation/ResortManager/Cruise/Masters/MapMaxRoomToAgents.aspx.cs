@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Globalization;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
 {

@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class Cruise_booking_ViewAllBookings : System.Web.UI.Page
 {

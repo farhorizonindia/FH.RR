@@ -1,16 +1,15 @@
-﻿using System;
+﻿using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
+using System.Data;
+using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Net;
-using System.Text;
-using FarHorizon.Reservations.Bases.BasePages;
-using System.Configuration;
 
 public partial class Rate_PackageMaster : MasterBasePage
 {

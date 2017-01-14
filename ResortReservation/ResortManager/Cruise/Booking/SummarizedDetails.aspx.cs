@@ -1,4 +1,6 @@
 ﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
 using System;
 using System.Collections.Generic;

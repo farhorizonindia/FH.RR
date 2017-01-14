@@ -14,6 +14,8 @@ using FarHorizon.Reservations.MasterServices;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class ClientUI_Booking : ClientBasePage
 {

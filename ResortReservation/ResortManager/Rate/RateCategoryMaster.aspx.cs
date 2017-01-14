@@ -7,6 +7,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
 using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class Rate_RateCategoryMaster : MasterBasePage
 {

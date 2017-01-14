@@ -62,7 +62,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +73,43 @@
     <Compile Include="BookingReportServices.cs" />
     <Compile Include="EventEmailServices.cs" />
     <Compile Include="MasterServices.cs" />
+    <Compile Include="Online\BAL\BALAgentPayment.cs" />
+    <Compile Include="Online\BAL\BALAgentRooms.cs" />
+    <Compile Include="Online\BAL\BALBooking.cs" />
+    <Compile Include="Online\BAL\BALBookingLock.cs" />
+    <Compile Include="Online\BAL\BALCountry.cs" />
+    <Compile Include="Online\BAL\BALCustomers.cs" />
+    <Compile Include="Online\BAL\BALDeparture.cs" />
+    <Compile Include="Online\BAL\BALHotelBooking.cs" />
+    <Compile Include="Online\BAL\BALLinks.cs" />
+    <Compile Include="Online\BAL\BALLocation.cs" />
+    <Compile Include="Online\BAL\BALLogin.cs" />
+    <Compile Include="Online\BAL\BALmarket.cs" />
+    <Compile Include="Online\BAL\BALOpenDates.cs" />
+    <Compile Include="Online\BAL\BALPackageMaster.cs" />
+    <Compile Include="Online\BAL\BALPackageRateCard.cs" />
+    <Compile Include="Online\BAL\BALRateCard.cs" />
+    <Compile Include="Online\BAL\BALRateCategory.cs" />
+    <Compile Include="Online\BAL\BALSearch.cs" />
+    <Compile Include="Online\Crc32.cs" />
+    <Compile Include="Online\DAL\DALAgentPayment.cs" />
+    <Compile Include="Online\DAL\DALAgentRooms.cs" />
+    <Compile Include="Online\DAL\DALBooking.cs" />
+    <Compile Include="Online\DAL\DALBookingLock.cs" />
+    <Compile Include="Online\DAL\DALCustomers.cs" />
+    <Compile Include="Online\DAL\DALDeparture.cs" />
+    <Compile Include="Online\DAL\DALHotelBooking.cs" />
+    <Compile Include="Online\DAL\DALLinks.cs" />
+    <Compile Include="Online\DAL\DALLocations.cs" />
+    <Compile Include="Online\DAL\DALLogin.cs" />
+    <Compile Include="Online\DAL\DALMarket.cs" />
+    <Compile Include="Online\DAL\DALOpenDates.cs" />
+    <Compile Include="Online\DAL\DALPackageMaster.cs" />
+    <Compile Include="Online\DAL\DALPackageRateCard.cs" />
+    <Compile Include="Online\DAL\DALRateCard.cs" />
+    <Compile Include="Online\DAL\DALRateCategory.cs" />
+    <Compile Include="Online\DAL\DALSearch.cs" />
+    <Compile Include="Online\DAL\XMLCLassnew.cs" />
     <Compile Include="UploadServices.cs" />
     <Compile Include="UserServices.cs" />
     <Compile Include="IBookingServices.cs" />
@@ -81,6 +120,10 @@
     <Compile Include="TouristServices.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\DataSecurity\FarHorizon.DataSecurity\FarHorizon.DataSecurity.csproj">
+      <Project>{D690E3B0-445C-4B6F-9211-5C2151E22239}</Project>
+      <Name>FarHorizon.DataSecurity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FarHorizon.Reservations.BusinessTier\FarHorizon.Reservations.BusinessTier.csproj">
       <Project>{A9719C5E-7C55-476E-93E7-6ABA810B6F91}</Project>
       <Name>FarHorizon.Reservations.BusinessTier</Name>
