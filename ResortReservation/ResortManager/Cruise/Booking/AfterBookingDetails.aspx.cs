@@ -1,4 +1,5 @@
 ﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices;
 using System;
 using System.Data;
 using System.Linq;
@@ -59,9 +60,9 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             pnlBookButton.Visible = false;
             panelwithoutCreditAgent.Visible = false;
             Bookingdt = new DataTable();
-            Bookingdt = Session["Bookingdt"] as DataTable;
+            Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             bookingmealdt = new DataTable();
-            bookingmealdt = Session["BookinMealdt"] as DataTable;
+            bookingmealdt = SessionServices.RetrieveSession<DataTable>("BookinMealdt");
             gdvSelectedRooms.DataSource = Bookingdt;
             gdvSelectedRooms.DataBind();
 
@@ -73,12 +74,9 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
             pnlCustReg.Visible = false;
             customerLogin.Visible = false;
-
-
-
         }
-        Bookingdt = Session["Bookingdt"] as DataTable;
 
+        Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
         preparetables(Bookingdt);
     }
 
@@ -216,7 +214,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             hdnfTotalPaybleAmt.Value = TotalPaybleAmt.ToString();
 
             txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("N2");
-            Bookingdt = Session["Bookingdt"] as DataTable;
+            Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
             lbltotAmt.Text = Bookingdt.Rows[0]["Currency"].ToString() + " " + TotalPaybleAmt.ToString();
             lblCurrency.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " ";
@@ -244,7 +242,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                 {
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs  Technologies Pvt. Ltd.: 12345
 
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
                     string BookRef = txtBookRef.Text + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString();
 
@@ -418,7 +416,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     hdnfPhoneNumber.Value = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Telephone"].ToString());
                     Session["CustId"] = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["CustId"].ToString());
 
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
                     string BookRef = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString()) + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Self";
                     ViewState["BookRef"] = BookRef;
@@ -430,9 +428,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     pnlBookButton.Visible = true;
                     customerLogin.Visible = false;
                 }
-                Bookingdt = Session["Bookingdt"] as DataTable;
+                Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
                 // preparetables(Bookingdt);
-
             }
             catch
             {
@@ -478,7 +475,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
                     Session.Add("CustomerMailId", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Email"].ToString()));
                     Session.Add("CustPassword", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Password"].ToString()));
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
                     string BookRef = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString()) + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Self";
                     ViewState["BookRef"] = BookRef;

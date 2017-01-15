@@ -1,4 +1,5 @@
-﻿using FarHorizon.Reservations.BusinessServices.Online.BAL;
+﻿using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using System;
 using System.Collections.Generic;
@@ -48,13 +49,15 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             ddlpax1rm.SelectedIndex = 2;
             ButtonsDiv.Style.Add("display", "none");
             div1.Style.Add("display", "none");
-            if (Session["BookedRooms"] != null)
+
+            DataTable bookedRooms = SessionServices.RetrieveSession<DataTable>("BookedRooms");
+            if (bookedRooms != null)
             {
-                ViewState["VsRoomDetails"] = Session["BookedRooms"];
+                ViewState["VsRoomDetails"] = bookedRooms;
 
                 bindRoomRates();
 
-                GridRoomPaxDetail.DataSource = (DataTable)Session["BookedRooms"];
+                GridRoomPaxDetail.DataSource = bookedRooms;
                 GridRoomPaxDetail.DataBind();
 
                 if (GridRoomPaxDetail.Rows.Count > 0)
@@ -132,11 +135,13 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
             blsr.PackageId = Session["PackId"].ToString();
 
-            blsr.totpax = Int32.TryParse(Session["totpax"].ToString(), out totpax) ? totpax : 0;
+            blsr.totpax = 0;
+            if (Session["totpax"] != null)
+            {
+                blsr.totpax = Int32.Parse(Session["totpax"].ToString());
+            }            
 
-            dt = new DataTable();
             dt = dlsr.GetRoomCategoryWiseRates(blsr);
-
 
             DataView dv = dt.DefaultView;
             dv.Sort = "PPRoomRate asc";
@@ -146,7 +151,9 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             {
                 if (sortedDT.Rows.Count > 0)
                 {
-                    Session["Rrate"] = sortedDT;
+                    //Session["Rrate"] = sortedDT;
+                    SessionServices.SaveSession<DataTable>("Rrate", sortedDT);
+                    
                     gdvRoomCategories.DataSource = sortedDT;
                     gdvRoomCategories.DataBind();
 
@@ -167,7 +174,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 div1.Style.Add("display", "none");
             }
         }
-        catch
+        catch(Exception exp)
         {
             div1.Style.Add("display", "none");
         }
@@ -769,7 +776,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 Session["cruiseBookingUrl"] = Request.Url.ToString();
 
                 DataTable RoomDetails = ViewState["VsRoomDetails"] as DataTable;
-                Session.Add("BookedRooms", RoomDetails);
+                SessionServices.SaveSession<DataTable>("BookedRooms", RoomDetails);
 
                 LockTheBooking(RoomDetails);
                 ///    
@@ -832,7 +839,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 dtnew.Rows.RemoveAt(grow.RowIndex);
                 dtnew.AcceptChanges();
                 ViewState["VsRoomDetails"] = dtnew;
-                Session["BookedRooms"] = dtnew;
+                SessionServices.SaveSession<DataTable>("BookedRooms", dtnew);
                 GridRoomPaxDetail.DataSource = dtnew;
                 GridRoomPaxDetail.DataBind();
                 calculateTotal();
@@ -892,8 +899,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         {
             if (gdvRoomCategories.Rows.Count > 1)
             {
-                dt = new DataTable();
-                dt = Session["Rrate"] as DataTable;
+                dt = SessionServices.RetrieveSession<DataTable>("Rrate");
                 #region getRoomCategory
                 blsr.action = "GetRoomCateId";
 
@@ -959,6 +965,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         DALBookingLock dbl = new DALBookingLock();
         dbl.PlaceLock(bl);
 
-        Session["BookingLock"] = bl;
+        Session["BookingLock"] = bl;        
     }
 }

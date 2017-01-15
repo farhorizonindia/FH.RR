@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web;
-using System.Collections;
 using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.SessionManager;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 
 namespace FarHorizon.Reservations.BusinessServices
 {
@@ -328,6 +327,28 @@ namespace FarHorizon.Reservations.BusinessServices
         public static Boolean AbandonSession()
         {
             return SessionHelper.AbandonSession();
+        }
+
+        public static void SaveSession<T>(string key, T value)
+        {            
+            if (typeof(T) == typeof(DataTable))
+            {
+                string json = JsonConvert.SerializeObject(value);
+                SessionHelper.SaveSession(key, json);
+                return;
+            }
+            SessionHelper.SaveSession(key, value);
+        }
+
+        public static T RetrieveSession<T>(string key)
+        {
+            if (typeof(T) == typeof(DataTable))
+            {
+                string dataTableJsonString = Convert.ToString(SessionHelper.RetrieveSession(key));
+                return JsonConvert.DeserializeObject<T>(dataTableJsonString);
+            }
+
+            return (T)SessionHelper.RetrieveSession(key);
         }
     }
 }

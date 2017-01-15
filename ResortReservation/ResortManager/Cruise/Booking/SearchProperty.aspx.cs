@@ -162,7 +162,6 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
                 ddlDestination.DataValueField = "CountryId";
                 ddlDestination.DataBind();
                 ddlDestination.Items.Insert(0, "-Select-");
-
             }
             else
             {

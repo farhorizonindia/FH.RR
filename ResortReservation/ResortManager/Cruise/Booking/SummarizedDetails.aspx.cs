@@ -1,4 +1,5 @@
 ﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
@@ -118,7 +119,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         try
         {
 
-            DataTable dtrpax = Session["BookedRooms"] as DataTable;
+            DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("BookedRooms");
             if (dtrpax != null)
             {
 
@@ -190,7 +191,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     {
         try
         {
-            dtGetBookedRooms = Session["BookedRooms"] as DataTable;
+            dtGetBookedRooms = SessionServices.RetrieveSession<DataTable>("BookedRooms");
             DataTable dtgroupedData = new DataTable();
             dtgroupedData.Columns.Add("categoryName");
             dtgroupedData.Columns.Add("Pax");
@@ -335,7 +336,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     lbPaymentMethod.Text = dtCustomer.Rows[0]["PaymentMethod"].ToString();
                     hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
                     Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
-                    DataTable dtrpax = Session["BookedRooms"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
                     string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
@@ -426,7 +427,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     #endregion
 
                     //aev@farhorizonindia.com [1:48:55 PM] Augurs Technologies Pvt. Ltd.: 12345
-                    DataTable dtrpax = Session["BookedRooms"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
                     string agentFirstName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["FirstName"].ToString());
                     string agentLastName = DataSecurityManager.Decrypt(dtAgentData.Rows[0]["LastName"].ToString());
@@ -745,7 +746,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     Session["CustomerCode"] = dtCustomer.Rows[0]["CustId"].ToString();
                     Session.Add("CustomerMailId", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Email"].ToString()));
                     Session.Add("CustPassword", DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Password"].ToString()));
-                    DataTable dtrpax = Session["BookedRooms"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
                     string BookRef = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString()) + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
@@ -1069,7 +1070,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
     private int GetPax()
     {
-        DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+        DataTable dtRoomBookingDetails = SessionServices.RetrieveSession<DataTable>("BookedRooms");
         return Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
     }
 
@@ -1082,7 +1083,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
         if (booking != null)
         {
-            DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+            DataTable GridRoomPaxDetail = SessionServices.RetrieveSession<DataTable>("BookedRooms");
             int LoopInsertStatus = 0;
             try
             {
@@ -1126,7 +1127,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             DALBooking dlsr = new DALBooking();
 
             DataTable dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
+            dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
             blsr._sBookingRef = bkref;
             blsr._dtStartDate = cin;
@@ -1172,7 +1173,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             BALBooking blsr = new BALBooking();
             DALBooking dlsr = new DALBooking();
 
-            DataTable dtbkdetails = Session["Bookingdt"] as DataTable;
+            DataTable dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             Session["maxBookId"] = bookingId;
 
             int LoopInsertStatus = 0;

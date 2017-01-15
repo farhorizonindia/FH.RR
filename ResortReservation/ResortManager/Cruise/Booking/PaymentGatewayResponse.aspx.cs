@@ -1,3 +1,4 @@
+using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.BusinessServices.Online;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
@@ -293,7 +294,7 @@ public partial class response : System.Web.UI.Page
     {
         lbBookingNo.Text = bookingDetail.BookingCode;
 
-        DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+        DataTable GridRoomPaxDetail = SessionServices.RetrieveSession<DataTable>("BookedRooms");
         gdvCruiseRooms.DataSource = GridRoomPaxDetail;
         gdvCruiseRooms.DataBind();
         // hidecolumns();
@@ -317,9 +318,7 @@ public partial class response : System.Web.UI.Page
         lblDepartDate.Text = Convert.ToDateTime(Session["chkout"]).ToString("d MMMM, yyyy");
         lblacm.Text = "Accomodation Name: " + Session["AccomName"].ToString();
 
-        DataTable Bookingdt;
-        Bookingdt = new DataTable();
-        Bookingdt = Session["Bookingdt"] as DataTable;
+        DataTable Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
         gdvSelectedRooms.DataSource = Bookingdt;
         gdvSelectedRooms.DataBind();
@@ -425,7 +424,7 @@ public partial class response : System.Web.UI.Page
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
                         FiilPackage();
                     }
-                    DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+                    DataTable GridRoomPaxDetail = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
                     double totalAmount = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)));
 
@@ -728,7 +727,7 @@ public partial class response : System.Web.UI.Page
             blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
 
             blsr._iNights = Convert.ToInt32(dtGetReturnedData.Rows[0]["NoOfNights"]);
-            DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+            DataTable dtRoomBookingDetails = SessionServices.RetrieveSession<DataTable>("BookedRooms");
             blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
             blsr._BookingStatusId = 1;
             blsr._SeriesId = 0;
@@ -773,7 +772,7 @@ public partial class response : System.Web.UI.Page
             BookedId = MaxBookingId;
             blsr._iBookingId = MaxBookingId;
 
-            DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+            DataTable GridRoomPaxDetail = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
             gdvCruiseRooms.DataSource = GridRoomPaxDetail;
             gdvCruiseRooms.DataBind();
@@ -831,7 +830,7 @@ public partial class response : System.Web.UI.Page
         try
         {
             dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
+            dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
             blsr._sBookingRef = bkref;
             blsr._dtStartDate = cin;
@@ -875,7 +874,7 @@ public partial class response : System.Web.UI.Page
         try
         {
             dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
+            dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             blsr._iAccomId = acmid;
 
             blsr.action = "getMaxBookId";
@@ -924,10 +923,7 @@ public partial class response : System.Web.UI.Page
             lblDepartDate.Text = Convert.ToDateTime(Session["chkout"]).ToString("d MMMM, yyyy");
             lblacm.Text = "Accomodation Name: " + Session["AccomName"].ToString();
 
-            DataTable Bookingdt;
-            Bookingdt = new DataTable();
-            Bookingdt = Session["Bookingdt"] as DataTable;
-
+            DataTable Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             gdvSelectedRooms.DataSource = Bookingdt;
             gdvSelectedRooms.DataBind();
 

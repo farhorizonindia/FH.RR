@@ -76,7 +76,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.SelectCommand.Parameters.AddWithValue("@PackageId", obj.PackageId);
                 da.SelectCommand.Parameters.AddWithValue("@AgentId", obj.AgentId);
                 da.SelectCommand.Parameters.AddWithValue("@totpax", obj.totpax);
-                da.SelectCommand.Parameters.AddWithValue("@startdate", obj._dtStartDate);
+                da.SelectCommand.Parameters.AddWithValue("@startdate", GF.HandleMaxMinDates(obj._dtStartDate, false));
 
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
@@ -89,8 +89,9 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 else
                     return null;
             }
-            catch (Exception)
+            catch (Exception exp)
             {
+                Console.Write(exp.Message);
                 return null;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
@@ -63,10 +64,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             this.pnlFullDetails.Visible = false;
             pnlBookButton.Visible = false;
             panelwithoutCreditAgent.Visible = false;
-            Bookingdt = new DataTable();
-            Bookingdt = Session["Bookingdt"] as DataTable;
-            bookingmealdt = new DataTable();
-            bookingmealdt = Session["BookinMealdt"] as DataTable;
+            Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
+            bookingmealdt = SessionServices.RetrieveSession<DataTable>("BookinMealdt");
             gdvSelectedRooms.DataSource = Bookingdt;
             gdvSelectedRooms.DataBind();
 
@@ -79,7 +78,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             pnlCustReg.Visible = false;
             customerLogin.Visible = false;
         }
-        Bookingdt = Session["Bookingdt"] as DataTable;
+        Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
         preparetables(Bookingdt);
     }
 
@@ -201,7 +200,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             }
             hdnfTotalPaybleAmt.Value = TotalPaybleAmt.ToString();
 
-            Bookingdt = Session["Bookingdt"] as DataTable;
+            Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             lbltotAmt.Text = Bookingdt.Rows[0]["Currency"].ToString() + " " + TotalPaybleAmt.ToString();
             lblCurrency.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " ";
 
@@ -395,7 +394,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
 
     private int GetPax()
     {
-        DataTable dtrpax = Session["Bookingdt"] as DataTable;
+        DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
         return Convert.ToInt16(dtrpax.Compute("SUM(Pax)", string.Empty));
     }
 
@@ -485,7 +484,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     hdnfPhoneNumber.Value = dtCustomer.Rows[0]["Telephone"].ToString();
                     Session["CustId"] = dtCustomer.Rows[0]["CustId"].ToString();
 
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
                     string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
@@ -496,7 +495,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     pnlBookButton.Visible = true;
                     customerLogin.Visible = false;
                 }
-                Bookingdt = Session["Bookingdt"] as DataTable;
+                Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
                 // preparetables(Bookingdt);
 
             }
@@ -537,7 +536,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     Session["CustomerCode"] = dtCustomer.Rows[0]["CustId"].ToString();
                     Session.Add("CustomerMailId", dtCustomer.Rows[0]["Email"].ToString());
                     Session.Add("CustPassword", dtCustomer.Rows[0]["Password"].ToString());
-                    DataTable dtrpax = Session["Bookingdt"] as DataTable;
+                    DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
                     string BookRef = dtCustomer.Rows[0]["FirstName"].ToString() + dtCustomer.Rows[0]["LastName"].ToString() + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Direct Client";
                     ViewState["BookRef"] = BookRef;
@@ -843,9 +842,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             BALBooking blsr = new BALBooking();
             DALBooking dlsr = new DALBooking();
 
-            DataTable dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
-
+            DataTable dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             blsr._sBookingRef = bkref;
             blsr._dtStartDate = cin;
             blsr._dtEndDate = cout;
@@ -891,7 +888,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             BALBooking blsr = new BALBooking();
             DALBooking dlsr = new DALBooking();
 
-            DataTable dtbkdetails = Session["Bookingdt"] as DataTable;
+            DataTable dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             BALBooking booking = dlsr.GetBookingDetails(bookingId);
 
             Session["maxBookId"] = bookingId;

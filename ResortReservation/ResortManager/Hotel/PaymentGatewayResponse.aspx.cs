@@ -1,4 +1,5 @@
-﻿using FarHorizon.Reservations.BusinessServices.Online;
+﻿using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.BusinessServices.Online;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
@@ -216,7 +217,7 @@ public partial class response : System.Web.UI.Page
             blsr._iAccomId = Convert.ToInt32(dtGetReturnedData.Rows[0]["AccomId"]);
 
             blsr._iNights = Convert.ToInt32(dtGetReturnedData.Rows[0]["NoOfNights"]);
-            DataTable dtRoomBookingDetails = Session["BookedRooms"] as DataTable;
+            DataTable dtRoomBookingDetails = SessionServices.RetrieveSession<DataTable>("BookedRooms");
             blsr._iPersons = Convert.ToInt32(dtRoomBookingDetails.Compute("SUM(Pax)", string.Empty));
             blsr._BookingStatusId = 1;
             blsr._SeriesId = 0;
@@ -263,7 +264,7 @@ public partial class response : System.Web.UI.Page
             lbBookingNo.Text = dtmaxId.Rows[0].ItemArray[0].ToString();
             BookedId = MaxBookingId;
             blsr._iBookingId = MaxBookingId;
-            DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+            DataTable GridRoomPaxDetail =  SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
             gdvCruiseRooms.DataSource = GridRoomPaxDetail;
             gdvCruiseRooms.DataBind();
@@ -368,7 +369,7 @@ public partial class response : System.Web.UI.Page
                         // lbBookingNo.Text = TRANSACTIONID.ToString();
                         FiilPackage();
                     }
-                    DataTable GridRoomPaxDetail = Session["BookedRooms"] as DataTable;
+                    DataTable GridRoomPaxDetail = SessionServices.RetrieveSession<DataTable>("BookedRooms");
 
                     gdvCruiseRooms.FooterRow.Cells[1].Text = "Total </br> Service Tax @ 4.50% </br> <b> Grand Total </b>";
                     gdvCruiseRooms.FooterRow.Cells[3].Text = Math.Round(Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty))).ToString("#.##") + "</br> " + Math.Round((4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100))).ToString("#.##") + " </br> " + Math.Round((Convert.ToDouble(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) + (4.5 * (Convert.ToInt32(GridRoomPaxDetail.Compute("SUM(Price)", string.Empty)) / 100)))).ToString("#.##");
@@ -467,10 +468,7 @@ public partial class response : System.Web.UI.Page
         try
         {
 
-            dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
-
-
+            dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
 
             blsr._sBookingRef = bkref;
             blsr._dtStartDate = cin;
@@ -517,20 +515,12 @@ public partial class response : System.Web.UI.Page
 
     private int InsertRoomBookingTableData(DataTable dtbooking, DateTime cin, DateTime cout, int acmid)
     {
-
-
-
-
         try
         {
-            dtbkdetails = new DataTable();
-            dtbkdetails = Session["Bookingdt"] as DataTable;
+            dtbkdetails = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             blsr._iAccomId = acmid;
 
             blsr.action = "getMaxBookId";
-
-
-
             DataTable dtmaxId = dlsr.GetMaxBookingId(blsr);
 
             int MaxBookingId = Convert.ToInt32(dtmaxId.Rows[0].ItemArray[0].ToString());
@@ -549,15 +539,9 @@ public partial class response : System.Web.UI.Page
                 blsr._iPaxStaying = Convert.ToInt32(dtbooking.Rows[LoopCounter][3].ToString());
                 blsr._bConvertTo_Double_Twin = Convert.ToBoolean(dtbkdetails.Rows[LoopCounter]["ConvDouble"].ToString());
                 blsr._cRoomStatus = "B";
-
-             
-
                 blsr._sRoomNo = dtbkdetails.Rows[LoopCounter][7].ToString();
-
               
                 blsr._PaidAmount = Convert.ToDouble(Session["Paid"]);
-            
-
 
                 blsr.action = "AddPriceDetailsToo";
                 string[] arr = dtbkdetails.Rows[LoopCounter]["Total"].ToString().Split(' ');
@@ -566,9 +550,6 @@ public partial class response : System.Web.UI.Page
 
              
                 blsr.PaymentId = Session["BookingPayId"].ToString();
-
-
-
                 int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
 
                 if (GetQueryResponse > 0)
@@ -577,18 +558,9 @@ public partial class response : System.Web.UI.Page
                 {
 
                 }
-
-
             }
 
-
-
-
-
-
-            DataTable Bookingdt;
-            Bookingdt = new DataTable();
-            Bookingdt = Session["Bookingdt"] as DataTable;
+            DataTable Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
             //Response.Write(Bookingdt.Rows[0]["Total1"].ToString());
 
             //gdvSelectedRooms.DataSource = Bookingdt;
@@ -612,27 +584,18 @@ public partial class response : System.Web.UI.Page
 
             if (LoopInsertStatus == dtbooking.Rows.Count)
             {
-
                 return 1;
-
             }
             else
             {
-                return
-                    0;
+                return 0;
             }
-
-
-
         }
         catch (Exception ex)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
-            return 0;
-                  
+            return 0;                  
         }
-
-
     }
 
     private void GenrateBill1(string transactionId)

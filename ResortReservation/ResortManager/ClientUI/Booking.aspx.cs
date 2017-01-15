@@ -335,7 +335,8 @@ public partial class ClientUI_Booking : ClientBasePage
 
             if (Returndt != null)
             {
-                Session["RoomInfo"] = Returndt;
+                //Session["RoomInfo"] = Returndt;
+                SessionServices.SaveSession<DataTable>("RoomInfo", Returndt);
 
                 //  dv.RowFilter = "ActualRoomTypeId<>0";
                 if (Returndt.Rows.Count > 0)

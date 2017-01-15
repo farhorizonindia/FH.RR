@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using FarHorizon.Reservations.BusinessServices;
+
 public partial class Cruise_booking_ReviewBookingDetails : System.Web.UI.Page
 {
     public DataTable dtGetBookedRooms;
@@ -29,8 +31,7 @@ public partial class Cruise_booking_ReviewBookingDetails : System.Web.UI.Page
     #region UDF
     private void LoadBookedRoomDetails()
     {
-
-        dtGetBookedRooms = Session["BookedRooms"] as DataTable;
+        dtGetBookedRooms = SessionServices.RetrieveSession<DataTable>("BookedRooms");
         DataTable dtgroupedData = new DataTable();
         dtgroupedData.Columns.Add("categoryName");
         dtgroupedData.Columns.Add("Pax");

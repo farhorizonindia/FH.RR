@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices;
 
 public partial class Hotel_HotelInvoice : System.Web.UI.Page
 {
@@ -19,8 +20,7 @@ public partial class Hotel_HotelInvoice : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Bookingdt = new DataTable();
-        Bookingdt = Session["Bookingdt"] as DataTable;
+        Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
         gdvSelectedRooms.DataSource = Bookingdt;
         gdvSelectedRooms.DataBind();
         lblArrvDate.Text = Session["Chkin"].ToString();
@@ -73,25 +73,19 @@ public partial class Hotel_HotelInvoice : System.Web.UI.Page
     {
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
-
             try
             {
-                retdt = new DataTable();
-                retdt = Session["RoomInfo"] as DataTable;
+                retdt = SessionServices.RetrieveSession<DataTable>("RoomInfo");
                 Label roomcatid = (Label)e.Row.FindControl("lblRoomCatId");
 
                 DataView dv = new DataView(retdt);
                 dv.RowFilter = "RoomCategoryId='" + roomcatid.Text + "' ";
                 e.Row.Cells[7].Text = dv.ToTable().Rows[0]["TaxPct"].ToString();
                 e.Row.Cells[8].Text = ((Convert.ToDouble(e.Row.Cells[7].Text) * Convert.ToDouble(e.Row.Cells[6].Text)) / 100).ToString();
-
             }
             catch
             {
-
-
             }
-
         }
     }
 }

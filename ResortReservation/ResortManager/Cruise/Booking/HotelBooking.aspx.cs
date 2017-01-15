@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using FarHorizon.Reservations.BusinessServices;
 
 public partial class Hotel_HotelBooking : System.Web.UI.Page
 {
@@ -58,9 +59,8 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
                     LinkButton1.Visible = false;
                 }
 
-                if (Session["Bookingdt"] == null)
+                if (SessionServices.RetrieveSession<DataTable>("Bookingdt") == null)
                 {
-
                     Session["AcId"] = Request.QueryString["AccomId"];
                     Session["Agid"] = Request.QueryString["AId"];
                     Session["Hpax"] = Request.QueryString["pax"];
@@ -81,10 +81,11 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
 
                 Int32.TryParse(Session["HNoofrooms"].ToString().ToString(), out noofrooms);
 
-                if (Session["Bookingdt"] != null)
+                DataTable bookingDt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
+                if (bookingDt != null)
                 {
-                    ViewState["VsRoomDetails"] = Session["Bookingdt"];
-                    gdvSelectedRooms.DataSource = (DataTable)Session["Bookingdt"];
+                    ViewState["VsRoomDetails"] = bookingDt;
+                    gdvSelectedRooms.DataSource = bookingDt;
                     gdvSelectedRooms.DataBind();
                     CalculateRoomRates();
                 }
@@ -218,26 +219,20 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
 
 
             blht.agentid = agid;
-            Returndt = new DataTable();
             Returndt = dlht.GetHotelRates(blht);
-
 
             if (Returndt != null)
             {
-                Session["RoomInfo"] = Returndt;
+                SessionServices.SaveSession<DataTable>("RoomInfo", Returndt);
                 dv = new DataView(Returndt);
                 //  dv.RowFilter = "ActualRoomTypeId<>0";
-
 
                 gdvHotelRoomRates.DataSource = dv;
                 gdvHotelRoomRates.DataBind();
                 RemoveZeroes();
                 ViewState["Rrate"] = Returndt;
             }
-
-
         }
-
         catch
         {
         }
@@ -751,9 +746,9 @@ public partial class Hotel_HotelBooking : System.Web.UI.Page
             Int32.TryParse(Session["AcId"].ToString(), out iAccomId);
             Int32.TryParse(Session["AccomTypeId"].ToString(), out iaccomtypeid);
 
-            Session["Bookingdt"] = ViewState["VsRoomDetails"];
-            DataTable fg = new DataTable();
-            fg = ViewState["VsRoomDetails"] as DataTable;
+            DataTable fg = ViewState["VsRoomDetails"] as DataTable;
+            SessionServices.SaveSession<DataTable>("Bookingdt", fg);
+            
             Session["Chkin"] = Session["HCheckin"].ToString();
             Session["chkout"] = Session["HCheckout"].ToString();
             //   Session["BookRef"] = txtBookRef.Text.Trim();
