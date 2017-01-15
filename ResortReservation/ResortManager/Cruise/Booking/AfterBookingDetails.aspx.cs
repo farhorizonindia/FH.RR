@@ -1,5 +1,7 @@
 ﻿using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using System;
 using System.Data;
 using System.Linq;
@@ -7,9 +9,8 @@ using System.Net.Mail;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
+public partial class AfterBookingDetails : System.Web.UI.Page
 {
-
     DataTable Bookingdt;
     DataTable bookingmealdt;
     double TotalPaybleAmt = 0;
@@ -510,7 +511,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         try
         {
             blOpenDates._Action = "GetCountry";
-            dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
+            DataTable dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
             if (dtGetReturnedData.Rows.Count > 0)
             {
                 ddlCountry.DataSource = dtGetReturnedData;
