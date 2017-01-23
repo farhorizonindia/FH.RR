@@ -294,4 +294,6 @@ function fillCheckOutDate(startDate, endDate) {
     if (pnlRegenSeries) {
         pnlRegenSeries.style.display = 'block';
     }
+
+    PageMethods.PostSeriesDateChanges(elStartDate.id, elStartDate.value, elEndDate.id, elEndDate.value);
 }

@@ -1,21 +1,14 @@
-using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using FarHorizon.Reservations.Common.DataEntities.Client;
+using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
+using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
-
 using FarHorizon.Reservations.MasterServices;
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
+using System;
+using System.Collections;
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class ClientUI_BookingConfirmation : ClientBasePage
 {
@@ -27,10 +20,7 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
     {
         Table t;
         AddAttributes();
-
         iBookingId = Convert.ToInt32(Request.QueryString["bid"].ToString());
-
-
 
         if (!IsPostBack)
         {
@@ -52,21 +42,9 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
             iStaticCounter = 0;
             FillDateWiseMealControls();
             t = null;
-            if (SessionServices.BookingConfirmation_TableSelectedMealPlan != null)
-            {
-                t = (Table)SessionServices.BookingConfirmation_TableSelectedMealPlan;
-                AddControlstoDateWiseMealPlanPanel(t);
-            }
-            else
-            {
-                FillBookingMealPlanData(iBookingId);
-            }
-            t = null;
-            if (SessionServices.BookingConfirmation_TableRoomsBooked != null)
-            {
-                t = (Table)SessionServices.BookingConfirmation_TableRoomsBooked;
-                AddControlstoBookedRoomsPanel(t);
-            }
+            
+            FillBookingMealPlanData(iBookingId);            
+            FillBookedRoomDetails(iBookingId);            
         }
     }
 
@@ -498,13 +476,10 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
         DateTime.TryParse(txtStartDate.Text, out sDate);
         DateTime.TryParse(txtEndDate.Text, out eDate);
 
-
         //sl = GetMealPlanList(); //Getting Values for all the Meal Combos        
         oMealPlanData = GetMealPlans();
         oAccomActivityData = GetActivitiesOfAccomodation();
         CurrentDate = sDate;
-
-
 
         while (CurrentDate <= eDate)
         {
@@ -514,11 +489,8 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
             tc.Controls.Add(t1);
             tr.Cells.Add(tc);
             t.Rows.Add(tr);
-
-
             CurrentDate = CurrentDate.AddDays(1);
         }
-
         AddControlstoDateWiseMealPlanPanel(t);
     }
 
@@ -1040,8 +1012,7 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
     }
 
     private Table ShowBookedRoomsPanel(BookedRoomsTotal[] oRoomsBooked)
-    {
-        SessionServices.BookingConfirmation_TableRoomsBooked = null;
+    {        
         Table tblMain = null;
         TableRow trHeading = null;
         TableRow tr = null;
@@ -1105,7 +1076,6 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
             AddControlstoBookedRoomsPanel(tblMain);
             #endregion Booked Rooms
         }
-        SessionServices.BookingConfirmation_TableRoomsBooked = tblMain;
         return tblMain;
     }
 
@@ -1128,9 +1098,7 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
         if (pnlDateWiseSchedule.Controls.Count > 0)
             pnlDateWiseSchedule.Controls.RemoveAt(0);
 
-        pnlDateWiseSchedule.Controls.Add(t);
-
-        SessionServices.BookingConfirmation_TableSelectedMealPlan = t;
+        pnlDateWiseSchedule.Controls.Add(t);        
     }
 
     private AccomActivityDTO[] GetActivitiesOfAccomodation()
@@ -1531,8 +1499,8 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
                 Response.Redirect("afterBookingactions.aspx?bid=" + iBookingId + "&bstatus=confirmed");
             }
 
-          //  ViewState["atleastonewaitlisted"] = null;
-           // ViewState["chartered"] = null;
+            //  ViewState["atleastonewaitlisted"] = null;
+            // ViewState["chartered"] = null;
         }
     }
 
@@ -1663,8 +1631,6 @@ public partial class ClientUI_BookingConfirmation : ClientBasePage
 
     private void ClearSessionVariables()
     {
-        SessionServices.BookingConfirmation_TableSelectedMealPlan = null;
-        SessionServices.BookingConfirmation_TableRoomsBooked = null;
         SessionServices.BookingConfirmation_TotalRoomsBooked = null;
         SessionServices.BookingConfirmation_BookingMealPlanDTO = null;
         SessionServices.BookingConfirmation_BookingMealPlanDTO = null;

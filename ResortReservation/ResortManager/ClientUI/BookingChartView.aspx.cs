@@ -19,6 +19,24 @@ public partial class _Default : ClientBasePage
     private int _totalDaysInChart = 31;
     private int _gridEndCol = 39;  //TOTALDAYSINCHART + 8 COLS FOR STATIC DATA 
 
+    public DateTime ChartStartDate
+    {
+        get
+        {
+            if (Session["StartDate"] != null)
+            {
+                DateTime startDate;
+                DateTime.TryParse(Session["StartDate"].ToString(), out startDate);
+                return startDate;
+            }
+            else
+            {
+                return DateTime.MinValue;
+            }
+        }
+        set { Session["StartDate"] = value; }
+    }
+
     public int TotalDaysInChart
     {
         get { return _totalDaysInChart; }
@@ -37,11 +55,12 @@ public partial class _Default : ClientBasePage
         Table tBookingChart = new Table();
         DateTime today;
         DateTime thisMonth;
+
         if (!IsPostBack)
         {
             SessionServices.BookingChart_TreeDTO = null;
             SessionServices.BookingChart_TreeType = null;
-            SessionServices.BookingChart_TableBookingTable = null;
+            
             FillTree();
 
             today = GF.GetDate();
@@ -54,18 +73,13 @@ public partial class _Default : ClientBasePage
             tBookingChart = FormatTable(tBookingChart);
             AddChartToPanel(tBookingChart);
         }
-        if (IsPostBack == true)
+        if (IsPostBack)
         {
             if (SessionServices.BookingChart_TreeDTO == null || SessionServices.BookingChart_TreeType == string.Empty)
                 FillTree();
-
-            tBookingChart = (Table)SessionServices.BookingChart_TableBookingTable;
-            if (tBookingChart != null)
-            {
-                tBookingChart = FormatTable(tBookingChart);
-                AddChartToPanel(tBookingChart);
-            }
+            
         }
+
         AddAttributes();
         tBookingChart = null;
     }
@@ -106,11 +120,10 @@ public partial class _Default : ClientBasePage
         base.OnInit(e);
     }
 
-    protected void btnMonthView_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("BookingChartMonthView.aspx");
-
-    }
+    //protected void btnMonthView_Click(object sender, EventArgs e)
+    //{
+    //    Response.Redirect("BookingChartMonthView.aspx");
+    //}
 
     #region TreeRelated
 
@@ -344,30 +357,21 @@ public partial class _Default : ClientBasePage
     private void StartAfterMonths(int Months)
     {
         try
-        {
-            Table t;
+        {            
             DateTime StartDate;
             DateTime EndDate;
-            t = (Table)SessionServices.BookingChart_TableBookingTable;
-            if (t != null)
+            StartDate = ChartStartDate;
+            if (StartDate != DateTime.MinValue)
             {
-                DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
-                if (StartDate != DateTime.MinValue)
-                {
-                    StartDate = StartDate.AddMonths(Months);
-                    StartDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + "01");
-                    TotalDaysInChart = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
-                    EndDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + TotalDaysInChart.ToString());
-                    t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
-                    t.Rows[1].Cells[t.Rows[1].Cells.Count - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
-                    
-                    //t.Rows[1].Cells[GridEndCol - 1].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
-                    SessionServices.BookingChart_TableBookingTable = t;
-                    FillBookingChartView();
-                    //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
-                    txtFromDate.Text = GF.GetMonthName(StartDate.Month) + " " + StartDate.Year.ToString();
+                StartDate = StartDate.AddMonths(Months);
+                StartDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + "01");
+                TotalDaysInChart = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
+                EndDate = DateTime.Parse(StartDate.Year.ToString() + "/" + StartDate.Month.ToString() + "/" + TotalDaysInChart.ToString());
+                ChartStartDate = StartDate;
 
-                }
+                FillBookingChartView();
+                //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
+                txtFromDate.Text = GF.GetMonthName(StartDate.Month) + " " + StartDate.Year.ToString();
             }
         }
         catch (Exception exp)
@@ -375,30 +379,21 @@ public partial class _Default : ClientBasePage
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
         }
     }
+
     private void StartAferDays(int Days)
     {
         try
         {
             //This Function will move the chart by adding the no. of paramter to the current start date
             //It can also receive -ive value as a paramter to move to previous dates.
-            Table t;
-            DateTime StartDate;
-            DateTime EndDate;
-            t = (Table)SessionServices.BookingChart_TableBookingTable;
-            if (t != null)
+            DateTime EndDate;            
+            DateTime StartDate = ChartStartDate;
+            if (StartDate != DateTime.MinValue)
             {
-                DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
-                if (StartDate != DateTime.MinValue)
-                {
-                    StartDate = StartDate.AddDays(Days);
-                    EndDate = StartDate.AddMonths(1).AddDays(-1);
-                    t.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
-                    int cellCount = t.Rows[1].Cells.Count - 1;
-                    t.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
-                    SessionServices.BookingChart_TableBookingTable = t;
-                    FillBookingChartView();
-                    //PrepareBookingChartView(0, 0, 0, StartingDate, StartingDate.AddMonths(Days));
-                }
+                StartDate = StartDate.AddDays(Days);
+                EndDate = StartDate.AddMonths(1).AddDays(-1);                
+                ChartStartDate = StartDate;
+                FillBookingChartView();                
             }
         }
         catch (Exception exp)
@@ -406,33 +401,26 @@ public partial class _Default : ClientBasePage
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
         }
     }
+
     private void GetStartandEndDate(out DateTime StartDate, out DateTime EndDate)
     {
-        StartDate = DateTime.MinValue;
+        StartDate = ChartStartDate;
         EndDate = DateTime.MinValue;
-        Table t;
+
         try
         {
-            t = (Table)SessionServices.BookingChart_TableBookingTable;
-            if (t != null)
+            if (StartDate == DateTime.MinValue)
             {
-                DateTime.TryParse(t.Rows[1].Cells[GRIDSTARTCOL].ID, out StartDate);
-                int daysInMonth = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
-                EndDate = StartDate.AddDays(daysInMonth);
-                //DateTime.TryParse(t.Rows[1].Cells[t.Rows[1].Cells.Count - 1].ID, out EndDate);
+                StartDate = GF.GetDate();
+                ChartStartDate = StartDate;
             }
+            int daysInMonth = DateTime.DaysInMonth(StartDate.Year, StartDate.Month);
+            EndDate = StartDate.AddDays(daysInMonth);
         }
         catch (Exception exp)
         {
             GF.LogError("BookingChartView.aspx.GetStartandEndDate", exp.Message);
-        }
-        finally
-        {
-            if (StartDate == DateTime.MinValue)
-                StartDate = GF.GetDate();
-            if (EndDate == DateTime.MinValue)
-                EndDate = StartDate.AddDays(31);
-        }
+        }        
     }
 
     private void FillTreeView()
@@ -700,6 +688,10 @@ public partial class _Default : ClientBasePage
         }
 
         tblBookingView = FormatTable(tblBookingView);
+
+        tblBookingView.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
+        int cellCount = tblBookingView.Rows[1].Cells.Count - 1;
+        tblBookingView.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
 
         AddChartToPanel(tblBookingView);
     }
@@ -1435,7 +1427,7 @@ public partial class _Default : ClientBasePage
             }
         }
         pnlBookingView.Controls.AddAt(0, tBookingChart);
-        SessionServices.BookingChart_TableBookingTable = tBookingChart;
+        //SessionServices.BookingChart_TableBookingTable = tBookingChart;
     }
 
     #endregion UserDefinedFunctions

@@ -1,25 +1,22 @@
-using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using FarHorizon.Reservations.Common.DataEntities.Client;
+using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
+using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.MasterServices;
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web.Services;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 
 public partial class ClientUI_SeriesBooking : ClientBasePage
 {
     const int ROOMCOLUMNSTART = 4;
+    static Hashtable ChangedSeriesDates;
+
     #region Control Defined Functions
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -27,23 +24,27 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         Table t = null;
         string sCtrlName = "";
         AddAttributes();
+
+        if (Request.QueryString["sid"] != null && Request.QueryString["sid"] != "")
+        {
+            int.TryParse(Request.QueryString["sid"].ToString(), out iSeriesId);
+        }
+
         if (!IsPostBack)
         {
+            ChangedSeriesDates = new Hashtable();
+
             FillAccomodationTypes();
             FillAccomodations();
             FillAgents();
             FillDropDowns();
-            if (Request.QueryString["sid"] != null && Request.QueryString["sid"] != "")
-            {
-                int.TryParse(Request.QueryString["sid"].ToString(), out iSeriesId);
-            }
+
             if (iSeriesId > 0)
             {
                 PrepareSeries(iSeriesId);
             }
 
             btnSaveSeries.Visible = false;
-
             ClearSessionVariables();
         }
         else
@@ -53,21 +54,16 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             {
                 if (sCtrlName != "ddlAccomName")
                 {
-                    t = null;
-                    if (SessionServices.SeriesBooking_TableTotalRoomCount != null)
-                    {
-                        t = (Table)SessionServices.SeriesBooking_TableTotalRoomCount;
-                        AddRoomsToPanel(t);
-                    }
+                    int accomodationId = Convert.ToInt32(ddlAccomName.SelectedItem.Value);
+                    PrepareRoomCategoriesAndTypes(accomodationId);
                 }
                 if (sCtrlName != "btnGetRoomsForSeries")
                 {
-                    t = null;
-                    if (SessionServices.SeriesBooking_TableSeries != null)
+                    if (iSeriesId > 0)
                     {
-                        t = (Table)SessionServices.SeriesBooking_TableSeries;
-                        AddSeriesToPanel(t);
+                        PrepareSeries(iSeriesId);
                     }
+                    else { PrepareSeries(false); }
                 }
             }
         }
@@ -76,7 +72,14 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
 
     protected void btnSaveSeries_Click(object sender, EventArgs e)
     {
-        SaveSeries();
+        try
+        {
+            SaveSeries();
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
+        }
     }
 
     //protected void ddlAccomType_SelectedIndexChanged(object sender, EventArgs e)
@@ -92,19 +95,31 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
 
     protected void ddlAccomName_SelectedIndexChanged(object sender, EventArgs e)
     {
-        PrepareRoomCategoriesAndTypes();
+        int accomodationId = Convert.ToInt32(ddlAccomName.SelectedItem.Value);
+        PrepareRoomCategoriesAndTypes(accomodationId);
     }
 
     protected void btnGenerateSeries_Click(object sender, EventArgs e)
     {
+        ChangedSeriesDates.Clear();
         PrepareSeries(false);
         btnSaveSeries.Visible = true;
     }
 
     protected void btnRegenerateSeries_Click(object sender, EventArgs e)
     {
-        PrepareSeries(true);
-        btnSaveSeries.Visible = true;
+        try
+        {
+            PrepareSeries(true);
+            btnSaveSeries.Visible = true;
+            ChangedSeriesDates.Clear();
+        }
+        catch (Exception exp)
+        {
+            btnSaveSeries.Visible = false;
+            pnlRegenSeries.Attributes["style"] = "display:block";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
+        }
     }
     #endregion
 
@@ -229,11 +244,10 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         }
     }
 
-    private void PrepareRoomCategoriesAndTypes()
+    private void PrepareRoomCategoriesAndTypes(int accomodationId)
     {
-        int AccomodationId = Convert.ToInt32(ddlAccomName.SelectedItem.Value);
         SeriesBookingServices oSeriesRooms = new SeriesBookingServices();
-        SeriesDTO[] oSeriesDTO = oSeriesRooms.GetRoomsForSeries(AccomodationId);
+        SeriesDTO[] oSeriesDTO = oSeriesRooms.GetRoomsForSeries(accomodationId);
         Table tblMain = new Table();
         string sPrevRoomCategory = "";
         TableRow tr = null;
@@ -293,41 +307,6 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             }
             AddRoomsToPanel(tblMain);
         }
-    }
-
-    private void PrepareSeries(bool withModifiedDates)
-    {
-        Hashtable selectedCategoryandTypes = new Hashtable();
-        Hashtable htCellsDataPerRow = new Hashtable();
-        Hashtable htBookedRooms = new Hashtable();
-
-        List<BookingDatesWithBookedRoomsDTO> bookingDatesWithBookedRoomsList;
-
-        Table tSeries = new Table();
-        TableRow tr = null, trHeaderRAW = null, trHeaderType = null, trHeaderCategory = null;
-        tr = new TableRow();
-
-        selectedCategoryandTypes = GetCheckedCategoryAndType();
-        bookingDatesWithBookedRoomsList = GetRoomsListBookingStatus(withModifiedDates);
-
-        foreach (BookingDatesWithBookedRoomsDTO obj in bookingDatesWithBookedRoomsList)
-        {
-            htCellsDataPerRow = GetCellsDataPerRow(obj.BookedRooms, selectedCategoryandTypes, obj.CheckInDate, obj.CheckOutDate);
-            tr = PrepareDataRow(htCellsDataPerRow);
-            if (tr != null)
-                tSeries.Rows.Add(tr);
-        }
-
-        trHeaderRAW = PrepareRowRAW(tr);
-        tSeries.Rows.AddAt(0, trHeaderRAW);
-
-        trHeaderType = PrepareRowTypes(trHeaderRAW);
-        tSeries.Rows.AddAt(0, trHeaderType);
-
-        trHeaderCategory = PrepareRowCategories(trHeaderType);
-        tSeries.Rows.AddAt(0, trHeaderCategory);
-
-        AddSeriesToPanel(tSeries);
     }
 
     private TableRow PrepareRowRAW(TableRow DataRow)
@@ -512,12 +491,12 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         return tr;
     }
 
-    private TableRow PrepareDataRow(Hashtable CategoryList)
+    private TableRow PrepareDataRow(Hashtable CategoryList, int departureNo)
     {
-        return PrepareDataRow(CategoryList, false);
+        return PrepareDataRow(CategoryList, false, departureNo);
     }
 
-    private TableRow PrepareDataRow(Hashtable CategoryList, Boolean ExistingSeries)
+    private TableRow PrepareDataRow(Hashtable CategoryList, bool ExistingSeries, int departureNo)
     {
         TableRow tr = new TableRow();
         TableCell tc = null;
@@ -532,12 +511,14 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             return null;
         ICollection Catlist = CategoryList.Keys;
         string IDPostFix = "", textBoxId = "", buttonId = "";
+
+        int cntrlCntr = 0;
         foreach (string Category in Catlist)
         {
             oSeriesDetailDTO = (SeriesDetailDTO)CategoryList[Category];
-
-            IDPostFix = oSeriesDetailDTO.CheckIn.ToShortDateString() + "*";
-            IDPostFix += oSeriesDetailDTO.CheckOut.ToShortDateString();
+            
+            IDPostFix = departureNo + "*" + cntrlCntr;
+            cntrlCntr++;
 
             #region Add Date Cells
             if (bDatesAdded == false)
@@ -945,7 +926,7 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         BookingOfSeriesList = BOSList;
     }
 
-    private void GetFinalizedRooms(SeriesDetailDTO SeriesDetail, BookingDTO Booking, List<BookedRooms> AllRooms, out  BookingOfSeriesDTO FinalizedBooking)
+    private void GetFinalizedRooms(SeriesDetailDTO SeriesDetail, BookingDTO Booking, List<BookedRooms> AllRooms, out BookingOfSeriesDTO FinalizedBooking)
     {
         int NoofRoomsBooked = 0; ;
         string RoomNo = string.Empty, RoomCategory = string.Empty, RoomType = string.Empty;
@@ -1023,40 +1004,48 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         int.TryParse(ddlGap.SelectedItem.Value, out iGap);
         int.TryParse(ddlNoOfNights.SelectedItem.Value, out iNoOfNights);
         SeriesBookingDates[] oSeriesBookingDates;
-        DateTime dtEndDate;
+        DateTime dtEndDate;        
 
-        if (!withModifiedDates)
+        try
         {
-            oSeriesBookingDates = new SeriesBookingDates[iNoOfDeps];
-            for (int i = 0; i < iNoOfDeps; i++)
+            if (!withModifiedDates)
             {
-                oSeriesBookingDates[i] = new SeriesBookingDates();
-                oSeriesBookingDates[i].AccomodationId = iAccomId;
-                oSeriesBookingDates[i].StartDate = dtFirstDepDate;
-                dtEndDate = dtFirstDepDate.AddDays(iNoOfNights);
-                oSeriesBookingDates[i].EndDate = dtEndDate;
-                dtFirstDepDate = dtEndDate.AddDays(iGap);
+                oSeriesBookingDates = new SeriesBookingDates[iNoOfDeps];
+                for (int i = 0; i < iNoOfDeps; i++)
+                {
+                    oSeriesBookingDates[i] = new SeriesBookingDates();
+                    oSeriesBookingDates[i].AccomodationId = iAccomId;
+                    oSeriesBookingDates[i].StartDate = dtFirstDepDate;
+                    dtEndDate = dtFirstDepDate.AddDays(iNoOfNights);
+                    oSeriesBookingDates[i].EndDate = dtEndDate;
+                    dtFirstDepDate = dtEndDate.AddDays(iGap);
+                }                
             }
+            else
+            {
+                Hashtable htDates = GetSeriesDates(withModifiedDates);
+
+                oSeriesBookingDates = new SeriesBookingDates[htDates.Count];
+                int ctr = 0;
+                foreach (Object key in htDates.Keys)
+                {
+                    oSeriesBookingDates[ctr] = new SeriesBookingDates();
+                    oSeriesBookingDates[ctr].AccomodationId = iAccomId;
+
+                    DateTime.TryParse(key.ToString(), out dtFirstDepDate);
+                    oSeriesBookingDates[ctr].StartDate = dtFirstDepDate;
+
+                    DateTime.TryParse(htDates[key].ToString(), out dtEndDate);
+                    oSeriesBookingDates[ctr].EndDate = dtEndDate;
+                    ctr++;
+                }
+            }
+            return oSeriesBookingDates;
         }
-        else
+        catch (Exception exp)
         {
-            Hashtable htDates = GetSeriesDates(withModifiedDates);
-            oSeriesBookingDates = new SeriesBookingDates[htDates.Count];
-            int ctr = 0;
-            foreach (Object key in htDates.Keys)
-            {
-                oSeriesBookingDates[ctr] = new SeriesBookingDates();
-                oSeriesBookingDates[ctr].AccomodationId = iAccomId;
-
-                DateTime.TryParse(key.ToString(), out dtFirstDepDate);
-                oSeriesBookingDates[ctr].StartDate = dtFirstDepDate;
-
-                DateTime.TryParse(htDates[key].ToString(), out dtEndDate);
-                oSeriesBookingDates[ctr].EndDate = dtEndDate;
-                ctr++;
-            }
+            throw exp;
         }
-        return oSeriesBookingDates;
     }
 
     private Hashtable GetCellsDataPerRow(List<BookedRooms> BookedRoomsList, Hashtable RoomCategoryAndType, DateTime StartDate, DateTime EndDate)
@@ -1144,6 +1133,9 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         string Value = "";
         for (int i = 0; i < sFormControls.Length; i++)
         {
+            if (sFormControls[i] == null)
+                continue;
+
             if (sFormControls[i].StartsWith(Constants.CHECKBOX_CAT_TYPE))
             {
                 Key = sFormControls[i].Replace(Constants.CHECKBOX_CAT_TYPE + "*", "");
@@ -1243,7 +1235,7 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         Hashtable htDates = new Hashtable();
         for (int i = 0; i < sFormControls.Length; i++)
         {
-            if (sFormControls[i].StartsWith("txt") && sFormControls[i].Contains("*") && sFormControls[i].Length > 20)
+            if (sFormControls[i] != null && sFormControls[i].StartsWith("txt") && sFormControls[i].Contains("*") && sFormControls[i].Length > 20)
             {
                 string[] arr = sFormControls[i].Split('*');
                 if (!htDates.ContainsKey(arr[arr.Length - 2]))
@@ -1285,6 +1277,10 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
                             TextBox txt = (TextBox)ctrl;
                             if (txt.ID.ToUpper().StartsWith("TXTCHECKINDATE") && txt.ID.Contains("*"))
                             {
+                                if (htDates.ContainsKey(txt.Text))
+                                {
+                                    throw new Exception("Two departues cannot start from same date.");                                    
+                                }
                                 htDates.Add(txt.Text, String.Empty);
                                 startDate = txt.Text;
                             }
@@ -1298,7 +1294,7 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             }
         }
         return htDates;
-    }
+    }    
 
     private clsSeriesBookingDTO[] GetSeriesBookedObject(int BookingID)
     {
@@ -1333,17 +1329,60 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
     {
         pnlSeries.Controls.Clear();
         pnlSeries.Controls.Add(tSeries);
-        SessionServices.SeriesBooking_TableSeries = tSeries;
     }
 
     private void AddRoomsToPanel(Table tblMain)
     {
         pnlTotalRoomCount.Controls.Clear();
-        pnlTotalRoomCount.Controls.Add(tblMain);
-        SessionServices.SeriesBooking_TableTotalRoomCount = tblMain;
+        pnlTotalRoomCount.Controls.Add(tblMain);        
     }
 
     #region Preprare Chart of Existing Series
+    private void PrepareSeries(bool withModifiedDates)
+    {
+        Hashtable selectedCategoryandTypes = new Hashtable();
+        Hashtable htCellsDataPerRow = new Hashtable();
+        Hashtable htBookedRooms = new Hashtable();
+
+        List<BookingDatesWithBookedRoomsDTO> bookingDatesWithBookedRoomsList;
+
+        Table tSeries = new Table();
+        TableRow tr = null, trHeaderRAW = null, trHeaderType = null, trHeaderCategory = null;
+        tr = new TableRow();
+
+        try
+        {
+            selectedCategoryandTypes = GetCheckedCategoryAndType();
+            bookingDatesWithBookedRoomsList = GetRoomsListBookingStatus(withModifiedDates);
+
+            int ctr = 0;
+            foreach (BookingDatesWithBookedRoomsDTO obj in bookingDatesWithBookedRoomsList)
+            {
+                htCellsDataPerRow = GetCellsDataPerRow(obj.BookedRooms, selectedCategoryandTypes, obj.CheckInDate, obj.CheckOutDate);
+
+                tr = PrepareDataRow(htCellsDataPerRow, ctr);
+                ctr++;
+                if (tr != null)
+                    tSeries.Rows.Add(tr);
+            }
+
+            trHeaderRAW = PrepareRowRAW(tr);
+            tSeries.Rows.AddAt(0, trHeaderRAW);
+
+            trHeaderType = PrepareRowTypes(trHeaderRAW);
+            tSeries.Rows.AddAt(0, trHeaderType);
+
+            trHeaderCategory = PrepareRowCategories(trHeaderType);
+            tSeries.Rows.AddAt(0, trHeaderCategory);
+
+            AddSeriesToPanel(tSeries);
+        }
+        catch (Exception exp)
+        {
+            throw exp;
+        }
+    }
+
     private void PrepareSeries(int SeriesId)
     {
         SeriesBookingServices oSeriesManager = new SeriesBookingServices();
@@ -1369,12 +1408,16 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
 
         #region Set the Category/Type wise Rooms
         //To Make sure that the controls for Categories and Types exists.
-        PrepareRoomCategoriesAndTypes();
+        int accomodationId = Convert.ToInt32(ddlAccomName.SelectedItem.Value);
+        PrepareRoomCategoriesAndTypes(accomodationId);
+
         SetCategoryAndTypesToControls(SeriesDetailList);
         #endregion Set the Category/Type wise Rooms
 
         #region Prepare each data row
         tr = new TableRow();
+
+        int departureNo = 0;
         foreach (SeriesDetailDTO SeriesDetailDTO in SeriesDetailList)
         {
             string DateKey = SeriesDetailDTO.CheckIn.ToString();
@@ -1398,11 +1441,12 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
                 htBookedRooms.Add(DateKey, htCellsDataPerRow);
                 if (htCellsDataPerRow != null)
                 {
-                    tr = PrepareDataRow(htCellsDataPerRow, true);
+                    tr = PrepareDataRow(htCellsDataPerRow, true, departureNo);
                     if (tr != null)
                         tSeries.Rows.Add(tr);
                 }
             }
+            departureNo++;
         }
         #endregion
 
@@ -1509,8 +1553,36 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         SessionServices.DeleteSession(Constants._Series_AccomodationData);
         SessionServices.DeleteSession(Constants._Series_BookedRooms_WithDates);
         SessionServices.DeleteSession(Constants._SeriesBooking_TableSeries);
-        SessionServices.DeleteSession(Constants._SeriesBooking_TableTotalRoomCount);
+        SessionServices.DeleteSession(Constants._SeriesBooking_TableTotalRoomCount);        
+
+        ChangedSeriesDates.Clear();
     }
 
+    [WebMethod]
+    public static void PostSeriesDateChanges(string startDateTextBoxId, string startDateValue, string endDateTextBoxId, string endDateValue)
+    {
+        if (ChangedSeriesDates == null)
+        {
+            ChangedSeriesDates = new Hashtable();
+        }
+
+        if (ChangedSeriesDates.ContainsKey(startDateTextBoxId))
+        {
+            ChangedSeriesDates[startDateTextBoxId] = startDateValue;
+        }
+        else
+        {
+            ChangedSeriesDates.Add(startDateTextBoxId, startDateValue);
+        }
+
+        if (ChangedSeriesDates.ContainsKey(endDateTextBoxId))
+        {
+            ChangedSeriesDates[endDateTextBoxId] = endDateValue;
+        }
+        else
+        {
+            ChangedSeriesDates.Add(endDateTextBoxId, endDateValue);
+        }
+    }
     #endregion Helper Methods
 }

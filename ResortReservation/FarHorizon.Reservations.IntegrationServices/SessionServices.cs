@@ -39,17 +39,7 @@ namespace FarHorizon.Reservations.BusinessServices
         {
             get { return SessionHelper.BookingChart_TreeArrangeBy; }
             set { SessionHelper.BookingChart_TreeArrangeBy = value; }
-        }
-        public static Object BookingChart_TableMonthChart
-        {
-            get { return SessionHelper.BookingChart_TableMonthChart; }
-            set { SessionHelper.BookingChart_TableMonthChart = value; }
-        }
-        public static Object BookingChart_TableBookingTable
-        {
-            get { return SessionHelper.BookingChart_TableBookingTable; }
-            set { SessionHelper.BookingChart_TableBookingTable = value; }
-        }
+        }        
         public static int BookingChart_RegionId
         {
             get { return SessionHelper.BookingChart_RegionId; }
@@ -129,16 +119,6 @@ namespace FarHorizon.Reservations.BusinessServices
         {
             get { return SessionHelper.BookingConfirmation_TotalRoomsBooked; }
             set { SessionHelper.BookingConfirmation_TotalRoomsBooked = value; }
-        }
-        public static Object BookingConfirmation_TableSelectedMealPlan
-        {
-            get { return SessionHelper.BookingConfirmation_TableSelectedMealPlan; }
-            set { SessionHelper.BookingConfirmation_TableSelectedMealPlan = value; }
-        }
-        public static Object BookingConfirmation_TableRoomsBooked
-        {
-            get { return SessionHelper.BookingConfirmation_TableRoomsBooked; }
-            set { SessionHelper.BookingConfirmation_TableRoomsBooked = value; }
         }
         public static BookingMealPlanDTO[] BookingConfirmation_BookingMealPlanDTO
         {
@@ -260,17 +240,7 @@ namespace FarHorizon.Reservations.BusinessServices
 
         #region Series Booking
         #region Series Booking Session Properties
-        public static Object SeriesBooking_TableTotalRoomCount
-        {
-            get { return SessionHelper.SeriesBooking_TableTotalRoomCount; }
-            set { SessionHelper.SeriesBooking_TableTotalRoomCount = value; }
-        }
-        public static Object SeriesBooking_TableSeries
-        {
-            get { return SessionHelper.SeriesBooking_TableSeries; }
-            set { SessionHelper.SeriesBooking_TableSeries = value; }
-        }
-        public static AccomTypeDTO[] Series_AccomodationData
+                public static AccomTypeDTO[] Series_AccomodationData
         {
             get { return SessionHelper.Series_AccomodationData; }
             set { SessionHelper.Series_AccomodationData = value; }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using FarHorizon.Reservations.BusinessServices.Online.BAL;
+﻿using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using System;
+using System.Data;
+using System.Web.UI.WebControls;
 
 public partial class Cruise_booking_CustomerLogin : System.Web.UI.Page
 {
@@ -21,7 +17,6 @@ public partial class Cruise_booking_CustomerLogin : System.Web.UI.Page
     }
     protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
     {
-
         try
         {
             blcus.Email = Login1.UserName.Trim().ToString();
@@ -39,8 +34,9 @@ public partial class Cruise_booking_CustomerLogin : System.Web.UI.Page
 
             }
         }
-        catch
+        catch(Exception exp)
         {
+            throw exp;
         }
     }
 }
