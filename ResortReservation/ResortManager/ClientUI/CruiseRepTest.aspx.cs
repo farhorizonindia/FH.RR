@@ -1,24 +1,18 @@
-﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using System.Collections.Generic;
+﻿using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
-using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.Common.DataEntities.Client;
-using FarHorizon.Reservations.MasterServices;
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.Common.DataEntities.InputOutput;
-using System.Text;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
+using FarHorizon.Reservations.MasterServices;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class ClientUI_CruiseRepTest : ClientBasePage
 {
@@ -218,8 +212,6 @@ public partial class ClientUI_CruiseRepTest : ClientBasePage
             getBookingsInput.BookingStatusType = newBookingStatusType;
             getBookingsInput.BookingCode = txtBookingCode.Text.Trim();
             getBookingsInput.AgentId = Convert.ToInt32(ddlAgent.SelectedValue.ToString());
-
-
 
             ds1 = oBookingManager.GetBookingsCruiseFH(getBookingsInput);
             if (ds1.Tables[0].Rows.Count > 0)

@@ -139,7 +139,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             if (Session["totpax"] != null)
             {
                 blsr.totpax = Int32.Parse(Session["totpax"].ToString());
-            }            
+            }
 
             dt = dlsr.GetRoomCategoryWiseRates(blsr);
 
@@ -153,7 +153,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 {
                     //Session["Rrate"] = sortedDT;
                     SessionServices.SaveSession<DataTable>("Rrate", sortedDT);
-                    
+
                     gdvRoomCategories.DataSource = sortedDT;
                     gdvRoomCategories.DataBind();
 
@@ -174,7 +174,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 div1.Style.Add("display", "none");
             }
         }
-        catch(Exception exp)
+        catch (Exception exp)
         {
             div1.Style.Add("display", "none");
         }
@@ -777,8 +777,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
                 DataTable RoomDetails = ViewState["VsRoomDetails"] as DataTable;
                 SessionServices.SaveSession<DataTable>("BookedRooms", RoomDetails);
-
                 LockTheBooking(RoomDetails);
+
                 ///    
                 //Response.Redirect("sendtoairpay.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString());
                 if (Session["Redirecturl"] == null)
@@ -853,7 +853,6 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     protected void Button1_Click(object sender, EventArgs e)
     {
         Response.Redirect(Session["DepartureSearchUrl"].ToString());
-
     }
     protected void GridRoomPaxDetail_RowDataBound(object sender, GridViewRowEventArgs e)
     {
@@ -914,7 +913,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 dv = new DataView(dt, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
                 if (ddlpax1rm.SelectedIndex > 0)
                 {
-                    blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;                    
+                    blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
                     blsr.action = "Getmaxrooms";
                     blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
                     dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
@@ -945,26 +944,34 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
 
     private void LockTheBooking(DataTable roomDetails)
     {
-        int lockDuration = ConfigurationManager.AppSettings["LockDuration"] != null ? Convert.ToInt16(ConfigurationManager.AppSettings["LockDuration"]) : 10;
-        BALBookingLock bl = new BALBookingLock();
-
-        int accomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
-        Session["AccomId"] = accomId;
-        Guid uniqueIdentifier = Guid.NewGuid();
-
-        bl.AccomId = accomId;
-        bl.LockIdentifier = uniqueIdentifier.ToString();
-        bl.LockExpireAt = DateTime.Now.AddMinutes(lockDuration);
-        bl.LockRooms = new List<LockRoom>();
-
-        foreach (DataRow row in roomDetails.Rows)
+        try
         {
-            LockRoom lr = new LockRoom { RoomCategoryId = Convert.ToInt16(row["RoomCategoryId"]), RoomNo = row["RoomNumber"].ToString() };
-            bl.LockRooms.Add(lr);
-        }
-        DALBookingLock dbl = new DALBookingLock();
-        dbl.PlaceLock(bl);
+            int lockDuration = ConfigurationManager.AppSettings["LockDuration"] != null ? Convert.ToInt16(ConfigurationManager.AppSettings["LockDuration"]) : 10;
+            BALBookingLock bl = new BALBookingLock();
 
-        Session["BookingLock"] = bl;        
+            int accomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
+            Session["AccomId"] = accomId;
+            Guid uniqueIdentifier = Guid.NewGuid();
+
+            bl.AccomId = accomId;
+            bl.LockIdentifier = uniqueIdentifier.ToString();
+            bl.LockExpireAt = DateTime.Now.AddMinutes(lockDuration);
+            bl.LockRooms = new List<LockRoom>();
+
+            foreach (DataRow row in roomDetails.Rows)
+            {
+                LockRoom lr = new LockRoom { RoomCategoryId = Convert.ToInt16(row["RoomCategoryId"]), RoomNo = row["RoomNumber"].ToString() };
+                bl.LockRooms.Add(lr);
+            }
+            DALBookingLock dbl = new DALBookingLock();
+            dbl.PlaceLock(bl);
+
+            SessionServices.SaveSession("BookingLock", bl, true);
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "LockError", "javascript:alert('" + exp.Message + "')", true);
+            throw exp;
+        }
     }
 }

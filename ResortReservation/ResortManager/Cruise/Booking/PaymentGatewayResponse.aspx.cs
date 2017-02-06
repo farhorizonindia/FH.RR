@@ -655,7 +655,9 @@ public partial class response : System.Web.UI.Page
 
     private void ReleaseBookingLock()
     {
-        BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
+        BALBookingLock bl = SessionServices.RetrieveSession<BALBookingLock>("BookingLock", true);
+
+        //BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
 
         if (bl != null)
         {

@@ -77,8 +77,8 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             SaveSeries();
         }
         catch (Exception exp)
-        {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
+        {            
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "btnSaveSeries", "javascript:alert('" + exp.Message.ToString() + Environment.NewLine + exp.StackTrace + "')", true);
         }
     }
 
@@ -101,9 +101,16 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
 
     protected void btnGenerateSeries_Click(object sender, EventArgs e)
     {
-        ChangedSeriesDates.Clear();
-        PrepareSeries(false);
-        btnSaveSeries.Visible = true;
+        try
+        {
+            ChangedSeriesDates.Clear();
+            PrepareSeries(false);
+            btnSaveSeries.Visible = true;
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "GenerateSeriesError", "javascript:alert('" + exp.Message.ToString() + exp.StackTrace + "')", true);
+        }
     }
 
     protected void btnRegenerateSeries_Click(object sender, EventArgs e)
@@ -118,7 +125,7 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
         {
             btnSaveSeries.Visible = false;
             pnlRegenSeries.Attributes["style"] = "display:block";
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Error", "javascript:alert('" + exp.Message.ToString() + "')", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "ReGenerateSeriesError", "javascript:alert('" + exp.Message.ToString() + "')", true);
         }
     }
     #endregion
@@ -702,7 +709,9 @@ public partial class ClientUI_SeriesBooking : ClientBasePage
             if (bActionCompleted == true)
             {
                 ClearSessionVariables();
-                Response.Redirect("afterBookingSeriesactions.aspx?sid=" + iSeriesID + "&bstatus=booked");
+
+                Response.Redirect("~/ClientUI/afterBookingSeriesactions.aspx?sid=" + iSeriesID + "&bstatus=booked");
+                //Response.Redirect("afterBookingSeriesactions.aspx?sid=" + iSeriesID + "&bstatus=booked");
             }
         }
     }

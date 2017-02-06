@@ -555,7 +555,8 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
     private bool IsBookingAvailable()
     {
-        BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
+        BALBookingLock bl = SessionServices.RetrieveSession<BALBookingLock>("BookingLock", true);
+        //BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
 
         DALBookingLock dbl = new DALBookingLock();
         if (dbl.IsLocked(bl))
@@ -1043,7 +1044,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             blsr._iAccomId = Convert.ToInt32(packageRow["AccomId"]);
 
             blsr._iNights = Convert.ToInt32(packageRow["NoOfNights"]);
-            blsr._BookingStatusId = (int)BookingStatusTypes.PROPOSED; //This is a proposed booking and it will be marked as booked on the next page once the payment is received.
+            blsr._BookingStatusId = (int)BookingStatusTypes.BOOKED; //This is a proposed booking and it will be marked as booked on the next page once the payment is received.
             blsr._SeriesId = 0;
             blsr._proposedBooking = true;
             blsr._chartered = false;

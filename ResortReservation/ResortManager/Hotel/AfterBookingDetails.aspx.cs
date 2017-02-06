@@ -866,7 +866,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             blsr._SeriesId = 0;
             blsr._proposedBooking = false;
             blsr._chartered = false;
-            blsr._BookingStatusId = (int)BookingStatusTypes.PROPOSED;
+            blsr._BookingStatusId = (int)BookingStatusTypes.BOOKED;
             blsr._proposedBooking = true;
 
             int bookingId = dlsr.AddParentBookingDetail(blsr);

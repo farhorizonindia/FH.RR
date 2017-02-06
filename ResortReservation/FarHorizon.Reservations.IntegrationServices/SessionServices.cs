@@ -300,8 +300,14 @@ namespace FarHorizon.Reservations.BusinessServices
         }
 
         public static void SaveSession<T>(string key, T value)
-        {            
-            if (typeof(T) == typeof(DataTable))
+        {
+            SaveSession<T>(key, value, false);
+        }
+
+
+        public static void SaveSession<T>(string key, T value, bool forceSerialize)
+        {
+            if (typeof(T) == typeof(DataTable) || forceSerialize)
             {
                 string json = JsonConvert.SerializeObject(value);
                 SessionHelper.SaveSession(key, json);
@@ -310,14 +316,23 @@ namespace FarHorizon.Reservations.BusinessServices
             SessionHelper.SaveSession(key, value);
         }
 
+        
         public static T RetrieveSession<T>(string key)
         {
-            if (typeof(T) == typeof(DataTable))
-            {
-                string dataTableJsonString = Convert.ToString(SessionHelper.RetrieveSession(key));
-                return JsonConvert.DeserializeObject<T>(dataTableJsonString);
-            }
+            return RetrieveSession<T>(key, false);
+        }
 
+        public static T RetrieveSession<T>(string key, bool forceDeSerialize)
+        {
+            if (typeof(T) == typeof(DataTable) || forceDeSerialize)
+            {
+                var value = SessionHelper.RetrieveSession(key);
+                if (value != null)
+                {
+                    string dataTableJsonString = Convert.ToString(SessionHelper.RetrieveSession(key));
+                    return JsonConvert.DeserializeObject<T>(dataTableJsonString);
+                }                
+            }
             return (T)SessionHelper.RetrieveSession(key);
         }
     }

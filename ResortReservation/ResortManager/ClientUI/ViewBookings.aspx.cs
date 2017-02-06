@@ -166,14 +166,20 @@ public partial class ViewBookings : ClientBasePage
                 e.Item.Cells[10].Text = "";
                 e.Item.Cells[11].Text = "";
                 e.Item.Cells[14].Text = "";
-                //if (string.Compare(e.Item.Cells[15].Text.ToUpper(), "TRUE", true) == 0)
-                //{
-                //    e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
-                //    e.Item.Cells[0].ForeColor = System.Drawing.Color.White;
-                //}
+                if (string.Compare(e.Item.Cells[15].Text.ToUpper(), "TRUE", true) == 0)
+                {
+                    e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
+                    e.Item.Cells[0].ForeColor = System.Drawing.Color.White;
+                    e.Item.Cells[8].Text = "";
+                    e.Item.Cells[9].Text = "";
+                    e.Item.Cells[10].Text = "";
+                    e.Item.Cells[11].Text = "";
+                    //e.Item.Cells[12].Text = "";
+                    //e.Item.Cells[13].Text = "";
+                    e.Item.Cells[14].Text = "";
+                }
             }
             #endregion
-
 
             #region Confirmed
 
@@ -222,19 +228,19 @@ public partial class ViewBookings : ClientBasePage
             }
             #endregion
 
-            #region Proposed            
-            else if (Boolean.Parse(e.Item.Cells[15].Text) == true || string.Compare(e.Item.Cells[5].Text, "PROPOSED", true) == 0)
-            {
-                e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
-                e.Item.Cells[8].Text = "";
-                e.Item.Cells[9].Text = "";
-                e.Item.Cells[10].Text = "";
-                e.Item.Cells[11].Text = "";
-                //e.Item.Cells[12].Text = "";
-                //e.Item.Cells[13].Text = "";
-                e.Item.Cells[14].Text = "";
-            }
-            #endregion
+            //#region Proposed            
+            //else if (Boolean.Parse(e.Item.Cells[15].Text) == true || string.Compare(e.Item.Cells[5].Text, "PROPOSED", true) == 0)
+            //{
+            //    e.Item.Cells[0].BackColor = System.Drawing.Color.Blue;
+            //    e.Item.Cells[8].Text = "";
+            //    e.Item.Cells[9].Text = "";
+            //    e.Item.Cells[10].Text = "";
+            //    e.Item.Cells[11].Text = "";
+            //    //e.Item.Cells[12].Text = "";
+            //    //e.Item.Cells[13].Text = "";
+            //    e.Item.Cells[14].Text = "";
+            //}
+            //#endregion
 
             #region CForm
             if (CForm)
@@ -419,17 +425,17 @@ public partial class ViewBookings : ClientBasePage
         {
             if (!String.IsNullOrEmpty(txtBookingCode.Text.Trim()) || (checkInDate != DateTime.MinValue && checkOutDate != DateTime.MinValue))
             {
-                //newBookingStatusType = bookingStatusType;
-                //if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
-                //{
-                //    newBookingStatusType = ENums.BookingStatusTypes.BOOKED;
-                //}
+                newBookingStatusType = bookingStatusType;
+                if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
+                {
+                    newBookingStatusType = ENums.BookingStatusTypes.BOOKED;
+                }
 
                 cdtGetBookingsInput getBookingsInput = new cdtGetBookingsInput();
                 getBookingsInput.AccomTypeId = AccomTypeId;
                 getBookingsInput.FromDate = checkInDate;
                 getBookingsInput.ToDate = checkOutDate;
-                getBookingsInput.BookingStatusType = bookingStatusType;
+                getBookingsInput.BookingStatusType = newBookingStatusType;
                 getBookingsInput.BookingCode = txtBookingCode.Text.Trim();
                 getBookingsInput.AgentId = Convert.ToInt32(ddlAgent.SelectedValue.ToString());
 

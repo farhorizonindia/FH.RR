@@ -60,7 +60,7 @@ public partial class _Default : ClientBasePage
         {
             SessionServices.BookingChart_TreeDTO = null;
             SessionServices.BookingChart_TreeType = null;
-            
+
             FillTree();
 
             today = GF.GetDate();
@@ -77,7 +77,7 @@ public partial class _Default : ClientBasePage
         {
             if (SessionServices.BookingChart_TreeDTO == null || SessionServices.BookingChart_TreeType == string.Empty)
                 FillTree();
-            
+
         }
 
         AddAttributes();
@@ -357,7 +357,7 @@ public partial class _Default : ClientBasePage
     private void StartAfterMonths(int Months)
     {
         try
-        {            
+        {
             DateTime StartDate;
             DateTime EndDate;
             StartDate = ChartStartDate;
@@ -386,14 +386,14 @@ public partial class _Default : ClientBasePage
         {
             //This Function will move the chart by adding the no. of paramter to the current start date
             //It can also receive -ive value as a paramter to move to previous dates.
-            DateTime EndDate;            
+            DateTime EndDate;
             DateTime StartDate = ChartStartDate;
             if (StartDate != DateTime.MinValue)
             {
                 StartDate = StartDate.AddDays(Days);
-                EndDate = StartDate.AddMonths(1).AddDays(-1);                
+                EndDate = StartDate.AddMonths(1).AddDays(-1);
                 ChartStartDate = StartDate;
-                FillBookingChartView();                
+                FillBookingChartView();
             }
         }
         catch (Exception exp)
@@ -420,7 +420,7 @@ public partial class _Default : ClientBasePage
         catch (Exception exp)
         {
             GF.LogError("BookingChartView.aspx.GetStartandEndDate", exp.Message);
-        }        
+        }
     }
 
     private void FillTreeView()
@@ -690,8 +690,8 @@ public partial class _Default : ClientBasePage
         tblBookingView = FormatTable(tblBookingView);
 
         tblBookingView.Rows[1].Cells[GRIDSTARTCOL].ID = StartDate.Year.ToString() + "-" + StartDate.Month.ToString("0#") + "-" + StartDate.Day.ToString("0#");
-        int cellCount = tblBookingView.Rows[1].Cells.Count - 1;
-        tblBookingView.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
+        //int cellCount = tblBookingView.Rows[1].Cells.Count - 1;
+        //tblBookingView.Rows[1].Cells[cellCount].ID = EndDate.Year.ToString() + "-" + EndDate.Month.ToString("0#") + "-" + EndDate.Day.ToString("0#");
 
         AddChartToPanel(tblBookingView);
     }
