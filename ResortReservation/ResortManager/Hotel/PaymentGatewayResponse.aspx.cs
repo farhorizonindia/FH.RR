@@ -40,91 +40,7 @@ public partial class response : System.Web.UI.Page
 
 
     protected void Page_Load(object sender, EventArgs e)
-    {
-
-        //if (!IsPostBack)
-        //{
-
-        //    lbBookinDate.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
-        //    lbInvoiceNO.Text = "IVc" + DateTime.Now.ToString("MMddhhmmssfff");
-        //    dated.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
-        //}
-        //lblBuyerName.Text = Session["InvName"].ToString();
-        //if (Session["Address"] != null)
-        //{
-        //    lblBuyerAddress.Text = Session["Address"].ToString();
-
-        //}
-
-        //if (Session["Hotel"] != null)
-        //{
-
-        //    try
-        //    {
-
-        //        if (Session["Usercode"] != null)
-        //        {
-        //            Int32.TryParse(Session["AId"].ToString(), out iagentid);
-
-        //        }
-        //        else if (Session["CustId"] != null)
-        //        {
-
-        //            Int32.TryParse(Session["CustId"].ToString(), out custId);
-        //            iagentid = custId;
-
-
-        //        }
-
-
-        //        Int32.TryParse(Session["AccomId"].ToString(), out iAccomId);
-        //        Int32.TryParse(Session["iAccomtypeId"].ToString(), out iaccomtypeid);
-
-
-        //        DateTime.TryParse(Session["Chkin"].ToString(), out chkin);
-        //        DateTime.TryParse(Session["chkout"].ToString(), out chkout);
-
-        //        bookref = Session["BookingRef"].ToString();
-
-
-        //        blsr._sBookingRef = bookref;
-        //        blsr._dtStartDate = chkin;
-        //        blsr._dtEndDate = chkout;
-
-
-        //        blsr._iAccomTypeId = iaccomtypeid;
-        //        blsr._iAccomId = iAccomId;
-
-        //        int iBRC = dlsr.GetBookingReferenceCount(blsr);
-
-        //        if (iBRC > 0)
-        //        {
-
-
-        //            System.Web.UI.ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "AlertBox", "alert('The Booking Reference mentioned by you is not unique. Please enter a different reference number.');", true);
-
-        //            return;
-        //        }
-
-              
-
-
-
-
-        //        //    Response.Redirect("HotelInvoice.aspx");
-
-
-
-        //    }
-        //    catch
-        //    {
-        //    }
-        //}
-
-
-
-
-
+    {        
     }
 
     public void sendMail(string TRANSACTIONID)
@@ -135,7 +51,7 @@ public partial class response : System.Web.UI.Page
 
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
             con.Open();
-            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo'   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+            string sqlQuery = "SELECT [PackageName], (select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as'BoardTo' FROM [dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
             SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
             DataTable dtGetPackageDetails = new DataTable();
             adp.Fill(dtGetPackageDetails);
@@ -408,7 +324,7 @@ public partial class response : System.Web.UI.Page
         {
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
             con.Open();
-            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo'   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as 'BoardTo' FROM [dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
             SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
             DataTable dtGetPackageDetails = new DataTable();
             adp.Fill(dtGetPackageDetails);

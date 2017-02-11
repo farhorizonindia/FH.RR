@@ -240,7 +240,7 @@ namespace FarHorizon.Reservations.DataBaseManager
                 using (SqlCommand cmd = dbCommandWrapper)
                 {
                     cmd.CommandTimeout = CommandTimeoutVal;
-                    obj = this.DbCmd.ExecuteScalar();
+                    obj = cmd.ExecuteScalar();
                 }
                 CloseCurrentConnection();                
             }

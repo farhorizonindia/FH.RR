@@ -872,7 +872,8 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             int bookingId = dlsr.AddParentBookingDetail(blsr);
             blsr._iBookingId = bookingId;
 
-            Session["tblBookingBAL"] = blsr;
+            //Session["tblBookingBAL"] = blsr;
+            SessionServices.SaveSession<BALBooking>("tblBookingBAL", blsr);
             return bookingId;
         }
         catch (Exception ex)

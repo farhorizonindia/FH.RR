@@ -5,6 +5,7 @@ using System.Data;
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.Common;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.MasterServices
 {
@@ -114,7 +115,7 @@ namespace FarHorizon.Reservations.MasterServices
                 {
                     hookedAgent = new AgentDTO();
                     hookedAgent.AgentId = ds.Tables[0].Rows[i][1] == DBNull.Value ? 0 : Convert.ToInt32(ds.Tables[0].Rows[i][1]);
-                    hookedAgent.AgentName = ds.Tables[0].Rows[i][2] == DBNull.Value ? String.Empty : Convert.ToString(ds.Tables[0].Rows[i][2]);
+                    hookedAgent.AgentName = ds.Tables[0].Rows[i][2] == DBNull.Value ? String.Empty : DataSecurityManager.Decrypt( Convert.ToString(ds.Tables[0].Rows[i][2]));
                     hookedAgentList.Add(hookedAgent);
                 }
             }

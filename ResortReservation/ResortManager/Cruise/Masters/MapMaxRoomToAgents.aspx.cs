@@ -57,9 +57,18 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
         {
             blAr._Action = "GetAllAgents";
             dtGetReturnedData = dlAr.BindControls(blAr);
+
+            List<BALAgent> agents = new List<BALAgent>();
+
             if (dtGetReturnedData != null && dtGetReturnedData.Rows.Count > 0)
             {
-                ddlAgents.DataSource = dtGetReturnedData;
+                foreach (DataRow row in dtGetReturnedData.Rows)
+                {
+                    BALAgent agent = new BALAgent { AgentId = Convert.ToInt32(row["AgentId"].ToString()), AgentName = row["AgentName"].ToString() };
+                    agents.Add(agent);
+                }
+
+                ddlAgents.DataSource = agents;
                 ddlAgents.DataTextField = "AgentName";
                 ddlAgents.DataValueField = "AgentId";
                 ddlAgents.DataBind();

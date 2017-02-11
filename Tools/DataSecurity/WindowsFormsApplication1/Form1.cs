@@ -83,7 +83,17 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("Please enter the plain text to encrypt");
                 return;
             }
-            txtResult.Text = DataSecurityManager.Encrypt(txtPlainText.Text);
+
+            List<string> txtList = txtPlainText.Lines.ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (string plainText in txtList)
+            {
+                if (!string.IsNullOrWhiteSpace(plainText))
+                    sb.AppendLine(DataSecurityManager.Encrypt(plainText));
+            }
+            txtResult.Text = sb.ToString();
             lblTotalLength.Text = txtResult.Text.Length.ToString();
         }
 
@@ -94,7 +104,17 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("Please enter the encrypted text to decrypt");
                 return;
             }
-            txtResult.Text = DataSecurityManager.Decrypt(txtEncryptedText.Text);
+
+            List<string> txtList = txtEncryptedText.Lines.ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (string encryptdText in txtList)
+            {
+                if (!string.IsNullOrWhiteSpace(encryptdText))
+                    sb.AppendLine(DataSecurityManager.Decrypt(encryptdText));
+            }
+            txtResult.Text = sb.ToString();
             lblTotalLength.Text = txtResult.Text.Length.ToString();
         }
 

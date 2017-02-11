@@ -9,7 +9,7 @@ using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.Common.DataEntities.InputOutput;
-
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 {
@@ -467,7 +467,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                     oBookingData[i].NoOfNights = Convert.ToInt32(dr.ItemArray.GetValue(9));
                     oBookingData[i].NoOfPersons = Convert.ToInt32(dr.ItemArray.GetValue(10));
                     oBookingData[i].AgentId = Convert.ToInt32(dr.ItemArray.GetValue(11));
-                    oBookingData[i].AgentName = Convert.ToString(dr.ItemArray.GetValue(12));
+                    oBookingData[i].AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(12)));
                     oBookingData[i].BookingStatusId = Convert.ToInt32(dr.ItemArray.GetValue(13));
                     oBookingData[i].ExchangeOrderNo = Convert.ToString(dr.ItemArray.GetValue(14));
                     if (dr.ItemArray.GetValue(15) != DBNull.Value)
@@ -794,7 +794,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                     booking.BookingCode = Convert.ToString(dr.ItemArray.GetValue(4).ToString());
                     booking.BookingReference = Convert.ToString(dr.ItemArray.GetValue(5));
 
-                    booking.agentname = Convert.ToString(dr.ItemArray.GetValue(6));
+                    booking.agentname = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(6)));
                     booking.noofnights = Convert.ToInt32(dr.ItemArray.GetValue(7));
                     booking.SGL = Convert.ToInt32(dr.ItemArray.GetValue(8));
                     booking.TWN = Convert.ToInt32(dr.ItemArray.GetValue(9));
@@ -924,9 +924,6 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 
                 //    bookingList.Add(booking);
                 //}
-
-
-
             }
             return dsBookingData;
         }

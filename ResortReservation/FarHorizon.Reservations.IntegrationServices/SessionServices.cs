@@ -39,7 +39,7 @@ namespace FarHorizon.Reservations.BusinessServices
         {
             get { return SessionHelper.BookingChart_TreeArrangeBy; }
             set { SessionHelper.BookingChart_TreeArrangeBy = value; }
-        }        
+        }
         public static int BookingChart_RegionId
         {
             get { return SessionHelper.BookingChart_RegionId; }
@@ -240,7 +240,7 @@ namespace FarHorizon.Reservations.BusinessServices
 
         #region Series Booking
         #region Series Booking Session Properties
-                public static AccomTypeDTO[] Series_AccomodationData
+        public static AccomTypeDTO[] Series_AccomodationData
         {
             get { return SessionHelper.Series_AccomodationData; }
             set { SessionHelper.Series_AccomodationData = value; }
@@ -282,58 +282,48 @@ namespace FarHorizon.Reservations.BusinessServices
         #endregion Master Sessions Properties
         #endregion Master Sessions
 
-        public static Boolean SaveSession(String key, Object value)
+        public static bool SaveSession(string key, object value)
         {
             return SessionHelper.SaveSession(key, value);
         }
-        public static Object RetrieveSession(String key)
+        public static object RetrieveSession(string key)
         {
             return SessionHelper.RetrieveSession(key);
         }
-        public static Boolean DeleteSession(String key)
+        public static bool DeleteSession(string key)
         {
             return SessionHelper.DeleteSession(key);
         }
-        public static Boolean AbandonSession()
+        public static bool AbandonSession()
         {
             return SessionHelper.AbandonSession();
         }
 
-        public static void SaveSession<T>(string key, T value)
+        public static void SaveSession<T>(string key, T value) where T : class
         {
-            SaveSession<T>(key, value, false);
+            //if (typeof(T) == typeof(DataTable))
+            //{
+            string json = JsonConvert.SerializeObject(value);
+            SessionHelper.SaveSession(key, json);
+            //return;
+            //}
+            //SessionHelper.SaveSession(key, value);
         }
 
 
-        public static void SaveSession<T>(string key, T value, bool forceSerialize)
+        public static T RetrieveSession<T>(string key) where T : class
         {
-            if (typeof(T) == typeof(DataTable) || forceSerialize)
+            //if (typeof(T) == typeof(DataTable))
+            //{
+            var value = SessionHelper.RetrieveSession(key);
+            if (value != null)
             {
-                string json = JsonConvert.SerializeObject(value);
-                SessionHelper.SaveSession(key, json);
-                return;
+                string dataTableJsonString = Convert.ToString(SessionHelper.RetrieveSession(key));
+                return JsonConvert.DeserializeObject<T>(dataTableJsonString);
             }
-            SessionHelper.SaveSession(key, value);
-        }
-
-        
-        public static T RetrieveSession<T>(string key)
-        {
-            return RetrieveSession<T>(key, false);
-        }
-
-        public static T RetrieveSession<T>(string key, bool forceDeSerialize)
-        {
-            if (typeof(T) == typeof(DataTable) || forceDeSerialize)
-            {
-                var value = SessionHelper.RetrieveSession(key);
-                if (value != null)
-                {
-                    string dataTableJsonString = Convert.ToString(SessionHelper.RetrieveSession(key));
-                    return JsonConvert.DeserializeObject<T>(dataTableJsonString);
-                }                
-            }
-            return (T)SessionHelper.RetrieveSession(key);
+            return default(T);
+            //}
+            //return (T)SessionHelper.RetrieveSession(key);
         }
     }
 }

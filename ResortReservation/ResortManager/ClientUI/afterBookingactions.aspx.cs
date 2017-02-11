@@ -1572,12 +1572,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tblMain.Width = 340;
                 if (st != "")
                 {
-
-
                     tr = new TableRow();
-
-
-
                     tc = new TableCell();
                     tc.Text = st;
                     tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
@@ -1600,7 +1595,6 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     tblMain.Rows.Add(tr);
 
                     tr = new TableRow();
-
 
                     tc = new TableCell();
                     tc.Text = BookingDTMail[i].AgentName;

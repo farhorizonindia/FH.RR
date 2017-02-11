@@ -22,6 +22,11 @@ namespace FarHorizon.Reservations.Common
         
         public static void LogError(string ModuleName, string ErrorString)
         {
+            DatabaseManager oDB;
+            oDB = new DatabaseManager();
+            oDB.DbCmd = oDB.GetSqlStringCommand("insert into tblLog(ModuleName, ErrorMessage) values ('" +  ModuleName +"', '" + ErrorString + "')");
+            oDB.ExecuteNonQuery(oDB.DbCmd);
+            
             //string AppPath;
             //FileStream fs;
             //StreamWriter sw;

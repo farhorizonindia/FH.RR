@@ -173,11 +173,12 @@ public partial class response : System.Web.UI.Page
                 { pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
-                thread.Join();
+                thread.Join();                
 
                 // Save the file to PDF.
                 //pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + ".pdf")));
                 pdf.SaveToFile(rename(Server.MapPath("inv/" + lbInvoiceNO.Text + "File.pdf")));
+                
                 #endregion
 
                 #region  ViewInvoice
@@ -245,7 +246,8 @@ public partial class response : System.Web.UI.Page
     {
         try
         {
-            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            //BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            BALBooking blsr = SessionServices.RetrieveSession<BALBooking>("tblBookingBAL");
             DALBooking dlr = new DALBooking();
 
             dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
@@ -266,8 +268,8 @@ public partial class response : System.Web.UI.Page
     {
         try
         {
-            BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
-
+            //BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+            BALBooking blsr = SessionServices.RetrieveSession<BALBooking>("tblBookingBAL");
             DALBooking dlr = new DALBooking();
             dlr.UpdateBookingStatus(blsr._iBookingId, BookingStatusTypes.BOOKED);
 
@@ -393,7 +395,9 @@ public partial class response : System.Web.UI.Page
                 {
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##");
 
-                    BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+                    //BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+                    BALBooking blsr = SessionServices.RetrieveSession<BALBooking>("tblBookingBAL");
+
                     ShowHotelBookingDetails(blsr);
 
                     GenrateHotelBill(TRANSACTIONID);
@@ -409,7 +413,9 @@ public partial class response : System.Web.UI.Page
                     lblTotPaid.Text = Convert.ToDouble(AMOUNT).ToString("#.##"); ;
 
                     #region Show The Details
-                    BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+                    //BALBooking blsr = Session["tblBookingBAL"] as BALBooking;
+
+                    BALBooking blsr = SessionServices.RetrieveSession<BALBooking>("tblBookingBAL");
                     DALBooking dlr = new DALBooking();
 
                     BALBooking bookingDetail = dlr.GetBookingDetails(blsr._iBookingId);
@@ -486,7 +492,7 @@ public partial class response : System.Web.UI.Page
         {
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
             con.Open();
-            string sqlQuery = "SELECT [PackageName] ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BordingFrom       )as 'BoardFrom'  ,(select LocationName from dbo.Locations where       LocationId = tblPackages.BoadingTo       )as'BoardTo'   FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+            string sqlQuery = "SELECT [PackageName], (select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as 'BoardTo' FROM [dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
             SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
             DataTable dtGetPackageDetails = new DataTable();
             adp.Fill(dtGetPackageDetails);
@@ -584,7 +590,7 @@ public partial class response : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(packId))
             {
-                string sqlQuery = "SELECT [PackageName], (select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as'BoardTo', NoOfNights FROM[cruise].[dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
+                string sqlQuery = "SELECT [PackageName], (select LocationName from dbo.Locations where LocationId = tblPackages.BordingFrom) as 'BoardFrom', (select LocationName from dbo.Locations where LocationId = tblPackages.BoadingTo) as 'BoardTo', NoOfNights FROM [dbo].[tblPackages] where PackageId = '" + Session["PackageId"] + "'";
                 SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
                 con.Open();
                 SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
@@ -655,7 +661,7 @@ public partial class response : System.Web.UI.Page
 
     private void ReleaseBookingLock()
     {
-        BALBookingLock bl = SessionServices.RetrieveSession<BALBookingLock>("BookingLock", true);
+        BALBookingLock bl = SessionServices.RetrieveSession<BALBookingLock>("BookingLock");
 
         //BALBookingLock bl = Session["BookingLock"] != null ? (BALBookingLock)Session["BookingLock"] : null;
 

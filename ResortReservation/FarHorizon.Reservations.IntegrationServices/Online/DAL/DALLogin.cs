@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 {
@@ -28,27 +29,39 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
+                string query = "select * from tblAgentMaster where AgentEmailId='" + DataSecurityManager.Encrypt(obj.EmailId) + "' and [password]='" + DataSecurityManager.Encrypt(obj.Password) + "'";
 
-                SqlDataAdapter da = new SqlDataAdapter();
-                da.SelectCommand = new SqlCommand("[dbo].[sp_cruiseLogin]", cn);
-                da.SelectCommand.Parameters.Clear();
-                da.SelectCommand.Parameters.AddWithValue("@agentemailid", obj.EmailId);
-                da.SelectCommand.Parameters.AddWithValue("@Password", obj.Password);
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = query;
+                cmd.Connection = cn;
 
-                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                //SqlDataAdapter da = new SqlDataAdapter();
+                //da.SelectCommand = new SqlCommand("[dbo].[sp_cruiseLogin]", cn);
+                //da.SelectCommand.Parameters.Clear();
+                //da.SelectCommand.Parameters.AddWithValue("@agentemailid", DataSecurityManager.Encrypt(obj.EmailId));
+                //da.SelectCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(obj.Password));
+
+                //da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
-                da.SelectCommand.ExecuteReader();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                
+                //da.SelectCommand.ExecuteReader();
                 DataTable dtReturnData = new DataTable();
+                dtReturnData.Load(reader);
+
                 cn.Close();
-                da.Fill(dtReturnData);
+                //da.Fill(dtReturnData);
                 if (dtReturnData != null)
                     return dtReturnData;
                 else
                     return null;
             }
-            catch (Exception)
+            catch (Exception exp)
             {
-                return null;
+                throw exp;
+                //return null;
             }
         }
         #endregion

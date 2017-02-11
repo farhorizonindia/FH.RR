@@ -77,6 +77,7 @@
     <Compile Include="BookingReportServices.cs" />
     <Compile Include="EventEmailServices.cs" />
     <Compile Include="MasterServices.cs" />
+    <Compile Include="Online\BAL\BALAgent.cs" />
     <Compile Include="Online\BAL\BALAgentPayment.cs" />
     <Compile Include="Online\BAL\BALAgentRooms.cs" />
     <Compile Include="Online\BAL\BALBooking.cs" />

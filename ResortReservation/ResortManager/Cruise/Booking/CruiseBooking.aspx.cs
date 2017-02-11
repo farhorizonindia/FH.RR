@@ -966,7 +966,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             DALBookingLock dbl = new DALBookingLock();
             dbl.PlaceLock(bl);
 
-            SessionServices.SaveSession("BookingLock", bl, true);
+            SessionServices.SaveSession<BALBookingLock>("BookingLock", bl);
         }
         catch (Exception exp)
         {

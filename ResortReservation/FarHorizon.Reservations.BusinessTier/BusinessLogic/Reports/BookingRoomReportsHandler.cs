@@ -1,3 +1,4 @@
+using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
 using FarHorizon.Reservations.DataBaseManager;
@@ -113,7 +114,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.Reports
                     {
                         oBRD[i] = new BookingDTMail();
                         oBRD[i].Bookingcode = dsBRD.Tables[0].Rows[i][0].ToString();
-                        oBRD[i].AgentName = dsBRD.Tables[0].Rows[i][1].ToString();
+                        oBRD[i].AgentName = DataSecurityManager.Decrypt(dsBRD.Tables[0].Rows[i][1].ToString());
                         oBRD[i].Accomodation = Convert.ToString(dsBRD.Tables[0].Rows[i][2].ToString());
                         oBRD[i].checkin = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][3].ToString());
                         oBRD[i].checkout = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][4].ToString());
