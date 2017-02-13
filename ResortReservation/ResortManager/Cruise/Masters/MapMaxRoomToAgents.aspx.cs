@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Globalization;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.DataSecurity;
 
 public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
 {
@@ -64,11 +65,13 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
             {
                 foreach (DataRow row in dtGetReturnedData.Rows)
                 {
-                    BALAgent agent = new BALAgent { AgentId = Convert.ToInt32(row["AgentId"].ToString()), AgentName = row["AgentName"].ToString() };
+                    BALAgent agent = new BALAgent { AgentId = Convert.ToInt32(row["AgentId"].ToString()), AgentName = DataSecurityManager.Decrypt(row["AgentName"].ToString()) };
                     agents.Add(agent);
                 }
 
-                ddlAgents.DataSource = agents;
+                List<BALAgent> sortedAgents = agents.OrderBy(a => a.AgentName).ToList();
+
+                ddlAgents.DataSource = sortedAgents;
                 ddlAgents.DataTextField = "AgentName";
                 ddlAgents.DataValueField = "AgentId";
                 ddlAgents.DataBind();
@@ -121,7 +124,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
                     blAr._AccomId = Convert.ToInt32(lbAccomId.Text.ToString());
                     blAr._AgentId = Convert.ToInt32(ddlAgents.SelectedItem.Value);
                     DataTable dtStatus = dlAr.GetExists(blAr);
-                    if (dtStatus.Rows[0]["cnt"].ToString()== "Not Exist")
+                    if (dtStatus.Rows[0]["cnt"].ToString() == "Not Exist")
                     {
                         //insert
                         blAr._AccomId = Convert.ToInt32(lbAccomId.Text.ToString());
@@ -132,7 +135,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
                         else
                             blAr._maxRooms = 0;
 
-                     
+
                         blAr._Date = Convert.ToDateTime(txtCalender.Text.Trim());
                         if (txtMaxRooms.Text != "")
                         {
@@ -167,7 +170,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
                         string dateTime = DateTime.Now.ToString();
                         string createddate = Convert.ToDateTime(dateTime).ToString("yyyy-MM-dd");
                         DateTime dt = DateTime.ParseExact(createddate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                       //blAr._Date = dt;
+                        //blAr._Date = dt;
                         if (txtMaxRooms.Text != "")
                         {
                             getQueryResponse = dlAr.UpdateRooms(blAr);
@@ -262,11 +265,11 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
 
     protected void txtCalender_TextChanged(object sender, EventArgs e)
     {
-       
+
     }
     protected void txtCalender_TextChanged1(object sender, EventArgs e)
     {
-        
+
     }
     protected void txtCalenderto_TextChanged(object sender, EventArgs e)
     {
@@ -309,7 +312,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
 
             DataTable dtnew = ViewState["MaxRooms"] as DataTable;
             DataView dv = new DataView(dtnew);
-            if (txtCalender.Text != "" && txtCalenderto.Text != ""&&ddlAgents.SelectedIndex>0)
+            if (txtCalender.Text != "" && txtCalenderto.Text != "" && ddlAgents.SelectedIndex > 0)
             {
                 if (Convert.ToDateTime(txtCalenderto.Text) >= Convert.ToDateTime(txtCalender.Text))
                 {
@@ -327,7 +330,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
                 gdvMaxBookableDetails.DataBind();
             }
 
-            
+
 
         }
         catch (Exception sqe)
@@ -339,7 +342,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
     {
         try
         {
-            int Id =Convert.ToInt32( gdvMaxBookableDetails.DataKeys[e.RowIndex].Value);
+            int Id = Convert.ToInt32(gdvMaxBookableDetails.DataKeys[e.RowIndex].Value);
             blAr._id = Id;
             blAr._Action = "DeleteBookableInfo";
 
@@ -353,11 +356,7 @@ public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Record could not be  Deleted')", true);
             }
-
-
-
         }
-
         catch
         {
         }

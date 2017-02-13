@@ -190,7 +190,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 else
                     return null;
             }
-            catch (Exception)
+            catch (Exception exp)
             {
                 return null;
             }

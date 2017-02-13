@@ -6,6 +6,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.Common;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 {
@@ -182,8 +184,9 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-        public DataTable BindControlsAgentmarket(BALLinks obj)
+        public List<AgentMarket> BindControlsAgentmarket(BALLinks obj)
         {
+            List<AgentMarket> agentMarkets = new List<AgentMarket>();
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
@@ -200,20 +203,25 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 cn.Close();
                 da.Fill(dtReturnData);
                 if (dtReturnData != null)
-                    return dtReturnData;
-                else
-                    return null;
+                {
+                    foreach (DataRow row in dtReturnData.Rows)
+                    {
+                        AgentMarket am = new AgentMarket
+                        {
+                            AgentId = Convert.ToInt32(row[0].ToString()),
+                            AgentName = DataSecurityManager.Decrypt(row[1].ToString()),
+                            cnt = Convert.ToBoolean(row[2].ToString())
+                        };
+                        agentMarkets.Add(am);
+                    }
+                }
+                return agentMarkets;
             }
             catch (Exception)
             {
                 return null;
             }
         }
-
-
-
-
-
 
         public int RemoveMappedRelation(BALLinks obj)
         {

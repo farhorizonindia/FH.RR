@@ -194,7 +194,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
         public DataTable getallRoomImages(BALAgentRooms obj)
         {
             try
@@ -221,9 +220,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
-
-
-
 
         public DataTable getImageById(BALAgentRooms obj)
         {
@@ -253,7 +249,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
         public int UpdateRoomImages(BALAgentRooms obj)
         {
             try
@@ -282,7 +277,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
         public int DeleteRoomImages(BALAgentRooms obj)
         {
             try
@@ -306,13 +300,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return 0;
             }
         }
-
-
-
-
-
-
-
 
         public DataTable GetBookableRoomDetails(BALAgentRooms obj)
         {
@@ -340,7 +327,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
-
 
         public int DeletebookableInfo(BALAgentRooms obj)
         {

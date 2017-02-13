@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using FarHorizon.Reservations.Bases.BasePages;
+﻿using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.Reservations.Common;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Web.UI.WebControls;
 
 public partial class Rate_MapAgentstoMarket : MasterBasePage
 {
@@ -55,12 +53,12 @@ public partial class Rate_MapAgentstoMarket : MasterBasePage
         #region BindCategotyGrid
         blLinks._Action = "GetAllAgentMarket";
         blLinks._MarketId = ddlMarket.SelectedItem.Value;
-        dtGetReturnedData = dlLinks.BindControlsAgentmarket(blLinks);
-        if (dtGetReturnedData != null)
-        {
-            gridAgents.DataSource = dtGetReturnedData;
-            gridAgents.DataBind();
+        List<AgentMarket> agentMarkets = dlLinks.BindControlsAgentmarket(blLinks);
 
+        if (agentMarkets != null)
+        {            
+            gridAgents.DataSource = agentMarkets;
+            gridAgents.DataBind();
         }
         else
         {
@@ -81,8 +79,8 @@ public partial class Rate_MapAgentstoMarket : MasterBasePage
     {
         gridAgents.PageIndex = e.NewPageIndex;
         BindAllagentmarket();
-
     }
+
     protected void cbStatus_CheckedChanged(object sender, EventArgs e)
     {
         try

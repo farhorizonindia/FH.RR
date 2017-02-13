@@ -118,6 +118,7 @@
     <Compile Include="ENums.cs" />
     <Compile Include="GenericComparer.cs" />
     <Compile Include="GF.cs" />
+    <Compile Include="Models\AgentMarket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

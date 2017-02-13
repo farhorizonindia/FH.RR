@@ -365,14 +365,12 @@
                                         <td>Check in
                         <asp:TextBox ID="txtChkin" runat="server" FontSize="17"></asp:TextBox>
                                             <%--<input type="button" id="btnStartDate" name="btnStartDate" onfocus="return setupCalendar('txtChkin', 'btnStartDate')"
-                            onclick="return setupCalendar('txtChkin', 'btnStartDate')" value="..."  style="background: url('../../images/calender.png') no-repeat; Background-size: 100%;width:30px;height:30px;color:white" />
-                                            --%>
+                                                onclick="return setupCalendar('txtChkin', 'btnStartDate')" value="..." style="background: url('../../images/calender.png') no-repeat; background-size: 100%; width: 30px; height: 30px; color: white" />--%>
                                         </td>
                                         <td class="auto-style1">Check out
                         <asp:TextBox ID="txtChkOut" runat="server"></asp:TextBox>
                                             <%--<input type="button" id="btnEndDate" name="btnEndDate" onclick="return setupCalendar('txtChkOut', 'btnEndDate')"
-                            onfocus="return setupCalendar('txtChkOut','btnEndDate')" value="..." style="background: url('../../images/calender.png') no-repeat; Background-size: 100%;width:30px;height:30px;color:white"  />
-                                            --%>
+                                                onfocus="return setupCalendar('txtChkOut','btnEndDate')" value="..." style="background: url('../../images/calender.png') no-repeat; background-size: 100%; width: 30px; height: 30px; color: white" />--%>
                                         </td>
                                         <td>No of Rooms :<asp:DropDownList ID="ddlNoofrooms" runat="server" OnSelectedIndexChanged="ddlNoofrooms_SelectedIndexChanged" Width="95%" AutoPostBack="True">
                                             <asp:ListItem Value="0">-Select-</asp:ListItem>

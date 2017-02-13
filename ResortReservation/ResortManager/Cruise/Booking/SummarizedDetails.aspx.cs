@@ -537,7 +537,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     Session["BookingPayId"] = BookingPayId;
                     Session.Add("BookingRef", txtBookRef.Text.Trim().ToString());
                     Session["Paid"] = Convert.ToDouble(hftxtpaidamt.Value.Trim() == "" ? "0" : hftxtpaidamt.Value.Trim());
-                    Session["InvName"] = Session["UserName"].ToString();
+                    Session["InvName"] = DataSecurityManager.Decrypt(Session["UserName"].ToString());
                     Session["Address"] = null;
                     Response.Redirect("PaymentGatewayResponse.aspx");
                 }
@@ -929,9 +929,14 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 return -1;
             }
             int bookingId = dlsr.AddParentBookingDetail(blsr);
-            blsr._iBookingId = bookingId;
 
-            //Session["tblBookingBAL"] = blsr;
+            //var bookingDetails = dlsr.GetBookingDetails(bookingId);
+            //if (bookingDetails != null)
+            //{
+            //    blsr.BookingCode = bookingDetails.BookingCode;
+            //}
+            blsr._iBookingId = bookingId;            
+                        
             SessionServices.SaveSession<BALBooking>("tblBookingBAL", blsr);
             return bookingId;
         }
