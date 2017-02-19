@@ -119,6 +119,7 @@
     <Compile Include="GenericComparer.cs" />
     <Compile Include="GF.cs" />
     <Compile Include="Models\AgentMarket.cs" />
+    <Compile Include="Models\CruiseLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

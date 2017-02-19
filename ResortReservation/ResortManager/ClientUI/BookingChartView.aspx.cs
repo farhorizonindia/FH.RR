@@ -2,12 +2,14 @@ using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
+using FarHorizon.Reservations.Common.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -821,68 +823,33 @@ public partial class _Default : ClientBasePage
         thc.Visible = false;
         thc.Attributes.Add("class", "dayheader");
         thr.Cells.Add(thc);
-        #endregion FixedColumnHeaders
+        #endregion FixedColumnHeaders  
 
-        DataTable dtReturnData = new DataTable();
-        string strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
-        SqlConnection cn = new SqlConnection(strCon);
-        SqlDataAdapter da = new SqlDataAdapter();
+        List<CruiseLocation> cruiseLocations = null;
+        int accomId = tvRegions.SelectedNode != null ? Convert.ToInt32(tvRegions.SelectedNode.Value) : 0;
+        if (accomId == 7)
+        {
+            cruiseLocations = GetCruiseLocations(accomId, StartDate, StartDate.AddDays(TotalDaysInChart));
+        }
+
         for (int i = 0; i < TotalDaysInChart; i++)
         {
-
-            try
-            {
-                TreeNode tn = tvRegions.SelectedNode;
-                if (tn != null)
-                {
-
-                    dtReturnData = new DataTable();
-                    if (tvRegions.SelectedNode.Value == "7")
-                    {
-                        da.SelectCommand = new SqlCommand("select (select LocationName from dbo.Locations where LocationId=BordingFrom),(select LocationName from dbo.Locations where LocationId=BoadingTo) from dbo.tblPackages tp   where PackageId=(select packageId from dbo.tblCruiseOpenDates where Convert(nvarchar(27),CheckInDate,106) =Convert(nvarchar(27),@CheckinDate,106))", cn);
-                        da.SelectCommand.Parameters.Clear();
-                        da.SelectCommand.Parameters.AddWithValue("@CheckinDate", StartDate);
-
-
-                        da.SelectCommand.CommandType = CommandType.Text;
-                        cn.Open();
-                        da.SelectCommand.ExecuteReader();
-
-                        cn.Close();
-                        da.Fill(dtReturnData);
-                    }
-
-                }
-            }
-            catch
-            {
-            }
-
             ColumnCaption = StartDate.DayOfWeek.ToString().Substring(0, 2);
-
-
             ColumnCaption += Environment.NewLine;
             if (StartDate.Day.ToString().Trim().Length == 1)
                 ColumnCaption += "0" + StartDate.Day.ToString();
             else
                 ColumnCaption += StartDate.Day.ToString();
 
-            try
+            if (accomId == 7)
             {
-                if (dtReturnData != null)
+                var cruiseLocation = cruiseLocations.FirstOrDefault(cl => cl.CheckInDate == StartDate.Date);
+                if (cruiseLocation != null)
                 {
-                    if (dtReturnData.Rows.Count > 0)
-                    {
-                        ColumnCaption += Environment.NewLine;
-                        ColumnCaption += dtReturnData.Rows[0][0].ToString();
-                    }
+                    ColumnCaption += Environment.NewLine;
+                    ColumnCaption += cruiseLocation.StartLocation;
                 }
-            }
-            catch
-            {
-
-            }
-
+            }           
 
             thc = new TableCell();
             thc.Text = ColumnCaption;
@@ -903,6 +870,58 @@ public partial class _Default : ClientBasePage
         }
         return thr;
     }
+
+    private List<CruiseLocation> GetCruiseLocations(int accomId, DateTime startDate, DateTime endDate)
+    {
+        DataTable dtReturnData;
+        string strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
+        SqlConnection cn = new SqlConnection(strCon);
+        SqlDataAdapter da = new SqlDataAdapter();
+
+        string query = "select CheckInDate, cod.PackageId, " +
+                " (select LocationName from dbo.Locations where LocationId = p.BordingFrom) as StartLocation, " +
+                    " (select LocationName from dbo.Locations where LocationId = p.BoadingTo) as EndLocation " +
+                        " from tblCruiseOpenDates cod join tblPackages p on cod.Packageid = p.PackageId " +
+                        " where CheckInDate between Convert(nvarchar(27), @startDate,106) and Convert(nvarchar(27), @endDate,106)";
+                
+        List<CruiseLocation> cruiseLocations = new List<CruiseLocation>();
+
+        try
+        {
+            dtReturnData = new DataTable();
+            da.SelectCommand = new SqlCommand(query, cn);
+            da.SelectCommand.Parameters.Clear();
+            da.SelectCommand.Parameters.AddWithValue("@startDate", startDate);
+            da.SelectCommand.Parameters.AddWithValue("@endDate", endDate);
+
+            da.SelectCommand.CommandType = CommandType.Text;
+            cn.Open();
+            da.SelectCommand.ExecuteReader();
+
+            cn.Close();
+            da.Fill(dtReturnData);
+
+            if (dtReturnData != null && dtReturnData.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtReturnData.Rows)
+                {
+                    CruiseLocation cruiseLocation = new CruiseLocation
+                    {
+                        CheckInDate = Convert.ToDateTime(row[0]),
+                        PackageId = Convert.ToString(row[1]),
+                        StartLocation = Convert.ToString(row[2]),
+                        EndLocation = Convert.ToString(row[3])
+                    };
+                    cruiseLocations.Add(cruiseLocation);
+                }
+            }
+        }
+        catch
+        {
+
+        }
+        return cruiseLocations;
+    }    
 
     private TableRow GenerateHeaderMonthData(TableRow thr)
     {
