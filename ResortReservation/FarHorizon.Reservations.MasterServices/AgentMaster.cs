@@ -5,11 +5,11 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using FarHorizon.Reservations.Common;
-
-
 using FarHorizon.Reservations.DataBaseManager;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.DataSecurity;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FarHorizon.Reservations.MasterServices
 {
@@ -108,7 +108,7 @@ namespace FarHorizon.Reservations.MasterServices
 
         public AgentDTO[] GetData(int AgentId)
         {
-            AgentDTO[] oAgentData = null;
+            List<AgentDTO> oAgentDataList = null;
             DataSet ds;
 
             string query = "select AgentId, AgentCode, AgentName, AgentEmailId,Password from tblAgentMaster where 1=1 ";
@@ -121,20 +121,28 @@ namespace FarHorizon.Reservations.MasterServices
             ds = GetDataFromDB(query);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                oAgentData = new AgentDTO[ds.Tables[0].Rows.Count];
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    oAgentData[i] = new AgentDTO();
-                    oAgentData[i].AgentId = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
-                    oAgentData[i].AgentCode = Convert.ToString(ds.Tables[0].Rows[i][1]);
-                    oAgentData[i].AgentName = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][2]));
-                    oAgentData[i].EmailId = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][3]));
-                    oAgentData[i].Password = DataSecurityManager.Decrypt(Convert.ToString(ds.Tables[0].Rows[i][4]));
-                }
-            }
+                List<Action> actions = new List<Action>();
+                oAgentDataList = new List<AgentDTO>();
 
-            AgentDTO[] orderedData = oAgentData.OrderBy(a => a.AgentName).ToArray();
-            return orderedData;
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    AgentDTO oAgentData = new AgentDTO();
+                    oAgentData.AgentId = Convert.ToInt32(row[0]);
+                    oAgentData.AgentCode = Convert.ToString(row[1]);
+
+                    actions.Add(new Action(() => oAgentData.AgentName = DataSecurityManager.Decrypt(Convert.ToString(row[2]))));
+                    actions.Add(new Action(() => oAgentData.EmailId = DataSecurityManager.Decrypt(Convert.ToString(row[3]))));
+                    actions.Add(new Action(() => oAgentData.Password = DataSecurityManager.Decrypt(Convert.ToString(row[4]))));
+
+                    oAgentDataList.Add(oAgentData);
+                }
+
+                ParallelOptions po = new ParallelOptions();
+                po.MaxDegreeOfParallelism = 100;
+
+                Parallel.Invoke(po, actions.ToArray());                
+            }
+            return oAgentDataList.OrderBy(a => a.AgentName).ToArray();            
         }
 
         private DataSet GetDataFromDB(string Query)

@@ -8,6 +8,7 @@ using System.Configuration;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.Common;
 using FarHorizon.DataSecurity;
+using System.Threading.Tasks;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 {
@@ -204,16 +205,22 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.Fill(dtReturnData);
                 if (dtReturnData != null)
                 {
+                    List<Action> actions = new List<Action>();
                     foreach (DataRow row in dtReturnData.Rows)
                     {
                         AgentMarket am = new AgentMarket
                         {
                             AgentId = Convert.ToInt32(row[0].ToString()),
-                            AgentName = DataSecurityManager.Decrypt(row[1].ToString()),
+                            //AgentName = DataSecurityManager.Decrypt(row[1].ToString()),
                             cnt = Convert.ToBoolean(row[2].ToString())
                         };
+                        actions.Add(new Action(() => am.AgentName = DataSecurityManager.Decrypt(Convert.ToString(row[1]))));
                         agentMarkets.Add(am);
                     }
+                    ParallelOptions po = new ParallelOptions();
+                    po.MaxDegreeOfParallelism = 100;
+
+                    Parallel.Invoke(po, actions.ToArray());
                 }
                 return agentMarkets;
             }

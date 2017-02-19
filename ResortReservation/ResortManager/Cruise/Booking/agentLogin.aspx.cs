@@ -7,12 +7,12 @@ using System.Web.UI.WebControls;
 using System.Data;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.Reservations.Common;
+using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 public partial class Cruise_booking_agentLogin : System.Web.UI.Page
 {
-
-    BALLogin bllog = new BALLogin();
-    DALLogin dllog = new DALLogin();
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -20,29 +20,31 @@ public partial class Cruise_booking_agentLogin : System.Web.UI.Page
 
     protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
     {
+        BALLogin bllog = new BALLogin();
+        DALLogin dllog = new DALLogin();
+
         try
         {
             if (Login1.UserName.Trim().ToString() == "" || Login1.Password.Trim().ToString() == "")
-            e.Authenticated = false;
+                e.Authenticated = false;
+
             bllog.EmailId = Login1.UserName.Trim().ToString();
-            bllog.Password = Login1.Password.Trim().ToString();
-            DataTable dt = dllog.AgentLogin(bllog);
-            if (dt != null && dt.Rows.Count > 0)
+            bllog.Password = Login1.Password.Trim().ToString();                       
+
+            AgentDTO agent = dllog.AgentLogin(bllog);
+            if (agent != null)
             {
-                Session.Add("UserName", dt.Rows[0]["AgentName"].ToString());
-                Session.Add("UserCode", dt.Rows[0]["AgentId"].ToString());
+                Session.Add("UserName", agent.AgentName);
+                Session.Add("UserCode", agent.AgentId);
                 Session.Add("AgentMailId", Login1.UserName.Trim().ToString());
                 Session.Add("Password", Login1.Password.Trim().ToString());
-          Response.Redirect("SearchProperty.aspx?Aid=" + dt.Rows[0]["AgentId"].ToString() + " ");
-            }
-            else
-            {
-
-
+                Response.Redirect("SearchProperty.aspx?Aid=" + agent.AgentId.ToString() + " ");
             }
         }
-        catch
+        catch (Exception exp)
         {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + exp.Message + "')", true);            
+            throw exp;            
         }
     }
 

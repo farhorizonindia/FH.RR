@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
+using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
-using FarHorizon.Reservations.BusinessServices.Online.BAL;
-using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 {
-
     /// <summary>
     /// Summary description for DALLogin
     /// </summary>
@@ -24,44 +21,42 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 
         #region Login
 
-        public DataTable AgentLogin(BALLogin obj)
+        public AgentDTO AgentLogin(BALLogin obj)
         {
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
-                string query = "select * from tblAgentMaster where AgentEmailId='" + DataSecurityManager.Encrypt(obj.EmailId) + "' and [password]='" + DataSecurityManager.Encrypt(obj.Password) + "'";
-
+                string query = "select AgentId, AgentCode, AgentName, AgentEmailId, Password from tblAgentMaster where AgentEmailId='" + DataSecurityManager.Encrypt(obj.EmailId) + "' and [password]='" + DataSecurityManager.Encrypt(obj.Password) + "'";
+                                
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = query;
                 cmd.Connection = cn;
-
-                //SqlDataAdapter da = new SqlDataAdapter();
-                //da.SelectCommand = new SqlCommand("[dbo].[sp_cruiseLogin]", cn);
-                //da.SelectCommand.Parameters.Clear();
-                //da.SelectCommand.Parameters.AddWithValue("@agentemailid", DataSecurityManager.Encrypt(obj.EmailId));
-                //da.SelectCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(obj.Password));
-
-                //da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
 
+                AgentDTO agent = null;
                 SqlDataReader reader = cmd.ExecuteReader();
-                
-                //da.SelectCommand.ExecuteReader();
-                DataTable dtReturnData = new DataTable();
-                dtReturnData.Load(reader);
 
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    agent = new AgentDTO();
+                    agent.AgentId = dt.Rows[0]["AgentId"] != null ? Convert.ToInt32(dt.Rows[0]["AgentId"]) : -1;
+                    agent.AgentCode = dt.Rows[0]["AgentCode"] != null ? dt.Rows[0]["AgentCode"].ToString() : string.Empty;
+                    agent.AgentName = dt.Rows[0]["AgentName"] != null ? DataSecurityManager.Decrypt(dt.Rows[0]["AgentName"].ToString()) : string.Empty;
+                    agent.EmailId = dt.Rows[0]["AgentEmailId"] != null ? DataSecurityManager.Decrypt(dt.Rows[0]["AgentEmailId"].ToString()) : string.Empty;
+                    agent.Password = dt.Rows[0]["Password"] != null ? DataSecurityManager.Decrypt(dt.Rows[0]["Password"].ToString()) : string.Empty;
+                }
+                reader.Close();               
                 cn.Close();
-                //da.Fill(dtReturnData);
-                if (dtReturnData != null)
-                    return dtReturnData;
-                else
-                    return null;
+
+                return agent;
             }
             catch (Exception exp)
             {
-                throw exp;
-                //return null;
+                throw exp;                
             }
         }
         #endregion

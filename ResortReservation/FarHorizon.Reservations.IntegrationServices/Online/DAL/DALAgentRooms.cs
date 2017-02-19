@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Globalization;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 {
@@ -317,8 +318,14 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 DataTable dtReturnData = new DataTable();
                 cn.Close();
                 da.Fill(dtReturnData);
-                if (dtReturnData != null)
+                if (dtReturnData != null && dtReturnData.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtReturnData.Rows)
+                    {
+                        row["AgentName"] = DataSecurityManager.Decrypt(row["AgentName"].ToString());
+                    }
                     return dtReturnData;
+                }
                 else
                     return null;
             }

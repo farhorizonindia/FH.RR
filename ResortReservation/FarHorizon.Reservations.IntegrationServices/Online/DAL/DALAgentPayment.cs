@@ -1,4 +1,5 @@
-﻿using FarHorizon.Reservations.BusinessServices.Online.BAL;
+﻿using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using System;
 using System.Configuration;
 using System.Data;
@@ -31,7 +32,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.SelectCommand.ExecuteReader();
                 DataTable dtReturnData = new DataTable();
                 cn.Close();
-                da.Fill(dtReturnData);
+                da.Fill(dtReturnData);                
+
                 if (dtReturnData != null)
                     return dtReturnData;
                 else
@@ -185,6 +187,16 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 DataTable dtReturnData = new DataTable();
                 cn.Close();
                 da.Fill(dtReturnData);
+
+                if (dtReturnData != null && dtReturnData.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtReturnData.Rows)
+                    {
+                        row["AgentName"] = DataSecurityManager.Decrypt(row["AgentName"].ToString());
+                        row["AgentEmailId"] = DataSecurityManager.Decrypt(row["AgentEmailId"].ToString());
+                    }
+                }
+
                 if (dtReturnData != null)
                     return dtReturnData;
                 else

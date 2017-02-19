@@ -3,6 +3,7 @@ using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Web.UI.WebControls;
@@ -54,10 +55,11 @@ public partial class Rate_MapAgentstoMarket : MasterBasePage
         blLinks._Action = "GetAllAgentMarket";
         blLinks._MarketId = ddlMarket.SelectedItem.Value;
         List<AgentMarket> agentMarkets = dlLinks.BindControlsAgentmarket(blLinks);
-
+        
         if (agentMarkets != null)
-        {            
-            gridAgents.DataSource = agentMarkets;
+        {
+            List<AgentMarket> sortedData = agentMarkets.OrderBy(a => a.AgentName).ToList();
+            gridAgents.DataSource = sortedData;
             gridAgents.DataBind();
         }
         else
