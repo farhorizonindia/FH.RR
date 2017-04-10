@@ -147,6 +147,91 @@ namespace WindowsFormsApplication1
             }
         }
 
+        internal void DecryptData(List<ParentItem> items)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            List<string> updateQueryCollection = new List<string>();
+            string updateQuery = string.Empty;
+
+            List<string> columnNames = new List<string>();
+            foreach (var parentItem in items)
+            {
+                string tableName = parentItem.ItemName;
+                foreach (var childItem in parentItem.Children)
+                {
+                    string columnName = childItem.ItemName;
+                    //if (childItem.Selected)
+                    //{
+                    //    ChangeColumnLength(tableName, columnName);
+                    //}
+                    columnNames.Add(columnName);
+                }
+                string query = "select " + string.Join(", ", columnNames) + " from " + tableName;
+
+                List<ColumnDetail> columnDetails = new List<ColumnDetail>();
+
+                var reader = GetData(query);
+                while (reader.Read())
+                {
+                    columnDetails.Clear();
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        ColumnDetail cd = new ColumnDetail();
+                        cd.ColumnName = reader.GetName(i);
+                        cd.ColumnType = reader.GetFieldType(i);
+                        cd.Value = reader.GetValue(i);
+                        columnDetails.Add(cd);
+                    }
+
+                    #region Prepare the update part of the query
+                    updateQuery = "update " + tableName + " set ";
+                    foreach (var columnToBeEncrypted in parentItem.Children.Where(c => c.Selected))
+                    {
+                        ColumnDetail cd = columnDetails.FirstOrDefault(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) == 0);
+                        updateQuery += columnToBeEncrypted.ItemName + " = '" +  DataSecurityManager.Decrypt(cd.Value.ToString()).Replace("'", "''") + "', ";
+                    }
+
+                    if (updateQuery.Trim().EndsWith(","))
+                    {
+                        updateQuery = updateQuery.Trim().Substring(0, updateQuery.Trim().Length - 1);
+                    }
+                    #endregion
+
+
+                    #region Prepare The Where Clause
+                    updateQuery += " where 1 = 1 ";
+                    foreach (var columnToBeEncrypted in parentItem.Children.Where(c => c.Selected))
+                    {
+                        var otherColumn = columnDetails.FirstOrDefault(c => string.Compare(c.ColumnName, columnToBeEncrypted.ItemName, true) == 0);
+
+                        if (otherColumn == null)
+                            continue;
+
+                        string value = otherColumn.Value == DBNull.Value ? "NULL" : otherColumn.Value.ToString();
+                        //Console.WriteLine(otherColumn.Value.ToString());
+
+                        updateQuery += " and " + otherColumn.ColumnName + DecorateForSQlQuery(otherColumn.ColumnType, value);
+                    }
+                    #endregion
+
+                    updateQuery += ";";
+
+                    updateQueryCollection.Add(updateQuery);
+                    sb.AppendLine(updateQuery);
+                }
+                reader.Close();
+            }
+
+            string qc = sb.ToString();
+
+            foreach (var q in updateQueryCollection)
+            {
+                ExecuteNonQuery(q);
+            }
+        }
+
         private void ChangeColumnLength(string tableName, string columnName)
         {
             string query = "SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "' AND COLUMN_NAME = '" + columnName + "'";
@@ -237,6 +322,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception exp)
             {
+                string q = query;
                 throw exp;
             }
         }

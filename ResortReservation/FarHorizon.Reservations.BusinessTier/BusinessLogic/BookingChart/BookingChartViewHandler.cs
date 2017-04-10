@@ -318,7 +318,9 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingChart
                         else
                             dateWiseBookingDTO.BookingStatusId = 0;
                         if (dr.ItemArray.GetValue(9) != null && dr.ItemArray.GetValue(9) != DBNull.Value)
-                            dateWiseBookingDTO.AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(9)));
+                            dateWiseBookingDTO.AgentName = Convert.ToString(dr.ItemArray.GetValue(9));
+                            //dateWiseBookingDTO.AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(9)));
+
                         if (dr.ItemArray.GetValue(10) != null && dr.ItemArray.GetValue(10) != DBNull.Value)
                             dateWiseBookingDTO.BookingReference = Convert.ToString(dr.ItemArray.GetValue(10));
                         if (dr.ItemArray.GetValue(11) != null && dr.ItemArray.GetValue(11) != DBNull.Value)

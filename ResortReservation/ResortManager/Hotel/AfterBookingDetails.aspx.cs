@@ -822,6 +822,10 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         {
             Int32.TryParse(Session["AId"].ToString(), out iagentid);
         }
+        if (iagentid == 0)
+        {
+            iagentid = 248;
+        }
         Int32.TryParse(Session["AccomId"].ToString(), out iAccomId);
         Int32.TryParse(Session["iAccomtypeId"].ToString(), out iaccomtypeid);
 

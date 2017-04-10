@@ -27,7 +27,8 @@ namespace FarHorizon.Reservations.MasterServices
                 string sProcName = "up_Ins_AgentMaster";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentCode", DbType.String, oAgentData.AgentCode);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                //oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, oAgentData.AgentName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, DataSecurityManager.Encrypt(oAgentData.EmailId));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oAgentData.Password));
 
@@ -57,7 +58,8 @@ namespace FarHorizon.Reservations.MasterServices
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentId", DbType.Int32, oAgentData.AgentId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentCode", DbType.String, oAgentData.AgentCode);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                //oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, DataSecurityManager.Encrypt(oAgentData.AgentName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAgentName", DbType.String, oAgentData.AgentName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentEmailId", DbType.String, DataSecurityManager.Encrypt(oAgentData.EmailId));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Password", DbType.String, DataSecurityManager.Encrypt(oAgentData.Password));
                 oDB.ExecuteNonQuery(oDB.DbCmd);
@@ -111,7 +113,8 @@ namespace FarHorizon.Reservations.MasterServices
             List<AgentDTO> oAgentDataList = null;
             DataSet ds;
 
-            string query = "select AgentId, AgentCode, AgentName, AgentEmailId,Password from tblAgentMaster where 1=1 ";
+            //string query = "select AgentId, AgentCode, AgentName, AgentEmailId,Password from tblAgentMaster where 1=1 ";
+            string query = "select AgentId, AgentName from tblAgentMaster where 1=1 ";
             if (AgentId != 0)
             {
                 query += " and AgentId=" + AgentId;
@@ -128,19 +131,20 @@ namespace FarHorizon.Reservations.MasterServices
                 {
                     AgentDTO oAgentData = new AgentDTO();
                     oAgentData.AgentId = Convert.ToInt32(row[0]);
-                    oAgentData.AgentCode = Convert.ToString(row[1]);
-
-                    actions.Add(new Action(() => oAgentData.AgentName = DataSecurityManager.Decrypt(Convert.ToString(row[2]))));
-                    actions.Add(new Action(() => oAgentData.EmailId = DataSecurityManager.Decrypt(Convert.ToString(row[3]))));
-                    actions.Add(new Action(() => oAgentData.Password = DataSecurityManager.Decrypt(Convert.ToString(row[4]))));
+                    //actions.Add(new Action(() => oAgentData.AgentName = DataSecurityManager.Decrypt(Convert.ToString(row[1]))));
+                    oAgentData.AgentName = Convert.ToString(row[1]);
+                    //oAgentData.AgentCode = Convert.ToString(row[1]);
+                    //actions.Add(new Action(() => oAgentData.AgentName = DataSecurityManager.Decrypt(Convert.ToString(row[2]))));
+                    //actions.Add(new Action(() => oAgentData.EmailId = DataSecurityManager.Decrypt(Convert.ToString(row[3]))));
+                    //actions.Add(new Action(() => oAgentData.Password = DataSecurityManager.Decrypt(Convert.ToString(row[4]))));
 
                     oAgentDataList.Add(oAgentData);
                 }
 
-                ParallelOptions po = new ParallelOptions();
-                po.MaxDegreeOfParallelism = 100;
+                //ParallelOptions po = new ParallelOptions();
+                //po.MaxDegreeOfParallelism = 100;
 
-                Parallel.Invoke(po, actions.ToArray());                
+                //Parallel.Invoke(po, actions.ToArray());                
             }
             return oAgentDataList.OrderBy(a => a.AgentName).ToArray();            
         }

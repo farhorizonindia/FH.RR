@@ -213,7 +213,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         oBookingTouristDTO[i].RoomDetails = dr.ItemArray.GetValue(22) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(22)) : "";
                         //oBookingTouristDTO[i].NextDestination = dr.ItemArray.GetValue(23) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(23)):"";
                         //oBookingTouristDTO[i].DepartureDateTime = dr.ItemArray.GetValue(24) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(24)):DateTime.MinValue;
-                        oBookingTouristDTO[i].EmployedinIndia = dr.ItemArray.GetValue(25) != DBNull.Value ? Convert.ToBoolean(dr.ItemArray.GetValue(25)) : false;
+                        oBookingTouristDTO[i].EmployedinIndia = dr.ItemArray.GetValue(25) != DBNull.Value ? Convert.ToBoolean(Convert.ToInt32(dr.ItemArray.GetValue(25))) : false;
                         oBookingTouristDTO[i].VisitPurpose = dr.ItemArray.GetValue(26) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(26)) : "";
                         oBookingTouristDTO[i].PermanentAddressInIndia = dr.ItemArray.GetValue(27) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(27)) : "";
                         //oBookingTouristDTO[i].MealPlan = dr.ItemArray.GetValue(28) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(28)):"";

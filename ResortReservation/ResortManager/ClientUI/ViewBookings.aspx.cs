@@ -345,6 +345,7 @@ public partial class ViewBookings : ClientBasePage
     {
         AgentMaster oAgentMaster = new AgentMaster();
         AgentDTO[] oAgentData = oAgentMaster.GetData();
+
         ListItemCollection li = new ListItemCollection();
         ListItem l = new ListItem("Choose Agent", "0");
         ddlAgent.Items.Insert(0, l);

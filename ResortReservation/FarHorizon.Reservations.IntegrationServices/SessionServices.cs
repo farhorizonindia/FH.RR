@@ -3,18 +3,16 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.SessionManager;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 
 namespace FarHorizon.Reservations.BusinessServices
 {
     public static class SessionServices
     {
-        public static string LoginId_Key
-        {
-            get { return SessionHelper.LoginId_Key; }
-        }
+        //public static string LoginId_Key
+        //{
+        //    get { return SessionHelper.LoginId_Key; }
+        //}
 
         public static int LoginId
         {
@@ -35,11 +33,11 @@ namespace FarHorizon.Reservations.BusinessServices
             get { return SessionHelper.BookingChart_TreeType; }
             set { SessionHelper.BookingChart_TreeType = value; }
         }
-        public static string BookingChart_TreeArrangeBy
-        {
-            get { return SessionHelper.BookingChart_TreeArrangeBy; }
-            set { SessionHelper.BookingChart_TreeArrangeBy = value; }
-        }
+        //public static string BookingChart_TreeArrangeBy
+        //{
+        //    get { return SessionHelper.BookingChart_TreeArrangeBy; }
+        //    set { SessionHelper.BookingChart_TreeArrangeBy = value; }
+        //}
         public static int BookingChart_RegionId
         {
             get { return SessionHelper.BookingChart_RegionId; }
@@ -105,11 +103,11 @@ namespace FarHorizon.Reservations.BusinessServices
 
         #region Booking ChangeRoomPax
         #region Booking Session Properties
-        public static SortedList BookingChangeRoomPax_DdlSelectedIndexes
-        {
-            get { return SessionHelper.BookingChangeRoomPax_DdlSelectedIndexes; }
-            //set { SessionHelper.BookingChangeRoomPax_DdlSelectedIndexes = value; }
-        }
+        //public static SortedList BookingChangeRoomPax_DdlSelectedIndexes
+        //{
+        //    get { return SessionHelper.BookingChangeRoomPax_DdlSelectedIndexes; }
+        //    //set { SessionHelper.BookingChangeRoomPax_DdlSelectedIndexes = value; }
+        //}
         #endregion
         #endregion
 
@@ -309,7 +307,6 @@ namespace FarHorizon.Reservations.BusinessServices
             //}
             //SessionHelper.SaveSession(key, value);
         }
-
 
         public static T RetrieveSession<T>(string key) where T : class
         {
