@@ -19,6 +19,8 @@ public partial class Rate_NewRateCard : MasterBasePage
     DataTable dtGetReturnedData;
     int getQueryResponse = 0;
     DataView dv;
+    BALLinks blLinks = new BALLinks();
+    DALLinks dlLinks = new DALLinks();
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -30,12 +32,38 @@ public partial class Rate_NewRateCard : MasterBasePage
             this.BindRateCategorise();
             this.BindRoomCategories();
             this.BindRoomTypeGrids();
+            this.BindAgentDD();
             SetInitialRow();
             //   this.BindRoomServiceGrids();
         }
     }
 
+    private void BindAgentDD()
+    {
 
+        #region Bind Agent DD
+        blLinks._Action = "GetAllGetAllAgents";
+        dtGetReturnedData = dlLinks.BindControlsAgent(blLinks);
+        if (dtGetReturnedData != null)
+        {
+            ddlagent.Items.Clear();
+            ddlagent.DataSource = dtGetReturnedData;
+            ddlagent.DataTextField = "AgentName";
+            ddlagent.DataValueField = "AgentId";
+            ddlagent.DataBind();
+            ddlagent.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        else
+        {
+            ddlagent.Items.Clear();
+            ddlagent.DataSource = null;
+            ddlagent.DataBind();
+            ddlagent.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        #endregion
+    }
     private void SetInitialRow()
     {
         try
@@ -506,6 +534,7 @@ public partial class Rate_NewRateCard : MasterBasePage
     {
         Response.Redirect(Request.RawUrl);
     }
+   
     protected void btnSbmit_Click(object sender, EventArgs e)
     {
         try
@@ -541,11 +570,13 @@ public partial class Rate_NewRateCard : MasterBasePage
             blCard._Remark = txtRemark.Text.ToString().Trim();
             blCard.GITPaxFrom = Convert.ToInt32(txtGITPAXRange.Text.Trim());
             blCard.TaxPct = Convert.ToDouble(txtTaxPer.Text.Trim());
-
+            blCard.agentid = Convert.ToInt32(ddlagent.SelectedValue.ToString());
             blCard.Description = txtRateDesc.Text;
             if (btnSbmit.Text == "Submit")
             {
-                blCard._RateCardId = ddlRatecategory.SelectedItem.Text + ddlRoomCategory.SelectedItem.Value.ToString() + ddlAccom.SelectedItem.Value.ToString();
+                Random RAND = new Random();
+                int NEW = RAND.Next(100);
+                blCard._RateCardId = ddlRatecategory.SelectedItem.Text + ddlRoomCategory.SelectedItem.Value.ToString() + ddlAccom.SelectedItem.Value.ToString() + NEW.ToString();
                 blCard._Action = "InsertRateCardData";
 
                 getQueryResponse = dlcard.AddParentRateCard(blCard);//calling DAL Function
@@ -554,7 +585,11 @@ public partial class Rate_NewRateCard : MasterBasePage
                     int FitGitInsert = AddFitGitRoomRate(blCard);
                     if (FitGitInsert > 0)
                     {
-                        Response.Redirect(Request.RawUrl);
+                        try
+                        {
+                            Response.Redirect("NewRateCard.aspx");
+                        }
+                        catch { }
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Rate card created successfully.')", true);
 
 
@@ -577,7 +612,11 @@ public partial class Rate_NewRateCard : MasterBasePage
                     int FitGitInsert = AddFitGitRoomRate(blCard);
                     if (FitGitInsert > 0)
                     {
-                        Response.Redirect(Request.RawUrl);
+                        try
+                        {
+                            Response.Redirect("NewRateCard.aspx");
+                        }
+                        catch { }
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Rate card created successfully.')", true);
                         btnSbmit.Text = "Submit";
 
@@ -591,7 +630,7 @@ public partial class Rate_NewRateCard : MasterBasePage
 
             }
         }
-        catch
+        catch (Exception ex)
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cant create rate card for these combinations. either wrong entry or combination already exists.')", true);
         }
@@ -643,7 +682,7 @@ public partial class Rate_NewRateCard : MasterBasePage
 
                 if (dtGetReturnedData != null)
                 {
-                   // ddlCurrency.SelectedValue = dtGetReturnedData.Rows[0]["Currency"].ToString();
+                    // ddlCurrency.SelectedValue = dtGetReturnedData.Rows[0]["Currency"].ToString();
                     txtGITPAXRange.Text = dtGetReturnedData.Rows[0]["GITPaxFrom"].ToString();
                     txtMinNights.Text = dtGetReturnedData.Rows[0]["MinNights"].ToString();
                     txtRateType.Text = dtGetReturnedData.Rows[0]["RateTypeId"].ToString();
@@ -698,7 +737,10 @@ public partial class Rate_NewRateCard : MasterBasePage
 
                 if (dtGetReturnedData != null)
                 {
-
+                    if (dtGetReturnedData.Rows[0]["agentid"].ToString() != "")
+                    {
+                        ddlagent.SelectedValue = dtGetReturnedData.Rows[0]["agentid"].ToString();
+                    }
 
                     for (int k = 0; k < GridFITRooms.Rows.Count; k++)
                     {
@@ -871,7 +913,7 @@ public partial class Rate_NewRateCard : MasterBasePage
 
 
         bindroomcat(Convert.ToInt32(ddlAccom.SelectedValue));
-       
+
     }
 
     public void bindroomcat(int acmid)
@@ -911,7 +953,7 @@ public partial class Rate_NewRateCard : MasterBasePage
     {
         DataTable dtratecard = ViewState["RateCards"] as DataTable;
         dv = new DataView(dtratecard);
-        dv.RowFilter = "AccomId='" + ddlAccom.SelectedValue + "' and RoomCateId='"+ddlRoomCategory.SelectedValue+"'";
+        dv.RowFilter = "AccomId='" + ddlAccom.SelectedValue + "' and RoomCateId='" + ddlRoomCategory.SelectedValue + "'";
         if (dv.ToTable().Rows.Count > 0)
         {
             gdvRateCards.DataSource = dv;

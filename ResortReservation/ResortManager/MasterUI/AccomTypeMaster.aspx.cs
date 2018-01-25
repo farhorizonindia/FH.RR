@@ -193,9 +193,10 @@ public partial class MasterUI_AccomTypeMaster : MasterBasePage
     }
     private void Delete()
     {
-        if (base.ValidateIfCommandAllowed(Request.Url.AbsoluteUri, ENums.PageCommand.Delete))
+       
+        if (!base.ValidateIfCommandAllowed(Request.Url.AbsoluteUri, ENums.PageCommand.Delete))
             return;
-
+      
         int Id = 0;
         int.TryParse(hfId.Value, out Id);
         if (Id == 0)

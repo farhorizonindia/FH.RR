@@ -48,5 +48,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 
         public int GITPaxFrom { get; set; }
         public double TaxPct { get; set; }
+        public int agentid { get; set; }
     }
 }

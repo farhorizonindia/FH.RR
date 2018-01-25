@@ -32,7 +32,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.SelectCommand.ExecuteReader();
                 DataTable dtReturnData = new DataTable();
                 cn.Close();
-                da.Fill(dtReturnData);                
+                da.Fill(dtReturnData);
 
                 if (dtReturnData != null)
                     return dtReturnData;
@@ -67,6 +67,88 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@OnCredit", obj.OnCredit == true ? 1 : 0);
                 da.InsertCommand.Parameters.AddWithValue("@CreditLimit", obj.CreditLimit);
                 da.InsertCommand.Parameters.AddWithValue("@phoneNumber", obj.Phone);
+                da.InsertCommand.Parameters.AddWithValue("@Category", obj._category);
+                da.InsertCommand.Parameters.AddWithValue("@country", obj._country);
+                da.InsertCommand.Parameters.AddWithValue("@Commision", obj.comission);
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+                //return 0;
+            }
+        }
+        public int Saveagentcontracting(string agentid, string cancal, string booking)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_AgentContracting]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "Save");
+                da.InsertCommand.Parameters.AddWithValue("@Agentid", agentid);
+                da.InsertCommand.Parameters.AddWithValue("@Cancellation", cancal);
+                da.InsertCommand.Parameters.AddWithValue("@booking", booking);
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+                //return 0;
+            }
+        }
+        public int saveCommission(int accomtype, int accomname, decimal commission)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Commisionmaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "Save");
+                da.InsertCommand.Parameters.AddWithValue("@AccomType", accomtype);
+                da.InsertCommand.Parameters.AddWithValue("@Accomname", accomname);
+                da.InsertCommand.Parameters.AddWithValue("@Commision", commission);
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+                //return 0;
+            }
+        }
+        public int savebanner(string image, string title)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Bannermaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "Save");
+                da.InsertCommand.Parameters.AddWithValue("@Image", image);
+                da.InsertCommand.Parameters.AddWithValue("@Name", title);
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.InsertCommand.ExecuteNonQuery();
@@ -83,7 +165,31 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
+        public int deletebanner(int id)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Bannermaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "delete");
+                da.InsertCommand.Parameters.AddWithValue("@id", id);
+                
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+                //return 0;
+            }
+        }
         public int UpdatepaymentDetails(BALAgentPayment obj)
         {
             try
@@ -102,6 +208,9 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 cmd.Parameters.AddWithValue("@OnCredit", obj.OnCredit);
                 cmd.Parameters.AddWithValue("@CreditLimit", obj.CreditLimit);
                 cmd.Parameters.AddWithValue("@phoneNumber", obj.Phone);
+                cmd.Parameters.AddWithValue("@Category", obj._category);
+                cmd.Parameters.AddWithValue("@country", obj._country);
+                cmd.Parameters.AddWithValue("@Commision", obj.comission);
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cn.Open();
@@ -169,7 +278,96 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
         }
 
         #endregion
+        public DataTable selectbyaccom(int accomtype, int accomname)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_Commisionmaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "selectbyaccom");
+                da.SelectCommand.Parameters.AddWithValue("@AccomType", accomtype);
+                da.SelectCommand.Parameters.AddWithValue("@Accomname", accomname);
 
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+
+
+
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+        }
+        public DataTable getlocalagent()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_agentPayement]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "localagent");
+               
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+
+
+
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+        }
+        public DataTable selectforbanner()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_Bannermaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "selectall");
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+
+
+
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+        }
         public DataTable AgentInfo(BALAgentPayment obj)
         {
             try
@@ -207,8 +405,62 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+        public DataTable fetchbyagentid(string agentid)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_AgentContracting]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "fetchbyagentid");
+                da.SelectCommand.Parameters.AddWithValue("@Agentid", agentid);
 
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
 
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                return null;
+            }
+        }
+
+        public DataTable checkagentemail(BALAgentPayment obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_agentPayement]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+                da.SelectCommand.Parameters.AddWithValue("@EmailId", obj._EmailId);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public DataTable GetAgentPaymentInfo(BALAgentPayment obj)
         {
             try
@@ -232,6 +484,33 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                     return null;
             }
             catch (Exception)
+            {
+                return null;
+            }
+        }
+        public DataTable getPaymentInfoall(BALAgentPayment obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_agentPayement]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "getPaymentInfoall");
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception ex)
             {
                 return null;
             }

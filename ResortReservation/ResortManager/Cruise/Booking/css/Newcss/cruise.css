@@ -1,0 +1,555 @@
+.details-grid-info h4 {
+    position: relative;
+    top: 8px;
+}
+/*-- Details --*/
+
+.details {
+    padding: 100px 0;
+    background-color: #EAEAEA;
+}
+
+    /*--agileits--*/
+    .details h3 {
+        text-align: left;
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        color: #1dc8d9;
+    }
+
+.details-grid {
+    padding: 0 5px;
+}
+
+.details-grid1, .details-grid2, .details-grid3 {
+    background-color: #FFF;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.details-grid1, .details-grid2, .details-grid3, .details-grid-image img {
+    width: 100%;
+}
+
+.details-grid-info p {
+    padding: 20px 40px 20px 0;
+    line-height: 25px;
+    font-size: 13px;
+    color: #777;
+}
+
+/*.details-grid*/ /*button.btn {
+	font-weight: 600;
+	color: #1dc8d9;
+	padding: 10px 30px;
+	border: 1px solid #1dc8d9;
+	border-right: none;
+	outline: none;
+	background-color: #FFF;
+	border-radius: 0;
+   -webkit-transition: 0.5s all;
+   margin-left: 84%;
+}*/
+.room-detail .btn:hover a {
+    color: #fff;
+}
+
+.room-detail .btn a {
+    color: #1dc8d9;
+}
+/*.details-grid*/ button.btn:hover {
+    background-color: #1dc8d9;
+    color: #FFF;
+    border-color: #1dc8d9;
+}
+
+.room-detail .top-div h3 {
+    border-bottom: 1px solid #000;
+    padding-bottom: 4%;
+}
+
+.room-detail .top-div .col-sm-4 {
+    padding-top: 6% !important;
+}
+
+.room-detail .bottom-div .col-sm-3 {
+    margin-top: 2rem;
+}
+
+.room-detail .bottom-div {
+    /*border-top: 1px solid rgba(0,0,0,0.5);*/
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    padding: 0%;
+    /* padding-top: 25px; */
+    margin-top: 0px;
+    padding-bottom: 10px;
+}
+
+.details-grid .glyphicon {
+    margin-left: 5px;
+}
+
+.modal-title {
+    font-size: 30px;
+    font-weight: 700;
+    /*--agileits--*/
+    letter-spacing: -1px;
+    color: #1dc8d9;
+}
+
+.modal-body {
+    padding: 30px 30px 0;
+}
+
+    .modal-body p {
+        padding: 30px 0;
+        line-height: 30px;
+    }
+
+/*-- //Details --*/
+/*-- Ventures --*/
+
+.ventures {
+    padding: 120px 0 80px;
+}
+
+    .ventures .container .fix {
+        position: fixed;
+    }
+
+    .ventures h3 {
+        text-align: left;
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        color: #1dc8d9;
+    }
+
+.ventures-grid-image, .ventures-grid-info {
+    height: 215px;
+    margin-bottom: 30px;
+}
+
+.ventures-grid-image {
+    padding: 0;
+}
+
+.ventures-grid3, .ventures-grid7 {
+    /*padding-left: 10px;*/
+}
+
+.ventures-grid-image img {
+    height: 215px;
+}
+
+
+/*--agileits--*/
+.ventures-grid-info {
+    padding: 0 10px;
+    background-color: #F5F5F5;
+}
+
+    .ventures-grid-info h4 {
+        font-size: 20px;
+        text-align: left;
+        margin: 20px 0;
+        font-weight: 600;
+        color: #1dc8d9;
+    }
+
+    .ventures-grid-info p {
+        font-size: 13px;
+        line-height: 25px;
+        color: #777;
+    }
+
+.ventures .container .location-grids p {
+    font-family: -webkit-body;
+    font-size: 16px;
+}
+
+.ventures .container .fix {
+    position: fixed;
+    width: 43%;
+    top: 12rem;
+    z-index: -1;
+}
+/*-- //Ventures --*/
+/*####### SELECT ROOM ########*/
+.select-room button {
+    margin-left: 28rem;
+    /*margin-top: 2rem;*/
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.select-room {
+    /*	margin-top: 11rem;*/
+    margin-bottom: 2rem;
+    background-color: rgba(0, 255, 255, 0.39);
+}
+
+.select {
+    background-color: rgb(156, 255, 255);
+}
+
+    .select .agileits h3 {
+        border-bottom: 1px solid;
+        padding: 5px;
+    }
+
+.select-room .select .select-down {
+    width: 90%;
+    margin: auto;
+}
+
+.select-room .total {
+    margin-left: 6rem;
+    margin-top: 3rem;
+    width: 15%;
+}
+
+.select-room .select .first-row h3 {
+    border: 1px solid;
+    padding: 2px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 3rem;
+}
+
+.select-room .btn:hover a {
+    color: #fff;
+}
+
+.select-room .btn a {
+    color: #1dc8d9;
+}
+
+.select-room .select .second-row {
+    background-color: rgba(255, 255, 255, 0.65);
+    padding: 1%;
+}
+
+    .select-room .select .second-row .col-md-2 {
+        text-align: center;
+    }
+
+.select-room .btn-lg {
+    margin-left: 106.2rem;
+    /* position: absolute; */
+    /*top: 9rem;*/
+    border: none;
+    background-color: #9cffff;
+    outline: none;
+}
+
+    .select-room .btn-lg:hover {
+        background-color: #9cffff;
+    }
+
+.select-room .first-span {
+    outline: none;
+    color: rgba(255, 0, 0, 0.64);
+}
+/*####### SELECT ROOM ########*/
+/*######## BOOKING-DETAILS #######*/
+.booking-details {
+    background-color: rgba(0, 255, 255, 0.38);
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+    .booking-details .container {
+        width: 100%;
+    }
+
+        .booking-details .container .slideInLeft .table {
+            text-align: center;
+        }
+
+.booking-head {
+    text-align: center;
+    margin-top: 2rem;
+    color: rgba(0, 171, 255, 0.59);
+}
+
+.booking-details .button1 {
+    margin-left: 0;
+}
+
+.booking-details .button2 {
+    margin-left: 0;
+}
+
+.booking-details h4, .booking-details h3 {
+    margin: 1rem auto;
+}
+
+.ak-btn-cont {
+    width: 28rem;
+    margin: 0 auto;
+}
+/* ###################### yours-details #################### */
+/*###### PAYMENT OPTIONS ##########*/
+.yours-details {
+    padding: 1%;
+}
+
+    .yours-details .col-sm-8 .top-form .ak-form ul li #ddltitle, .payment-option #dvRefrence .ak-form #ddlList1 {
+        margin-bottom: 15px;
+        width: 20%;
+        border: 1px solid #eee;
+        height: 35px;
+        outline: 0;
+    }
+
+    .yours-details .col-sm-8 .payment-option {
+        margin-top: 5%;
+    }
+
+    .yours-details .col-sm-8 .top-form .ak-form ul li #ddltitle:hover, .payment-option #dvRefrence .ak-form #ddlList1:hover {
+        border-color: #54CEB7 !important;
+    }
+
+.payment-option input[type="text"], .payment-option input[type="password"] {
+    width: 100%;
+    padding: 1em 1em;
+    color: #485460;
+    margin: 0.5em 0;
+    border: 1px solid #9e9e9e;
+    outline: none;
+    transition: border-color 0.3s;
+    -o-transition: border-color 0.3s;
+    -ms-transition: border-color 0.3s;
+    -moz-transition: border-color 0.3s;
+    -webkit-transition: border-color 0.3s;
+    /*float: left;*/
+    font-size: 0.9em;
+    -webkit-appearance: none;
+}
+
+/*/*.payment-option .panel1-default .panel1-body .ak-form ul li #ddlCountry1 {
+    padding: 1em 1em;
+    color: #485460;
+    width: 100%;
+    margin: 0.5em 0;
+    border: 1px solid;
+    outline: none;
+    transition: border-color 0.3s;
+    -o-transition: border-color 0.3s;
+    -ms-transition: border-color 0.3s;
+    -moz-transition: border-color 0.3s;
+    -webkit-transition: border-color 0.3s;
+    /*float: left;*/
+/*font-size: 0.9em;
+    border-color: #EEE;
+    -webkit-appearance: none;*/
+/*}*/
+
+.payment-option label {
+    margin: 0;
+}
+
+.payment-option form .col-sm-4 .book-pag-frm2 #datepicker2 {
+    border: 1px solid #eeeeee;
+    margin-bottom: 0;
+    padding: 1em 1em;
+}
+
+    .payment-option form .col-sm-4 .book-pag-frm2 #datepicker2:hover {
+        border-color: #54CEB7;
+        color: #3498DB;
+    }
+
+.payment-option .panel-default .panel-title span {
+    width: 22px;
+    border: 1px solid #ccc;
+    position: absolute;
+    background: #fff;
+    height: 22px;
+    border-radius: 50%;
+}
+
+.payment-option #collapseTwo ul li {
+    list-style: none;
+}
+
+.payment-option .check-room {
+    width: 100% !important;
+}
+
+.payment-option input:hover {
+    border-color: #54CEB7;
+}
+
+.payment-option #ddlCountry1:hover {
+    border-color: #54CEB7;
+    border-radius: 0;
+}
+
+@media(max-width:1200px) {
+    .payment-option .panel-title label {
+        padding-left: 5% !important;
+    }
+}
+
+@media(max-width:950px) {
+    .payment-option .panel-title label {
+        padding-left: 7% !important;
+    }
+}
+
+@media(max-width:600px) {
+    .payment-option .panel-title label {
+        padding-left: 6% !important;
+    }
+}
+
+@media(max-width:450px) {
+    .payment-option .panel-title label {
+        padding-left: 8% !important;
+    }
+}
+
+@media(max-width:350px) {
+    .payment-option .panel-title label {
+        padding-left: 11% !important;
+    }
+}
+
+.top-form .ak-form .col-sm-6 input {
+    border: 1px solid #9e9e9e;
+    width: 100%;
+    padding: 1em 1em;
+    outline: none;
+}
+
+.top-form .ak-form #ddltitle:hover {
+    border-color: #54CEB7 !important;
+}
+
+.top-form .ak-form #ddlCountry:hover {
+    border-color: #54CEB7 !important;
+    border-radius: 0;
+}
+
+.top-form .ak-form .col-sm-6 input:hover {
+    border-color: #54CEB7;
+    color: #3498DB;
+}
+
+.left-col .room-detail {
+    padding: 0;
+    /*padding: 0px 10px 12px 10px;*/
+}
+
+.yours-details .left-col {
+    border: 1px solid rgba(0,0,0,0.5) !important;
+    background-color: #fff;
+    border-radius: 4px;
+    /*margin-top: 15px;*/
+    margin-bottom: 6px;
+    /* -webkit-box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4); */
+    -moz-box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4);
+    -o-box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4);
+    box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4);
+}
+/*############ book faster ############*/
+.ak-main-login .login-btn {
+    width: 100% !important;
+    margin-top: 1%;
+    text-align: center;
+}
+
+.yours-details .left-col .room-detail #gdvHotelRoomRates tbody tr td h3 {
+    font-size: 20px;
+    float: left;
+    padding: 0px 15px;
+}
+
+.yours-details .left-col .room-detail #gdvHotelRoomRates tbody tr td .first label {
+    display: none;
+}
+
+.yours-details .left-col .room-detail #gdvHotelRoomRates tbody tr td .first p {
+    font-size: 14px;
+    color: #000;
+    padding: 0px 15px;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .first {
+    padding: 0;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .fourth .top p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .fourth .top label {
+    margin: 4px 0px 5px 0px;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .fourth .row {
+    margin: 0 !important;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .fourth {
+    padding: 0 !important;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .second img {
+    max-width: 100% !important;
+    height: 200px;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .second {
+    padding-top: 20px;
+}
+
+.left-col .room-detail #gdvHotelRoomRates tbody tr td .fourth .bottom .gross {
+    margin: 5px 0px 10px;
+    padding: 15px 0px;
+    border-radius: 4px;
+    background-color: #eee;
+}
+
+.yours-details .total-value {
+    /*float: right;*/
+    font-size: 18px;
+    box-shadow: 2px 2px 8px #cacaca;
+    padding: 10px 10px;
+    font-weight: bold;
+    margin-top: 0px;
+    width: 100%;
+    text-align: right;
+    background: #eeeeee;
+    /*border-radius: 3px;*/
+}
+
+/* ################### summarizedDetails1 css ###################*/
+.yours-details .left-col h4 {
+    padding-top: 3%;
+    font-size: 17px;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 13px;
+    text-align: center;
+}
+
+.yours-details .left-col .room-detail #GridRoomPaxDetail tbody tr td .top-div img {
+    max-width: 100%;
+    height: 200px;
+}
+
+.yours-details .left-col .room-detail #GridRoomPaxDetail tbody tr td .bottom-div .gross-value {
+    margin: 5px 0px 10px;
+    padding: 15px 0px;
+    border-radius: 4px;
+    background-color: #eee;
+    margin: 12px 0px !important;
+}

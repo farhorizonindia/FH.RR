@@ -4,8 +4,10 @@ using System.Text;
 using System.Xml;
 using FarHorizon.Reservations.Common;
 
+
 namespace FarHorizon.Reservations.XMLManager
 {
+   
     internal static class XMLHandler
     {               
         internal static XmlDocument LoadXML(ENums.UploadXMLType uploadXMLType)
@@ -29,7 +31,7 @@ namespace FarHorizon.Reservations.XMLManager
                 try
                 {
                     string dataDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                    dataDirectory = dataDirectory.Replace("ResortManager\\", "");
+                    //dataDirectory = dataDirectory.Replace("ResortManager\\", "");
                     dataDirectory = dataDirectory + XMLConstants.baseDirectory + xmlFileName;
                     xmlDoc.Load(dataDirectory);
                     return xmlDoc;

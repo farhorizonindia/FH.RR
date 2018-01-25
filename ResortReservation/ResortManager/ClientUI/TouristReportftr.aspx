@@ -57,7 +57,7 @@
     <div>
         <asp:ScriptManager ID="scmgrviewbookings" runat="server">
         </asp:ScriptManager>
-        <asp:Label ID="lblTouristNotFound" runat="server"></asp:Label>
+     
         <asp:UpdatePanel ID="pnlviewbookings" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <table id="filtersection" class="filtersection">
@@ -119,7 +119,7 @@
                             <td class="filtersectionCell">Accomodation no:</td>
                             <td class="auto-style2"><asp:DropDownList CssClass="select filterselect" ID="ddlAccomName" runat="server"
                                 Width="150px"></asp:DropDownList></td>
-                            <td class="filtersectionCell"><asp:Button ID="btnShow" runat="server" CssClass="appbutton" OnClick="btnShow_Click" Text="Show" />
+                            <td class="filtersectionCell"><asp:Button ID="btnShow"   runat="server" CssClass="appbutton" OnClick="btnShow_Click" Text="Show" />
                                 <asp:Button ID="btnExport" runat="server" CssClass="appbutton" OnClick="btnExport_Click" Text="Download" /></td>
                             <td class="filtersectionCell">&nbsp;</td>
                             <td class="auto-style1">&nbsp;</td>
@@ -132,7 +132,7 @@
                             <td class="filtersectionCell">&nbsp;</td>
                         </tr>
                     </table>
-
+                   <asp:Label ID="lblTouristNotFound" runat="server"></asp:Label>
                 <div id="gridsection" class="gridsection">
                     <asp:DataGrid ID="dgTouristDetails" PageSize="30" runat="server" AutoGenerateColumns="False"
                         AllowPaging="True" OnPageIndexChanged="dgTouristDetails_PageIndexChanged" Width="100%" >
@@ -211,6 +211,7 @@
                         <AlternatingItemStyle BackColor="White" />
                         <ItemStyle BackColor="#EFF3FB" />
                         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                        
                     </asp:DataGrid>
                 </div>
             </ContentTemplate>

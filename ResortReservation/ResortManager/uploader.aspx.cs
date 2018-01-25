@@ -13,12 +13,19 @@ using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
+using System.IO;
+using FarHorizon.Reservations.UploadManager;
+using System.Collections.Generic;
+using FarHorizon.Reservations.DataBaseManager;
+using System.Text;
+using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.XMLManager;
 
 public partial class uploader : ClientBasePage
 {
     private int BookingId;
     private string uploadType = string.Empty;
-
+    public TouristUploader tourisst = new TouristUploader();
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Request.QueryString["bid"] != null)
@@ -48,7 +55,7 @@ public partial class uploader : ClientBasePage
             }
         }
         #endregion
-       
+
         try
         {
             #region Loading the Excel/CSV File
@@ -64,20 +71,24 @@ public partial class uploader : ClientBasePage
                 sr.Close();
             }
             #endregion
-          
+
             #region Upload File To the Database
 
             ENums.UploadXMLType uploadXMLType = (ENums.UploadXMLType)Enum.Parse(typeof(ENums.UploadXMLType), uploadType);
-            UploadServices uploadServices = new UploadServices();
+            XmlDocument xmlMappingDoc = XMLHelper.LoadXML(uploadXMLType);
+            //XmlDocument xd = new XmlDocument();
+            ////xd.LoadXml(uploadXMLType);
+            //UploadServices uploadServices = new UploadServices();
             //Response.Write("abc");
-            bool uploaded = uploadServices.HandleUploadedFile(BookingId, uploadXMLType, RecordList);
-           
+            //bool uploaded = uploadServices.HandleUploadedFile(BookingId, uploadXMLType, RecordList);
+            bool uploaded = tourisst.processUplodedFile(BookingId, RecordList, xmlMappingDoc);
+
             #endregion
 
             #region Validating Response
             if (uploaded)
             {
-              
+
                 msg = "File uploaded and processed successfully.";
                 base.DisplayAlert(msg);
                 Response.Redirect("~\\ClientUI\\ViewTourists.aspx?bid=" + BookingId.ToString());
@@ -110,4 +121,6 @@ public partial class uploader : ClientBasePage
             //production environments. It would be better just to put a generic error message. 
         }
     }
+    
 }
+

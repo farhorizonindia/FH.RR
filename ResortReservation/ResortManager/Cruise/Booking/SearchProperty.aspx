@@ -295,6 +295,8 @@
                 <div class="row">
                     <div class="col-md-12 text-center White-Box">
                         <h2>Search Accomodations <span class=" pull-right" style="padding-top: 7px;">
+                            <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton></span></h2>
                         <div class=" clearfix"></div>
                     </div>
@@ -307,8 +309,10 @@
                             <tr>
                                 <td>
                                     <asp:Label ID="lblLoginas" runat="server" Text=" Login as "></asp:Label>
-                                    <asp:LinkButton ID="lnkLogin" runat="server" PostBackUrl="~/Cruise/booking/agentLogin.aspx" Font-Underline="True"> Agent</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkLogin" runat="server" PostBackUrl="~/Cruise/booking/agentLogin.aspx" Font-Underline="True"> Partner</asp:LinkButton>
                                     <asp:LinkButton ID="lnkCustLogin" runat="server" Font-Underline="True" OnClick="lnkCustLogin_Click">Customer</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkCustomerRegis" runat="server" Font-Underline="True" OnClick="lnkCustomerRegis_Click">Or Customer Registration</asp:LinkButton>
+
                                     <asp:LinkButton ID="lnkView" Style="margin-left: 10px" runat="server" OnClick="lnkView_Click">View your Bookings</asp:LinkButton>
                                 </td>
                                 <td>
@@ -325,15 +329,33 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <asp:DropDownList Enabled="false" ID="ddlDestination" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDestination_SelectedIndexChanged">
+                                            <asp:DropDownList Enabled="false" ID="ddlDestination" Visible="false" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDestination_SelectedIndexChanged">
                                             </asp:DropDownList>
+                                            <asp:DropDownList ID="ddlPackege" runat="server">
+                                            </asp:DropDownList>
+                                        </td>
+                                        <td>
+                                            <asp:DropDownList ID="ddlYear" runat="server">
+                                            </asp:DropDownList>
+
                                         </td>
                                         <td>
                                             <asp:DropDownList ID="ddlDates" runat="server">
+                                                <asp:ListItem Text="Month"></asp:ListItem>
+                                                <asp:ListItem Text="Jan"></asp:ListItem>
+                                                <asp:ListItem Text="Feb"></asp:ListItem>
+                                                <asp:ListItem Text="Mar"></asp:ListItem>
+                                                <asp:ListItem Text="Apr"></asp:ListItem>
+                                                <asp:ListItem Text="May"></asp:ListItem>
+                                                <asp:ListItem Text="Jun"></asp:ListItem>
+                                                <asp:ListItem Text="Jul"></asp:ListItem>
+                                                <asp:ListItem Text="Aug"></asp:ListItem>
+                                                <asp:ListItem Text="Sept"></asp:ListItem>
+                                                <asp:ListItem Text="Oct"></asp:ListItem>
+                                                <asp:ListItem Text="Nov"></asp:ListItem>
+                                                <asp:ListItem Text="Dec"></asp:ListItem>
                                             </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList ID="ddlRiver" runat="server">
+                                            <asp:DropDownList ID="ddlRiver" Visible="false" runat="server">
                                             </asp:DropDownList>
                                         </td>
                                         <td>

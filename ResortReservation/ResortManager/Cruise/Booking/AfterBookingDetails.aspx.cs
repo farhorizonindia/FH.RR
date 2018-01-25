@@ -340,6 +340,111 @@ public partial class AfterBookingDetails : System.Web.UI.Page
     protected void btnSbmt_Click(object sender, EventArgs e)
     {
 
+        {
+
+            if (Session["UserCode"] != null)
+            {
+                //  pnlLogin.Visible = true;
+                try
+                {
+                    customerLogin.Visible = false;
+                    if (Session["AgentMailId"] != null && Session["Password"] != null)
+                    {
+                        blagentpayment._Action = "MailValidate";
+                        blagentpayment._EmailId = Session["AgentMailId"].ToString();
+                        blagentpayment._Password = Session["Password"].ToString();
+                        DataTable dtAgent = dlagentpayment.BindControls(blagentpayment);
+                        if (dtAgent.Rows.Count > 0)
+                        {
+
+                            lblAgentName.Text = Session["UserName"].ToString();
+                            lblBillingAddress.Text = dtAgent.Rows[0]["BillingAddress"].ToString();
+                            lbPaymentMethod.Text = dtAgent.Rows[0]["PaymentMethod"].ToString();
+                            hdnfPhoneNumber.Value = dtAgent.Rows[0]["Phone"].ToString();
+                            hdnfCreditLimit.Value = dtAgent.Rows[0]["CreditLimit"].ToString();
+                            bool oncredit = Convert.ToBoolean(dtAgent.Rows[0]["ChkCredit"].ToString());
+
+                            pnlFullDetails.Visible = true;
+                            pnlBookButton.Visible = true;
+
+                            if (oncredit)
+                            {
+                                panelwithoutCreditAgent.Visible = false;
+                                btnPayProceed.Text = "Book";
+                            }
+                            else
+                            {
+                                panelwithoutCreditAgent.Visible = true;
+                                btnPayProceed.Text = "Proceed For Payment";
+                            }
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Agent Payment Details Not found')", true);
+                        }
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('It seems you are not logged in')", true);
+                    }
+                }
+                catch (Exception sqe)
+                {
+
+                }
+            }
+            else if (Session["CustomerCode"] != null)
+            {
+                try
+                {
+                    blcus.Email = Session["CustomerMailId"].ToString(); ;
+                    blcus.Password = Session["CustPassword"].ToString();
+                    blcus.action = "LoginCust";
+
+                    DataTable dtCustomer = dlcus.checkDuplicateemail(blcus);
+                    if (dtCustomer != null)
+                    {
+                        Session["CustMailId"] = Session["CustomerMailId"].ToString();
+
+                        ViewState["Pass"] = txtCustPass.Text.Trim();
+                        lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
+
+
+                        lblAgentName.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString());
+                        lbPaymentMethod.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["PaymentMethod"].ToString());
+                        hdnfPhoneNumber.Value = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Telephone"].ToString());
+                        Session["CustId"] = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["CustId"].ToString());
+
+                        DataTable dtrpax = SessionServices.RetrieveSession<DataTable>("Bookingdt");
+
+                        string BookRef = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString()) + "X" + Convert.ToDouble(dtrpax.Compute("SUM(Pax)", string.Empty)).ToString() + "-" + "Self";
+                        ViewState["BookRef"] = BookRef;
+                        lbPaymentMethod.Text = "N/A";
+
+
+                        pnlFullDetails.Visible = true;
+                        panelwithoutCreditAgent.Visible = true;
+                        pnlBookButton.Visible = true;
+                        customerLogin.Visible = false;
+                    }
+                    Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
+                    // preparetables(Bookingdt);
+                }
+                catch
+                {
+
+                }
+            }
+            else
+            {
+                pnlLogin.Visible = false;
+                customerLogin.Visible = true;
+
+            }
+
+            //Bookingdt = Session["Bookingdt"] as DataTable;
+            //preparetables(Bookingdt);
+        }
     }
     protected void btnSmbt_Click(object sender, EventArgs e)
     {

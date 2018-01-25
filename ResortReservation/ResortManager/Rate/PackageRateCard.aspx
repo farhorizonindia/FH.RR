@@ -12,56 +12,53 @@
     <link rel="stylesheet" type="text/css" media="all" href="../style.css" />
     <script language="javascript" type="text/javascript" src="../js/master/roomcategorymaster.js"></script>
     <style type="text/css">
-        .auto-style2
-        {
+        .auto-style2 {
             width: 116px;
         }
 
-        .auto-style3
-        {
+        .auto-style3 {
             width: 118px;
         }
 
-        .auto-style4
-        {
+        .auto-style4 {
             width: 77px;
         }
-        .auto-style5
-        {
+
+        .auto-style5 {
             width: 118px;
             height: 24px;
         }
-        .auto-style6
-        {
+
+        .auto-style6 {
             width: 116px;
             height: 24px;
         }
-        .auto-style7
-        {
+
+        .auto-style7 {
             width: 77px;
             height: 24px;
         }
-        .auto-style8
-        {
+
+        .auto-style8 {
             height: 24px;
         }
-        .auto-style9
-        {
+
+        .auto-style9 {
             width: 118px;
             height: 19px;
         }
-        .auto-style10
-        {
+
+        .auto-style10 {
             width: 116px;
             height: 19px;
         }
-        .auto-style11
-        {
+
+        .auto-style11 {
             width: 77px;
             height: 19px;
         }
-        .auto-style12
-        {
+
+        .auto-style12 {
             height: 19px;
         }
     </style>
@@ -79,8 +76,8 @@
                     <div id="gridsection" class="gridsection">
 
                         <table class="titleParent">
-                            <tr style="display:none">
-                                <td class="auto-style3" >RateCardId</td>
+                            <tr style="display: none">
+                                <td class="auto-style3">RateCardId</td>
                                 <td class="auto-style2">
                                     <asp:DropDownList ID="ddlRateCardId" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlRateCardId_SelectedIndexChanged">
                                     </asp:DropDownList>
@@ -91,13 +88,38 @@
                             <tr>
                                 <td class="auto-style5">Package</td>
                                 <td class="auto-style6">
-                                    <asp:DropDownList ID="ddlpackage" runat="server">
+                                    <asp:DropDownList ID="ddlpackage" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlpackage_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
                                 <td class="auto-style7">
                                     <asp:RequiredFieldValidator ID="reqfddlpackage" runat="server" ControlToValidate="ddlpackage" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate" ErrorMessage="*"></asp:RequiredFieldValidator>
                                 </td>
                                 <td class="auto-style8"></td>
+                            </tr>
+                            <tr>
+                                <td >Main Agent</td>
+                                <td >
+                                    <asp:DropDownList ID="ddlagent" Width="44%" runat="server">
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlagent" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate" ErrorMessage="*"></asp:RequiredFieldValidator>
+                                </td>
+                                <td >Ref Agent</td>
+                                <td >
+                                    <asp:DropDownList ID="ddlAgentRef" Width="44%" runat="server">
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlagentref" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate" ErrorMessage="*"></asp:RequiredFieldValidator>
+                                </td>
+                                <td >Commission Agent</td>
+                                <td >
+                                    <asp:DropDownList ID="ddlAgentCommission" Width="44%" runat="server">
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlAgentCommission" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate" ErrorMessage="*"></asp:RequiredFieldValidator>
+                                </td>
+                                <td >Commission for Agent(in %)</td>
+                                <td >
+                                    <asp:TextBox ID="txtCommission" Width="44%" runat="server"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtCommission" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate" ErrorMessage="*"></asp:RequiredFieldValidator>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="auto-style3">Rate Category</td>
@@ -124,22 +146,20 @@
                                 <td class="auto-style3">Valid From</td>
                                 <td class="auto-style2">
                                     <asp:TextBox ID="txtValFrom" runat="server"></asp:TextBox>
-                                    <asp:CalendarExtender ID="txtValFrom_CalendarExtender" runat="server" TargetControlID="txtValFrom">
-                                        </asp:CalendarExtender>
+                                    <asp:CalendarExtender ID="txtValFrom_CalendarExtender" runat="server" TargetControlID="txtValFrom"></asp:CalendarExtender>
                                     <asp:RequiredFieldValidator ID="reqftxtValFrom" runat="server" ControlToValidate="txtValFrom" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
                                 </td>
                                 <td class="auto-style4">Valid To</td>
                                 <td>
                                     <asp:TextBox ID="txtValto" runat="server" AutoPostBack="True" OnTextChanged="txtValto_TextChanged"></asp:TextBox>
-                                     <asp:CalendarExtender ID="caltxtValto" runat="server" TargetControlID="txtValto">
-                                        </asp:CalendarExtender>
+                                    <asp:CalendarExtender ID="caltxtValto" runat="server" TargetControlID="txtValto"></asp:CalendarExtender>
                                     <asp:RequiredFieldValidator ID="reqftxtValto" runat="server" ControlToValidate="txtValto" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="auto-style5">Tax(%)</td>
                                 <td class="auto-style6">
-                                    <asp:TextBox ID="txtTaxPercent" runat="server">0</asp:TextBox>
+                                    <asp:TextBox ID="txtTaxPercent" runat="server" AutoPostBack="True" OnTextChanged="txtTaxPercent_TextChanged">0</asp:TextBox>
                                     <asp:RequiredFieldValidator ID="reqftxtTaxPercent" runat="server" ControlToValidate="txtTaxPercent" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
 
                                 </td>
@@ -179,13 +199,13 @@
                                 <td class="auto-style12">&nbsp;</td>
                             </tr>
                         </table>
-                          <table id="statussection" class="statussection">
-                        <tr>
-                            <td>
-                                <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label>
-                            </td>
-                        </tr>
-                    </table>
+                        <table id="statussection" class="statussection">
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     <div>
 
@@ -198,12 +218,11 @@
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
                                 <asp:BoundField DataField="Sn" />
-                                <asp:TemplateField  >
+                                <asp:TemplateField>
 
                                     <ItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtvalfrom" ></asp:TextBox>
-                                        <asp:CalendarExtender ID="txtvalFrom_CalendarExtender" runat="server" TargetControlID="txtvalfrom">
-                                        </asp:CalendarExtender>
+                                        <asp:TextBox runat="server" ID="txtvalfrom"></asp:TextBox>
+                                        <asp:CalendarExtender ID="txtvalFrom_CalendarExtender" runat="server" TargetControlID="txtvalfrom"></asp:CalendarExtender>
                                         &nbsp;
                                       <%--  <asp:RequiredFieldValidator ID="reqftxtvalFrom" runat="server" ControlToValidate="txtvalfrom" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
                                         &nbsp;
@@ -216,12 +235,11 @@
                                     <ControlStyle Width="0px" />
                                     <HeaderStyle ForeColor="White" />
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="White" HeaderText="" ControlStyle-Width="0" >
+                                <asp:TemplateField HeaderStyle-ForeColor="White" HeaderText="" ControlStyle-Width="0">
 
                                     <ItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtValTo" ></asp:TextBox>
-                                        <asp:CalendarExtender ID="txtValTo_CalendarExtender" runat="server" TargetControlID="txtValTo">
-                                        </asp:CalendarExtender>
+                                        <asp:TextBox runat="server" ID="txtValTo"></asp:TextBox>
+                                        <asp:CalendarExtender ID="txtValTo_CalendarExtender" runat="server" TargetControlID="txtValTo"></asp:CalendarExtender>
                                         &nbsp;
                                      <%--   <asp:RequiredFieldValidator ID="reqftxtValTo" runat="server" ControlToValidate="txtValTo" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
 
@@ -235,7 +253,7 @@
                                     <ControlStyle Width="0px" />
                                     <HeaderStyle ForeColor="White" />
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="White" HeaderText="Room<br/> Category">
+                                <asp:TemplateField HeaderStyle-ForeColor="White" HeaderText="Room<br/> Category">
 
                                     <ItemTemplate>
                                         <asp:DropDownList runat="server" Width="180px" ID="ddlRoomCat"></asp:DropDownList>
@@ -247,83 +265,83 @@
                                     <HeaderStyle ForeColor="White" />
 
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="White" HeaderText="From <br/> Pax">
+                                <asp:TemplateField HeaderStyle-ForeColor="White" HeaderText="From <br/> Pax">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtFromPax" Width="40px"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtFromPax" runat="server" ControlToValidate="txtFromPax" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="White" />
+                                    <HeaderStyle ForeColor="White" />
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="White" HeaderText="To <br/> Pax">
+                                <asp:TemplateField HeaderStyle-ForeColor="White" HeaderText="To <br/> Pax">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtToPax" Width="40px"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtToPax" runat="server" ControlToValidate="txtToPax" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="White" />
+                                    <HeaderStyle ForeColor="White" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="BC<br/> PP">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="BC<br/> PP">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtBcPP" Width="40px" AutoPostBack="True" OnTextChanged="txtBcPP_TextChanged"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtBcPP" runat="server" ControlToValidate="txtBcPP" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="Black" />
+                                    <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="BC<br/>SRS">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="BC<br/>SRS">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtBcSrs" Width="40px" AutoPostBack="True" OnTextChanged="txtBcSrs_TextChanged"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtBcSrs" runat="server" ControlToValidate="txtBcSrs" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="Black" />
+                                    <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="BC<br/>Tax Inc.">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="BC<br/>Tax Inc.">
 
                                     <ItemTemplate>
                                         <asp:CheckBox runat="server" ID="chktaxInc" Width="40px" OnCheckedChanged="chktaxInc_CheckedChanged"></asp:CheckBox>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="Black" />
+                                    <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="BC<br/>Tax(%)">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="BC<br/>Tax(%)">
 
                                     <ItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtBcTaxValue" Width="40px" ></asp:TextBox>
+                                        <asp:TextBox runat="server" ID="txtBcTaxValue" Width="40px"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtBcTaxValue" runat="server" ControlToValidate="txtBcTaxValue" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="Black" />
+                                    <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="NC<br/> PP">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="NC<br/> PP">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtNcPP" Width="40px"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtNcPP" runat="server" ControlToValidate="txtNcPP" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
 
                                     </ItemTemplate>
-                                    <HeaderStyle  ForeColor="Black" />
+                                    <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField  HeaderStyle-ForeColor="Black" HeaderText="NC<br/>SRS">
+                                <asp:TemplateField HeaderStyle-ForeColor="Black" HeaderText="NC<br/>SRS">
 
                                     <ItemTemplate>
                                         <asp:TextBox runat="server" ID="txtNcSrs" Width="40px"></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="regextxtNcSrs" runat="server" ControlToValidate="txtNcSrs" ErrorMessage="*" ValidationExpression="((\d+)((\.\d{1,2})?))$" ValidationGroup="ValRate"></asp:RegularExpressionValidator>
-                                     
+
                                     </ItemTemplate>
                                     <HeaderStyle ForeColor="Black" />
                                 </asp:TemplateField>
 
-                                
+
                                 <asp:TemplateField ControlStyle-Width="0" HeaderStyle-ForeColor="White" HeaderText="">
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdnfrompaxold" runat="server" />
@@ -333,7 +351,7 @@
                                     <HeaderStyle ForeColor="White" />
                                 </asp:TemplateField>
 
-                                
+
                             </Columns>
                             <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
                             <SortedAscendingCellStyle BackColor="#F5F7FB" />
@@ -345,11 +363,11 @@
                     <table id="buttonsection" class="buttonsection">
                         <tr>
                             <td style="width: 74px; height: 26px">
-                                <asp:Button CssClass="appbutton" ID="btnSbmit" runat="server"  ValidationGroup="ValRate" Height="24px" Text="Submit"
+                                <asp:Button CssClass="appbutton" ID="btnSbmit" runat="server" ValidationGroup="ValRate" Height="24px" Text="Submit"
                                     Width="65px" OnClick="btnSbmit_Click" /></td>
                             <td style="width: 74px; height: 26px">
                                 <asp:Button CssClass="appbutton" ID="btncancel" runat="server" Text="Cancel"
-                                      Height="24px"  Width="65px" OnClick="btncancel_Click" /></td>
+                                    Height="24px" Width="65px" OnClick="btncancel_Click" /></td>
                         </tr>
                     </table>
 
@@ -357,12 +375,14 @@
                         <AlternatingRowStyle BackColor="White" />
                         <Columns>
                             <asp:BoundField DataField="RateCardId" HeaderText="RateCardId" />
-                            
-                             <asp:BoundField DataField="PackName" HeaderText="Package Name" />
+
+                            <asp:BoundField DataField="PackName" HeaderText="Package Name" />
                             <asp:BoundField DataField="RateCategory" HeaderText="RateCategory" />
                             <asp:BoundField DataField="SupplierName" HeaderText="SupplierName" />
+                            <asp:BoundField DataField="AgentName" HeaderText="AgentName" />
+                            <asp:BoundField DataField="RefAgentName" HeaderText="Ref AgentName" />
                             <asp:BoundField DataField="VaildFrom" HeaderText="ValidFrom" DataFormatString="{0:dd-MMM-yyyy}" />
-                            <asp:BoundField DataField="ValidTo" HeaderText="ValidTo" DataFormatString="{0:dd-MMM-yyyy}"  />
+                            <asp:BoundField DataField="ValidTo" HeaderText="ValidTo" DataFormatString="{0:dd-MMM-yyyy}" />
                             <asp:BoundField DataField="tax" HeaderText="tax" />
                             <asp:BoundField DataField="Currency" HeaderText="Currency" />
                             <asp:TemplateField>
@@ -385,7 +405,7 @@
                     </asp:GridView>
 
 
-                  
+
                     <table id="hiddensection" class="hiddensection">
                         <tr>
                             <td>
@@ -395,9 +415,7 @@
                     </table>
                     <table>
                         <tr>
-                            <td>
-                                
-                            </td>
+                            <td></td>
                             <td>
                                 <asp:HiddenField ID="hdnRatecardid" runat="server" />
                                 <asp:HiddenField ID="hdnRoomCtid" runat="server" />

@@ -25,39 +25,47 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 
         public DataTable GetHotelRates(BALHotelBooking obj)
         {
+            DataTable dtReturnData = new DataTable();
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
 
                 SqlDataAdapter da = new SqlDataAdapter();
-                da.SelectCommand = new SqlCommand("[dbo].[sp_hotelRates]", cn);
-                da.SelectCommand.Parameters.Clear();
-                da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
+                try
+                {
+                    da.SelectCommand = new SqlCommand("[dbo].[sp_hotelRates]", cn);
+                    da.SelectCommand.Parameters.Clear();
+                    da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
 
 
-                da.SelectCommand.Parameters.AddWithValue("@Accomid", obj.Accomid);
-                da.SelectCommand.Parameters.AddWithValue("@AgentId", obj.agentid);
-                da.SelectCommand.Parameters.AddWithValue("@totpax", obj.TotPax);
-                da.SelectCommand.Parameters.AddWithValue("@Reqnoofrooms", obj.Reqnoofrooms);
-                da.SelectCommand.Parameters.AddWithValue("@startdate", obj.checkin);
-                da.SelectCommand.Parameters.AddWithValue("@enddate", obj.Checkout);
+                    da.SelectCommand.Parameters.AddWithValue("@Accomid", obj.Accomid);
+                    da.SelectCommand.Parameters.AddWithValue("@AgentId", obj.agentid);
+                    da.SelectCommand.Parameters.AddWithValue("@totpax", obj.TotPax);
+                    da.SelectCommand.Parameters.AddWithValue("@Reqnoofrooms", obj.Reqnoofrooms);
+                    da.SelectCommand.Parameters.AddWithValue("@startdate", obj.checkin);
+                    da.SelectCommand.Parameters.AddWithValue("@enddate", obj.Checkout);
 
-                da.SelectCommand.Parameters.AddWithValue("@roomtypeId", obj.RoomTypeId);
-                da.SelectCommand.CommandType = CommandType.StoredProcedure;
-                cn.Open();
-                da.SelectCommand.ExecuteReader();
-                DataTable dtReturnData = new DataTable();
-                cn.Close();
-                da.Fill(dtReturnData);
+                    da.SelectCommand.Parameters.AddWithValue("@roomtypeId", obj.RoomTypeId);
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    cn.Open();
+                    da.SelectCommand.ExecuteReader();
+
+                    cn.Close();
+                    da.Fill(dtReturnData);
+                }
+                catch (Exception ex) { }
                 if (dtReturnData != null)
                     return dtReturnData;
                 else
                     return null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
+
+            //return dtReturnData;
+
         }
 
         public DataTable getrooms(BALHotelBooking obj)

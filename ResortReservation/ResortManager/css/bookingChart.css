@@ -12,6 +12,42 @@
 	border-style:outset;	
 }
 
+.singlebookingcell div{
+      outline: -webkit-focus-ring-color auto 0px!important;
+       border:none!important;
+     padding:0px!important;
+}
+/**
+.singlebookingcell div:focus{
+      outline: -webkit-focus-ring-color auto 0px!important;
+       border:none!important;
+     padding:0px!important;
+}
+
+
+.singlebookingcell div:hover{
+      outline: -webkit-focus-ring-color auto 0px!important;
+    border:none!important;
+     padding:0px!important;
+} */
+   
+.tdblock {
+    position: relative;
+}
+
+.confirmedCell:focus {
+    outline: -webkit-focus-ring-color auto 0px!important;
+    border:none;
+     padding:0px!important;
+}
+
+.confirmedCell:hover {
+    outline: -webkit-focus-ring-color auto 0px!important;
+    border:none;
+    padding:0px!important;
+}
+
+
 .dayheader
 {
 	/*filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr=#5987D6, endColorstr=#002D96);*/

@@ -100,7 +100,7 @@ namespace FarHorizon.Reservations.Common
         public const string MEALPLAN = "mp*";
 
         #endregion
-
+        public const string Proposd = "Proposed Booking*";
         #region Session Constants
         public static string _LoginId = "LoginId";
         #region Client Sessions

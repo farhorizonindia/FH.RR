@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="PaymentGatewayResponse.aspx.cs" Inherits="response" EnableEventValidation="false" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script runat="server">
     protected void Button1_Click(object sender, EventArgs e)
@@ -122,12 +123,13 @@
         }
 
         .PROFORMA_L {
-            width: 50%;
+            width: 62%;
             float: left;
+            height: 80px;
         }
 
         .PROFORMA_R {
-            width: 50%;
+            width: 37%;
             float: left;
         }
 
@@ -172,20 +174,25 @@
             width: 352px;
         }
 
-        .auto-style7 {
-            width: 242px;
+        .invoicetable {
+            padding: 10px;
         }
 
-        .auto-style8 {
-            width: 244px;
+        .auto-style9 {
+            width: 172px;
+        }
+
+        .auto-style10 {
+            width: 135px;
         }
     </style>
 </head>
 <body>
-    <span id="DivInvoice" runat="server">
 
+    <span id="DivInvoice" runat="server">
         <form id="form1" runat="server">
-            <div style="display: dwew; float:right; margin-right:10px;">
+
+            <div style="display: dwew; float: right; margin-right: 10px;">
                 <center>
                     <div id="divDisplay">
                         <asp:Button ID="btnBack" runat="server" Text="Home" OnClick="btnBack_Click" />
@@ -319,7 +326,7 @@
             <asp:Label ID="lblAccomName" runat="server" Text="Mv Mahabaahu India"></asp:Label>
         </p>
             --%>
-            <div class="Invoice_Wrp" id="mydiv">
+            <div class="Invoice_Wrp" id="mydiv" style="box-shadow: 3px 0px 10px #cacaca; padding: 20px;">
                 <div class="Invoice_Wrp_header">
                     <div class="Invoice_header_L">
                         <div>Registered Office</div>
@@ -327,17 +334,19 @@
                         <div>C.R. Park</div>
                         <div>New Delhi-110019</div>
                         <div>PAN: AAACF6111G</div>
-                        <div>Service Tax No. AAACF6111GSD002</div>
+                        <div>GST. 07AAACF6111G123</div>
                     </div>
                     <div class="Invoice_header_R">
-                        <img style="margin-left: 31%;" src="http://adventureresortscruises.in/Cruise/booking/img_logo.png" alt="" />
+                        <img style="margin-left: 25%;" src="http://test1.adventureresortscruises.in/Cruise/booking/ARC_Logo.jpg.png" alt="" />
                     </div>
                     <div class="clear"></div>
                 </div>
                 <!--Invoice_Wrp_header-->
                 <div class="Invoice_Wrp_body">
                     <div class="PROFORMA_div">
-                        <div class="PROFORMA_text"><strong>PROFORMA INVOICE</strong></div>
+                        <div class="PROFORMA_text" style="border-bottom: 1px solid; padding-bottom: 10px;">
+                            <strong>PROFORMA INVOICE</strong>
+                        </div>
                         <div class="clear"></div>
                         <div class="PROFORMA_L">
                             <div style="width: 40%; word-wrap: break-word;">
@@ -350,30 +359,33 @@
                             </div>
                         </div>
                         <div class="PROFORMA_R">
-                            <table style="width: 100%">
+                            <table style="width: 91%; padding-left: 12px; margin-left: 32px;">
                                 <tr>
-                                    <td style="text-align: right">Dated: </td>
-                                    <td style="text-align: left">
-                                        <asp:Label ID="dated" runat="server"></asp:Label></td>
+                                    <td style="text-align: left" class="auto-style9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dated: </td>
+                                    <td style="text-align: left; padding-left: 7%;" class="auto-style10">
+                                        <asp:Label ID="dated" runat="server" Style="margin-left: -16%;"></asp:Label></td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right">Invoice No: </td>
-                                    <td style="text-align: left">
+                                    <td style="text-align: left" class="auto-style9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Invoice No: </td>
+                                    <td style="text-align: left" class="auto-style10">
                                         <asp:Label ID="lbInvoiceNO" runat="server"></asp:Label></td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right">No of Pax: </td>
-                                    <td style="text-align: left">
+                                    <td style="text-align: left" class="auto-style9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <asp:Label ID="Label5" runat="server" Text="No of Guest:"></asp:Label>
+                                    </td>
+
+                                    <td style="text-align: left" class="auto-style10">
                                         <asp:Label ID="lbPax" runat="server"></asp:Label></td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right">Booking No: </td>
-                                    <td style="text-align: left">
+                                    <td style="text-align: left" class="auto-style9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Booking No: </td>
+                                    <td style="text-align: left" class="auto-style10">
                                         <asp:Label ID="lbBookingNo" runat="server"></asp:Label></td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right">Booking Date: </td>
-                                    <td style="text-align: left">
+                                    <td style="text-align: left" class="auto-style9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Booking Date: </td>
+                                    <td style="text-align: left" class="auto-style10">
                                         <asp:Label ID="lbBookinDate" runat="server"></asp:Label></td>
                                 </tr>
                             </table>
@@ -384,34 +396,38 @@
                     <!--PROFORMA_div-->
                     <div class="Invoice_Package">
                         <strong><%--Package: 7 nights 8 days Upstream Cruise, 7 nights--%>
-                            <asp:Label ID="lbpackageName" runat="server" Font-Underline="True"></asp:Label></strong>
+                        </strong>
                         <div class="clear"></div>
 
-                        <div class="Invoice_Package_L">
+                        <div class="Invoice_header_R">
                             <div>
                                 <asp:Label ID="lblVessel" runat="server"></asp:Label><%-- MV Mahabaahu--%>
                                 <asp:Label ID="lblacm" runat="server"></asp:Label>
+
+                            </div>
+                            <div>
+                                <asp:Label ID="lbpackageName" runat="server" Font-Underline="false"></asp:Label>
                             </div>
                             <div>
                                 <asp:Label ID="lbStrtEnd" runat="server" Text=""></asp:Label>
                             </div>
                         </div>
                         <div class="Invoice_Package_R">
-                            <div>
+                            <div style="padding-left: 257px;">
                                 <div>
-                                    <table style="width: 100%">
+                                    <table style="width: 114%; margin-left: -43px;">
                                         <tr>
-                                            <td style="text-align: right; width: 209px;">Start Date: </td>
-                                            <td style="text-align: left">
+                                            <td style="text-align: left; width: 109px;">Start Date: </td>
+                                            <td style="text-align: left; padding-left: 1%;">
                                                 <asp:Label ID="lblArrvDate" runat="server"></asp:Label></td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div>
-                                    <table style="width: 100%">
+                                    <table style="width: 114%; margin-left: -43px;">
                                         <tr>
-                                            <td style="text-align: right; width: 209px;">End Date: </td>
-                                            <td style="text-align: left">
+                                            <td style="text-align: left; width: 106px;">End Date: </td>
+                                            <td style="text-align: left; padding-left: 1%;">
                                                 <asp:Label ID="lblDepartDate" runat="server"></asp:Label></td>
                                         </tr>
                                     </table>
@@ -422,7 +438,7 @@
                         </div>
                     </div>
                     <!--Invoice_Package-->
-                    <div class="Invoice_Wrp_Tbl" style="display: table-cell; padding-top: 30px; padding-bottom: 30px; width: 900px;">
+                    <div class="Invoice_Wrp_Tbl" style="display: table-cell; padding-top: 30px; padding-bottom: 30px; width: 100%;">
                         <%--<table width="100%" border="1" cellspacing="0" cellpadding="5">
                         <tr>
                             <th><strong>Particulars</strong></th>
@@ -477,26 +493,83 @@
                             <td>979 </td>
                         </tr>
                     </table>--%>
-                        <asp:GridView ID="gdvCruiseRooms" DataKeyNames="Bed Configuration,RoomNumber" runat="server" AutoGenerateColumns="False" Width="100%" ShowFooter="True" OnRowDataBound="gdvCruiseRooms_RowDataBound">
-                            <Columns>
-                                <asp:BoundField DataField="categoryName" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" HeaderText="Particulars" />
-                                <asp:BoundField DataField="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Pax" />
-                                <asp:BoundField DataField="Price" HeaderText="Rate in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="166px" />
-                                <asp:BoundField DataField="Price" HeaderText="Total in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="118px" />
-                            </Columns>
-                            <FooterStyle BackColor="#CCCCCC" CssClass="ralign" />
-                            <HeaderStyle BackColor="#CCCCCC" />
-                        </asp:GridView>
-                        <asp:GridView ID="gdvSelectedRooms" runat="server" Width="100%" AutoGenerateColumns="false" ShowFooter="True" Font-Size="Medium">
-                            <Columns>
-                                <asp:BoundField DataField="categoryName" HeaderText="Particulars" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left" />
-                                <asp:BoundField DataField="Pax" HeaderText="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
-                                <asp:BoundField DataField="Price" HeaderText="Rate in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="166px" />
-                                <asp:BoundField DataField="Total" HeaderText="Total in INR" HeaderStyle-CssClass="rightalign" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="118px" />
-                            </Columns>
-                            <FooterStyle BackColor="#CCCCCC" CssClass="ralign" />
-                            <HeaderStyle BackColor="#CCCCCC" />
-                        </asp:GridView>
+                        <div style="width: 1000px;">
+                            <asp:GridView ID="gdvCruiseRooms" DataKeyNames="RoomNumber" runat="server" AutoGenerateColumns="False" Width="100%" ShowFooter="True" OnRowDataBound="gdvCruiseRooms_RowDataBound">
+                                <Columns>
+                                    <asp:BoundField DataField="SCat" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Particulars" />
+                                    <asp:BoundField DataField="RoomNumber" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Cabin No" />
+                                    <asp:BoundField DataField="Bconfig" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Bed Config" />
+                                    <asp:BoundField DataField="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="Guests" />
+
+
+                                    <%-- <asp:BoundField DataField="RoomType" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="No Of Rooms" />--%>
+                                    <asp:BoundField DataField="pricewithouttax" HeaderText="Rate Per Person(INR)" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="166px" />
+                                    <%-- <asp:BoundField DataField="Tax1" HeaderText="Tax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="166px" />--%>
+                                    <asp:BoundField DataField="Total" HeaderText="Gross Amount(INR)" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="118px" />
+                                </Columns>
+                                <FooterStyle BackColor="#CCCCCC" CssClass="ralign invoicetable" />
+                                <HeaderStyle BackColor="#CCCCCC" CssClass="invoicetable" />
+                            </asp:GridView>
+                            <asp:GridView ID="gdvSelectedRooms" runat="server" Width="100%" AutoGenerateColumns="false" ShowFooter="True" Font-Size="Medium">
+                                <Columns>
+                                    <asp:BoundField DataField="categoryName" HeaderText="Particulars" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
+                                    <asp:BoundField DataField="Pax" HeaderText="Pax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
+                                    <asp:BoundField DataField="Nights" HeaderText="Nights" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
+                                    <asp:BoundField DataField="RoomType" HeaderText="Room Type" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" />
+
+                                    <asp:BoundField DataField="Price" HeaderText="Rate in INR" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="166px" />
+                                    <asp:BoundField DataField="Inclusivetax" HeaderText="Total in INR" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="118px" />
+                                </Columns>
+                                <FooterStyle BackColor="#CCCCCC" CssClass="ralign invoicetable" />
+                                <HeaderStyle BackColor="#CCCCCC" CssClass="invoicetable" />
+                            </asp:GridView>
+                        </div>
+                        <div style="float: left; padding-left: 75%;">
+                            <table>
+                                
+
+
+                                <tr>
+                                    <td style="font: bold; width: 157px;">
+                                        <asp:Label ID="lbltotalGross" runat="server" Text="Total Gross"></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="lblgetTotal" Style="text-align: right; float: right;" runat="server" Text=" "></asp:Label></td>
+                                </tr>
+                                <tr>
+                                    <td style="font: bold">
+                                        <asp:Label ID="Label4" runat="server" Text=" "></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="lblDiscount" Style="text-align: right; float: right;" runat="server" Text=" "></asp:Label></td>
+                                </tr>
+                                <tr>
+                                    <td style="font: bold">
+                                        <asp:Label ID="Label7" runat="server" Text=" "></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="lblTaxableAmount" Style="text-align: right; float: right;" runat="server" Text=" "></asp:Label></td>
+                                </tr>
+                                <tr>
+                                    <td style="font: bold">
+                                        <asp:Label ID="lblGst" runat="server" Text="Tax"></asp:Label><asp:Label ID="Label1" runat="server" Text=" "></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="Label3" runat="server" Style="text-align: right; float: right;" Text=" "></asp:Label></td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font: bold">
+                                        <asp:Label ID="Label6" runat="server" Text=" "></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="lblGross" Style="text-align: right; float: right;" runat="server" Text=" "></asp:Label></td>
+                                </tr>
+                                <tr>
+                                    <td style="font: bold">
+                                        <asp:Label ID="Label2" runat="server" Text=" "></asp:Label></td>
+                                    <td style="float: right; text-align: right;">
+                                        <asp:Label ID="lblGetGrandTotal" Style="text-align: right; float: right;" runat="server" Text=" "></asp:Label></td>
+                                </tr>
+                            </table>
+
+
+                        </div>
                     </div>
 
                     <!--Invoice_Wrp_Tbl-->
@@ -523,13 +596,18 @@
         </div>--%>
                         <div><strong>&nbsp;Payment details:</strong></div>
                         <table style="width: 550px">
-                            <tr style="display: none">
-                                <td class="auto-style3">Total Amout(after adding VAT(4.50%)(in INR)</td>
+                            <tr id="trtot" runat="server" visible="false">
+                                <td class="auto-style3">Total Amout(in INR)</td>
                                 <td class="ralign">
                                     <asp:Label ID="lblTotAMt" runat="server"></asp:Label></td>
                             </tr>
+                            <tr id="tradvance" runat="server" visible="false">
+                                <td class="auto-style4">Advance Amout Paid (In INR)</td>
+                                <td class="ralign">
+                                    <asp:Label ID="lbladvance" runat="server"></asp:Label></td>
+                            </tr>
                             <tr>
-                                <td class="auto-style4">Total Amout Paid (in INR)</td>
+                                <td class="auto-style4">Total Amout Paid (In INR)</td>
                                 <td class="ralign">
                                     <asp:Label ID="lblTotPaid" runat="server"></asp:Label></td>
                             </tr>
@@ -539,7 +617,8 @@
                                     <asp:Label ID="lblBalance" runat="server"></asp:Label></td>
                             </tr>
                             <tr>
-                                <td class="auto-style4"><asp:Label ID="lblBalanceDueOn" runat="server" Text="Balance Due On"></asp:Label></td>
+                                <td class="auto-style4">
+                                    <asp:Label ID="lblBalanceDueOn" runat="server" Text="Balance Due On"></asp:Label></td>
                                 <td class="ralign">
                                     <asp:Label ID="lbBalanceDueIn" runat="server"></asp:Label></td>
                             </tr>
@@ -558,7 +637,7 @@
                 </div>
                 <asp:HiddenField ID="hfBookingId" runat="server" />
             </div>
-            <%-- <input type="button" value="Print" onclick="PrintElem('#mydiv')" />--%>            
+            <%-- <input type="button" value="Print" onclick="PrintElem('#mydiv')" />--%>
         </form>
     </span>
 </body>

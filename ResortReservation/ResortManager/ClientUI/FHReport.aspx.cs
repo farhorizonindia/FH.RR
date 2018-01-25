@@ -181,19 +181,23 @@ public partial class FHReport : ClientBasePage
 
     private void FillAgents()
     {
-        AgentMaster oAgentMaster = new AgentMaster();
-        AgentDTO[] oAgentData = oAgentMaster.GetData();
-        ListItemCollection li = new ListItemCollection();
-        ListItem l = new ListItem("Choose Agent", "0");
-        ddlAgent.Items.Insert(0, l);
-        if (oAgentData != null)
+        try
         {
-            for (int i = 0; i < oAgentData.Length; i++)
+            AgentMaster oAgentMaster = new AgentMaster();
+            AgentDTO[] oAgentData = oAgentMaster.GetData();
+            ListItemCollection li = new ListItemCollection();
+            ListItem l = new ListItem("Choose Agent", "0");
+            ddlAgent.Items.Insert(0, l);
+            if (oAgentData != null)
             {
-                l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
-                ddlAgent.Items.Insert(i + 1, l);
+                for (int i = 0; i < oAgentData.Length; i++)
+                {
+                    l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
+                    ddlAgent.Items.Insert(i + 1, l);
+                }
             }
         }
+        catch { }
     }
 
 
@@ -252,26 +256,27 @@ public partial class FHReport : ClientBasePage
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             #region Booking & Proposed
-            if (string.Compare(e.Item.Cells[12].Text, "BOOKED", true) == 0)
+            if (string.Compare(e.Item.Cells[14].Text, "BOOKED", true) == 0)
             {
-                e.Item.Cells[13].BackColor = System.Drawing.Color.Aqua;
+                e.Item.Cells[14].BackColor = System.Drawing.Color.Aqua;
                 //    e.Item.Cells[10].Text = "";
                 //   e.Item.Cells[11].Text = "";
 
                 //    e.Item.Cells[14].Text = "";
 
 
-                if (string.Compare(e.Item.Cells[13].Text.ToUpper(), "TRUE", true) == 0)
+                if (string.Compare(e.Item.Cells[15].Text.ToUpper(), "TRUE", true) == 0)
                 {
-                    e.Item.Cells[13].BackColor = System.Drawing.Color.Blue;
-                    e.Item.Cells[13].ForeColor = System.Drawing.Color.White;
+                    e.Item.Cells[14].BackColor = System.Drawing.Color.Blue;
+                    e.Item.Cells[14].ForeColor = System.Drawing.Color.White;
+                    e.Item.Cells[14].Text = "PROPOSED";
                 }
             }
             #endregion
             #region Confirmed
-            else if (string.Compare(e.Item.Cells[13].Text, "CONFIRMED", true) == 0)
+            else if (string.Compare(e.Item.Cells[14].Text, "CONFIRMED", true) == 0)
             {
-                e.Item.Cells[13].BackColor = System.Drawing.Color.Lime;
+                e.Item.Cells[14].BackColor = System.Drawing.Color.Lime;
                 //   e.Item.Cells[6].Text = "";
 
                 // LinkButton bc;
@@ -286,9 +291,9 @@ public partial class FHReport : ClientBasePage
             }
             #endregion
             #region Cancelled
-            else if (string.Compare(e.Item.Cells[13].Text, "CANCELLED", true) == 0)
+            else if (string.Compare(e.Item.Cells[14].Text, "CANCELLED", true) == 0)
             {
-                e.Item.Cells[13].BackColor = System.Drawing.Color.Red;
+                e.Item.Cells[14].BackColor = System.Drawing.Color.Red;
                 //      e.Item.Cells[6].Text = "";
                 //      e.Item.Cells[7].Text = "";
                 ////     e.Item.Cells[9].Text = "";
@@ -300,9 +305,9 @@ public partial class FHReport : ClientBasePage
             }
             #endregion
             #region Waitlisted
-            else if (string.Compare(e.Item.Cells[13].Text, "WAITLISTED", true) == 0)
+            else if (string.Compare(e.Item.Cells[14].Text, "WAITLISTED", true) == 0)
             {
-                e.Item.Cells[13].BackColor = System.Drawing.Color.Orange;
+                e.Item.Cells[14].BackColor = System.Drawing.Color.Orange;
                 //  e.Item.Cells[8].Text = "";
                 //   e.Item.Cells[9].Text = "";
                 //   e.Item.Cells[10].Text = "";
@@ -314,20 +319,20 @@ public partial class FHReport : ClientBasePage
             #endregion
 
             #region Proposed
-            if (Boolean.Parse(e.Item.Cells[14].Text) == true)
-            {
-                //   e.Item.Cells[8].Text = "";
-                // e.Item.Cells[9].Text = "";
-                //  e.Item.Cells[10].Text = "";
-                // e.Item.Cells[11].Text = "";
-                //e.Item.Cells[12].Text = "";
-                //e.Item.Cells[13].Text = "";
-                //   e.Item.Cells[14].Text = "";
-            }
+            //if (Boolean.Parse(e.Item.Cells[15].Text) == true)
+            //{
+            //    //   e.Item.Cells[8].Text = "";
+            //    // e.Item.Cells[9].Text = "";
+            //    //  e.Item.Cells[10].Text = "";
+            //    // e.Item.Cells[11].Text = "";
+            //    //e.Item.Cells[12].Text = "";
+            //    //e.Item.Cells[13].Text = "";
+            //    //   e.Item.Cells[14].Text = "";
+            //}
             #endregion
 
             #region
-            if (Boolean.Parse(e.Item.Cells[15].Text) == true)
+            if (Boolean.Parse(e.Item.Cells[16].Text) == true)
             {
                 e.Item.BackColor = System.Drawing.Color.Teal;
                

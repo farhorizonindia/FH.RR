@@ -1,5 +1,6 @@
 using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
 using System;
@@ -7,12 +8,16 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.IO;
+using System.Data;
 
 public partial class ClientUI_afterBookingactions : ClientBasePage
 {
+    DALSearch dlsearch = new DALSearch();
+    string status = "";
     protected void Page_Load(object sender, EventArgs e)
     {
-        string status = "";
+
 
         int iBookingId = 0;
         int iAccomodationId = 0;
@@ -35,7 +40,39 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             SendEventEmail(iBookingId, status, updated);
             DisplayBookingResult(iBookingId, status);
             ShowBookingDetails(iBookingId);
+            DataTable dt = dlsearch.getroomsdetails(iBookingId);
+            if (dt != null && dt.Rows.Count > 0)
+            {
 
+                DataView view = new DataView(dt);
+                DataTable distinctValues = view.ToTable(true, "RoomCategoryId");
+                StringBuilder sb = new StringBuilder();
+
+                string value = "";
+                int k = 1;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i]["RoomCategoryId"].ToString() == value)
+                    {
+                        sb.Append(",");
+                        sb.Append(dt.Rows[i]["RoomNo"].ToString());
+
+
+                    }
+                    else
+                    {
+                        sb.Append(" ");
+                        value = dt.Rows[i]["RoomCategoryId"].ToString();
+                        sb.Append(dt.Rows[i]["RoomCategory"].ToString() + " :");
+                        sb.Append(dt.Rows[i]["RoomNo"].ToString());
+
+                        k++;
+                    }
+                }
+                Label4.Text = sb.ToString();
+
+
+            }
             if (status == "confirmed")
             {
                 lblSubject.Text = "Booking Confirmed";
@@ -93,8 +130,12 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 }
             }
 
-            if ((status == "waitlisted" || status == "booked") && updated == false)
+            if ((status == "waitlisted" || status == "booked" || status == "Proposed Booking") && updated == false)
             {
+                if (SessionServices.Booking_Propsed != null)
+                {
+                    lblpropsedbook.Text = SessionServices.Booking_Propsed;
+                }
                 lblSubject.Text = "Booking New";
                 Table tblparent = new Table();
                 TableRow tr;
@@ -112,8 +153,12 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tblparent.Rows.Add(tr);
                 PnlMailformat.Controls.Add(tblparent);
             }
-            if ((status == "waitlisted" || status == "booked") && updated == true)
+            if ((status == "waitlisted" || status == "booked" || status == "Proposed Booking") && updated == true)
             {
+                if (SessionServices.Booking_Propsed != null)
+                {
+                    lblpropsedbook.Text = SessionServices.Booking_Propsed;
+                }
                 lblSubject.Text = "Booking Updated";
                 BookingDTMail[] obd = SessionServices.RetrieveSession("BookDetMail") as BookingDTMail[];
                 BookingRoomReportsDTO[] orrbd = SessionServices.RetrieveSession("BookroomDetmail") as BookingRoomReportsDTO[];
@@ -132,7 +177,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tc.Controls.Add(BookDetailsformail(iBookingId, "Updated Details"));
                 tr.Cells.Add(tc);
                 tblparent.Rows.Add(tr);
-                
+
                 //PrepareBookindDetailsMail(obd, "Previous Details");
                 //BookDetailsformail(iBookingId, "Updated Details");
 
@@ -200,6 +245,11 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 case "deleted":
                     Status_Deleted(BookingId);
                     break;
+                case "Proposed Booking":
+                    Status_Waitlisted(BookingId);
+                    break;
+
+
             }
         }
         else
@@ -208,7 +258,22 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             //lblBookingStatus.ForeColor = System.Drawing.Color.Green;
         }
     }
-
+    private void Status_ProposedBooking(int iBookingId)
+    {
+        StringBuilder strComment = new StringBuilder();
+        lblBookingStatus.Text = "The booking has been updated successfully.";
+        lblBookingStatus.ForeColor = System.Drawing.Color.Orange;
+        lblBookingDetails.Text = "";
+        //        strComment.Append("You can perform following operations");
+        strComment.Append("<br><a href='Booking.aspx?bid=" + Convert.ToString(iBookingId) + "'>View/Edit </a>");
+        strComment.Append(" | <a href='bookingconfirmation.aspx?bid=" + Convert.ToString(iBookingId) + "'>Confirm</a>");
+        //strComment.Append("<br> <a href='touristDetails.aspx?bid=" + Convert.ToString(_iBookingId) + "'>Add Tourists</a><br>");
+        //strComment.Append("<br> <a href='ViewTourists.aspx?bid=" + Convert.ToString(_iBookingId) + "'>View Tourists</a><br>");
+        strComment.Append(" | <a href='Booking.aspx'>New Reservation</a>");
+        strComment.Append(" | <a href='ViewBookings.aspx'>Current Reservations</a>");
+        lblComment.Text = Convert.ToString(strComment);
+        strComment = null;
+    }
     private void Status_Booked(int iBookingId)
     {
         StringBuilder strComment = new StringBuilder();
@@ -316,6 +381,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
         {
             case "booked":
             case "waitlisted":
+            case "Proposed Booking":
                 eventName = ENums.EventName.BOOKING;
                 if (BookingUpdated)
                     eventName = ENums.EventName.BOOKINGUPDATED;
@@ -513,67 +579,82 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
         TableCell tc = null;
         for (int i = 0; i < oBlockedBooking.Length; i++)
         {
-            //if (oBlockedBooking[i].BookingType == 'X')
+            try
             {
-                // prepare a row of the current record showing its bookingref, category, 
-                //roomtype and no_of_rooms_freed by this id
-                pnlID = oBlockedBooking[i].RoomCategory + "" + oBlockedBooking[i].RoomType;
-                if (oBlockedBooking[i].BookingId != iPrevBookingID)
+                //if (oBlockedBooking[i].BookingType == 'X')
                 {
-                    if (tblRoomDetails.Rows.Count > 0)
+                    // prepare a row of the current record showing its bookingref, category, 
+                    //roomtype and no_of_rooms_freed by this id
+                    pnlID = oBlockedBooking[i].RoomCategory + "" + oBlockedBooking[i].RoomType;
+                    if (oBlockedBooking[i].BookingId != iPrevBookingID)
                     {
-                        Panel p = new Panel();
-                        p.ID = pnlID;
-                        p = AddTableToPanel(p, tblRoomDetails);
-                        trMain = new TableRow();
-                        tc = new TableCell();
-                        tc.Controls.Add(p);
-                        trMain.Cells.Add(tc);
-                        tblMain.Rows.Add(trMain);
-                    }
-                    //if (oBlockedBooking[i].BookingId == BookingId)
-                    {
-                        if (oBlockedBooking[i].BookingType == 'X')
+                        if (tblRoomDetails.Rows.Count > 0)
                         {
+                            Panel p = new Panel();
+                            p.ID = pnlID;
+                            p = AddTableToPanel(p, tblRoomDetails);
                             trMain = new TableRow();
-                            tc = SetCellData("Booking Details Of Cancelled Booking");
-                            tc.ColumnSpan = 6;
+                            tc = new TableCell();
+                            tc.Controls.Add(p);
                             trMain.Cells.Add(tc);
                             tblMain.Rows.Add(trMain);
                         }
-                    }
-                    //else if (oBlockedBooking[i].BookingId != BookingId)
-                    {
-                        if (oBlockedBooking[i].BookingType == Constants.WAITLISTED)
+                        if (oBlockedBooking[i].BookingId == BookingId)
                         {
-                            if (bWritten == false)
+                            if (oBlockedBooking[i].BookingType == 'X')
                             {
                                 trMain = new TableRow();
-                                tc = SetCellData("Bookings that can be confirmed in lieu of the cancelled booking");
+                                tc = SetCellData("Booking Details Of Cancelled Booking");
                                 tc.ColumnSpan = 6;
                                 trMain.Cells.Add(tc);
                                 tblMain.Rows.Add(trMain);
-                                bWritten = true;
+                                trMain = new TableRow();
+                                tc = SetCellData("Booking Reference : " + "<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
+                                tc.ColumnSpan = 6;
+                                trMain.Cells.Add(tc);
+                                //tc = SetCellData("<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
+                                //trMain.Cells.Add(tc);
+                                tblMain.Rows.Add(trMain);
+                                iPrevBookingID = oBlockedBooking[i].BookingId;
+
+                                tblRoomDetails = new Table();
                             }
                         }
+                        else if (oBlockedBooking[i].BookingId != BookingId)
+                        {
+                            if (oBlockedBooking[i].BookingType == Constants.WAITLISTED)
+                            {
+                                if (bWritten == false)
+                                {
+                                    trMain = new TableRow();
+                                    tc = SetCellData("Bookings that can be confirmed in lieu of the cancelled booking");
+                                    tc.ColumnSpan = 6;
+                                    trMain.Cells.Add(tc);
+                                    tblMain.Rows.Add(trMain);
+                                    bWritten = true;
+                                    trMain = new TableRow();
+                                    tc = SetCellData("Booking Reference : " + "<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
+                                    tc.ColumnSpan = 6;
+                                    trMain.Cells.Add(tc);
+                                    //tc = SetCellData("<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
+                                    //trMain.Cells.Add(tc);
+                                    tblMain.Rows.Add(trMain);
+                                    iPrevBookingID = oBlockedBooking[i].BookingId;
+
+                                    tblRoomDetails = new Table();
+                                }
+                            }
+                        }
+                       
                     }
                     trMain = new TableRow();
-                    tc = SetCellData("Booking Reference : " + "<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
-                    tc.ColumnSpan = 6;
-                    trMain.Cells.Add(tc);
-                    //tc = SetCellData("<a href='#'>" + oBlockedBooking[i].BookingRef.ToString() + "</a>");
-                    //trMain.Cells.Add(tc);
-                    tblMain.Rows.Add(trMain);
-                    iPrevBookingID = oBlockedBooking[i].BookingId;
-
-                    tblRoomDetails = new Table();
+                    trMain.Cells.Add(SetCellData(oBlockedBooking[i].RoomCategory.ToString()));
+                    trMain.Cells.Add(SetCellData(oBlockedBooking[i].RoomType.ToString()));
+                    trMain.Cells.Add(SetCellData(oBlockedBooking[i].No_Of_RoomsWaitListed.ToString()));
+                    tblRoomDetails.Rows.Add(trMain);
                 }
-                trMain = new TableRow();
-                trMain.Cells.Add(SetCellData(oBlockedBooking[i].RoomCategory.ToString()));
-                trMain.Cells.Add(SetCellData(oBlockedBooking[i].RoomType.ToString()));
-                trMain.Cells.Add(SetCellData(oBlockedBooking[i].No_Of_RoomsWaitListed.ToString()));
-                tblRoomDetails.Rows.Add(trMain);
             }
+            catch { }
         }
         Panel p1 = new Panel();
         p1.ID = pnlID;
@@ -1000,7 +1081,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
         }
         return null;
     }
-        
+
     private Table PrepareRoomBookingReport(BookingRoomReportsDTO[] BookingRoomReportsDTO, string st)
     {
         Table tblMain;
@@ -1011,7 +1092,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
             TableRow tr;
             TableCell tc;
-            tblMain.Width = 340;
+            tblMain.Width = 360;
             tblMain.Attributes.Add("Border", "1px solid black");
 
 
@@ -1146,7 +1227,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             tblMain.Style.Add("border-collapse", "collapse");
             TableRow tr;
             TableCell tc;
-            tblMain.Width = 340;
+            tblMain.Width = 400;
             tblMain.Attributes.Add("Border", "1px solid black");
 
 
@@ -1288,7 +1369,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
             TableRow tr;
             TableCell tc;
-            tblMain.Width = 340;
+            tblMain.Width = 360;
             tblMain.Attributes.Add("Border", "1px solid black");
 
 
@@ -1423,7 +1504,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             tblMain.Style.Add("border-collapse", "collapse");
             TableRow tr;
             TableCell tc;
-            tblMain.Width = 340;
+            tblMain.Width = 400;
             tblMain.Attributes.Add("Border", "1px solid black");
 
 
@@ -1569,7 +1650,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tblMain.Style.Add("border-collapse", "collapse");
                 TableRow tr;
                 TableCell tc;
-                tblMain.Width = 340;
+                tblMain.Width = 360;
                 if (st != "")
                 {
                     tr = new TableRow();
@@ -1590,6 +1671,8 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
                     tc = new TableCell();
                     tc.Text = BookingDTMail[i].Bookingcode;
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
@@ -1598,6 +1681,14 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
                     tc = new TableCell();
                     tc.Text = BookingDTMail[i].AgentName;
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+                    tblMain.Rows.Add(tr);
+
+                    tr = new TableRow();
+
+                    tc = new TableCell();
+                    tc.Text = BookingDTMail[i].RefAgentName;
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
@@ -1628,6 +1719,16 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
+                    if (BookingDTMail[i].packagename != "")
+                    {
+                        tr = new TableRow();
+                        tc = new TableCell();
+                        tc.Text = BookingDTMail[i].packagename.ToString();
+                        tc.Width = 250;
+                        tr.Cells.Add(tc);
+                        tblMain.Rows.Add(tr);
+                    }
+                    tr = new TableRow();
 
                     tr = new TableRow();
 
@@ -1640,10 +1741,32 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     {
                         tc.Text = BookingDTMail[i].bookingstatus;
                     }
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
 
+                    tr = new TableRow();
+
+                    tc = new TableCell();
+                    if (BookingDTMail[i].chartered == true)
+                    {
+                        tc.Text = BookingDTMail[i].bookingstatus + "(Chartered)";
+                    }
+                    else if (status == "Proposed Booking")
+                    {
+                        tc.Text = "Proposed";
+                    }
+                    else
+                    {
+                        tc.Text = BookingDTMail[i].bookingstatus;
+                    }
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+                    tblMain.Rows.Add(tr);
                     tr = new TableRow();
 
 
@@ -1675,7 +1798,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tblMain.Style.Add("border-collapse", "collapse");
                 TableRow tr;
                 TableCell tc;
-                tblMain.Width = 340;
+                tblMain.Width = 400;
                 if (st != "")
                 {
 
@@ -1704,11 +1827,14 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     tc = new TableCell();
                     tc.Text = "Booking Id:";
                     //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
 
                     tc = new TableCell();
                     tc.Text = BookingDTMail[i].Bookingcode;
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
@@ -1722,6 +1848,19 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
                     tc = new TableCell();
                     tc.Text = BookingDTMail[i].AgentName;
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+                    tblMain.Rows.Add(tr);
+
+                    tr = new TableRow();
+                    tc = new TableCell();
+                    tc.Text = "RefAgent Name:";
+                    //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+
+                    tc = new TableCell();
+                    tc.Text = BookingDTMail[i].RefAgentName;
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
@@ -1764,10 +1903,26 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
+                    if (BookingDTMail[i].packagename != "")
+                    {
+                        tr = new TableRow();
+                        tc = new TableCell();
+                        tc.Text = "Package:";
+                        //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                        tc.Width = 250;
+                        tr.Cells.Add(tc);
 
+                        tc = new TableCell();
+                        tc.Text = BookingDTMail[i].packagename.ToString();
+                        tc.Width = 1583;
+                        tr.Cells.Add(tc);
+                        tblMain.Rows.Add(tr);
+                    }
                     tr = new TableRow();
                     tc = new TableCell();
                     tc.Text = "Booking Status:";
+                    //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
@@ -1778,13 +1933,53 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                     {
                         tc.Text = BookingDTMail[i].bookingstatus + "(Chartered)";
                     }
+                    else if (status == "Proposed Booking")
+                    {
+                        tc.Text = "Proposed";
+                    }
                     else
                     {
                         tc.Text = BookingDTMail[i].bookingstatus;
                     }
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                     tc.Width = 250;
                     tr.Cells.Add(tc);
                     tblMain.Rows.Add(tr);
+
+                    
+
+                    tr = new TableRow();
+                    tc = new TableCell();
+                    tc.Text = "Booking Types:";
+                    //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+                    //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+
+                    tc = new TableCell();
+
+
+                    if (BookingDTMail[i].chartered == true)
+                    {
+                        tc.Text = BookingDTMail[i].bookingstatus + "(Chartered)";
+                    }
+                    else if (status == "Proposed Booking")
+                    {
+                        tc.Text = "Proposed";
+                    }
+                    else
+                    {
+                        tc.Text = BookingDTMail[i].bookingstatus;
+                    }
+
+                    tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
+                    tblMain.Rows.Add(tr);
+
 
                     tr = new TableRow();
                     tc = new TableCell();
@@ -1828,7 +2023,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
             tblMain.Style.Add("border-collapse", "collapse");
             TableRow tr;
             TableCell tc;
-            tblMain.Width = 340;
+            tblMain.Width = 400;
             if (st != "")
             {
 
@@ -1847,11 +2042,15 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tc = new TableCell();
                 tc.Text = "Booking Id:";
                 //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+                //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
                 tc.Width = 250;
                 tr.Cells.Add(tc);
 
                 tc = new TableCell();
                 tc.Text = BookingDTMail[i].Bookingcode;
+                tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                 tc.Width = 250;
                 tr.Cells.Add(tc);
                 tblMain.Rows.Add(tr);
@@ -1865,6 +2064,19 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
 
                 tc = new TableCell();
                 tc.Text = BookingDTMail[i].AgentName;
+                tc.Width = 250;
+                tr.Cells.Add(tc);
+                tblMain.Rows.Add(tr);
+
+                tr = new TableRow();
+                tc = new TableCell();
+                tc.Text = "RefAgent Name:";
+                //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                tc.Width = 250;
+                tr.Cells.Add(tc);
+
+                tc = new TableCell();
+                tc.Text = BookingDTMail[i].RefAgentName;
                 tc.Width = 250;
                 tr.Cells.Add(tc);
                 tblMain.Rows.Add(tr);
@@ -1907,10 +2119,26 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 tc.Width = 250;
                 tr.Cells.Add(tc);
                 tblMain.Rows.Add(tr);
+                if (BookingDTMail[i].packagename != "")
+                {
+                    tr = new TableRow();
+                    tc = new TableCell();
+                    tc.Text = "Package:";
+                    //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                    tc.Width = 250;
+                    tr.Cells.Add(tc);
 
+                    tc = new TableCell();
+                    tc.Text = BookingDTMail[i].packagename.ToString();
+                    tc.Width = 1583;
+                    tr.Cells.Add(tc);
+                    tblMain.Rows.Add(tr);
+                }
                 tr = new TableRow();
                 tc = new TableCell();
                 tc.Text = "Booking Status:";
+                //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                 //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
                 tc.Width = 250;
                 tr.Cells.Add(tc);
@@ -1920,13 +2148,54 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
                 {
                     tc.Text = BookingDTMail[i].bookingstatus + "(Chartered)";
                 }
+                else if (status == "Proposed Booking")
+                {
+                    tc.Text = "Proposed";
+                }
                 else
                 {
                     tc.Text = BookingDTMail[i].bookingstatus;
                 }
+                tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                tc.Style[HtmlTextWriterStyle.Color] = "Blue";
                 tc.Width = 250;
                 tr.Cells.Add(tc);
                 tblMain.Rows.Add(tr);
+
+               
+
+                tr = new TableRow();
+                tc = new TableCell();
+                tc.Text = "Booking Types:";
+                //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                //tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+                //tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                tc.Width = 250;
+                tr.Cells.Add(tc);
+
+                tc = new TableCell();
+
+
+                if (BookingDTMail[i].chartered == true)
+                {
+                    tc.Text = BookingDTMail[i].bookingstatus + "(Chartered)";
+                }
+                else if (status == "Proposed Booking")
+                {
+                    tc.Text = "Proposed";
+                }
+                else
+                {
+                    tc.Text = BookingDTMail[i].bookingstatus;
+                }
+
+                tc.Style[HtmlTextWriterStyle.FontWeight] = "Bold";
+                tc.Style[HtmlTextWriterStyle.Color] = "Blue";
+
+
+                tc.Width = 250;
+                //tr.Cells.Add(tc);
+                //tblMain.Rows.Add(tr);
 
                 tr = new TableRow();
                 tc = new TableCell();
@@ -1967,7 +2236,7 @@ public partial class ClientUI_afterBookingactions : ClientBasePage
         TableRow tr;
         TableCell tc;
 
-        tblMain.Width = 340;
+        tblMain.Width = 360;
         tblMain.Style[HtmlTextWriterStyle.FontSize] = "x-small";
 
         for (int i = 0; i < BookingRoomReportsDTO.Length; i++)

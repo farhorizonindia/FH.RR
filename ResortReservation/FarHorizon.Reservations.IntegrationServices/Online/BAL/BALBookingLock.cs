@@ -16,7 +16,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public int AccomId { get; set; }
         public string LockIdentifier { get; set; }
         public DateTime LockExpireAt { get; set; }
-
+        public string rooms { get; set; }
+        public int roocatid { get; set; }
         public List<LockRoom> LockRooms { get; set; }
     }
 

@@ -23,7 +23,10 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
         {
             return SaveData(oBookingTouristDTO, Action.insert, out TouristNo);
         }
-
+        public bool InsertTouristentry(BookingTouristDTO oBookingTouristDTO, out int TouristNo)
+        {
+            return bookingTouristentry(oBookingTouristDTO, Action.insert, out TouristNo);
+        }
         public bool UpdateTouristDetails(BookingTouristDTO oBookingTouristDTO)
         {
             int iTouristNo;
@@ -71,7 +74,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportMode", DbType.String, String.Empty);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomDetails", DbType.String, oBookingTouristDTO.RoomDetails);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@NextDestination", DbType.String, String.Empty);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureDateTime", DbType.DateTime, GF.HandleMaxMinDates(DateTime.MinValue, false));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureDateTime", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.departuredate, true));
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmployedinIndia", DbType.Boolean, oBookingTouristDTO.EmployedinIndia);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisitPurpose", DbType.String, oBookingTouristDTO.VisitPurpose);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PermanentAddressInIndia", DbType.String, oBookingTouristDTO.PermanentAddressInIndia);
@@ -85,6 +88,85 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportPhoneNo", DbType.String, String.Empty);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Suffix", DbType.String, oBookingTouristDTO.Suffix);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, oBookingTouristDTO.EmailId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivalVehicalno", DbType.String, oBookingTouristDTO.arrivalvehiaclno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DpartureVehicalno", DbType.String, oBookingTouristDTO.departurevehicalno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureCity", DbType.String, oBookingTouristDTO.departureairport);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivalCity", DbType.String, oBookingTouristDTO.arrivalairport);
+                iTouristNo = 0;
+                if (oAction == Action.insert)
+                    iTouristNo = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
+                else if (oAction == Action.update)
+                    oDB.ExecuteNonQuery(oDB.DbCmd);
+                TouristNo = iTouristNo;
+            }
+            catch (Exception exp)
+            {
+                oDB = null;
+                oBookingTouristDTO = null;
+                GF.LogError("clsBookingTouristHandler.SaveData", exp.Message);
+                return false;
+            }
+            return true;
+        }
+        private bool bookingTouristentry(BookingTouristDTO oBookingTouristDTO, Action oAction, out int TouristNo)
+        {
+            int iTouristNo = 0;
+            TouristNo = 0;
+            try
+            {
+                oDB = new DatabaseManager();
+                string sProcName = "";
+                if (oAction == Action.insert)
+                    sProcName = "up_Ins_BookingTouristentry";
+                else if (oAction == Action.update)
+                    sProcName = "up_Upd_BookingTourist";
+
+                oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingId", DbType.Int32, oBookingTouristDTO.BookingId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, oBookingTouristDTO.BookingCode == null ? string.Empty : oBookingTouristDTO.BookingCode);
+                if (oAction == Action.update)
+                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TouristNo", DbType.Int32, oBookingTouristDTO.TouristNo);
+
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@FirstName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.FirstName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MiddleName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.MiddleName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@LastName", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.LastName));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Gender", DbType.String, oBookingTouristDTO.Gender);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@NationalityId", DbType.Int32, oBookingTouristDTO.NationalityId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PassportNo", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.PassportNo));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DOB", DbType.DateTime, oBookingTouristDTO.DateOfBirth);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PlaceofBirth", DbType.String, oBookingTouristDTO.PlaceofBirth);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PPIssueDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.PassportIssueDate, false));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PPExpiryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.PassportExpiryDate, false));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisaNo", DbType.String, DataSecurityManager.Encrypt(oBookingTouristDTO.VisaNo));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisaExpiryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.VisaExpiryDate, false));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@IndiaEntryDate", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.IndiaEntryDate, false));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ProposedStayInIndia", DbType.String, oBookingTouristDTO.ProposedStayInIndia);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivalDateTime", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.ArrivalDateTime, true));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivedFrom", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VehicleNo", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportCompany", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportMode", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomDetails", DbType.String, oBookingTouristDTO.RoomDetails);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@NextDestination", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureDateTime", DbType.DateTime, GF.HandleMaxMinDates(oBookingTouristDTO.departuredate, true));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmployedinIndia", DbType.Boolean, oBookingTouristDTO.EmployedinIndia);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VisitPurpose", DbType.String, oBookingTouristDTO.VisitPurpose);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PermanentAddressInIndia", DbType.String, oBookingTouristDTO.PermanentAddressInIndia);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MealPlan", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Allergies", DbType.String, oBookingTouristDTO.Allergies);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MealPref", DbType.String, oBookingTouristDTO.MealPreferences);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@SpecialMessage", DbType.String, oBookingTouristDTO.SpecialMessage);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@VehicleName", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DriverName", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DriverPhoneNo", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TransportPhoneNo", DbType.String, String.Empty);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Suffix", DbType.String, oBookingTouristDTO.Suffix);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, oBookingTouristDTO.EmailId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivalVehicalno", DbType.String, oBookingTouristDTO.arrivalvehiaclno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DpartureVehicalno", DbType.String, oBookingTouristDTO.departurevehicalno);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DepartureCity", DbType.String, oBookingTouristDTO.departureairport);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@ArrivalCity", DbType.String, oBookingTouristDTO.arrivalairport);
                 iTouristNo = 0;
                 if (oAction == Action.insert)
                     iTouristNo = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
@@ -212,8 +294,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         //oBookingTouristDTO[i].TransportMode = dr.ItemArray.GetValue(21) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(21)):"";
                         oBookingTouristDTO[i].RoomDetails = dr.ItemArray.GetValue(22) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(22)) : "";
                         //oBookingTouristDTO[i].NextDestination = dr.ItemArray.GetValue(23) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(23)):"";
-                        //oBookingTouristDTO[i].DepartureDateTime = dr.ItemArray.GetValue(24) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(24)):DateTime.MinValue;
-                        oBookingTouristDTO[i].EmployedinIndia = dr.ItemArray.GetValue(25) != DBNull.Value ? Convert.ToBoolean(Convert.ToInt32(dr.ItemArray.GetValue(25))) : false;
+                        oBookingTouristDTO[i].departuredate = dr.ItemArray.GetValue(24) != DBNull.Value ? Convert.ToDateTime(dr.ItemArray.GetValue(24)):DateTime.MinValue;
+                        oBookingTouristDTO[i].EmployedinIndia = dr.ItemArray.GetValue(25) != DBNull.Value ? Convert.ToBoolean(dr.ItemArray.GetValue(25)) : false;
                         oBookingTouristDTO[i].VisitPurpose = dr.ItemArray.GetValue(26) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(26)) : "";
                         oBookingTouristDTO[i].PermanentAddressInIndia = dr.ItemArray.GetValue(27) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(27)) : "";
                         //oBookingTouristDTO[i].MealPlan = dr.ItemArray.GetValue(28) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(28)):"";
@@ -228,6 +310,10 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         oBookingTouristDTO[i].Nationality = GetNationalityName(oBookingTouristDTO[i].NationalityId);
                         oBookingTouristDTO[i].CFormNo = dr.ItemArray.GetValue(37) != DBNull.Value ? Convert.ToInt32(dr.ItemArray.GetValue(37)) : 0;
                         oBookingTouristDTO[i].EmailId = dr.ItemArray.GetValue(38) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(38)) : "";
+                        oBookingTouristDTO[i].arrivalvehiaclno = dr.ItemArray.GetValue(40) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(40)) : "";
+                        oBookingTouristDTO[i].departurevehicalno = dr.ItemArray.GetValue(41) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(41)) : "";
+                        oBookingTouristDTO[i].departureairport = dr.ItemArray.GetValue(42) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(42)) : "";
+                        oBookingTouristDTO[i].arrivalairport = dr.ItemArray.GetValue(43) != DBNull.Value ? Convert.ToString(dr.ItemArray.GetValue(43)) : "";
                     }
                     #endregion AssigningValues
                 }
@@ -272,6 +358,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 {
                     oBookingTouristDTO = new BookingTouristDTO[ds.Tables[0].Rows.Count];
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+
                     {
                         dr = ds.Tables[0].Rows[i];
                         oBookingTouristDTO[i] = new BookingTouristDTO();
@@ -287,6 +374,38 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oBookingTouristDTO[i].MiddleName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(4)));
                         if (dr.ItemArray.GetValue(5) != DBNull.Value)
                             oBookingTouristDTO[i].LastName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(5)));
+                        if (dr.ItemArray.GetValue(6) != DBNull.Value)
+                            oBookingTouristDTO[i].RoomDetails = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(6)));
+                        if (dr.ItemArray.GetValue(7) != DBNull.Value)
+                            oBookingTouristDTO[i].Gender = (Convert.ToChar(dr.ItemArray.GetValue(7)));
+                        if (dr.ItemArray.GetValue(8) != DBNull.Value)
+                            oBookingTouristDTO[i].DateOfBirth = Convert.ToDateTime(Convert.ToDateTime(dr.ItemArray.GetValue(8)).ToString());
+                        if (dr.ItemArray.GetValue(9) != DBNull.Value)
+                            oBookingTouristDTO[i].Nationality = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(9)));
+                        if (dr.ItemArray.GetValue(10) != DBNull.Value)
+                            oBookingTouristDTO[i].PassportNo = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(10)));
+                        if (dr.ItemArray.GetValue(11) != DBNull.Value)
+                            oBookingTouristDTO[i].VisaExpiryDate = Convert.ToDateTime(dr.ItemArray.GetValue(11));
+                        if (dr.ItemArray.GetValue(12) != DBNull.Value)
+                            oBookingTouristDTO[i].ArrivalDateTime = Convert.ToDateTime(dr.ItemArray.GetValue(12));
+                        if (dr.ItemArray.GetValue(13) != DBNull.Value)
+                            oBookingTouristDTO[i].vehicalno = Convert.ToString(dr.ItemArray.GetValue(13));
+                        if (dr.ItemArray.GetValue(14) != DBNull.Value)
+                            oBookingTouristDTO[i].departuredate = Convert.ToDateTime(dr.ItemArray.GetValue(14));
+                        if (dr.ItemArray.GetValue(15) != DBNull.Value)
+                            oBookingTouristDTO[i].departureairport = Convert.ToString(dr.ItemArray.GetValue(15));
+                        if (dr.ItemArray.GetValue(16) != DBNull.Value)
+                            oBookingTouristDTO[i].guestname = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(16))) + ". " + DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(3))) + " " + DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(5)));
+                        if (dr.ItemArray.GetValue(17) != DBNull.Value)
+                            oBookingTouristDTO[i].arrivalvehiaclno = Convert.ToString(dr.ItemArray.GetValue(17));
+                        if (dr.ItemArray.GetValue(18) != DBNull.Value)
+                            oBookingTouristDTO[i].departurevehicalno = Convert.ToString(dr.ItemArray.GetValue(18));
+                        if (dr.ItemArray.GetValue(20) != DBNull.Value)
+                            oBookingTouristDTO[i].arrivalairport = Convert.ToString(dr.ItemArray.GetValue(20));
+
+
+
+
                     }
                 }
             }

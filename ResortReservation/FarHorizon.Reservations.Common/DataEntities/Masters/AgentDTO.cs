@@ -13,7 +13,11 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         private String _emailId;
         private string _password;
         private string _Phone;
-
+        private string _category;
+        private string _country;
+        private byte _localagent;
+        private int _BookingId;
+        private string _TokenNo;
         #region AgentMasterProperties
 
         public int AgentId
@@ -45,13 +49,34 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
             get { return _password; }
             set { _password = value; }
         }
+        public byte localagent
+        {
+            get { return _localagent; }
+            set { _localagent = value; }
+        }
+
 
         public string Phone
         {
             get { return _Phone; }
             set { _Phone = value; }
         }
-
+        public string category
+        {
+            get { return _category; }
+            set { _category = value; }
+        }
+        public string country
+        {
+            get { return _country; }
+            set { _country = value; }
+        }
+        public string TokenNo
+        {
+            get { return _TokenNo; }
+            set { _TokenNo = value; }
+        }
+        
         #endregion AgentMasterProperties
     }
 }

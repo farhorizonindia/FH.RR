@@ -23,7 +23,9 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private int _iNoOfNights;
         private int _iNoOfPersons;
         private int _iAgentId;
+        private int _AgentRefTypeId;
         private string _sAgentName;
+        private string _AgentType;
         private int _iBookingStatusId;
         private string _sBookingStatus;
         private int _iSeriesId;
@@ -59,7 +61,9 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private string _arrivalcity;
         private string _departurecity;
         private bool _chartered;
-
+        private decimal _agentcommission;
+        private string _packagid;
+        private string _packagename;
 
         #endregion
 
@@ -75,6 +79,8 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             _sAccomName = string.Empty;
 
             _sAgentName = string.Empty;
+
+            _AgentType = string.Empty;
             _sBookingStatus = string.Empty;
             _sExOrderNo = string.Empty;
             _sArrivalTransport = string.Empty;
@@ -93,6 +99,10 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             _DepartureDriverPhoneNo = string.Empty;
             _arrivalcity = string.Empty;
             _departurecity = string.Empty;
+            _packagid = string.Empty;
+            _packagename = string.Empty;
+
+
         }
 
         #region Booking Data Members
@@ -126,7 +136,13 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set
             { _iBookingId = value; }
         }
-
+        public string packagid
+        {
+            get
+            { return _packagid; }
+            set
+            { _packagid = value; }
+        }
         public string BookingCode
         {
             get
@@ -264,13 +280,22 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _iAgentId; }
             set { _iAgentId = value; }
         }
+        public int AgentIdRef
+        {
+            get { return _AgentRefTypeId; }
+            set { _AgentRefTypeId = value; }
+        }
 
         public string AgentName
         {
             get { return _sAgentName; }
             set { _sAgentName = value; }
         }
-
+        public string AgentType
+        {
+            get { return _AgentType; }
+            set { _AgentType = value; }
+        }
         public int BookingStatusId
         {
             get { return _iBookingStatusId; }
@@ -429,6 +454,16 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _proposedBooking; }
             set { _proposedBooking = value; }
         }
+        public decimal agentcommission
+        {
+            get { return _agentcommission; }
+            set { _agentcommission = value; }
+        }
+        public string packaagename
+        {
+            get { return _packagename; }
+            set { _packagename = value; }
+        }
         #endregion
     }
 
@@ -450,6 +485,8 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private bool _hasIndianTourists;
         private int _noofnights;
         private string _agentname;
+        private string _refagentname;
+        private string _AgentType;
         private int _sgl;
         private int _twn;
         private int _dbl;
@@ -553,6 +590,17 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set { _agentname = value; }
         }
 
+        
+        public string refagentname
+        {
+            get { return _refagentname; }
+            set { _refagentname = value; }
+        }
+        public string agentType
+        {
+            get { return _AgentType; }
+            set { _AgentType = value; }
+        }
         public int BookingId
         {
             get { return _iBookingId; }

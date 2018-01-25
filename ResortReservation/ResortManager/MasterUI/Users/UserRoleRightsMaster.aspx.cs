@@ -14,18 +14,33 @@ using System.Collections.Generic;
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Bases.BasePages;
+using System.Xml;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 
 public partial class MasterUI_Users_UserRoleRightsMaster : MasterBasePage
 {
+    public XMLCLassnew xmlclss = new XMLCLassnew();
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
+            //xmlload();
+            //LoadXML();
             FillRoles();
             FillRights();
         }
     }
+    public XmlDocument xmlload()
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        string dataDirectory = System.Web.HttpContext.Current.Server.MapPath("~/FarHorizon.Reservations.XMLServices/XMLs/ApplicationRights.xml");
 
+        //dataDirectory = dataDirectory.Replace("ResortManager\\", "");
+
+        //dataDirectory = dataDirectory + XMLConstants.baseDirectory + "ApplicationRights.xml";
+        xmlDoc.Load(dataDirectory);
+        return xmlDoc;
+    }
     private void FillRoles()
     {
         UserRoleMaster userRoleMaster = new UserRoleMaster();
@@ -40,7 +55,35 @@ public partial class MasterUI_Users_UserRoleRightsMaster : MasterBasePage
             }
         }
     }
+    internal static XmlDocument LoadXML()
+    {
+        string xmlFileName = string.Empty;
 
+
+
+        xmlFileName = XMLConstants.APPLICATIONRIGHTS;
+
+
+
+        if (!String.IsNullOrEmpty(xmlFileName))
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            try
+            {
+                string dataDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                //dataDirectory = dataDirectory.Replace("ResortManager\\", "");
+                dataDirectory = dataDirectory + XMLConstants.baseDirectory + xmlFileName;
+                
+                xmlDoc.Load(dataDirectory);
+                return xmlDoc;
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+        return null;
+    }
     private void FillRights()
     {
         ApplicationRightsMaster applicationRightsMaster = new ApplicationRightsMaster();
@@ -212,4 +255,10 @@ public partial class MasterUI_Users_UserRoleRightsMaster : MasterBasePage
             }
         }
     }
+}
+static class XMLConstants
+{
+    public const string APPLICATIONRIGHTS = "ApplicationRights.xml";
+    public const string TOURISTMAPPER = "touristMapper.xml";
+    public const String baseDirectory = @"\FarHorizon.Reservations.XMLServices\XMLs\";
 }

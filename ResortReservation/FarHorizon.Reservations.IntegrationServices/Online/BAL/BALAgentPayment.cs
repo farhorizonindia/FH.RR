@@ -17,6 +17,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string _PaymentMethod { get; set; }
         public string _EmailId { get; set; }
         public string _Password { get; set; }
+        public string _category { get; set; }
+        public string _country { get; set; }
 
         public int agentid;
 
@@ -26,5 +28,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string MarketId { get; set; }
 
         public string Phone { get; set; }
+        public decimal comission { get; set; }
     }
 }

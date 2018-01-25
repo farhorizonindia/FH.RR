@@ -45,7 +45,7 @@ public partial class ClientUI_BookingReminder : System.Web.UI.Page
 
 
             SqlConnection cn = new SqlConnection(strCon);
-            string query1 = "Select Days from [dbo].[tblBookingReminder] where EmailID=@EmailId";
+            string query1 = "Select Days from [dbo].[tblBookingReminder]";
             SqlCommand cmd1 = new SqlCommand(query1, cn);
             cmd1.Parameters.AddWithValue("@EmailId", "rahul.dd21@gmail.com");
             cmd1.CommandType = CommandType.Text;

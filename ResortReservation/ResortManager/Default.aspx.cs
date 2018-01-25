@@ -14,11 +14,12 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.UserManager;
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.DataSecurity;
 
 public partial class _Default : ClientBasePage 
 {
     protected void Page_Load(object sender, EventArgs e)
-    {
+      {
         if (Debugger.IsAttached)
         {
             Login1.UserName = "admin";
@@ -27,6 +28,8 @@ public partial class _Default : ClientBasePage
 
     protected void Login1_Authenticate(object sender, AuthenticateEventArgs e)
     {
+
+        string st = DataSecurityManager.Decrypt("VDIzaDQ1aXMxMjRJNTRzNTVNNjVpbDNxNDNGNVRpOXdoMHdnZGZnNDMzQzM0bDQ1U3RINTQ0aVNoNHM5U2YwbZa29muiOnz/yMzpkFm/2rcsgt8rk4zSTV0+MmcmpeZG");
         UserDTO userDto;
         UserServices userServices;
         int iLoginId;
@@ -42,6 +45,8 @@ public partial class _Default : ClientBasePage
             iLoginId = userServices.ValidateUser(userDto);
             if (iLoginId > 0)
             {
+                Session["getadmin"]= Login1.UserName.Trim().ToString();
+                Session["iLoginId"] = iLoginId;
                 e.Authenticated = true;                
                 SessionServices.LoginId = iLoginId; 
             }

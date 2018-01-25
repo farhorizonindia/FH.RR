@@ -73,7 +73,7 @@ namespace FarHorizon.Reservations.DataBaseManager
         {
             if (CurrentConnection != null)
                 CurrentConnection.Close();
-        }       
+        }
 
         /// <summary>
         /// Get the Command Timeout Value from Configuration file
@@ -141,19 +141,19 @@ namespace FarHorizon.Reservations.DataBaseManager
         /// <returns>DataSet object</returns>
         public System.Data.DataSet ExecuteDataSet(string theCmdStr)
         {
-            System.Data.DataSet ds = null;
+            System.Data.DataSet ds = new DataSet();
             try
             {
                 SqlDataAdapter adapter = new SqlDataAdapter(theCmdStr, CurrentConnection);
                 adapter.Fill(ds, "dataSet");
-                CurrentConnection.Close();               
+                CurrentConnection.Close();
             }
             catch
             {
                 throw;
             }
             return ds;
-        }        
+        }
 
         /// <summary>
         /// Execute the command and return the results in a new DataSet.
@@ -191,10 +191,10 @@ namespace FarHorizon.Reservations.DataBaseManager
                 using (SqlCommand cmd = new SqlCommand(theCmdStr, CurrentConnection))
                 {
                     cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();                    
+                    cmd.ExecuteNonQuery();
                 }
                 CloseCurrentConnection();
-                
+
             }
             catch (Exception exp)
             {
@@ -215,7 +215,7 @@ namespace FarHorizon.Reservations.DataBaseManager
                     cmd.CommandTimeout = CommandTimeoutVal;
                     cmd.ExecuteNonQuery();
                 }
-                CloseCurrentConnection();                
+                CloseCurrentConnection();
             }
             catch (Exception exp)
             {
@@ -242,14 +242,14 @@ namespace FarHorizon.Reservations.DataBaseManager
                     cmd.CommandTimeout = CommandTimeoutVal;
                     obj = cmd.ExecuteScalar();
                 }
-                CloseCurrentConnection();                
+                CloseCurrentConnection();
             }
             catch
             {
                 throw;
             }
             return obj;
-        }        
+        }
         #endregion
 
         #region GetStoredProcCommand
@@ -267,7 +267,7 @@ namespace FarHorizon.Reservations.DataBaseManager
                 CommandText = storedProcedureName,
                 CommandTimeout = CommandTimeoutVal
             };
-            return dbc;            
+            return dbc;
         }
 
         /// <summary>
@@ -284,13 +284,13 @@ namespace FarHorizon.Reservations.DataBaseManager
                 CommandText = sqlQuery,
                 CommandTimeout = CommandTimeoutVal
             };
-            return dbc;            
+            return dbc;
         }
-        
+
         #endregion
 
         #region Transaction Methods
-        
+
 
         #endregion
     }

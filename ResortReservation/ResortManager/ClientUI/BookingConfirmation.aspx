@@ -216,7 +216,7 @@
                             </tr>
                             <tr>
                                 <td class="labelcell">
-                                    Vehicle No.
+                                    No.
                                 </td>
                                 <td class="inputcell" style="width: 155px">
                                     <asp:TextBox CssClass="input" ID="txtArrivalVehicleNo" runat="server" Width="140px"></asp:TextBox>
@@ -295,7 +295,7 @@
                             </tr>
                             <tr>
                                 <td class="labelcell">
-                                    Vehicle No.
+                                    No.
                                 </td>
                                 <td class="auto-style3">
                                     <asp:TextBox CssClass="input" ID="txtDepartureVehicleNo" runat="server" Width="140px"></asp:TextBox>

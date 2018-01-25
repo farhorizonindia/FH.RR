@@ -46,7 +46,7 @@
                                 <td>
                                     User Id</td>
                                 <td style="width: 106px">
-                                    <asp:TextBox ID="txtUserId" runat="server" CssClass="input" MaxLength="8"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtUserId" runat="server" CssClass="input" MaxLength="10" Width="156px"></asp:TextBox></td>
                             </tr>
                             <tr>
                                 <td>

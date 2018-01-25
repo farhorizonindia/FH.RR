@@ -81,7 +81,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Cruise Direction">
                                     <ItemTemplate>
-                                        <asp:Label runat="server" ID="lbCruiseDirection" Text='<%#Eval("CruiseDirection") %>'></asp:Label>
+                                        <asp:Label runat="server" ID="lbCruiseDirection" Text='<%#Eval("CruiseDirection") %>' ></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>

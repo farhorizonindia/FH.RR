@@ -28,7 +28,7 @@ body
 { margin:0; padding:0;/*background-color: azure;*/
 }
 
-.booking-online-box{ width:1170px; margin:0 auto; float:none;}
+.booking-online-box{ width:100%; margin:0 auto; float:none;}
 
 
 .RoomRatesBox
@@ -54,7 +54,7 @@ body
   }
 
 
-..Hotel-Booking-Tbl-2 table {   
+.Hotel-Booking-Tbl-2 table {   
     background-color:#eaeaea; 
     border:1px solid #ddd; 
     padding:10px; 
@@ -62,11 +62,11 @@ body
 }
 
 .booking-online table{ 
-    background-color:rgba(149, 190, 222, 0.8) !important;
+    /*background-color:rgba(149, 190, 222, 0.8) !important;*/
     border:1px solid #337ab7;
     padding: 10px; 
-	width:80%; 
-	margin:0 auto; 
+	width:100%; 
+	
 	float:none;
 	border-color: #fff !important;
 }
@@ -81,33 +81,37 @@ body
         }
 
 .booking-online table tr td select {   
-            border: solid 1px #fff;
-            background-color: #FFFFFF;
+            /*border: solid 1px #fff;*/
+            background-color: #F9F9F9;
             text-align: left !important;
-            padding: 7px 12px;
+            padding: 12px 12px;
             font-weight: 400;
             line-height: 1.42857143; width:100%;
-        }
+            font-size:14px;
+            outline:0;
+        } 
+.pax-details table tr td select{
+    width:inherit!important;
+}
 
 .booking-online div table{ 
-      background-color: #eaeaea;
+      background-color: #ececec;
     border: 1px solid #ddd;
-    padding: 10px; width:80%; margin:0 auto; float:none;
+    padding: 10px; width:100%; float:none;
 }
 
 .booking-online2 div table{ 
     /*background-color: #eaeaea;*/
     border: 1px solid #ddd;
     padding: 10px; 
-	width:80%; 
-	margin:0 auto; 
+	width:100%; 
+
 	float:none;
 }
 
 .booking-online2 div input[type=submit]{  
      color: #fff;
     background-color: #4479BA;
-    border-color: #46b8da;
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
@@ -128,7 +132,8 @@ body
    border: 1px solid transparent;
     border-radius: 4px;     
    margin-top: 0px;
-        }
+    height: 36px;
+}
 
 .btn-summerised{ width:200px; margin:30px auto 0 auto; float:none;}
 
@@ -269,7 +274,6 @@ body
 
 
 .bg-img1{ 
-	background:url(../images/bg-img1.jpg) !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-attachment: fixed !important;
@@ -286,7 +290,7 @@ body
 
 
 .bg-img2{ 
-	background:url(../images/bg-img2.jpg) !important;
+	/*background:url(../images/bg-img2.jpg) !important;*/
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-attachment: fixed !important;
@@ -325,9 +329,9 @@ body
 
 .GridHeader
 {
-    background-color: rgba(149, 190, 222, 0.8) !important; 
-	font-size:16px; 
-	font-family:"Times New Roman", Times, serif;
+    background-color: #ECECEC !important; 
+	font-size:13px; 
+	font-family: 'Montserrat', sans-serif;
 }
 
 .White-Box{ 
@@ -381,7 +385,7 @@ body
 .padding2{ padding-bottom:20px; padding-top:20px;}
 
 
-.m2{width: 1170px;
+.m2{width: 100%;
     margin: 0 auto;
     float: none;}
 	
@@ -425,10 +429,8 @@ body
 input[type=submit] {
     color: #fff !important;
     background-color: #4479BA !important;
-    border-color: #46b8da !important;
     display: inline-block !important;
     padding: 6px 12px !important;
-    margin-bottom: 0 !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     line-height: 1.42857143 !important;

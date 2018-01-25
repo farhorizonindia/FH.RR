@@ -35,7 +35,7 @@ function showRoomBookings(parentCellId, contentPanelId) {
     divid = divId.replace("Detail", "Header");
     headerDiv = document.getElementById(divid);
     if (headerDiv != null) {
-        headerDiv.style.borderStyle = "groove";
+        headerDiv.style.borderStyle = "none";
         headerDiv.style.color = "white";
     }
 
@@ -88,8 +88,10 @@ function showRoomBookings(parentCellId, contentPanelId) {
     lastselectedDiv = "";
     }
     } */
-    var left = parentCell.offsetLeft + 228;
-    var top = parentCell.offsetTop + 102;
+    var left = parentCell.offsetLeft + 15;
+    var top = parentCell.offsetTop + 20;
+    //debugger;
+    //document.getElementById('roomCellDivDetail10120180304').css('left', '-18px');
     showBubbleTooltip('Booking Details', toolTipText, parentCell, left, top);
    
 }
@@ -110,7 +112,7 @@ function showRoomBookingsm(parentCellId, contentPanelId) {
     divid = divId.replace("Detail", "Header");
     headerDiv = document.getElementById(divid);
     if (headerDiv != null) {
-        headerDiv.style.borderStyle = "groove";
+        headerDiv.style.borderStyle = "none";
         headerDiv.style.color = "white";
     }
 
@@ -163,8 +165,9 @@ function showRoomBookingsm(parentCellId, contentPanelId) {
     lastselectedDiv = "";
     }
     } */
-    var left = parentCell.offsetLeft + 228;
-    var top = parentCell.offsetTop + 102;
+ 
+    var left = parentCell.offsetLeft + 350;
+    var top = parentCell.offsetTop + 30;
     showBubbleTooltip('', toolTipText, parentCell, left, top);
 
 }

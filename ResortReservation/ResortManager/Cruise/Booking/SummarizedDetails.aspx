@@ -235,6 +235,8 @@
                             <div class="col-md-12 text-center White-Box">
 
                                 <h2>Final Booking Details <span class=" pull-right">
+                                    <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton></span></h2>
                                 <div class=" clearfix"></div>
                             </div>
@@ -317,7 +319,7 @@
                                     <asp:TemplateField HeaderText="Bed Configuration">
 
                                         <ItemTemplate>
-                                            <asp:Label runat="server" ID="BedConfig" Text='<%#Eval("Bed Configuration") %>'></asp:Label>
+                                            <asp:Label runat="server" ID="BedConfig" Text='<%#Eval("RoomType") %>'></asp:Label>
                                         </ItemTemplate>
 
 
@@ -348,7 +350,7 @@
 
 
 
-                                    <asp:TemplateField HeaderText="Tax" Visible="false">
+                                    <asp:TemplateField HeaderText="Tax">
 
                                         <ItemTemplate>
                                             <asp:Label runat="server" ID="Tax" Text='<%#Eval("Tax") %>'></asp:Label>
@@ -455,6 +457,7 @@
                                         <td style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <asp:Button runat="server" ID="btnCustLogin" Text="Login" ValidationGroup="CustLogin" OnClick="btnCustLogin_Click" />
                                         </td>
+                                        <td><a href="ForgotPassword.aspx">Forgot Password</a></td>
                                     </tr>
                                 </table>
                             </asp:Panel>

@@ -85,6 +85,8 @@
 
                             <h2>Select your travel Date
                   <span class=" pull-right">
+                      <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton>
                   </span>
                             </h2>
@@ -164,6 +166,7 @@
                                             %>                                            
                                         </span>pp<br />
                                         based on Standard Room <span class="highlightBlue"><strong></strong></span>
+                                        
                                     </div>
                                     <% PackageId = Session["PackId"].ToString(); %>
                                     <% PackageName = dtres.Rows[i]["NamePack"].ToString(); %>

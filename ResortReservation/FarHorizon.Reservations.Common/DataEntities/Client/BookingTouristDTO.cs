@@ -44,7 +44,13 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private string _accomname;
         private DateTime _checkindate;
         private DateTime _checkoutdate;
-
+        private string _vehicalno;
+        private DateTime _departuredate;
+        private string _departureairport;
+        private string _arivalairport;
+        private string _Guestname;
+        private string _arrivalvehiaclno;
+        private string _departurevehiaclno;
         #endregion Variables
 
         #region Properties
@@ -60,13 +66,47 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _checkoutdate; }
             set { _checkoutdate = value; }
         }
+        public DateTime departuredate
+        {
+            get { return _departuredate; }
+            set { _departuredate = value; }
+        }
 
         public string AccomName
         {
             get { return _accomname; }
             set { _accomname = value; }
         }
-
+        public string guestname
+        {
+            get { return _Guestname; }
+            set { _Guestname = value; }
+        }
+        public string arrivalvehiaclno
+        {
+            get { return _arrivalvehiaclno; }
+            set { _arrivalvehiaclno = value; }
+        }
+        public string arrivalairport
+        {
+            get { return _arivalairport; }
+            set { _arivalairport = value; }
+        }
+        public string departurevehicalno
+        {
+            get { return _departurevehiaclno; }
+            set { _departurevehiaclno = value; }
+        }
+        public string departureairport
+        {
+            get { return _departureairport; }
+            set { _departureairport = value; }
+        }
+        public string vehicalno
+        {
+            get { return _vehicalno; }
+            set { _vehicalno = value; }
+        }
         public string BookingRef
         {
             get { return _bookingRef; }

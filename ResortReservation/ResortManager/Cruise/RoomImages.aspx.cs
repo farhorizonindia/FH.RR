@@ -56,7 +56,7 @@ public partial class Cruise_Masters_RoomImages : MasterBasePage
             string filename = uploadLogo.PostedFile.FileName;
             if (uploadLogo.PostedFile.ContentLength > 0)
             {
-                string uploadPath = "../RoomImages/";
+                string uploadPath = "/Cruise/Booking/inv/";
                 string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
                 string savepath = rootedpath + filename;
 
@@ -129,7 +129,7 @@ public partial class Cruise_Masters_RoomImages : MasterBasePage
             string filename = uploadLogo.PostedFile.FileName;
             if (uploadLogo.PostedFile.ContentLength > 0)
             {
-                string uploadPath = "../RoomImages/";
+                string uploadPath = "/Cruise/Booking/inv/";
                 string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
                 string savepath = rootedpath + filename;
 
@@ -167,19 +167,19 @@ public partial class Cruise_Masters_RoomImages : MasterBasePage
             }
 
 
-        }
-        catch
+    }
+        catch(Exception ex)
         {
         }
     }
 
     private void UploadFileToFTP(string filename)
     {
-        FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create("ftp://ftp.adventureresortscruises.in/" + Path.GetFileName(filename) + "");
+        FtpWebRequest ftpReq = (FtpWebRequest)WebRequest.Create("ftp://163.172.206.126/Cruise/Booking/inv/" + Path.GetFileName(filename) + "");
 
         ftpReq.UseBinary = true;
         ftpReq.Method = WebRequestMethods.Ftp.UploadFile;
-        ftpReq.Credentials = new NetworkCredential("UploadImage", "Augurs@123");
+        ftpReq.Credentials = new NetworkCredential("advmain", "dAsd133DS@");
 
         byte[] b = File.ReadAllBytes(filename);
         ftpReq.ContentLength = b.Length;

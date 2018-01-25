@@ -49,6 +49,16 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["CustName"] != null)
+        {
+            lblUsername.Text = "Hello " + Session["CustName"].ToString();
+        }
+        if (Session["UserName"] != null)
+
+        {
+            lblUsername.Text = "Hello " + Session["UserName"].ToString();
+
+        }
         if (!IsPostBack)
         {
             try
@@ -137,7 +147,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             GridRoomPaxDetail.FooterRow.Cells[3].Text = "<b>Total</b>";
             GridRoomPaxDetail.FooterRow.Cells[5].Text = "INR" + " " + Convert.ToDouble(dtrpax.Compute("SUM(Price)", string.Empty)).ToString();
         }
-        catch
+        catch (Exception e)
         {
 
         }
@@ -251,6 +261,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             hftxtpaidamt.Value = Convert.ToDouble(txtPaidAmt.Text).ToString("N2").Replace(",", "");
 
             lblBalanceAmt.Text = dtGetBookedRooms.Rows[0]["Currency"].ToString() + " " + Math.Round((TotalPaybleAmt - Convert.ToDecimal(txtPaidAmt.Text))).ToString();
+           
             //    txtmailied.Text = Session["AgentMailId"].ToString();
             dtGetBookedRooms = dtgroupedData;
             GridSummerizeRoomDetails.DataSource = dtGetBookedRooms;
@@ -262,7 +273,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
     #endregion
-
+   
     protected void btnSmbt_Click(object sender, EventArgs e)
     {
         if (Session["UserCode"] != null)
@@ -447,7 +458,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                                                                     //Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
 
                     Session["Address"] = lblBillingAddress.Text.Trim().ToString(); ;
-                    Session["InvName"] = FirstName;
+                    Session["InvName"] = FirstName + " " + LastName;
                     Session["SubInvName"] = FirstName;
 
                     string[] arr = { };
@@ -511,7 +522,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
 
                     Session["Address"] = lblBillingAddress.Text.Trim().ToString();
-                    Session["InvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString());
+                    Session["InvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["FirstName"].ToString()) + "" + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString());
 
                     Session["SubInvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString()) + ", " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + FirstName;
 
@@ -606,7 +617,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
                 if (dtCustomer.Rows.Count > 0)
                 {
                     ViewState["Pass"] = txtCustPass.Text.Trim();
-
+                    Session["userpass"] = txtCustPass.Text.Trim();
                     Session["CustMailId"] = txtCustMailId.Text.Trim();
                     lblAgentName.Text = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["FirstName"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["LastName"].ToString());
                     lblBillingAddress.Text = dlcus.GetBillingAddress(dtCustomer.Rows[0]);
@@ -649,7 +660,48 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         sendMail();
         pnlCustReg.Visible = false;
     }
+    public void sendMail()
+    {
+        try
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
+            mail.From = new MailAddress("reservations@adventureresortscruises.in");
 
+            mail.To.Add(txtMailAddress.Text.Trim());
+            mail.Subject = "Mail Verification";
+
+            Random rnd = new Random();
+            string Code = rnd.Next(10000, 99999).ToString();
+            hfVCode.Value = Code;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>");
+            sb.Append("<div> Dear " + txtFirstName.Text + ",</div> <div><br/></div><div>Thanks for your registering with us.</div> <div><br/> </div><div>For security reasons we have added this step so that we verify the email address before any booking details is sent across.</div> <div><br/></div> ");
+            sb.Append(" <div>To verify your email address please enter the code " + Code + " in the registration screen. </div> <div><br/> </div><div>Do contact us if you have any issue at reservations@adventureresort.com</div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
+            sb.Append("</div>");
+            sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
+
+            mail.IsBodyHtml = true;
+            mail.Body = sb.ToString();
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
+            SmtpServer.EnableSsl = false;
+
+            SmtpServer.Send(mail);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please check your Mail for the Verification Code')", true);
+            pnlCustReg.Visible = false;
+            customerLogin.Visible = true;
+
+            TableCust.Visible = false;
+            tableVerify.Visible = true;
+        }
+        catch (Exception ex)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
+        }
+    }
     public void ClientRegister()
     {
         try
@@ -682,48 +734,7 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
         }
     }
 
-    public void sendMail()
-    {
-        try
-        {
-            MailMessage mail = new MailMessage();
-            SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
-            mail.From = new MailAddress("reservations@adventureresortscruises.in");
-
-            mail.To.Add(txtMailAddress.Text.Trim());
-            mail.Subject = "Mail Verification";
-
-            Random rnd = new Random();
-            string Code = rnd.Next(10000, 99999).ToString();
-            hfVCode.Value = Code;
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<div>");
-            sb.Append("<div> Dear " + txtFirstName.Text + ",</div> <div><br/></div><div>Thanks for your registering with us.</div> <div><br/> </div><div>For security reasons we have added this step so that we verify the email address before any booking details is sent across.</div> <div><br/></div> ");
-            sb.Append(" <div>To verify your email address please enter the code " + Code + " in the registration screen. </div> <div><br/> </div><div>Do contact us if you have any issue at reservations@adventureresort</div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
-            sb.Append("</div>");
-            sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
-
-            mail.IsBodyHtml = true;
-            mail.Body = sb.ToString();
-
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("reservations@adventureresortscruises.in", "Augurs@123");
-            SmtpServer.EnableSsl = false;
-
-            SmtpServer.Send(mail);
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please check your Mail for the Verification Code')", true);
-            pnlCustReg.Visible = false;
-            customerLogin.Visible = true;
-
-            TableCust.Visible = false;
-            tableVerify.Visible = true;
-        }
-        catch (Exception ex)
-        {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
-        }
-    }
+    
 
     protected void btnCloseCust_Click(object sender, EventArgs e)
     {
@@ -859,9 +870,47 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
     private void BookTheCruise()
     {
         int bookingId = InsertParentTableData();
+        bool update =Convert.ToBoolean(1);
+        
         InsertChildTableData(bookingId);
+        SendEventEmail(bookingId, "Proposed Booking", update);
     }
-
+    private ENums.EventName GetEventName(string BookingStatus, bool BookingUpdated)
+    {
+        ENums.EventName eventName = ENums.EventName.NONE;
+        switch (BookingStatus)
+        {
+            case "booked":
+            case "waitlisted":
+            case "Proposed Booking":
+                eventName = ENums.EventName.BOOKING;
+                if (BookingUpdated)
+                    eventName = ENums.EventName.BOOKINGUPDATED;
+                break;
+            case "confirmed":
+                eventName = ENums.EventName.CONFIRMATION;
+                if (BookingUpdated)
+                    eventName = ENums.EventName.CONFIRMATIONUPDATED;
+                break;
+            case "cancelled":
+            case "confirmation_cancelled":
+                eventName = ENums.EventName.CANCELLED;
+                break;
+            case "deleted":
+                eventName = ENums.EventName.DELETED;
+                break;
+        }
+        return eventName;
+    }
+    private void SendEventEmail(int BookingId, string BookingStatus, bool bookingUpdated)
+    {
+        ENums.EventName eventName = GetEventName(BookingStatus, bookingUpdated);
+        EventEmailServices eventEmailService = new EventEmailServices();
+        eventEmailService.SendEventMail(BookingId, eventName);
+        //Thread emailThread = new Thread(new ThreadStart(EventEmailManager.SendEventMail(BookingId, AccomodationId, EventName)));
+        //emailThread.Priority = ThreadPriority.Highest;
+        //emailThread.Start();
+    }
     private int InsertParentTableData()
     {
         BALBooking blsr = new BALBooking();
@@ -935,8 +984,8 @@ public partial class Cruise_booking_SummarizedDetails : System.Web.UI.Page
             //{
             //    blsr.BookingCode = bookingDetails.BookingCode;
             //}
-            blsr._iBookingId = bookingId;            
-                        
+            blsr._iBookingId = bookingId;
+
             SessionServices.SaveSession<BALBooking>("tblBookingBAL", blsr);
             return bookingId;
         }

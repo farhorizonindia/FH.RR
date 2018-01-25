@@ -47,6 +47,37 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
+        public DataTable BindControlsFilter(BALOpenDates obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_OpenDates]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+                da.SelectCommand.Parameters.AddWithValue("@packageId", obj._PackageId);
+                da.SelectCommand.Parameters.AddWithValue("@CheckinDate", obj._checkInDate);
+                da.SelectCommand.Parameters.AddWithValue("@checkOutDate", obj._checkOutDate);
+                da.SelectCommand.Parameters.AddWithValue("@Status", obj.Status);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
         public DataTable GetRiverLocation(BALOpenDates obj)
         {
             try
@@ -83,6 +114,35 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.SelectCommand.Parameters.Clear();
                 da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
                 da.SelectCommand.Parameters.AddWithValue("@packageId", obj._PackageId);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public DataTable getAboutpackage(int noofnight,DateTime from,DateTime to)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_OpenDates]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", "getpachkage");
+               
+                da.SelectCommand.Parameters.AddWithValue("@NoOfNights", noofnight);
+                da.SelectCommand.Parameters.AddWithValue("@checkIn", from);
+                da.SelectCommand.Parameters.AddWithValue("@checkOut", to);
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 da.SelectCommand.ExecuteReader();

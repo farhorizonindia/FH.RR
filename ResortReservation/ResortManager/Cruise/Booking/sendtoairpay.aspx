@@ -14,12 +14,18 @@
     string sFName = Request.QueryString["FirstName"].Trim();
     string sLName = Request.QueryString["LastName"].Trim();
     string sAddress = Request.QueryString["BillingAddress"].Trim();
-    string sCity = "Lucknow";
-    string sState = "UP";
-    string sCountry = "INDIA";
-    string sPincode = "226005";
+    string sCity = Request.QueryString["City"].Trim();
+    string sState = Request.QueryString["State"].Trim();
+    string sCountry = Request.QueryString["Country"].Trim();
+    string sPincode = Request.QueryString["PinCode"].Trim();
+    
     string sAmount = Request.QueryString["PaidAmt"].Trim();
     string sOrderId = Request.QueryString["BookingPayId"].Trim();
+
+    ////string sCity = "Lucknow";
+    ////string sState = "UP";
+    ////string sCountry = "INDIA";
+    ////string sPincode = "226005";
 
     // server side validation
     validatepost(sEmail, sPhone, sFName, sLName, sAddress, sCity, sState, sCountry, sPincode, sAmount, sOrderId);
@@ -34,7 +40,7 @@
     string checksum1 = MD5Hash(allParamValue12);
     checksum.Text = checksum1;
     privatekey.Text = str256Key;
-            
+
 %>
 
 
@@ -80,10 +86,14 @@
                         <input type="hidden" name="buyerFirstName" value="<%=Request.QueryString["FirstName"]%>" />
                         <input type="hidden" name="buyerLastName" value="<%=Request.QueryString["LastName"]%>" />
                         <input type="hidden" name="buyerAddress" value="<%=Request.QueryString["BillingAddress"]%>" />
-                        <input type="hidden" name="buyerCity" value="Lucknow" />
+                        <input type="hidden" name="buyerCity" value="<%=Request.QueryString["City"]%>" />
+                        <input type="hidden" name="buyerState" value="<%=Request.QueryString["State"]%>" />
+                        <input type="hidden" name="buyerCountry" value="<%=Request.QueryString["Country"]%>" />
+                        <input type="hidden" name="buyerPinCode" value="<%=Request.QueryString["PinCode"]%>" />
+                        <%--<input type="hidden" name="buyerCity" value="Lucknow" />
                         <input type="hidden" name="buyerState" value="UP" />
                         <input type="hidden" name="buyerCountry" value="INDIA" />
-                        <input type="hidden" name="buyerPinCode" value="226005" />
+                        <input type="hidden" name="buyerPinCode" value="226005" />--%>
                         <input type="hidden" name="amount" value="<%=Request.QueryString["PaidAmt"]%>" />
                         <input type="hidden" name="chmod" value="">
 

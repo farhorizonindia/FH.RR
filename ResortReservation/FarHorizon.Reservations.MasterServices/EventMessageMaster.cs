@@ -8,13 +8,14 @@ using FarHorizon.Reservations.DataBaseManager;
 using System.Data;
 using System.Data.SqlClient;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
+using System.Configuration;
 
 namespace FarHorizon.Reservations.MasterServices
 {
     public class EventMessageMaster 
     {
         #region IMaster Members
-
+    string    strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
         public bool Insert(EventMessageDTO oEventMessageData)
         {
             string sProcName;
@@ -25,7 +26,7 @@ namespace FarHorizon.Reservations.MasterServices
 
                 sProcName = "up_Ins_EventMessage";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventName", DbType.Int32, oEventMessageData.EventName);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventName", DbType.String, oEventMessageData.EventName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventMessage", DbType.String, oEventMessageData.EventMessage);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventSubject", DbType.String, oEventMessageData.EventSubject);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventMessageDefault", DbType.String, oEventMessageData.EventMessageDefault);
@@ -56,7 +57,7 @@ namespace FarHorizon.Reservations.MasterServices
 
                 sProcName = "up_Upd_EventMessage";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MessageId", DbType.Int32, oEventMessageData.MessageId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MessageId", DbType.String, oEventMessageData.MessageId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventName", DbType.String, oEventMessageData.EventName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventMessage", DbType.String, oEventMessageData.EventMessage);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventSubject", DbType.String, oEventMessageData.EventSubject);                
@@ -115,7 +116,32 @@ namespace FarHorizon.Reservations.MasterServices
         {
             return GetEventMessage(0, EventName);
         }
+        public DataTable getmessgaeforpassword()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
 
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[getmailforpassword]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp.Message);
+                return null;
+            }
+        }
         private EventMessageDTO[] GetEventMessage(int MessageId, string EventName)
         {
             DataSet ds;

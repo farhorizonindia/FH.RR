@@ -24,7 +24,16 @@ public partial class Cruise_booking_DepartureSearch : System.Web.UI.Page
     public string CheckinDate = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["CustName"] != null)
+        {
+            lblUsername.Text = "Hello " + Session["CustName"].ToString();
+        }
+        if (Session["UserName"] != null)
 
+        {
+            lblUsername.Text = "Hello " + Session["UserName"].ToString();
+
+        }
         Session["totpax"] = null;
         Session["PackageId"] = null;
         Session["checkin"] = null;
@@ -130,8 +139,15 @@ public partial class Cruise_booking_DepartureSearch : System.Web.UI.Page
                 blsrch.AgentId = 247;
             }
 
-            dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
+            // dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
+            DataTable dtsorted = new DataTable();
+            dtsorted = dlsrch.GetCruiseOpenDatesPackage(blsrch);
 
+            if (dtsorted != null && dtsorted.Rows.Count > 0)
+            {
+                dtsorted.DefaultView.Sort = "CheckInDate  ASC";
+            }
+            dtres = dtsorted;
 
         }
         catch

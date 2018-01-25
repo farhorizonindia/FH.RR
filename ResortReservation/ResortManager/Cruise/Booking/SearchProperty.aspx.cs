@@ -6,17 +6,33 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using System.Configuration;
 public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 {
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
     BALRateCard blCard = new BALRateCard();
     DALRateCard dlcard = new DALRateCard();
+    DALSearch dlsearch = new DALSearch();
     DataTable dtGetReturnedData;
+
     int getQueryResponse = 0;
 
     protected void Page_Load(object sender, EventArgs e)
     {
+
+        if (Session["CustName"] != null)
+        {
+            lblUsername.Text = "Hello " + Session["CustName"].ToString();
+            lnkCustomerRegis.Visible = false;
+        }
+        if (Session["UserName"] != null)
+
+        {
+            lblUsername.Text = "Hello " + Session["UserName"].ToString();
+            lnkCustomerRegis.Visible = false;
+        }
+
         if (!IsPostBack)
         {
             try
@@ -40,6 +56,8 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
                 }
 
                 LoadCountries();
+                fetchpackage();
+                loadyear();
                 if (ddlDestination.Items.Count > 1)
                 {
                     ListItem li = ddlDestination.Items.FindByText("India");
@@ -146,7 +164,7 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        Response.Redirect("PackageSearchResults.aspx?CId=" + ddlDestination.SelectedValue + "&date=" + ddlDates.SelectedValue + "&RId=" + ddlRiver.SelectedValue + "");
+        Response.Redirect("PackageSearchResults.aspx?Package=" + ddlPackege.SelectedValue + "&Year=" + ddlYear.SelectedValue + "&month=" + ddlDates.SelectedItem);
     }
 
     private void LoadCountries()
@@ -180,7 +198,40 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 
         }
     }
+    #region getpackage
+    public void fetchpackage()
+    {
+        DataTable dt = dlsearch.fetchall();
+        if (dt != null & dt.Rows.Count > 0)
+        {
+            ddlPackege.Items.Insert(0, "-Select Package-");
+            ddlPackege.DataSource = dt;
+            ddlPackege.DataTextField = "PackageName";
+            ddlPackege.DataValueField = "PackageId";
+            ddlPackege.DataBind();
 
+        }
+    }
+    private void loadyear()
+    {
+        ddlYear.Items.Clear();
+        ListItem[] itens = new ListItem[4] {
+    new ListItem("-- Year --"),
+    new ListItem(DateTime.Today.Year.ToString()),
+    new ListItem(DateTime.Today.AddYears(+1).Year.ToString()),
+    new ListItem(DateTime.Today.AddYears(+2).Year.ToString()) };
+
+        ddlYear.Items.AddRange(itens);
+        //ddlYear.Items.Clear();
+        //ddlYear.Items.Add("--Year--");
+        //var currentYear = DateTime.Today.Year;
+        //for (int i = 2; i >= 0; i++)
+        //{
+        //    // Now just add an entry that's the current year minus the counter
+        //    ddlYear.Items.Add((currentYear - i).ToString());
+        //}
+    }
+    #endregion
     public void BindRiverMonths()
     {
         #region Bind RiverDD
@@ -217,45 +268,45 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 
         #region bindmonths
 
-        try
-        {
-            blOpenDates._Action = "getseasonmonths";
-            if (ddlDestination.SelectedIndex > 0)
-            {
-                blOpenDates._CountryId = Convert.ToInt32(ddlDestination.SelectedValue);
-            }
-            else
-            {
+        //try
+        //{
+        //    blOpenDates._Action = "getseasonmonths";
+        //    if (ddlDestination.SelectedIndex > 0)
+        //    {
+        //        blOpenDates._CountryId = Convert.ToInt32(ddlDestination.SelectedValue);
+        //    }
+        //    else
+        //    {
 
-                blOpenDates._CountryId = 0;
-            }
+        //        blOpenDates._CountryId = 0;
+        //    }
 
-            dtGetReturnedData = dlOpenDates.getMonthsforddl(blOpenDates);
-            if (dtGetReturnedData != null && dtGetReturnedData.Rows.Count > 0)
-            {
-                ddlDates.DataSource = dtGetReturnedData;
-                ddlDates.DataTextField = "MonthYYYY";
-                ddlDates.DataValueField = "MonthYYYY";
-                ddlDates.DataBind();
-                ddlDates.Items.Insert(0, new ListItem("-Month-", "0"));
-            }
+        //    dtGetReturnedData = dlOpenDates.getMonthsforddl(blOpenDates);
+        //    if (dtGetReturnedData != null && dtGetReturnedData.Rows.Count > 0)
+        //    {
+        //        ddlDates.DataSource = dtGetReturnedData;
+        //        ddlDates.DataTextField = "MonthYYYY";
+        //        ddlDates.DataValueField = "MonthYYYY";
+        //        ddlDates.DataBind();
+        //        ddlDates.Items.Insert(0, new ListItem("-Month-", "0"));
+        //    }
 
-            else
-            {
-                ddlDates.Items.Clear();
-                ddlDates.DataSource = null;
-                ddlDates.DataBind();
-                ddlDates.Items.Insert(0, "-No Dates-");
-            }
-        }
-        catch
-        {
+        //    else
+        //    {
+        //        ddlDates.Items.Clear();
+        //        ddlDates.DataSource = null;
+        //        ddlDates.DataBind();
+        //        ddlDates.Items.Insert(0, "-No Dates-");
+        //    }
+        //}
+        //catch
+        //{
 
-            ddlDates.Items.Clear();
-            ddlDates.DataSource = null;
-            ddlDates.DataBind();
-            ddlDates.Items.Insert(0, "-No Dates-");
-        }
+        //    ddlDates.Items.Clear();
+        //    ddlDates.DataSource = null;
+        //    ddlDates.DataBind();
+        //    ddlDates.Items.Insert(0, "-No Dates-");
+        //}
 
         #endregion
     }
@@ -324,54 +375,63 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
 
     protected void btnSearchOthAccom_Click(object sender, EventArgs e)
     {
-        try
-        {
-            if (Convert.ToDateTime(txtChkin.Text).Date >= System.DateTime.Now.Date)
+        //if (ddlNoofrooms.SelectedIndex > 0)
+        //{
+            try
             {
-                if (Session["UserCode"] != null)
-                {
-                    string guests = string.Empty;
-                    int[] arr = new int[10];
-                    int pax = totalguests(out arr);
-                    Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
-                    string url = "~/Hotel/HotelBooking.aspx?AId=" + Request.QueryString["Aid"].ToString() + "&AccomId=" + ddlAccomodationName.SelectedValue + "&AccomTypeId=" + ddlAccomType.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + txtChkin.Text.Trim() + "&Checkout=" + txtChkOut.Text.Trim() + "&Noofrooms=" + ddlNoofrooms.SelectedValue + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + "";
-                    for (int k = 0; k < gdvRooms.Rows.Count; k++)
-                    {
-                        guests = guests + " &guest" + (k + 1).ToString() + "=" + arr[k].ToString();
 
+                if (Convert.ToDateTime(txtChkin.Text).Date >= System.DateTime.Now.Date)
+                {
+                    if (Session["UserCode"] != null)
+                    {
+                        string guests = string.Empty;
+                        int[] arr = new int[10];
+                        int pax = totalguests(out arr);
+                        Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
+                        string url = "~/Hotel/HotelBooking.aspx?AId=" + Request.QueryString["Aid"].ToString() + "&AccomId=" + ddlAccomodationName.SelectedValue + "&AccomTypeId=" + ddlAccomType.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + txtChkin.Text.Trim() + "&Checkout=" + txtChkOut.Text.Trim() + "&Noofrooms=" + ddlNoofrooms.SelectedValue + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + "";
+                        for (int k = 0; k < gdvRooms.Rows.Count; k++)
+                        {
+                            guests = guests + " &guest" + (k + 1).ToString() + "=" + arr[k].ToString();
+
+                        }
+                        url = url + guests;
+                        Session["Bookingdt"] = null;
+                        Response.Redirect(url);
                     }
-                    url = url + guests;
-                    Session["Bookingdt"] = null;
-                    Response.Redirect(url);
+                    else
+                    {
+                        string guests = string.Empty;
+                        int[] arr = new int[10];
+                        int pax = totalguests(out arr);
+                        Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
+                        string url = "~/Hotel/HotelBooking.aspx?AId=0&AccomId=" + ddlAccomodationName.SelectedValue + "&AccomTypeId=" + ddlAccomType.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + txtChkin.Text.Trim() + "&Checkout=" + txtChkOut.Text.Trim() + "&Noofrooms=" + ddlNoofrooms.SelectedValue + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + " ";
+
+                        for (int k = 0; k < gdvRooms.Rows.Count; k++)
+                        {
+                            guests = guests + " &guest" + (k + 1).ToString() + "=" + arr[k].ToString();
+
+                        }
+                        url = url + guests;
+                        Session["Bookingdt"] = null;
+                        Response.Redirect(url);
+                    }
                 }
                 else
                 {
-                    string guests = string.Empty;
-                    int[] arr = new int[10];
-                    int pax = totalguests(out arr);
-                    Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
-                    string url = "~/Hotel/HotelBooking.aspx?AId=0&AccomId=" + ddlAccomodationName.SelectedValue + "&AccomTypeId=" + ddlAccomType.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + txtChkin.Text.Trim() + "&Checkout=" + txtChkOut.Text.Trim() + "&Noofrooms=" + ddlNoofrooms.SelectedValue + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + " ";
-
-                    for (int k = 0; k < gdvRooms.Rows.Count; k++)
-                    {
-                        guests = guests + " &guest" + (k + 1).ToString() + "=" + arr[k].ToString();
-
-                    }
-                    url = url + guests;
-                    Session["Bookingdt"] = null;
-                    Response.Redirect(url);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Sorry!Previous Dates Cannot be booked')", true);
                 }
             }
-            else
+
+            catch (Exception E)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Sorry!Previous Dates Cannot be booked')", true);
+
             }
-        }
-
-        catch
-        {
-
-        }
+        //}
+        //else
+        //{
+        //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Sorry!Please select No of Rooms')", true);
+        //    return;
+        //}
     }
 
     private void BindAccomType()
@@ -387,7 +447,7 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
             if (campRow != null)
             {
                 dtGetReturnedData.Rows.Remove(campRow);
-            } 
+            }
             #endregion
 
             if (dtGetReturnedData.Rows.Count > 0)
@@ -512,5 +572,10 @@ public partial class Cruise_booking_SearchProperty : System.Web.UI.Page
     protected void lnkCustLogin_Click(object sender, EventArgs e)
     {
         Response.Redirect("CustomerLogin.aspx");
+    }
+
+    protected void lnkCustomerRegis_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("../Masters/NewuserRegister.aspx");
     }
 }

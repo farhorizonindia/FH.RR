@@ -7,8 +7,8 @@ using System.Web.UI.WebControls;
 using System.Data;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
-
-public partial class Cruise_Masters_CountryMaster : System.Web.UI.Page
+using FarHorizon.Reservations.Bases.BasePages;
+public partial class Cruise_Masters_CountryMaster : MasterBasePage
 {
 
     DataTable dtgetreturneddata;

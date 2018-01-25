@@ -26,6 +26,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string action { get; set; }
         public string PackageId { get; set; }
         public int AgentId { get; set; }
-
+        public string PackageType { get; set; }
+        public int Openclose { get; set; }
     }
 }

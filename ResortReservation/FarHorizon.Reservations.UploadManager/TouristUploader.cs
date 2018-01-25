@@ -12,7 +12,7 @@ using FarHorizon.DataSecurity;
 
 namespace FarHorizon.Reservations.UploadManager
 {
-    internal class TouristUploader : ITouristUploader
+    public class TouristUploader : ITouristUploader
     {
         #region IUploadedFileProcessor Members
         public bool processUplodedFile(int BookingId, ArrayList RecordList, XmlDocument xmlMappingDoc)

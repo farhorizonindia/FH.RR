@@ -214,7 +214,7 @@ public partial class ClientUI_CruiseRepTest : ClientBasePage
             getBookingsInput.AgentId = Convert.ToInt32(ddlAgent.SelectedValue.ToString());
 
             ds1 = oBookingManager.GetBookingsCruiseFH(getBookingsInput);
-            if (ds1.Tables[0].Rows.Count > 0)
+            if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
             {
                 headings1.Style.Remove("display");
                 headings.Style.Remove("display");
@@ -227,7 +227,7 @@ public partial class ClientUI_CruiseRepTest : ClientBasePage
 
             if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
             {
-                oBookingData = oBookingData.FindAll(delegate(ViewBookingDTO booking) { return booking.ProposedBooking == true; });
+                oBookingData = oBookingData.FindAll(delegate (ViewBookingDTO booking) { return booking.ProposedBooking == true; });
             }
             SessionServices.ViewBooking_BookingData = oBookingData;
 
@@ -278,7 +278,7 @@ public partial class ClientUI_CruiseRepTest : ClientBasePage
         Response.ContentEncoding = Encoding.UTF8;
         StringWriter tw = new StringWriter();
         HtmlTextWriter hw = new HtmlTextWriter(tw);
-       //tbl.RenderControl(hw);
+        //tbl.RenderControl(hw);
         Response.Write(tw.ToString());
         Response.End();
     }

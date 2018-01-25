@@ -39,10 +39,14 @@ public partial class posttoairpay : System.Web.UI.Page
         string sFName = Request.QueryString["FirstName"].Trim();
         string sLName = Request.QueryString["LastName"].Trim();
         string sAddress = Request.QueryString["BillingAddress"].Trim();
-        string sCity = "Lucknow";
-        string sState = "UP";
-        string sCountry = "INDIA";
-        string sPincode = "226005";
+        string sCity = Request.QueryString["City"].Trim();
+        string sState = Request.QueryString["State"].Trim();
+        string sCountry = Request.QueryString["Country"].Trim();
+        string sPincode = Request.QueryString["PinCode"].Trim();
+        //string sCity = "Lucknow";
+        //string sState = "UP";
+        //string sCountry = "INDIA";
+        //string sPincode = "226005";
         string sAmount = Request.QueryString["PaidAmt"].Trim();
         string sOrderId = Request.QueryString["BookingPayId"].Trim();
 
@@ -162,7 +166,7 @@ public partial class posttoairpay : System.Web.UI.Page
     }
     if (sState != "")
     {
-        Regex regex = new Regex(@"^([a-zA-Z0-9]{2,50})$");
+        Regex regex = new Regex(@"^([a-zA-Z0-9 ]{2,50})$");
         Match match = regex.Match(sState);
         if (!match.Success)
         {
@@ -227,7 +231,8 @@ public partial class posttoairpay : System.Web.UI.Page
 
         byte[] result = md5.Hash;
 
-        StringBuilder strBuilder = new StringBuilder(hash.Length);
+        StringBuilder strBuilder = new StringBuilder(hash.Length)
+            ;
         for (int i = 0; i < hash.Length; i++)
         {
             strBuilder.Append(hash[i].ToString("x2"));

@@ -99,6 +99,12 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                     lockRoom.RoomCategoryId,
                     lockRoom.RoomNo,
                     DateTime.Now);
+                    // string query = string.Format("select Id from tblBookingLock where LockIdentifier <> '{0}' and AccomId = {1} and RoomCategoryId = {2} and RoomNo = {3} and LockExpireAt between CONVERT(date, getdate()) and '{4}'",
+                    //balBookingLock.LockIdentifier,
+                    //balBookingLock.AccomId,
+                    //lockRoom.RoomCategoryId,
+                    //lockRoom.RoomNo,
+                    //DateTime.Now);
                     cmd.CommandText = query;
                     var exists = cmd.ExecuteScalar();
 

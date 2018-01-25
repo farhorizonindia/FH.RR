@@ -115,14 +115,17 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.Reports
                         oBRD[i] = new BookingDTMail();
                         oBRD[i].Bookingcode = dsBRD.Tables[0].Rows[i][0].ToString();
                         oBRD[i].AgentName = DataSecurityManager.Decrypt(dsBRD.Tables[0].Rows[i][1].ToString());
-                        oBRD[i].Accomodation = Convert.ToString(dsBRD.Tables[0].Rows[i][2].ToString());
-                        oBRD[i].checkin = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][3].ToString());
-                        oBRD[i].checkout = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][4].ToString());
-                        oBRD[i].bookingstatus = Convert.ToString(dsBRD.Tables[0].Rows[i][5].ToString());
-                        oBRD[i].pax = Convert.ToInt32(dsBRD.Tables[0].Rows[i][6].ToString());
-                        oBRD[i].Nights = Convert.ToInt32(dsBRD.Tables[0].Rows[i][7].ToString());
-                        oBRD[i].Bookingref = Convert.ToString(dsBRD.Tables[0].Rows[i][8].ToString());
-                        oBRD[i].chartered = Convert.ToBoolean((dsBRD.Tables[0].Rows[i][9] != null && dsBRD.Tables[0].Rows[i][9].ToString() !="")? dsBRD.Tables[0].Rows[i][9] : false);
+                        oBRD[i].RefAgentName = DataSecurityManager.Decrypt(dsBRD.Tables[0].Rows[i][2].ToString());
+                        oBRD[i].Accomodation = Convert.ToString(dsBRD.Tables[0].Rows[i][3].ToString());
+                        oBRD[i].checkin = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][4].ToString());
+                        oBRD[i].checkout = Convert.ToDateTime(dsBRD.Tables[0].Rows[i][5].ToString());
+                        oBRD[i].bookingstatus = Convert.ToString(dsBRD.Tables[0].Rows[i][6].ToString());
+                        oBRD[i].pax = Convert.ToInt32(dsBRD.Tables[0].Rows[i][7].ToString());
+                        oBRD[i].Nights = Convert.ToInt32(dsBRD.Tables[0].Rows[i][8].ToString());
+                        oBRD[i].Bookingref = Convert.ToString(dsBRD.Tables[0].Rows[i][9].ToString());
+                        oBRD[i].chartered = Convert.ToBoolean((dsBRD.Tables[0].Rows[i][10] != null && dsBRD.Tables[0].Rows[i][10].ToString() !="")? dsBRD.Tables[0].Rows[i][10] : false);
+                        oBRD[i].packagename = Convert.ToString(dsBRD.Tables[0].Rows[i][11].ToString());
+
                     }
                     dsBRD = null;
                 }

@@ -16,13 +16,15 @@ using FarHorizon.Reservations.MasterServices;
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
 using System.IO;
+using FarHorizon.Reservations.DataBaseManager;
+using System.Collections.Generic;
 
 public partial class MasterUI_RoomMaster : MasterBasePage
 {
     #region Controls Functions
     protected void Page_Load(object sender, EventArgs e)
     {
-        AddAttributes();        
+        AddAttributes();
         if (!IsPostBack)
         {
             FillAccomodationType();
@@ -66,7 +68,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
             return;
         int Id = 0;
         int.TryParse(hfAccomId.Value, out Id);
-        if (Id == 0 && hfRoomNo.Value =="")
+        if (Id == 0 && hfRoomNo.Value == "")
         {
             lblStatus.Text = "Add action initiated.";
             Save();
@@ -155,14 +157,14 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         //dgRooms.Items[0].Cells[0].Text
         string sRoomNo = dgRooms.SelectedItem.Cells[0].Text;
         int iAccomID = 0;
-        int.TryParse(Convert.ToString(dgRooms.SelectedItem.Cells[1].Text),out iAccomID);
+        int.TryParse(Convert.ToString(dgRooms.SelectedItem.Cells[1].Text), out iAccomID);
         hfRoomNo.Value = sRoomNo;
-        hfAccomId.Value = iAccomID.ToString();        
+        hfAccomId.Value = iAccomID.ToString();
         SessionServices.RoomMaster_OperationMode = "EDIT";
 
         RoomMaster oRoomMaster = new RoomMaster();
         RoomDTO[] oAccomRoomData = oRoomMaster.GetData(iAccomID, sRoomNo);
-     
+
         ddlAccomodation.SelectedValue = Convert.ToString(oAccomRoomData[0].AccomodationId);
         ddlFloors.SelectedValue = Convert.ToString(oAccomRoomData[0].FloorId);
         ddlRoomType.SelectedValue = Convert.ToString(oAccomRoomData[0].RoomTypeId);
@@ -173,8 +175,8 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         txtDescription.Text = Convert.ToString(oAccomRoomData[0].Description);
         ddlExtraBeds.Text = Convert.ToString(oAccomRoomData[0].ExtraBeds);
         txtExtraBedRate.Text = Convert.ToString(oAccomRoomData[0].ExtraBedRate);
-     
-       // chkMainten.Checked = oAccomRoomData[0].Status==false?true:false;
+
+        // chkMainten.Checked = oAccomRoomData[0].Status==false?true:false;
         if (txtExtraBedRate.Text != "")
             txtExtraBedRate.Enabled = true;
         else
@@ -201,7 +203,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         btnCancel.Visible = true;
         btnDelete.Enabled = true;
         btnEdit.Text = "Update";
-      //  chkMainten.Visible = true;
+        //  chkMainten.Visible = true;
         //btnEdit.Enabled = true;
         //btnSave.Enabled = false;
         lblStatus.Text = "";
@@ -287,7 +289,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
     //{
     //    txtExtraBedRate.Enabled = false;
     //}
-    
+
     #endregion Controls Functions
 
     #region UserDefined Functions
@@ -342,19 +344,88 @@ public partial class MasterUI_RoomMaster : MasterBasePage
             //ddlFloors.DataBind();
         }
     }
+    public AccomodationDTO[] GetData(int RegionId, int AccomodationTypeId, int AccomodationId)
+    {
+        DataSet ds;
+        AccomodationDTO[] AccomData;
+        AccomData = null;
+        ds = null;
+        string sProcName;
+        DatabaseManager oDB;
+        try
+        {
+            oDB = new DatabaseManager();
+
+            sProcName = "up_Get_Accomodations";
+            oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomTypeId", DbType.Int32, AccomodationTypeId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, AccomodationId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iRegionId", DbType.Int32, RegionId);
+            ds = oDB.ExecuteDataSet(oDB.DbCmd);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                AccomData = new AccomodationDTO[ds.Tables[0].Rows.Count];
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    AccomData[i] = new AccomodationDTO();
+                    AccomData[i].AccomodationTypeId = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
+                    AccomData[i].AccomodationType = Convert.ToString(ds.Tables[0].Rows[i][1]);
+                    AccomData[i].AccomodationId = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
+                    AccomData[i].AccomodationName = Convert.ToString(ds.Tables[0].Rows[i][3]);
+                    AccomData[i].RegionId = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
+                    AccomData[i].Region = Convert.ToString(ds.Tables[0].Rows[i][5]);
+                    AccomData[i].AccomInitial = Convert.ToString(ds.Tables[0].Rows[i][6]);
+                    //AccomData[i].AccomodationSeasonList = GetAccomodationSeasonDates(AccomData[i].AccomodationId);
+                }
+            }
+        }
+        catch (Exception exp)
+        {
+            GF.LogError("clsAccomodationMaster.Update", exp.Message.ToString());
+            oDB = null;
+        }
+        finally
+        {
+            oDB = null;
+        }
+        return AccomData;
+    }
+
+    private List<AccomodationSeasonDTO> GetAccomodationSeasonDates(int accomodationId)
+    {
+        throw new NotImplementedException();
+    }
+
     private void FillAccomodations(int iAccomTypeID)
     {
-        AccomodationMaster oAccomMaster = new AccomodationMaster();
-        AccomodationDTO[] oAccomData = oAccomMaster.GetData(0, iAccomTypeID, 0);
-        if (oAccomData.Length > 0)
+        try
         {
-            SortedList slAccomMaster = new SortedList();
-            slAccomMaster.Add("0", "Choose Accomodation");
-            for (int i = 0; i < oAccomData.Length; i++)
+            AccomodationMaster oAccomMaster = new AccomodationMaster();
+            AccomodationDTO[] oAccomData = GetData(0, iAccomTypeID, 0);
+            if (oAccomData.Length > 0 && oAccomData != null)
             {
-                slAccomMaster.Add(Convert.ToString(oAccomData[i].AccomodationId), Convert.ToString(oAccomData[i].AccomodationName));
+                SortedList slAccomMaster = new SortedList();
+                slAccomMaster.Add("0", "Choose Accomodation");
+                for (int i = 0; i < oAccomData.Length; i++)
+                {
+                    slAccomMaster.Add(Convert.ToString(oAccomData[i].AccomodationId), Convert.ToString(oAccomData[i].AccomodationName));
+                }
+                ddlAccomodation.DataSource = slAccomMaster;
+                ddlAccomodation.DataTextField = "value";
+                ddlAccomodation.DataValueField = "key";
+                ddlAccomodation.DataBind();
             }
-            ddlAccomodation.DataSource = slAccomMaster;
+           
+        }
+        catch
+
+        {
+            SortedList slAccomMaster1 = new SortedList();
+           
+            slAccomMaster1.Remove("0");
+            slAccomMaster1.Add("0", "Choose Accomodation");
+           
+            ddlAccomodation.DataSource = slAccomMaster1;
             ddlAccomodation.DataTextField = "value";
             ddlAccomodation.DataValueField = "key";
             ddlAccomodation.DataBind();
@@ -364,27 +435,27 @@ public partial class MasterUI_RoomMaster : MasterBasePage
     {
         RoomTypeMaster oRoomTypeMaster = new RoomTypeMaster();
         RoomTypeDTO[] oRoomTypeData = oRoomTypeMaster.GetData();
-        
+
         if (oRoomTypeData.Length > 0)
-        {          
-            ListItem l=null;
-            l=new ListItem();
+        {
+            ListItem l = null;
+            l = new ListItem();
             l.Value = "0";
             l.Text = "Choose Room Type";
-            ddlRoomType.Items.Insert(0,l);
+            ddlRoomType.Items.Insert(0, l);
             for (int i = 0; i < oRoomTypeData.Length; i++)
             {
-                l=new ListItem();
+                l = new ListItem();
                 l.Text = oRoomTypeData[i].RoomType.Trim() + " - " + oRoomTypeData[i].DefaultNoOfBeds.ToString();
-                l.Value = oRoomTypeData[i].RoomTypeId.ToString() ;                
-                ddlRoomType.Items.Insert(i+1,l);                
-            }       
+                l.Value = oRoomTypeData[i].RoomTypeId.ToString();
+                ddlRoomType.Items.Insert(i + 1, l);
+            }
         }
     }
     private void FillConvertCombo()
     {
         ddlConvert.Items.Insert(0, "No");
-        ddlConvert.Items.Insert(1,"Yes");
+        ddlConvert.Items.Insert(1, "Yes");
     }
     private void CalcTotalNoOfBeds()
     {
@@ -425,13 +496,13 @@ public partial class MasterUI_RoomMaster : MasterBasePage
     {
         ListItem l = null;
         l = new ListItem("Choose", "-1");
-        ddlExtraBeds.Items.Insert(0,l);
+        ddlExtraBeds.Items.Insert(0, l);
 
         for (int i = 0; i < 5; i++)
         {
             l = new ListItem(i.ToString(), i.ToString());
-            ddlExtraBeds.Items.Insert(i+1, l);
-        }       
+            ddlExtraBeds.Items.Insert(i + 1, l);
+        }
         ddlExtraBeds.SelectedIndex = 0;
     }
     private void Save()
@@ -460,21 +531,21 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         //oRoomData.Sequence = 1;
         //oRoomData.FloorId = 1;
         //oRoomData.TelExtnNo = "12345";     
-     
+
         bActionCompleted = oRoomMaster.Insert(oAccomRoomData);
         if (bActionCompleted == true)
         {
             base.DisplayAlert("The record has been inserted successfully");
             ClearControls();
-            RefreshGrid(Convert.ToInt32(ddlAccomodation.SelectedItem.Value.ToString()));        
+            RefreshGrid(Convert.ToInt32(ddlAccomodation.SelectedItem.Value.ToString()));
             lblStatus.Text = "Saved";
         }
         else
-            lblStatus.Text = "Error Occured while insertion: Please refer to the error log.";                
+            lblStatus.Text = "Error Occured while insertion: Please refer to the error log.";
 
         oAccomRoomData = null;
         oRoomMaster = null;
-        
+
     }
     private void Update()
     {
@@ -487,12 +558,12 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         bool bActionCompleted = false;
         int Id = 0; string sRoomNo = "";
         int.TryParse(hfAccomId.Value, out Id);
-        sRoomNo = hfRoomNo.Value;   
-        if (Id == 0 || sRoomNo =="")
+        sRoomNo = hfRoomNo.Value;
+        if (Id == 0 || sRoomNo == "")
         {
             lblStatus.Text = "Please click on edit button again.";
             return;
-        }        
+        }
         RoomDTO oAccomRoomData = new RoomDTO();
         oAccomRoomData.RoomNo = Convert.ToString(txtRoomNo.Text);
         oAccomRoomData.AccomodationId = Id;
@@ -508,12 +579,12 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         oAccomRoomData.No_of_Beds = Convert.ToInt32(txtNoOfBeds.Text.ToString());
         oAccomRoomData.RoomTypeId = Convert.ToInt32(ddlRoomType.SelectedItem.Value.ToString());
         oAccomRoomData.RoomCategoryId = Convert.ToInt32(ddlRoomCategory.SelectedItem.Value.ToString());
-      //  oAccomRoomData.Status = chkMainten.Checked?false:true;
+        //  oAccomRoomData.Status = chkMainten.Checked?false:true;
         if (ddlConvert.SelectedIndex == 1)
             oAccomRoomData.Convertable = true;
 
         RoomMaster oRoomMaster = new RoomMaster();
-     
+
 
         bActionCompleted = oRoomMaster.Update(oAccomRoomData);
         if (bActionCompleted == true)
@@ -524,7 +595,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
             lblStatus.Text = "Updated";
         }
         else
-            lblStatus.Text = "Error Occured while updation: Please refer to the error log.";                
+            lblStatus.Text = "Error Occured while updation: Please refer to the error log.";
 
         oAccomRoomData = null;
         oRoomMaster = null;
@@ -540,7 +611,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         int Id = 0; string sRoomNo = "";
         int.TryParse(hfAccomId.Value, out Id);
         sRoomNo = hfRoomNo.Value;
-        if (Id == 0 || sRoomNo =="")
+        if (Id == 0 || sRoomNo == "")
         {
             lblStatus.Text = "Please click on edit button again.";
             return;
@@ -579,11 +650,11 @@ public partial class MasterUI_RoomMaster : MasterBasePage
                 base.DisplayAlert("Error Occured while deleted: Please refer to the error log.");
             }
         }
-        
+
 
         oRoomMaster = null;
-        oAccomRoomData = null;        
-    }        
+        oAccomRoomData = null;
+    }
     private void RefreshGrid(int AccomodationId)
     {
         RoomMaster oRoomMaster = new RoomMaster();
@@ -650,14 +721,42 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         txtExtraBedRate.Text = "";
         txtDescription.Text = "";
         txtDefaultNoOfBeds.Text = "";
-        
+
         //ddlAccomType.SelectedIndex = 0;
         //ddlAccomodation.SelectedIndex = 0;
         ddlFloors.SelectedIndex = 0;
         ddlRoomType.SelectedIndex = 0;
         ddlRoomCategory.SelectedIndex = 0;
         ddlExtraBeds.SelectedIndex = 0;
-        ddlConvert.SelectedIndex = 0;       
+        ddlConvert.SelectedIndex = 0;
     }
     #endregion UserDefined Functions
+
+    protected void btnHide_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void dgRooms_ItemCommand(object source, DataGridCommandEventArgs e)
+    {
+        //if (e.CommandName == "Select" || e.CommandArgument!="")
+        //{
+        string roomno = e.CommandArgument.ToString();
+        // int acomid = Convert.ToInt32(e.CommandName.ToString());
+        if (e.Item.Cells[0].Text != "")
+        {
+            int acomid = Convert.ToInt32(e.Item.Cells[1].Text);
+            RoomDTO rdto = new RoomDTO();
+            rdto.RoomNo = roomno;
+            rdto.AccomodationId = acomid;
+            RoomMaster oRoomMaster = new RoomMaster();
+            bool n = oRoomMaster.updatestatus(rdto);
+            if (n == true)
+            {
+                RefreshGrid(acomid);
+            }
+        }
+        //}
+
+    }
 }

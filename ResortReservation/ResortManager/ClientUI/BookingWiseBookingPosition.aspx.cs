@@ -1,0 +1,262 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using System.Data;
+using FarHorizon.Reservations.Bases.BasePages;
+
+public partial class ClientUI_BookingWiseBookingPosition : MasterBasePage
+{
+
+    DALBooking dlbooking = new DALBooking();
+    BALBooking blbooking = new BALBooking();
+    DALOpenDates dlOpenDates = new DALOpenDates();
+    BALOpenDates blOpenDates = new BALOpenDates();
+    BALRateCard blCard = new BALRateCard();
+    DALRateCard dlcard = new DALRateCard();
+    DALSearch dlsearch = new DALSearch();
+    DataTable dtGetReturnedData;
+    DALAgentPayment dlagent = new DALAgentPayment();
+    public DataTable dt;
+    public DataTable dt1;
+    public DataTable dt2;
+    public DataTable dt3;
+    public DataTable dt4;
+    public DataTable dt5;
+    public DataTable dt6;
+    public DataTable dt7;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //getall();
+        if (!IsPostBack)
+        {
+            fetchpackage();
+            lblCurrentDateTime.Text = DateTime.Now.ToLongDateString();
+            lblTime.Text = DateTime.Now.ToString("HH:mm:ss IST");
+        }
+    }
+    private void getall()
+    {
+        blbooking.action = "Upstream";
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt = dlbooking.getmonthlyrevenue(blbooking);
+        Session["getdata"] = dt;
+        if (dt != null && dt.Rows.Count > 0)
+        {
+
+        }
+    }
+    private void getallDownstream()
+    {
+        blbooking.action = "Downstream";
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt1 = dlbooking.getmonthlyrevenue(blbooking);
+       // Session["getdata"] = dt1;
+        if (dt1 != null && dt1.Rows.Count > 0)
+        {
+
+        }
+    }
+    private void getUpstreamCalculation()
+    {
+        blbooking.action = "Upstream";
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt2 = dlbooking.getUpstreamCalculation(blbooking);
+       // Session["getdata"] = dt2;
+        if (dt2 != null && dt2.Rows.Count > 0)
+        {
+
+        }
+    }
+
+    private void getDownstreamCalculation()
+    {
+        blbooking.action = "Downstream";
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt3 = dlbooking.getDownstreamCalculation(blbooking);
+        // Session["getdata"] = dt2;
+        if (dt3 != null && dt3.Rows.Count > 0)
+        {
+
+        }
+    }
+    private void getUpstreamPackage()
+    {
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt4 = dlbooking.getUpstreamPackage(blbooking);
+        // Session["getdata"] = dt2;
+        if (dt4 != null && dt4.Rows.Count > 0)
+        {
+
+        }
+    }
+    private void getDownstreamPackage()
+    {
+        blbooking.PackageId = ddlPackage.SelectedValue;
+        if (txtfrom.Text != "")
+        {
+            blbooking._dtStartDate = DateTime.Parse(txtfrom.Text);
+        }
+        else
+        {
+            blbooking._dtStartDate = DateTime.Parse("1990/01/01");
+        }
+        if (txtTo.Text != "")
+        {
+            blbooking._dtEndDate = DateTime.Parse(txtTo.Text);
+        }
+        else
+        {
+            blbooking._dtEndDate = DateTime.Parse("1990/01/01");
+        }
+        dt5 = dlbooking.getDownstreamPackage(blbooking);
+        // Session["getdata"] = dt2;
+        if (dt5 != null && dt5.Rows.Count > 0)
+        {
+
+        }
+    }
+    public void fetchpackage()
+    {
+        DataTable dt = dlsearch.fetchall();
+        if (dt != null & dt.Rows.Count > 0)
+        {
+            ddlPackage.Items.Insert(0, "-Select Package-");
+            ddlPackage.DataSource = dt;
+            ddlPackage.DataTextField = "PackageName";
+            ddlPackage.DataValueField = "PackageId";
+            ddlPackage.DataBind();
+            ddlPackage.Items.Insert(0, "All Packages");
+        }
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        getall();
+        getallDownstream();
+        getUpstreamCalculation();
+        getDownstreamCalculation();
+        getUpstreamPackage();
+        getDownstreamPackage();
+        //    DataView dv = new DataView();
+        //    DataSet ds = new DataSet();
+        //    if (Session["getdata"] != null)
+        //    {
+        //        dt = Session["getdata"] as DataTable;
+        //    }
+        //    if (dt != null && dt.Rows.Count > 0)
+        //    {
+        //        if (txtfrom.Text != "" && txtTo.Text != "" && ddlPackage.SelectedIndex == 0 && ddlStatus.SelectedIndex == 0)
+        //        {
+        //            ds.Tables.Add(dt);
+        //            DataTable dt2 = new DataTable();
+        //            dt = ds.Tables[0].Select().Where(p => (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text)) && (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text))).CopyToDataTable();
+
+        //            ds.Clear();
+        //        }
+        //        else if (txtfrom.Text != "" && txtTo.Text != "" && ddlPackage.SelectedIndex > 0 && ddlStatus.SelectedIndex == 0)
+        //        {
+        //            ds.Tables.Add(dt);
+        //            DataTable dt2 = new DataTable();
+        //            dt = ds.Tables[0].Select().Where(p => (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text)) && (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text))).CopyToDataTable();
+        //            dv = new DataView(dt, "PackageName = '" + ddlPackage.SelectedItem.ToString() + "'", "PackageName", DataViewRowState.CurrentRows);
+        //            dt = dv.ToTable();
+
+        //        }
+        //        else if (txtfrom.Text != "" && txtTo.Text != "" && ddlPackage.SelectedIndex > 0 && ddlStatus.SelectedIndex > 0)
+        //        {
+        //            ds.Tables.Add(dt);
+        //            DataTable dt2 = new DataTable();
+        //            dt = ds.Tables[0].Select().Where(p => (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text)) && (Convert.ToDateTime(p["StartDate"]) >= Convert.ToDateTime(txtfrom.Text))).CopyToDataTable();
+        //            dv = new DataView(dt, "PackageName = '" + ddlPackage.SelectedItem.ToString() + "'", "PackageName", DataViewRowState.CurrentRows);
+        //            dt = dv.ToTable();
+        //            dv = new DataView(dt, "Staus = '" + ddlStatus.SelectedItem.ToString() + "'", "Staus", DataViewRowState.CurrentRows);
+        //            dt = dv.ToTable();
+
+        //        }
+        //    }
+    }
+}

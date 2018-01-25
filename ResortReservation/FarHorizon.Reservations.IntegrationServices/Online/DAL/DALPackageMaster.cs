@@ -172,7 +172,60 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
+        public DataTable getPackagebyBynights(BALPackageMaster obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_Package]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+                da.SelectCommand.Parameters.AddWithValue("@NoOfNights", obj._NoOfNights);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public DataTable Getpackagebydates(BALPackageMaster obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_Package]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+                da.SelectCommand.Parameters.AddWithValue("@CheckInDate", obj.Checkin);
+                da.SelectCommand.Parameters.AddWithValue("@CheckOutDate", obj.checkout);
+                //da.SelectCommand.Parameters.AddWithValue("@NoOfNights", obj._NoOfNights);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public int DeletePackage(BALPackageMaster obj)
         {
             try

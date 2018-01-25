@@ -55,6 +55,8 @@
 
 
                           <h2>Packages <span class=" pull-right">
+                              <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" BackColor="#4479BA" OnClick="LinkButton1_Click">Logout</asp:LinkButton></span></h2>
 
 
@@ -77,7 +79,7 @@
                           %>
                           <div class="col-md-12 text-left noSideMargin noSidePadding bottomWhiteBar imageOffersFader">
 
-                              <div class=" col-sm-4"><% Response.Write("<img src= " + dtres.Rows[i]["Img"].ToString() + " class='img-responsive noLeftPadding' border='0' alt='' />");%></div>
+                              <div class=" col-sm-4"><% Response.Write("<img src= /" + dtres.Rows[i]["Img"].ToString() + " class='img-responsive noLeftPadding' border='0' alt='' />");%></div>
                               <div class=" col-sm-8">
 
                                   <h3 style="font-family: 'Times New Roman'; font-style: italic; font-weight: bold">

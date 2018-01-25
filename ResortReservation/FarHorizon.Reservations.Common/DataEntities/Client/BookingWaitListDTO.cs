@@ -16,6 +16,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private string _sRoomType;
         private int _iAccomId;
         private int _iNo_Of_RoomsWaitListed;
+        private int paxstaying;
 
         public int AccomId
         {
@@ -67,6 +68,11 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         {
             get { return _iNo_Of_RoomsWaitListed; }
             set { _iNo_Of_RoomsWaitListed = value; }
+        }
+        public int paxstying
+        {
+            get { return paxstaying; }
+            set { paxstaying = value; }
         }
     }
 }

@@ -102,7 +102,19 @@ namespace FarHorizon.Reservations.MasterServices
         {
             return GetData(0);
         }
+        public DataSet GetallData()
+        {
+            RoomCategoryDTO[] oRoomCategoryData;
+            oRoomCategoryData = null;
 
+            string query = "select RoomCategoryID, RoomCategory, CategoryAlias from tblRoomCategoryMaster where 1=1";
+            //if (RoomCategoryId != 0)
+            //    query += " and RoomCategoryID=" + RoomCategoryId;
+            //query += " order by RoomCategory";
+            oRoomCategoryData = PopulateDataObject(query);
+            DataSet ds = GetDataFromDB(query);
+            return ds;
+        }
         public RoomCategoryDTO[] GetData(int RoomCategoryId)
         {
             RoomCategoryDTO[] oRoomCategoryData;

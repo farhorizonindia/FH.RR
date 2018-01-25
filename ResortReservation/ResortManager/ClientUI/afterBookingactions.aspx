@@ -35,6 +35,10 @@
                                     <td>
                                         <asp:Label ID="lblComment" runat="server"></asp:Label></td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="lblpropsedbook" runat="server"></asp:Label></td>
+                                </tr>
                             </table>
                         </asp:Panel>
                     </td>
@@ -47,8 +51,8 @@
 
                         <hr />
                         <div>
-                            <div style="margin-bottom: 10px">
-                                Sub :<asp:Label ID="lblSubject" runat="server"></asp:Label>
+                            <div style="margin-bottom: 10px; font: bold;">
+                                Sub :<asp:Label ID="lblSubject" runat="server" Font-Bold="true"></asp:Label>
                             </div>
                             <div style="margin-bottom: 10px">
                                 <asp:Label ID="Label1" runat="server" Text="Dear Sir/Madam," Style="margin-bottom: 10px"></asp:Label>
@@ -56,7 +60,7 @@
 
                             <div style="margin-bottom: 10px">
 
-                                <asp:Label ID="Label2" runat="server" Text="Please find below the updated status of your booking:"></asp:Label>
+                                <asp:Label ID="Label2" runat="server" Text="We are truly pleased to update your booking as per the below details: "></asp:Label>
                             </div>
                         </div>
 
@@ -64,6 +68,20 @@
                         </asp:Panel>
                         <asp:Panel ID="pnlmailbookedrms" runat="server">
                         </asp:Panel>
+                        <br />
+                        <table>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="Label3" runat="server" Text="Cabin/Room number detail :"></asp:Label></td>
+                                <td>
+                                    <asp:Label ID="Label4" runat="server" Text=" "></asp:Label></td>
+                                <td>
+                                    <asp:Label ID="Label5" runat="server" Text=" "></asp:Label></td>
+                                <td>
+                                    <asp:Label ID="Label6" runat="server" Text=" "></asp:Label></td>
+
+                            </tr>
+                        </table>
                         <br />
                         <div style="float: left; clear: left">
                             <asp:Label ID="lblOtherMsg" runat="server" Text="Other Bookings Within The Same Date Are:" Font-Bold="true"></asp:Label>

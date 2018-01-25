@@ -34,5 +34,11 @@ namespace FarHorizon.Reservations.Common.DataEntities.InputOutput
         /// Optional Field
         /// </summary>
         public Int32 AgentId;
+
+        /// <summary>
+        /// Optional Field
+        /// </summary>
+        public Int32 RefAgentId;
+
     }
 }

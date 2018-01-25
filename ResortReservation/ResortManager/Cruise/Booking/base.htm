@@ -1,0 +1,60 @@
+<HTML>
+<!-- FILE: base.htm (Oracle Forms)                                  -->
+<!--                                                                -->  
+<!-- This is the default base HTML file for running a form on the   -->
+<!-- web using a generic APPLET tag to include Forms applet.        -->
+<!--                                                                -->  
+<!-- IMPORTANT NOTES:                                               -->
+<!-- Default values for all the variables which appear below        -->
+<!-- (enclosed in percent characters) are defined in the servlet    -->
+<!-- configuration file (formsweb.cfg). It is preferable to make    -->
+<!-- changes in that file where possible, rather than this one.     -->
+<!--                                                                -->  
+<!-- This file will be REPLACED if you reinstall Oracle Forms, so   -->
+<!-- you are advised to make your own version if you want to make   -->
+<!-- want to make any modifications.  You should then set the       -->
+<!-- baseHTML parameter in the Forms Servlet configuration file     -->
+<!-- (formsweb.cfg) to point to your new file instead of this one.  -->
+
+<HEAD><TITLE>%pageTitle%</TITLE></HEAD>
+
+<BODY %HTMLbodyAttrs%>
+%HTMLbeforeForm%
+
+<!-- Forms applet definition (start) -->
+<APPLET CODEBASE="%codebase%"
+        CODE="oracle.forms.engine.Main"
+        ARCHIVE="%archive%"
+        WIDTH="%Width%"
+        HEIGHT="%Height%">
+
+<PARAM NAME="serverURL" VALUE="%serverURL%">
+<PARAM NAME="networkRetries" VALUE="%networkRetries%">
+<PARAM NAME="serverArgs" 
+       VALUE="%escapeParams% module=%form% userid=%userid% sso_userid=%sso_userid% sso_formsid=%sso_formsid% sso_subDN=%sso_subDN% sso_usrDN=%sso_usrDN% debug=%debug% host=%host% port=%port% %otherParams%">
+<PARAM NAME="separateFrame" VALUE="%separateFrame%">
+<PARAM NAME="splashScreen"  VALUE="%splashScreen%">
+<PARAM NAME="background"  VALUE="%background%">
+<PARAM NAME="lookAndFeel"  VALUE="%lookAndFeel%">
+<PARAM NAME="colorScheme"  VALUE="%colorScheme%">
+<PARAM NAME="serverApp" VALUE="%serverApp%">
+<PARAM NAME="logo" VALUE="%logo%">
+<PARAM NAME="imageBase" VALUE="%imageBase%">
+<PARAM NAME="formsMessageListener" VALUE="%formsMessageListener%">
+<PARAM NAME="recordFileName" VALUE="%recordFileName%">
+<PARAM NAME="EndUserMonitoringEnabled" VALUE="%EndUserMonitoringEnabled%">
+<PARAM NAME="EndUserMonitoringURL" VALUE="%EndUserMonitoringURL%">
+<PARAM NAME="heartbeat" VALUE="%heartbeat%">
+
+</APPLET>
+<!-- Forms applet definition (end) -->
+
+%HTMLafterForm%
+
+</BODY>
+</HTML>
+
+
+
+
+

@@ -1,0 +1,7 @@
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.Common.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.Common.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\FarHorizon.Reservations.Common.csprojResolveAssemblyReference.cache
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\FarHorizon.Reservations.Common.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.Common\obj\Debug\FarHorizon.Reservations.Common.pdb

@@ -85,12 +85,16 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomTypeId", DbType.Int32, objBooking.AccomodationTypeId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, objBooking.AccomodationId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAgentId", DbType.Int32, objBooking.AgentId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAgentIdRef", DbType.String, objBooking.AgentIdRef);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNights", DbType.Int32, objBooking.NoOfNights);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iPersons", DbType.Int32, objBooking.NoOfPersons);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingStatusId", DbType.Int32, objBooking.BookingStatusId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@SeriesId", DbType.Int32, objBooking.SeriesId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@proposedBooking", DbType.Boolean, objBooking.ProposedBooking);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@chartered", DbType.Boolean, objBooking.Chartered);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@agentcommision", DbType.Decimal, objBooking.agentcommission);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@packageid", DbType.String, objBooking.packagid);
+                //oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAgenttype", DbType.String, objBooking.AgentType);
 
 
                 iBookingID = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
@@ -226,9 +230,11 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNights", DbType.Int32, objBooking.NoOfNights);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iPersons", DbType.Int32, objBooking.NoOfPersons);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAgentId", DbType.Int32, objBooking.AgentId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentIdRef", DbType.Int32, objBooking.AgentIdRef);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iBookingStatusId", DbType.Int32, objBooking.BookingStatusId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@proposedBooking", DbType.Boolean, objBooking.ProposedBooking);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@charteredbooking", DbType.Boolean, objBooking.Chartered);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@packid", DbType.String, objBooking.packagid);
                 oDB.ExecuteNonQuery(oDB.DbCmd);
 
             }
@@ -453,23 +459,40 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 {
                     oBookingData[i] = new BookingDTO();
                     dr = dsBookingData.Tables[0].Rows[i];
-                    oBookingData[i].BookingId = Convert.ToInt32(dr.ItemArray.GetValue(0));
-                    oBookingData[i].BookingCode = Convert.ToString(dr.ItemArray.GetValue(1));
-                    oBookingData[i].BookingReference = Convert.ToString(dr.ItemArray.GetValue(2));
-                    oBookingData[i].SDate = Convert.ToString(dr.ItemArray.GetValue(3));
-                    oBookingData[i].EDate = Convert.ToString(dr.ItemArray.GetValue(4));
+                    if (dr.ItemArray.GetValue(0) != DBNull.Value)
+                        oBookingData[i].BookingId = Convert.ToInt32(dr.ItemArray.GetValue(0));
+                    if (dr.ItemArray.GetValue(1) != DBNull.Value)
+                        oBookingData[i].BookingCode = Convert.ToString(dr.ItemArray.GetValue(1));
+                    if (dr.ItemArray.GetValue(2) != DBNull.Value)
+                        oBookingData[i].BookingReference = Convert.ToString(dr.ItemArray.GetValue(2));
+                    if (dr.ItemArray.GetValue(3) != DBNull.Value)
+                        oBookingData[i].SDate = Convert.ToString(dr.ItemArray.GetValue(3));
+                    if (dr.ItemArray.GetValue(4) != DBNull.Value)
+                        oBookingData[i].EDate = Convert.ToString(dr.ItemArray.GetValue(4));
                     oBookingData[i].StartDate = Convert.ToDateTime(dr.ItemArray.GetValue(3).ToString());
                     oBookingData[i].EndDate = Convert.ToDateTime(dr.ItemArray.GetValue(4).ToString());
-                    oBookingData[i].AccomodationType = Convert.ToString(dr.ItemArray.GetValue(5));
-                    oBookingData[i].AccomodationName = Convert.ToString(dr.ItemArray.GetValue(6));
-                    oBookingData[i].AccomodationTypeId = Convert.ToInt32(dr.ItemArray.GetValue(7));
-                    oBookingData[i].AccomodationId = Convert.ToInt32(dr.ItemArray.GetValue(8));
-                    oBookingData[i].NoOfNights = Convert.ToInt32(dr.ItemArray.GetValue(9));
-                    oBookingData[i].NoOfPersons = Convert.ToInt32(dr.ItemArray.GetValue(10));
-                    oBookingData[i].AgentId = Convert.ToInt32(dr.ItemArray.GetValue(11));
-                    oBookingData[i].AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(12)));
-                    oBookingData[i].BookingStatusId = Convert.ToInt32(dr.ItemArray.GetValue(13));
-                    oBookingData[i].ExchangeOrderNo = Convert.ToString(dr.ItemArray.GetValue(14));
+                    if (dr.ItemArray.GetValue(5) != DBNull.Value)
+                        oBookingData[i].AccomodationType = Convert.ToString(dr.ItemArray.GetValue(5));
+                    if (dr.ItemArray.GetValue(6) != DBNull.Value)
+                        oBookingData[i].AccomodationName = Convert.ToString(dr.ItemArray.GetValue(6));
+                    if (dr.ItemArray.GetValue(7) != DBNull.Value)
+                        oBookingData[i].AccomodationTypeId = Convert.ToInt32(dr.ItemArray.GetValue(7));
+                    if (dr.ItemArray.GetValue(8) != DBNull.Value)
+                        oBookingData[i].AccomodationId = Convert.ToInt32(dr.ItemArray.GetValue(8));
+                    if (dr.ItemArray.GetValue(9) != DBNull.Value)
+                        oBookingData[i].NoOfNights = Convert.ToInt32(dr.ItemArray.GetValue(9));
+                    if (dr.ItemArray.GetValue(10) != DBNull.Value)
+                        oBookingData[i].NoOfPersons = Convert.ToInt32(dr.ItemArray.GetValue(10));
+                    if (dr.ItemArray.GetValue(11) != DBNull.Value)
+                        oBookingData[i].AgentId = Convert.ToInt32(dr.ItemArray.GetValue(11));
+                    if (dr.ItemArray.GetValue(44) != DBNull.Value)
+                        oBookingData[i].AgentIdRef = Convert.ToInt32(dr.ItemArray.GetValue(44));
+                    if (dr.ItemArray.GetValue(12) != DBNull.Value)
+                        oBookingData[i].AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(12)));
+                    if (dr.ItemArray.GetValue(13) != DBNull.Value)
+                        oBookingData[i].BookingStatusId = Convert.ToInt32(dr.ItemArray.GetValue(13));
+                    if (dr.ItemArray.GetValue(14) != DBNull.Value)
+                        oBookingData[i].ExchangeOrderNo = Convert.ToString(dr.ItemArray.GetValue(14));
                     if (dr.ItemArray.GetValue(15) != DBNull.Value)
                         oBookingData[i].VoucherDate = Convert.ToDateTime(dr.ItemArray.GetValue(15).ToString());
                     if (dr.ItemArray.GetValue(16) != DBNull.Value)
@@ -527,6 +550,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 
                     if (dr.ItemArray.GetValue(41) != DBNull.Value)
                         oBookingData[i].Chartered = Convert.ToBoolean(dr.ItemArray.GetValue(41));
+                    oBookingData[i].packaagename = Convert.ToString(dr.ItemArray.GetValue(42));
+                    oBookingData[i].packagid = Convert.ToString(dr.ItemArray.GetValue(43));
                 }
             }
             //}
@@ -679,6 +704,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomId", DbType.Int32, getBookingsInput.AccomodationId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentId", DbType.Int32, getBookingsInput.AgentId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, getBookingsInput.BookingCode);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RefAgentId", DbType.Int32, getBookingsInput.RefAgentId);
 
                 dsBookingData = oDB.ExecuteDataSet(oDB.DbCmd);
             }
@@ -706,32 +732,39 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                     booking.EndDate = Convert.ToDateTime(dr.ItemArray.GetValue(4).ToString());
                     booking.BookingStatus = Convert.ToString(dr.ItemArray.GetValue(5));
                     booking.AccomodationType = Convert.ToString(dr.ItemArray.GetValue(6));
+                    booking.agentname = Convert.ToString(dr.ItemArray.GetValue(8));
+
+                    if (dr.ItemArray.GetValue(17) != DBNull.Value)
+                        booking.refagentname = Convert.ToString(dr.ItemArray.GetValue(17));
+                    if (dr.ItemArray.GetValue(13) != DBNull.Value)
+                        booking.agentType = Convert.ToString(dr.ItemArray.GetValue(13));
+
                     if (dr.ItemArray.GetValue(7) != DBNull.Value)
                         booking.ProposedBooking = Convert.ToBoolean(dr.ItemArray.GetValue(7));
-                    if (dr.ItemArray.GetValue(8) != DBNull.Value)
+                    if (dr.ItemArray.GetValue(9) != DBNull.Value)
                     {
-                        if (Convert.ToInt32(dr.ItemArray.GetValue(8)) > 0)
+                        if (Convert.ToInt32(dr.ItemArray.GetValue(9)) > 0)
                         {
                             booking.HasForeignTourists = true;
                         }
                     }
-                    if (dr.ItemArray.GetValue(9) != DBNull.Value)
+                    if (dr.ItemArray.GetValue(10) != DBNull.Value)
                     {
-                        if (Convert.ToInt32(dr.ItemArray.GetValue(9)) > 0)
+                        if (Convert.ToInt32(dr.ItemArray.GetValue(10)) > 0)
                         {
                             booking.HasIndianTourists = true;
                         }
                     }
 
-                    if (dr.ItemArray.GetValue(10) != DBNull.Value)
-                        booking.CharteredBooking = Convert.ToBoolean(dr.ItemArray.GetValue(10));
                     if (dr.ItemArray.GetValue(11) != DBNull.Value)
-                    booking.PaymentStatus = Convert.ToBoolean(dr.ItemArray.GetValue(11));
-
+                        booking.CharteredBooking = Convert.ToBoolean(dr.ItemArray.GetValue(11));
                     if (dr.ItemArray.GetValue(12) != DBNull.Value)
-                        booking.PaidAmt = Convert.ToDouble(dr.ItemArray.GetValue(12));
-                    if (dr.ItemArray.GetValue(13) != DBNull.Value)
-                        booking.InvoiceAmount = Convert.ToDouble(dr.ItemArray.GetValue(13));
+                        booking.PaymentStatus = Convert.ToBoolean(dr.ItemArray.GetValue(12));
+
+                    if (dr.ItemArray.GetValue(14) != DBNull.Value)
+                        booking.PaidAmt = Convert.ToDouble(dr.ItemArray.GetValue(14));
+                    if (dr.ItemArray.GetValue(16) != DBNull.Value)
+                        booking.InvoiceAmount = Convert.ToDouble(dr.ItemArray.GetValue(16));
 
                     bookingList.Add(booking);
                 }
@@ -799,7 +832,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                     booking.SGL = Convert.ToInt32(dr.ItemArray.GetValue(8));
                     booking.TWN = Convert.ToInt32(dr.ItemArray.GetValue(9));
                     booking.DBL = Convert.ToInt32(dr.ItemArray.GetValue(10));
-
+                    
                     booking.Total = Convert.ToInt32(dr.ItemArray.GetValue(11));
                     booking.PAX = Convert.ToInt32(dr.ItemArray.GetValue(12));
                     booking.BookingStatus = Convert.ToString(dr.ItemArray.GetValue(13));
@@ -826,7 +859,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                         booking.CharteredBooking = Convert.ToBoolean(dr.ItemArray.GetValue(17));
                     if (dr.ItemArray.GetValue(18) != DBNull.Value)
                         booking.TRP = Convert.ToInt32(dr.ItemArray.GetValue(18));
-
+                    booking.refagentname = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(20)));
 
 
                     bookingList.Add(booking);

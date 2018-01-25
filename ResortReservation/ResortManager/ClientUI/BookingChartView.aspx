@@ -27,9 +27,16 @@
     <script language="javascript" type="text/javascript" src="../js/popups.js"></script>
 
     <script language="javascript" type="text/javascript" src="../js/global.js"></script>
+    
+ 
+ 
 
 </head>
 <body>
+
+    
+
+
     <form id="form1" runat="server">
     <phc:PageHeaderControl ID="pageheader1" runat="server" PageTitle="Booking Chart" />
     <div>
@@ -37,6 +44,9 @@
         </asp:ScriptManager>
         <asp:UpdatePanel ID="pnlBookingChartView" runat="server">
             <ContentTemplate>
+
+
+
                 <table id="MainTable" class="mainTable">
                     <tr>
                         <td class="changeTree">

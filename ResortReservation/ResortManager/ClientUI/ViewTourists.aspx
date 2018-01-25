@@ -22,7 +22,7 @@
                     <asp:DataGrid ID="dgTouristDetails" PageSize="30" runat="server" AutoGenerateColumns="False"
                         Width="936px" AllowPaging="True">
                         <Columns>
-                            <asp:BoundColumn DataField="BookingCode" HeaderText="Booking Code">
+                            <asp:BoundColumn DataField="BookingId" HeaderText="Booking Code">
                                 <ItemStyle CssClass="column" />
                                 <HeaderStyle CssClass="columnHeader" />
                             </asp:BoundColumn>

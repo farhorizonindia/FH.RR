@@ -109,6 +109,10 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
+                                  <asp:BoundColumn DataField="refagentname" HeaderText="RefAgent" >
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:BoundColumn>
                                    <asp:BoundColumn DataField="noofnights" HeaderText="Nights" >
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
@@ -153,7 +157,7 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
-
+                                
                                 <asp:BoundColumn DataField="BookingAmt" HeaderText="Booking Amount" >
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
