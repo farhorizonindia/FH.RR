@@ -1,6 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SummarizedDetails1.aspx.cs" Inherits="Cruise_Booking_SummarizedDetails1" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="~/Cruise/Booking/SummarizedDetails1.aspx.cs" Inherits="Cruise_Booking_SummarizedDetails" EnableEventValidation="false" %>
 
 <!DOCTYPE html>
+
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -53,7 +55,7 @@
                         <span class="icon-bar "></span>
                         <span class="icon-bar "></span>
                     </button>
-                    <a class="navbar-brand agileits " href="searchproperty1.aspx">Resorts</a>
+                    <a class="navbar-brand agileits headerTextFont" href="searchproperty.aspx">Booking System</a>
                 </div>
 
                 <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
@@ -64,7 +66,7 @@
                         <li class="dropdown">
                             <a id="lblLoginas" runat="server" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LOGIN <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a runat="server" id="lnkLogin" href="agentLogin1.aspx">Partner</a></li>
+                                <li><a runat="server" id="lnkLogin" href="agentLogin.aspx">Partner</a></li>
                                 <li><a runat="server" id="lnkCustomerRegis" href="../Masters/NewRegister.aspx">Customer </a>
 
 
@@ -289,7 +291,7 @@
                                                 </div>
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtPostcode" ValidationGroup="Cust"></asp:RequiredFieldValidator>
-                                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" ErrorMessage="Invalid" ControlToValidate="txtPostcode" ValidationGroup="Cust" ValidationExpression="[0-9]{6}"></asp:RegularExpressionValidator>
+                                                 
                                                     <asp:TextBox ID="txtPostcode" runat="server" class="text-box-dark agileits " Placeholder="Post Code" MaxLength="6" TabIndex="11"></asp:TextBox>
 
 
@@ -457,7 +459,7 @@ All reservations are subject to cancellation if payments are not received by the
                                 </div>
                             </div>
                         </div>
-                       <%-- <div class="payment-option">--%>
+                        <%--<div class="payment-option">--%>
                         <div>
                             <div id="dvpayment" runat="server" visible="false">
                                 <label class="text-left">PAYMENT OPTIONS</label>
@@ -512,6 +514,24 @@ All reservations are subject to cancellation if payments are not received by the
                                     </div>
                                 </div>
                             </div>
+
+
+
+                             <asp:Panel ID="pnlguestlogin" runat="server" Visible="false">
+                                <table id="table12" runat="server" >
+                                    <tr>
+                                        <td>
+                                            <asp:TextBox ID="txtguestverify" placeholder="Enter Code" runat="server"></asp:TextBox>
+                                            <asp:Button ID="btnguestverify" runat="server" Text="Verify" class="btn btn-primary agileits  wow fadeInLeft button1" OnClick="btnguestverify_Click"   />
+
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                <asp:HiddenField ID="hdfguestcode" runat="server" />
+                            </asp:Panel>
+
+
                             <div class="panel panel-default" runat="server" id="dvRefrence">
                                 <div class="panel-heading collapsed" role="tab" id="Div1" runat="server"
                                     data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="background-color: #f5f5f5; border-color: #ddd;">
@@ -556,21 +576,21 @@ All reservations are subject to cancellation if payments are not received by the
                                                     </select>--%>
                                                 </li>
                                             </ul>
-                                           
 
-                                             <div class="row agileits ">
+
+                                            <div class="row agileits ">
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
 
                                                     <div style="width: 100%">
 
                                                         <div style="width: 86%; float: right;">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtFirstname1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtFirstname1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                             <asp:TextBox ID="txtFirstname1" runat="server" Placeholder="First Name" class="text-box-dark agileits " TabIndex="1"></asp:TextBox>
 
                                                         </div>
 
                                                         <div style="width: 50%;">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="ddlList1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="ddlList1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                             <asp:DropDownList ID="ddlList1" runat="server" class="text-box-dark agileits" Style="margin-bottom: 0px; font-size: 12px; width: 26%; margin-top: 0%; border: 1px solid #9e9e9e; height: 52px;">
 
                                                                 <asp:ListItem>Mr</asp:ListItem>
@@ -583,7 +603,7 @@ All reservations are subject to cancellation if payments are not received by the
 
                                                     <%--<input required=""  id="" runat="server" type="text" value="First Name" onblur="if (this.value == '') {this.value = 'First Name';}" name="firstname" />--%>
                                                 </div>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtLastanme1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtLastanme1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
 
                                                     <asp:TextBox ID="txtLastanme1" runat="server" Placeholder="Last Name" Font-Size="Larger" class="text-box-dark agileits " TabIndex="2"></asp:TextBox>
@@ -593,7 +613,7 @@ All reservations are subject to cancellation if payments are not received by the
                                             <div class="row agileits ">
 
                                                 <div class="col-sm-6 agileits">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtEmailid1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtEmailid1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <%--<input required="" id="" runat="server" type="text" value="Email Address" onblur="if (this.value == '') {this.value = 'Email Address';}" name="register-email" />--%>
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ValidationExpression="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ControlToValidate="txtMailAddress" ValidationGroup="Cust" ErrorMessage="Invalid Email Format"></asp:RegularExpressionValidator>
                                                     <asp:TextBox ID="txtEmailid1" runat="server" Placeholder="Email Address" class="text-box-dark agileits " TabIndex="3"></asp:TextBox>
@@ -602,9 +622,9 @@ All reservations are subject to cancellation if payments are not received by the
                                                 </div>
 
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtMobilephone1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtMobilephone1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
 
-                                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator7" runat="server" ErrorMessage="Invalid" ControlToValidate="txtTelephone" ValidationGroup="Cust" ValidationExpression="^([0-9]{8,15})$"></asp:RegularExpressionValidator>
+                                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator7" runat="server" ErrorMessage="Invalid" ControlToValidate="txtTelephone" ValidationGroup="Cust1" ValidationExpression="^([0-9]{8,15})$"></asp:RegularExpressionValidator>
                                                     <asp:TextBox ID="txtMobilephone1" runat="server" Placeholder="Contact No" MaxLength="10" TabIndex="4"></asp:TextBox>
                                                 </div>
                                             </div>
@@ -612,14 +632,14 @@ All reservations are subject to cancellation if payments are not received by the
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
 
 
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" InitialValue="0" ForeColor="Red" ControlToValidate="ddlCountry1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" InitialValue="0" ForeColor="Red" ControlToValidate="ddlCountry1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <asp:DropDownList ID="ddlCountry1" class="text-box-dark agileits" runat="server" CssClass="form-control" Style="font-size: 12px; border-radius: 0; padding: 17px 12px !important;" TabIndex="6">
                                                     </asp:DropDownList>
 
                                                     <%-- <input required=""  runat="server" id="" type="text" value="Address 1"  onblur="if (this.value == '') {this.value = 'Address 1';}" name="address1" />--%>
                                                 </div>
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtState1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtState1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <asp:TextBox ID="txtState1" runat="server" Placeholder="State" class="text-box-dark agileits " TabIndex="7"></asp:TextBox>
 
                                                     <%--  <input required="" runat="server" id="" type="text" value="Address 2" onblur="if (this.value == '') {this.value = 'Address 2';}" name="address2" />--%>
@@ -627,26 +647,26 @@ All reservations are subject to cancellation if payments are not received by the
                                             </div>
                                             <div class="row agileits ">
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtCity1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtCity1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <asp:TextBox ID="txtCity1" runat="server" Placeholder="City" class="text-box-dark agileits " TabIndex="8"></asp:TextBox>
                                                     <%-- <input required=""  id="txtCity" runat="server" type="text" value="City"  onblur="if (this.value == '') {this.value = 'City';}" name="city" />--%>
                                                 </div>
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtAddress11" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtAddress11" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <asp:TextBox ID="txtAddress11" runat="server" Placeholder="Address1" class="text-box-dark agileits " TabIndex="9"></asp:TextBox>
                                                     <%--<input required=""  type="text" value="State" runat="server"  onblur="if (this.value == '') {this.value = 'State';}" name="state" />--%>
                                                 </div>
                                             </div>
                                             <div class="row agileits ">
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator34" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtadress22" ValidationGroup="Cust"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator34" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtadress22" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
                                                     <asp:TextBox ID="txtadress22" runat="server" Placeholder="Address2" class="text-box-dark agileits " TabIndex="10"></asp:TextBox>
 
                                                     <%-- <input required="" type="text" value="Postcode" id="" runat="server" onblur="if (this.value == '') {this.value = 'Postcode';}" name="postcode" />--%>
                                                 </div>
                                                 <div class="col-sm-6 agileits" style="padding-bottom: 15px;">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtPostcode1" ValidationGroup="Cust"></asp:RequiredFieldValidator>
-                                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator8" runat="server" ErrorMessage="Invalid" ControlToValidate="txtPostcode1" ValidationGroup="Cust" ValidationExpression="[0-9]{6}"></asp:RegularExpressionValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" ErrorMessage="*" ForeColor="Red" ControlToValidate="txtPostcode1" ValidationGroup="Cust1"></asp:RequiredFieldValidator>
+                                                   
                                                     <asp:TextBox ID="txtPostCode1" runat="server" class="text-box-dark agileits " Placeholder="Post Code" MaxLength="6" TabIndex="11"></asp:TextBox>
 
 
@@ -940,7 +960,7 @@ All reservations are subject to cancellation if payments are not received by the
                                             </table>
 
                                             <br />
-                                            <div class="col-sm-12 text-center">
+                                            <div style="padding-left: 30%;">
                                                 <asp:CheckBox ID="chkterms" Visible="false" runat="server" OnCheckedChanged="chkterms_CheckedChanged" />
                                                 <asp:Label ID="Label3" Visible="false" Style="padding-left: 2%;" runat="server" Text="I agree to the terms and condition"></asp:Label>
                                                 <asp:Label ID="lblT" runat="server" Text="By proceeding I accept the"></asp:Label>
@@ -986,29 +1006,29 @@ All reservations are subject to cancellation if payments are not received by the
 
                             <!-- ####################### -->
                         </div>
+                </div>
+                <div class="col-sm-5 left-col" style="box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4);">
+                    <h4 class="text-left">Your Reservation</h4>
+                    <br />
+                    <div class="col-sm-12 top-div" style="padding-left: 0; padding-right: 0;">
+                        <asp:Image ID="Image1" Width="100%" runat="server" />
+                        <%-- <img src='/<%# Session["forimage"].ToString() %>' class="img-responsive" alt="room-" runat="server" id="imgcruise">--%>
                     </div>
-                    <div class="col-sm-5 left-col" style="box-shadow: 3px 3px 9px 2px rgba(0,0,0,0.4);">
-                        <h4 class="text-left">Your Reservation</h4>
-                        <br />
-                        <div class="col-sm-12 top-div" style="padding-left: 0; padding-right: 0;">
-                            <asp:Image ID="Image1" Width="100%" runat="server" />
-                            <%-- <img src='/<%# Session["forimage"].ToString() %>' class="img-responsive" alt="room-" runat="server" id="imgcruise">--%>
-                        </div>
-                        <br />
-                        <div class="col-sm-12" style="margin-bottom: 15px;">
-                            <label style="font-size: 18px; margin: 4px 0px 5px 0px;">Rate Includes</label>
-                            <p style="text-align: justify; font-size: 14px;">
-                                <asp:Label ID="lblPakagedescrip" runat="server" Text=" "></asp:Label><%# Session["Packagedesc"].ToString() %>
-                            </p>
+                    <br />
+                    <div class="col-sm-12" style="margin-bottom: 15px;">
+                        <label style="font-size: 18px; margin: 4px 0px 5px 0px;">Rate Includes</label>
+                        <p style="text-align: justify; font-size: 14px;">
+                            <asp:Label ID="lblPakagedescrip" runat="server" Text=" "></asp:Label><%# Session["Packagedesc"].ToString() %>
+                        </p>
 
-                        </div>
-                        <br />
-                        <div class="col-sm-6">
-                            <label>Check In:</label>
+                    </div>
+                    <br />
+                    <div class="col-sm-6">
+                        <label>Check In:</label>
 
-                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                            <asp:Label ID="Label4" runat="server" Text=""></asp:Label>
-                            <%-- <select class="form-control" id="sel1">
+                        <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                        <asp:Label ID="Label4" runat="server" Text=""></asp:Label>
+                        <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1016,13 +1036,13 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                        </div>
-                        <div class="col-sm-6">
-                            <label>Check Out:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Check Out:</label>
 
-                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                            <asp:Label ID="Label5" runat="server" Text=""></asp:Label>
-                            <%-- <select class="form-control" id="sel1">
+                        <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                        <asp:Label ID="Label5" runat="server" Text=""></asp:Label>
+                        <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1030,49 +1050,49 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                        </div>
-                        <br />
-                        <div class="row room-detail">
-                            <%
-                                if (dtrpax!=null)
+                    </div>
+                    <br />
+                    <div class="row room-detail">
+                        <%
+                            if (dtrpax != null)
+                            {
+                        %>
+                        <% for (int i = 0; i < dtrpax.Rows.Count; i++)
+                            {
+                                try
                                 {
-                            %>
-                            <% for (int i = 0; i < dtrpax.Rows.Count; i++)
-                                {
-                                    try
-                                    {
-                            %>
-                            <h3 style="font-size: 22px; padding-bottom: 11px; margin-top: 3%;"><%Response.Write((dtrpax.Rows[i]["categoryName"]).ToString()); %></h3>
+                        %>
+                        <h3 style="font-size: 22px; padding-bottom: 11px; margin-top: 3%;"><%Response.Write((dtrpax.Rows[i]["categoryName"]).ToString()); %></h3>
 
 
-                            <div class="col-sm-12 middle-div">
-                                <div class="row">
-                                    <div class="col-sm-12 top-div">
-                                        <div class="row" style="padding-top: 25px;">
-                                            <!-- <div class="col-sm-3">
+                        <div class="col-sm-12 middle-div">
+                            <div class="row">
+                                <div class="col-sm-12 top-div">
+                                    <div class="row" style="padding-top: 25px;">
+                                        <!-- <div class="col-sm-3">
                                             <label>Room</label>
                                             <p>Pool Facing Dlx Cottage</p>
                                         </div> -->
 
-                                            <div class="col-sm-6">
-                                                <label>Room Type:</label>
+                                        <div class="col-sm-6">
+                                            <label>Room Type:</label>
 
-                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                <%Response.Write((dtrpax.Rows[i]["RoomType"]).ToString()); %>
-                                                <%-- <asp:Label ID="Label2" runat="server" Text='<%# Eval("RoomType") %>'></asp:Label>--%>
-                                                <%-- <select class="form-control" id="sel1">
+                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                            <%Response.Write((dtrpax.Rows[i]["RoomType"]).ToString()); %>
+                                            <%-- <asp:Label ID="Label2" runat="server" Text='<%# Eval("RoomType") %>'></asp:Label>--%>
+                                            <%-- <select class="form-control" id="sel1">
 
                                                                         <option>No</option>
                                                                         <option>Yes</option>
                                                                     </select>--%>
-                                            </div>
-                                            <div class="col-sm-6" style="width: 30%;">
-                                                <label>Guests:</label>
+                                        </div>
+                                        <div class="col-sm-6" style="width: 30%;">
+                                            <label>Guests:</label>
 
-                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                <%Response.Write((dtrpax.Rows[i]["Pax"]).ToString()); %>
-                                                <%-- <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>--%>
-                                                <%-- <select class="form-control" id="sel1">
+                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                            <%Response.Write((dtrpax.Rows[i]["Pax"]).ToString()); %>
+                                            <%-- <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>--%>
+                                            <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1080,14 +1100,14 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                                            </div>
-                                            <div class="col-sm-6" style="width: 30%;">
-                                                <label>Room No:</label>
+                                        </div>
+                                        <div class="col-sm-6" style="width: 30%;">
+                                            <label>Room No:</label>
 
-                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                <%Response.Write((dtrpax.Rows[i]["RoomNumber"]).ToString()); %>
-                                                <%-- <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>--%>
-                                                <%-- <select class="form-control" id="sel1">
+                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                            <%Response.Write((dtrpax.Rows[i]["RoomNumber"]).ToString()); %>
+                                            <%-- <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>--%>
+                                            <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1095,151 +1115,150 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                                            </div>
-                                            <%-- <div class="col-sm-4">
+                                        </div>
+                                        <%-- <div class="col-sm-4">
                                                                 <label>Room</label>
                                                                 <p>1</p>
                                                             </div>--%>
-                                        </div>
                                     </div>
-
                                 </div>
-                                <!-- middle-div -->
-                                <!-- <div class="row">
+
+                            </div>
+                            <!-- middle-div -->
+                            <!-- <div class="row">
                                 <div class="col-sm-12 middle-div">
                                     <p><strong>Detail:</strong>Stone Cottages (201 - 208)</p>
                                 </div>
 
                             </div> -->
-                                <!-- middle-div -->
+                            <!-- middle-div -->
 
-                            </div>
-                            <div class="col-sm-12 bottom-div">
-                                <div class="row" style="margin: 0;">
-                                    <!-- <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-12 bottom-div">
+                            <div class="row" style="margin: 0;">
+                                <!-- <div class="col-sm-3">
                                     <label>Detail</label>
                                     <p>Stone Cottages (201 - 208)</p>
                                 </div> -->
 
 
-                                    <div class="col-sm-6" style="float: left;">
-                                        <p style="font-size: 18px;" class="text-left">Price Per Person: </p>
+                                <div class="col-sm-6" style="float: left;">
+                                    <p style="font-size: 18px;" class="text-left">Price Per Person: </p>
 
-                                        <%--<p style="font-size: 18px;" class="text-left">Discount(<%# Eval("Discount") %>):  </p>--%>
-                                        <%
-    if (dtrpax.Rows[i]["Discount"].ToString() == "0%")
-    {
-        //Response.Write("<span style='color:#f99646'> " + dtres.Rows[i]["Availability"].ToString() + " </span>");
-    }
-    else
-    {
-        //<p style="font-size: 18px;" class="text-left">Gross: </p>
-        Response.Write(" <p style='font-size: 18px;' class='text-left'>Gross: </p>");
-        Response.Write(" <p style='font-size: 18px;' class='text-left'>Discount(" + dtrpax.Rows[i]["Discount"].ToString() + "):</p>");
-    }
+                                    <%--<p style="font-size: 18px;" class="text-left">Discount(<%# Eval("Discount") %>):  </p>--%>
+                                    <%
+                                        if (dtrpax.Rows[i]["Discount"].ToString() == "0%")
+                                        {
+                                            //Response.Write("<span style='color:#f99646'> " + dtres.Rows[i]["Availability"].ToString() + " </span>");
+                                        }
+                                        else
+                                        {
+                                            //<p style="font-size: 18px;" class="text-left">Gross: </p>
+                                            Response.Write(" <p style='font-size: 18px;' class='text-left'>Gross: </p>");
+                                            Response.Write(" <p style='font-size: 18px;' class='text-left'>Discount(" + dtrpax.Rows[i]["Discount"].ToString() + "):</p>");
+                                        }
 
 
-                                        %>
-                                        <%--<p style="font-size: 18px;" class="text-left">Discount( <%Response.Write((dtrpax.Rows[i]["Discount"]).ToString()); %>):  </p>--%>
-                                        <p style="font-size: 18px;" class="text-left">Taxable amount:  </p>
-                                        <%
-    Response.Write(" <p style='font-size: 18px;' class='text-left'>GST (" + dtrpax.Rows[i]["Tax"].ToString() + "%):</p>");
-                                        %>
-                                        <%--   <p style="font-size: 18px;" class="text-left">GST@<%# Session["gettaxpercentage"].ToString() %>: </p>--%>
+                                    %>
+                                    <%--<p style="font-size: 18px;" class="text-left">Discount( <%Response.Write((dtrpax.Rows[i]["Discount"]).ToString()); %>):  </p>--%>
+                                    <p style="font-size: 18px;" class="text-left">Taxable amount:  </p>
+                                    <%
+                                        Response.Write(" <p style='font-size: 18px;' class='text-left'>GST (" + dtrpax.Rows[i]["Tax"].ToString() + "%):</p>");
+                                    %>
+                                    <%--   <p style="font-size: 18px;" class="text-left">GST@<%# Session["gettaxpercentage"].ToString() %>: </p>--%>
 
-                                        <%--<p style="font-size: 18px;" class="text-left">Gross:  </p>--%>
+                                    <%--<p style="font-size: 18px;" class="text-left">Gross:  </p>--%>
 
+                                    <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p style="font-size: 18px;" class="text-right">
+                                        <%-- <strong>INR <%# Eval("Pricewithouttax1") %></strong>--%>
+                                        <strong>INR  <%Response.Write((dtrpax.Rows[i]["Pricewithouttax1"]).ToString()); %></strong>
+                                    </p>
+                                    <%--<p style="font-size: 18px;" class="text-right"><strong>INR   <%Response.Write((dtrpax.Rows[i]["Total"]).ToString()); %></strong> </p>--%>
+                                    <%
+                                        if (dtrpax.Rows[i]["Discountprice"].ToString() == "0")
+                                        {
+                                            //Response.Write("<span style='color:#f99646'> " + dtres.Rows[i]["Availability"].ToString() + " </span>");
+                                        }
+                                        else
+                                        {
+                                            Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Total"].ToString() + " </strong></p>");
+                                            Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Discountprice"].ToString() + " </strong></p>");
+                                        }
+
+
+                                    %>
+                                    <%--<p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Discountprice"]).ToString()); %></strong> </p>--%>
+                                    <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["taxablepamt"]).ToString()); %></strong> </p>
+                                    <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Tax1"]).ToString()); %></strong> </p>
+
+                                    <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Totalprice") %></strong> </p>--%>
+
+                                    <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
+                                </div>
+                                <div class="col-sm-12 gross-value" style="margin: 0;">
+                                    <div class="col-sm-6">
+
+                                        <p style="font-size: 18px; margin-left: -6%;" class="text-left">Total: </p>
                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p style="font-size: 18px;" class="text-right">
-                                            <%-- <strong>INR <%# Eval("Pricewithouttax1") %></strong>--%>
-                                            <strong>INR  <%Response.Write((dtrpax.Rows[i]["Pricewithouttax1"]).ToString()); %></strong>
-                                        </p>
-                                        <%--<p style="font-size: 18px;" class="text-right"><strong>INR   <%Response.Write((dtrpax.Rows[i]["Total"]).ToString()); %></strong> </p>--%>
-                                        <%
-    if (dtrpax.Rows[i]["Discountprice"].ToString() == "0")
-    {
-        //Response.Write("<span style='color:#f99646'> " + dtres.Rows[i]["Availability"].ToString() + " </span>");
-    }
-    else
-    {
-        Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Total"].ToString() + " </strong></p>");
-        Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Discountprice"].ToString() + " </strong></p>");
-    }
 
-
-                                        %>
-                                        <%--<p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Discountprice"]).ToString()); %></strong> </p>--%>
-                                        <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["taxablepamt"]).ToString()); %></strong> </p>
-                                        <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Tax1"]).ToString()); %></strong> </p>
-
-                                        <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Totalprice") %></strong> </p>--%>
-
+                                        <p style="font-size: 18px; margin-right: -7%;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Totalprice"]).ToString()); %></strong> </p>
                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                     </div>
-                                    <div class="col-sm-12 gross-value">
-                                        <div class="row">
-                                            <div class="col-sm-6" style="float: left;">
-
-                                                <p style="font-size: 18px;" class="text-left">Total: </p>
-                                                <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
-                                            </div>
-                                            <div class="col-sm-6">
-
-                                                <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Totalprice"]).ToString()); %></strong> </p>
-                                                <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
                                 </div>
+
 
 
                             </div>
 
-                            <br />
-                            <%
-            }
-            catch
-            {
-            }
-        } } %>
 
-                            <asp:GridView ID="GridRoomPaxDetail" Visible="false" runat="server" ForeColor="#333333" GridLines="None" Font-Size="Medium" AutoGenerateColumns="False" Width="100%">
-                                <Columns>
-                                    <asp:TemplateField>
-                                        <ItemTemplate>
-                                            <h3 style="font-size: 22px; padding-bottom: 11px; margin-top: 3%;"><%# Eval("categoryName") %></h3>
+                        </div>
 
-                                            <div class="col-sm-12 middle-div">
-                                                <div class="row">
-                                                    <div class="col-sm-12 top-div">
-                                                        <div class="row" style="padding-top: 25px;">
-                                                            <!-- <div class="col-sm-3">
+                        <br />
+                        <%
+                                    }
+                                    catch
+                                    {
+                                    }
+                                }
+                            } %>
+
+                        <asp:GridView ID="GridRoomPaxDetail" Visible="false" runat="server" ForeColor="#333333" GridLines="None" Font-Size="Medium" AutoGenerateColumns="False" Width="100%">
+                            <Columns>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <h3 style="font-size: 22px; padding-bottom: 11px; margin-top: 3%;"><%# Eval("categoryName") %></h3>
+
+                                        <div class="col-sm-12 middle-div">
+                                            <div class="row">
+                                                <div class="col-sm-12 top-div">
+                                                    <div class="row" style="padding-top: 25px;">
+                                                        <!-- <div class="col-sm-3">
                                             <label>Room</label>
                                             <p>Pool Facing Dlx Cottage</p>
                                         </div> -->
 
-                                                            <div class="col-sm-6">
-                                                                <label>Room Type:</label>
+                                                        <div class="col-sm-6">
+                                                            <label>Room Type:</label>
 
-                                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                                <asp:Label ID="Label2" runat="server" Text='<%# Eval("RoomType") %>'></asp:Label>
-                                                                <%-- <select class="form-control" id="sel1">
+                                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                                            <asp:Label ID="Label2" runat="server" Text='<%# Eval("RoomType") %>'></asp:Label>
+                                                            <%-- <select class="form-control" id="sel1">
 
                                                                         <option>No</option>
                                                                         <option>Yes</option>
                                                                     </select>--%>
-                                                            </div>
-                                                            <div class="col-sm-6" style="width: 30%;">
-                                                                <label>Guests:</label>
+                                                        </div>
+                                                        <div class="col-sm-6" style="width: 30%;">
+                                                            <label>Guests:</label>
 
-                                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>
-                                                                <%-- <select class="form-control" id="sel1">
+                                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pax") %>'></asp:Label>
+                                                            <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1247,13 +1266,13 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                                                            </div>
-                                                            <div class="col-sm-6" style="width: 30%;">
-                                                                <label>Room No:</label>
+                                                        </div>
+                                                        <div class="col-sm-6" style="width: 30%;">
+                                                            <label>Room No:</label>
 
-                                                                <%--<img src="images/down.png" class="img-responsive" alt="">--%>
-                                                                <asp:Label ID="lblRoomNo" runat="server" Text='<%# Eval("RoomNumber") %>'></asp:Label>
-                                                                <%-- <select class="form-control" id="sel1">
+                                                            <%--<img src="images/down.png" class="img-responsive" alt="">--%>
+                                                            <asp:Label ID="lblRoomNo" runat="server" Text='<%# Eval("RoomNumber") %>'></asp:Label>
+                                                            <%-- <select class="form-control" id="sel1">
                                                                         <option>1</option>
                                                                         <option>2</option>
                                                                         <option>3</option>
@@ -1261,117 +1280,117 @@ All reservations are subject to cancellation if payments are not received by the
                                                                         <option>5</option>
                                                                         <option>6</option>
                                                                     </select>--%>
-                                                            </div>
-                                                            <%-- <div class="col-sm-4">
+                                                        </div>
+                                                        <%-- <div class="col-sm-4">
                                                                 <label>Room</label>
                                                                 <p>1</p>
                                                             </div>--%>
-                                                        </div>
                                                     </div>
-
                                                 </div>
-                                                <!-- middle-div -->
-                                                <!-- <div class="row">
+
+                                            </div>
+                                            <!-- middle-div -->
+                                            <!-- <div class="row">
                                 <div class="col-sm-12 middle-div">
                                     <p><strong>Detail:</strong>Stone Cottages (201 - 208)</p>
                                 </div>
 
                             </div> -->
-                                                <!-- middle-div -->
+                                            <!-- middle-div -->
 
-                                            </div>
-                                            <div class="col-sm-12 bottom-div">
-                                                <div class="row" style="margin: 0;">
-                                                    <!-- <div class="col-sm-3">
+                                        </div>
+                                        <div class="col-sm-12 bottom-div">
+                                            <div class="row" style="margin: 0;">
+                                                <!-- <div class="col-sm-3">
                                     <label>Detail</label>
                                     <p>Stone Cottages (201 - 208)</p>
                                 </div> -->
 
 
-                                                    <div class="col-sm-6" style="float: left;">
+                                                <div class="col-sm-6" style="float: left;">
 
-                                                        <p style="font-size: 18px;" class="text-left">Price Per Person: </p>
-                                                        <p style="font-size: 18px;" class="text-left">Gross: </p>
-                                                        <p style="font-size: 18px;" class="text-left">Discount(<%# Eval("Discount") %>):  </p>
-                                                        <p style="font-size: 18px;" class="text-left">Taxable amount:  </p>
-                                                        <p style="font-size: 18px;" class="text-left">GST <%# Session["gettaxpercentage"].ToString() %>: </p>
+                                                    <p style="font-size: 18px;" class="text-left">Price Per Person: </p>
+                                                    <p style="font-size: 18px;" class="text-left">Gross: </p>
+                                                    <p style="font-size: 18px;" class="text-left">Discount(<%# Eval("Discount") %>):  </p>
+                                                    <p style="font-size: 18px;" class="text-left">Taxable amount:  </p>
+                                                    <p style="font-size: 18px;" class="text-left">GST <%# Session["gettaxpercentage"].ToString() %>: </p>
 
-                                                        <%--<p style="font-size: 18px;" class="text-left">Gross:  </p>--%>
+                                                    <%--<p style="font-size: 18px;" class="text-left">Gross:  </p>--%>
 
+                                                    <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <p style="font-size: 18px;" class="text-right">
+                                                        <strong>INR <%# Eval("Pricewithouttax1") %></strong>
+                                                    </p>
+                                                    <p style="font-size: 18px;" class="text-right"><strong>INR  <%# Eval("Total") %></strong> </p>
+                                                    <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Discountprice") %></strong> </p>
+                                                    <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("taxablepamt") %></strong> </p>
+                                                    <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Tax1") %></strong> </p>
+
+                                                    <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Totalprice") %></strong> </p>--%>
+
+                                                    <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
+                                                </div>
+                                                <div class="col-sm-12 gross-value" style="margin: 0;">
+                                                    <div class="col-sm-6">
+
+                                                        <p style="font-size: 18px;" class="text-left">Total: </p>
                                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <p style="font-size: 18px;" class="text-right">
-                                                            <strong>INR <%# Eval("Pricewithouttax1") %></strong>
-                                                        </p>
-                                                        <p style="font-size: 18px;" class="text-right"><strong>INR  <%# Eval("Total") %></strong> </p>
-                                                        <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Discountprice") %></strong> </p>
-                                                        <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("taxablepamt") %></strong> </p>
-                                                        <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Tax1") %></strong> </p>
 
-                                                        <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Totalprice") %></strong> </p>--%>
-
+                                                        <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Totalprice") %></strong> </p>
                                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                     </div>
-                                                    <div class="col-sm-12 gross-value" style="margin: 0;">
-                                                        <div class="col-sm-6">
-
-                                                            <p style="font-size: 18px;" class="text-left">Total: </p>
-                                                            <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
-                                                        </div>
-                                                        <div class="col-sm-6">
-
-                                                            <p style="font-size: 18px;" class="text-right"><strong>INR <%# Eval("Totalprice") %></strong> </p>
-                                                            <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
-                                                        </div>
-                                                    </div>
-
-
-
                                                 </div>
 
 
+
                                             </div>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
 
-                        </div>
-                        <div class="col-sm-12 bottom-btn" style="padding-left: 0; padding-right: 0;">
-                            <div class="row">
-                                <div>
-                                    <div class="total-value col-sm-12">
-                                        <asp:Label ID="Label6" runat="server" Style="float: left; padding-left: 2%;" Text="Total"></asp:Label>
 
-                                        <asp:Label ID="lblnetAmount" runat="server" Text=" "></asp:Label>
-                                    </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+
+                    </div>
+                    <div class="col-sm-12 bottom-btn" style="padding-left: 0; padding-right: 0;">
+                        <div class="row">
+                            <div>
+                                <div class="total-value col-sm-12">
+                                    <asp:Label ID="Label6" runat="server" Style="float: left; padding-left: 2%;" Text="Total"></asp:Label>
+
+                                    <asp:Label ID="lblnetAmount" runat="server" Text=" "></asp:Label>
                                 </div>
-
-
-
                             </div>
-                        </div>
-                        <div class="col-sm-12 bottom-btn" style="padding-left: 0; padding-right: 0;">
-                            <div class="row">
-                                <div>
-                                    <div class="total-value col-sm-12">
 
 
 
-                                        <asp:LinkButton ID="lnkbtnAdd" runat="server" CssClass="button-link" OnClick="lnkbtnAdd_Click">Add Room</asp:LinkButton>
-                                    </div>
-                                </div>
-
-
-
-                            </div>
                         </div>
                     </div>
+                    <div class="col-sm-12 bottom-btn" style="padding-left: 0; padding-right: 0;">
+                        <div class="row">
+                            <div>
+                                <div class="total-value col-sm-12">
 
+
+
+                                    <asp:LinkButton ID="lnkbtnAdd" runat="server" CssClass="button-link" OnClick="lnkbtnAdd_Click">Add Room</asp:LinkButton>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
                 </div>
 
             </div>
+
+        </div>
 
         </div>
 

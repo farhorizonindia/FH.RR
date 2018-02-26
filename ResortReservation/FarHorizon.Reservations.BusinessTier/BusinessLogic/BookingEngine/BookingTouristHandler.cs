@@ -429,7 +429,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, bcode);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@name", DbType.String, DataSecurityManager.Encrypt(firstName));
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, DataSecurityManager.Encrypt(email));
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EmailId", DbType.String, email);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@passportNo", DbType.String, DataSecurityManager.Encrypt(ppno));
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@chkindate", DbType.Date, chkin);

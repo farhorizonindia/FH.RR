@@ -26,6 +26,7 @@ public partial class FHReport : ClientBasePage
     {
         if (!IsPostBack)
         {
+            FillRefAgents();
             FillBookingStatusTypes();
             FillAccomodationTypes();
             FillAgents();
@@ -41,6 +42,29 @@ public partial class FHReport : ClientBasePage
             btnShow_Click(sender, e);
         }
 
+    }
+    private void FillRefAgents()
+    {
+        try
+        {
+            AgentMaster oAgentMaster = new AgentMaster();
+            AgentDTO[] oAgentData = oAgentMaster.GetRefAgentData();
+
+            ListItemCollection li = new ListItemCollection();
+            ListItem l = new ListItem("Choose Ref Agent", "0");
+            ddlRefAgent.Items.Insert(0, l);
+            if (oAgentData != null)
+            {
+                for (int i = 0; i < oAgentData.Length; i++)
+                {
+                    l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
+                    ddlRefAgent.Items.Insert(i + 1, l);
+                    string Email = oAgentData[i].EmailId.ToString();
+                    //Session["Email"] = Email;
+                }
+            }
+        }
+        catch { }
     }
     private void RefreshGrid()
     {
@@ -76,7 +100,7 @@ public partial class FHReport : ClientBasePage
                 getBookingsInput.BookingStatusType = newBookingStatusType;
                 getBookingsInput.BookingCode = txtBookingCode.Text.Trim();
                 getBookingsInput.AgentId = Convert.ToInt32(ddlAgent.SelectedValue.ToString());
-
+                getBookingsInput.RefAgentId  = Convert.ToInt32(ddlRefAgent.SelectedValue.ToString());
                 oBookingData = oBookingManager.GetBookingsFH(getBookingsInput);
                 if (bookingStatusType == ENums.BookingStatusTypes.PROPOSED)
                 {

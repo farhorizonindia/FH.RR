@@ -108,6 +108,13 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                 ddlpackage.DataValueField = "PackageId";
                 ddlpackage.DataBind();
                 ddlpackage.Items.Insert(0, "-Select-");
+
+                drppackaging.DataSource = dtGetReturnedData;
+                drppackaging.DataTextField = "PackageName";
+                drppackaging.DataValueField = "PackageId";
+                drppackaging.DataBind();
+                ListItem li = new ListItem { Text = "-Select-", Value = "0" };
+                drppackaging.Items.Insert(0, li);
             }
             else
             {
@@ -115,6 +122,11 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                 ddlpackage.DataSource = null;
                 ddlpackage.DataBind();
                 ddlpackage.Items.Insert(0, "-No Package-");
+
+                drppackaging.Items.Clear();
+                drppackaging.DataSource = null;
+                drppackaging.DataBind();
+                drppackaging.Items.Insert(0, "-No Package-");
             }
         }
         catch (Exception sqe)
@@ -132,6 +144,7 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
         try
         {
             blOpenDates._Action = "GetAllOpenDates";
+
             dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
             if (dtGetReturnedData.Rows.Count > 0)
             {
@@ -180,7 +193,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                 if (getQueryResponse > 0)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cruise OpenDate has been added successfully')", true);
-                    BindGridOpenDates();
+                    //  BindGridOpenDates();
+                    Button1_Click(this,e);
                 }
             }
             else
@@ -191,7 +205,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                 if (getQueryResponse > 0)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cruise OpenDate has been updated successfully')", true);
-                    BindGridOpenDates();
+                    Button1_Click(this, e);
+                    //  BindGridOpenDates();
 
                 }
                 else
@@ -283,6 +298,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                     dt1 = dlOpenDates.SeasonCheck(blOpenDates);
                     if (dt1 != null)
                     {
+
+
                         if (dt1.Rows.Count > 0)
                         {
                             blOpenDates._Action = "checkduplicatedeparture";
@@ -400,7 +417,7 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
             if (res > 0)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Departure Deleted')", true);
-                BindGridOpenDates();
+                Button1_Click(this, e);
             }
             else
             {
@@ -498,7 +515,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                 DataView dv = new DataView();
                 dv = new DataView(getavialabl, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
                 DataTable dt2 = dv.ToTable();
-                if (dt2 != null && dt2.Rows.Count > 0)
+                bool check = Convert.ToBoolean(dt.Rows[0]["Openclose"]);
+                if (dt2 != null && dt2.Rows.Count > 0  && check!=true)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Close can only happen if there is no booking on those departures')", true);
                     return;
@@ -586,7 +604,7 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
                                 catch (Exception ex) { }
                             }
                             Session["set"] = null;
-                            this.BindGridOpenDates();
+                            Button1_Click(this, e);
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Update Successfully')", true);
 
                         }
@@ -688,6 +706,47 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
 
         catch (Exception ex)
         {
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            blOpenDates._Action = "GetAllOpenDatesfilter";
+            blOpenDates._PackageId = drppackaging.SelectedValue;
+            if (txtfrom.Text != string.Empty || txtTo.Text != string.Empty)
+            {
+                blOpenDates._checkInDate = DateTime.Parse(txtfrom.Text);
+                blOpenDates._checkOutDate = DateTime.Parse(txtTo.Text);
+            }
+            else
+            {
+                blOpenDates._checkInDate = DateTime.Parse("1990/01/01");
+                blOpenDates._checkOutDate = DateTime.Parse("1990/01/01");
+            }
+            string ss = drpcloseopen.SelectedValue;
+            if (ss != "")
+            {
+                blOpenDates.Status = Convert.ToBoolean(drpcloseopen.SelectedValue);
+            }
+
+            dtGetReturnedData = dlOpenDates.BindControlsFilter(blOpenDates);
+            if (dtGetReturnedData.Rows.Count > 0)
+            {
+                GridOpenDates.DataSource = dtGetReturnedData;
+                GridOpenDates.DataBind();
+            }
+            else
+            {
+                GridOpenDates.DataSource = null;
+                GridOpenDates.DataBind();
+            }
+        }
+        catch (Exception sqe)
+        {
+            GridOpenDates.DataSource = null;
+            GridOpenDates.DataBind();
         }
     }
 }

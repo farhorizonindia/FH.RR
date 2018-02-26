@@ -128,6 +128,33 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return 0;
             }
         }
+
+        public int UpdateforadminPassword(string password,Int32 custid)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_customers]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@action", "updatepassword");
+                da.InsertCommand.Parameters.AddWithValue("@CustId", custid);
+                da.InsertCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(password));
+            
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
         public int Updateforadmin(BALCustomers obj)
         {
             try
@@ -149,7 +176,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@PostalCode", DataSecurityManager.Encrypt(obj.PostalCode));
                 da.InsertCommand.Parameters.AddWithValue("@CountryId", obj.CountryId.ToString());
                 da.InsertCommand.Parameters.AddWithValue("@IsActive", obj.IsActive);
-
+                
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.InsertCommand.ExecuteNonQuery();

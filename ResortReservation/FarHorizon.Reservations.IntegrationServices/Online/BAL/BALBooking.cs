@@ -24,7 +24,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 
         public int roomcatid { get; set; }
 
-
+        public string InvoiceNo { get; set; }
         #region Parent Booking Table
         public string _sBookingRef { get; set; }
         public DateTime _dtStartDate { get; set; }
@@ -68,6 +68,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public decimal priceperperson { get; set; }
         public decimal ToTal { get; set; }
         public string bedconfig{get;set;}
+        public string InvoiceSequence { get; set; }
+
         #endregion
 
     }

@@ -47,7 +47,7 @@
 <body>
     <form id="form1" runat="server">
         <phc:PageHeaderControl ID="pageheader1" runat="server" PageTitle="Booking" />
-        <div id="tooltip">
+        <div id="tooltip" style="padding:5px 5px 5px 10px;">
             <div id="header" class="header">
                 No other bookings of this room.
             </div>

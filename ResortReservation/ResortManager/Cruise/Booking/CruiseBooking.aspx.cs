@@ -196,7 +196,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             DataTable dtRoomsdata;
 
             dtRoomsdata = bindroomddl();
-            PolygonHotSpot hotSpot;
+                PolygonHotSpot hotSpot;
+          //  RectangleHotSpot hotSpot;
             if (Session["get"] == null)
             {
                 ImageMap1.ImageUrl = "~/images/aspnet_imagemap.png";
@@ -205,7 +206,8 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
             foreach (DataRow dr in dtRoomsdata.Rows)
             {
                 hotSpot = new PolygonHotSpot();
-
+                hotSpot.TabIndex = -1;
+                
                 //HtmlTextWriter writer = new HtmlTextWriter(tex);
                 //writer.AddStyleAttribute=
 
@@ -1689,6 +1691,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
         {
             try
             {
+                lblmessage.Visible = false;
                 ImageButton imgbtn = (ImageButton)e.CommandSource;
                 GridViewRow grow = (GridViewRow)imgbtn.NamingContainer;
                 DataTable dtnew = ViewState["VsRoomDetails"] as DataTable;
@@ -2300,8 +2303,10 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
                 {
                     if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
                     {
+                        lblmessage.Visible = true;
                         lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
                         addrows(dv, roomCatId);
+                    
                         lblmessage.Text = "cabin no "+ hfRoomId.Value + " reserved successfully";
                         ScriptManager.RegisterStartupScript(Page, GetType(), "disp_confirm", "<script>disp_confirm()</script>", false);
                     }
@@ -2394,6 +2399,7 @@ public partial class Cruise_booking_CruiseBooking : System.Web.UI.Page
     }
     protected void ddlbedconfiguration_SelectedIndexChanged(object sender, EventArgs e)
     {
+        lblmessage.Visible = false;
 
         try
         {

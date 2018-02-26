@@ -35,6 +35,8 @@ public partial class Cruise_Booking_ForgotPassword : System.Web.UI.Page
     string SmtpHost = ConfigurationManager.AppSettings["SMTPServer"]; 
     protected void Page_Load(object sender, EventArgs e)
     {
+
+        string st = DataSecurityManager.Encrypt("randeep@xportsoft.com");
         if (Session["CustomerMailId"] == null || Session["AgentMailId"] == null)
         {
             LinkButton1.Visible = false;

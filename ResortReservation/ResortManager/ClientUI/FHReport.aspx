@@ -71,6 +71,11 @@
                             <td class="filtersectionCell">
                                 <asp:DropDownList CssClass="select" ID="ddlAgent" runat="server" Width="220px">
                                 </asp:DropDownList></td>
+                               <td class="filtersectionCell">
+                                Ref Agent:</td>
+                            <td class="filtersectionCell">
+                                <asp:DropDownList CssClass="select" ID="ddlRefAgent" runat="server" Width="220px">
+                                </asp:DropDownList></td>
                             <td class="filtersectionCell">
                                 </td>
                             <td class="filtersectionCell">

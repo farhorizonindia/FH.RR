@@ -23,6 +23,19 @@
         .auto-style1 {
             width: 79px;
         }
+        .clstimedate { text-align:right; padding:0 10px 10px 0;
+        }
+
+        .cls_bokingdtl table tr td {
+    padding: 2px 4px;
+}
+
+        .cls_bokingdtl {
+    padding: 0 5px;
+}
+        .cls_bokingdtl table {
+    width: 100%;
+}
     </style>
 
 </head>
@@ -71,60 +84,96 @@
                     </tr>
 
                 </table>
+
+                
             </div>
-            <div style="float: right; padding-right: 17%;">
-                <table>
+            <div class="clstimedate">
+as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label ID="lblTime" runat="server"></asp:Label>
+
+                <%--<table>
                     <tr>
-                        <td>as on:
+                        <td>
                         </td>
                         <td>
-                            <asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label>
-                            <asp:Label ID="lblTime" runat="server"></asp:Label>
+                            
+                            
                         </td>
                     </tr>
-                </table>
+                </table>--%>
             </div>
-            <div>
-                <table border="1">
+            <div class="cls_bokingdtl">
+                <table border="1" cellpadding="0" cellspacing="0">
                     <tr>
-                        <th style="background-color: #507CD1;">Sno</th>
-                        <th class="auto-style2" style="background-color: #507CD1;">Despatch Date</th>
+                        <th width="20" style="background-color: #507CD1;">Sno</th>
+                        <th class="auto-style2" style="background-color: #507CD1;">Dispatch Date</th>
                         <th style="background-color: #507CD1;">Nights</th>
-                        <th style="background-color: #507CD1;">U/D</th>
+                     <%--   <th style="background-color: #507CD1;">U/D</th>--%>
                         <th style="background-color: #507CD1;">Booking Code</th>
                         <th style="background-color: #507CD1;">Booking Refrence</th>
                         <th style="background-color: #507CD1;">Main Agent</th>
                         <th style="background-color: #507CD1;">Ref Agent</th>
-                        <th style="background-color: #507CD1;">Borading Locatiuon</th>
+                        <th style="background-color: #507CD1;">Borading Location</th>
 
-                        <th style="background-color: #507CD1;">De Boarding Location</th>
+                        <th style="background-color: #507CD1;">De-Boarding Location</th>
                         <th style="background-color: #507CD1;">Status</th>
                         <th style="background-color: #507CD1;">Suite</th>
                         <th style="background-color: #507CD1;">Swb</th>
                         <th style="background-color: #507CD1;">Swob</th>
                         <th style="background-color: #507CD1;">Total</th>
-                        <th style="background-color: #507CD1;">Booking/ Revenue Amount</th>
+                        <th width="80" style="background-color: #507CD1;">Booking/ Revenue Amount</th>
                     </tr>
                     <tr>
-                        <% if (dt != null && dt.Rows.Count > 0)
-                            { %>
+                        <%
+                            Int32 groupcount = 0;
+                            for (int k = 0; k < dtgroupby.Rows.Count; k++)
+                            {
+                                groupcount++;
+
+                                 int Sno = 1;
+                            System.Data.DataTable dtnew = new System.Data.DataTable();
+
+                            System.Data.DataView dvopendates = new  System.Data.DataView(dtall);
+                            string filter = "StartDate>='"+ dtgroupby.Rows[k]["StartDate"]+"' and StartDate<'"+dtgroupby.Rows[k]["EndDate"]+"'";
+                            dvopendates.RowFilter = filter;
+
+                            dtnew= dvopendates.ToTable();
+
+                                if (dtnew != null && dtnew.Rows.Count > 0)
+                                { %>
 
 
                         <% 
+
                             try
                             {
+                                string name = (dtnew.Rows[0]["ShortPackName"]).ToString();
+
+                                //if (dt.Rows[0]["PackageName"].ToString().Contains("Downstream"))
+                                //{
+                                //    name = ("Downstream");
+                                //}
+                                //else if (dt.Rows[0]["PackageName"].ToString().Contains("Upstream"))
+                                //{
+                                //    name = ("Upstream");
+                                //}
                         %>
-                        <td style="background-color: yellow;">Group1:</td>
-                        <td style="width: 23%; background-color: yellow;"><%Response.Write((dt.Rows[0]["BordingFrom"]).ToString().Split('(')[0] + (dt.Rows[0]["BoadingTo"]).ToString().Split('(')[0] + "Upstream,Starting " + Convert.ToDateTime(dt.Rows[0]["StartDate"].ToString()).ToString("dd MMMM yyyy")); %></td>
+                        <td style="background-color: yellow;"><%{
+                                                                      Response.Write("Group" + groupcount);
+                                                                      
+
+                                                                  } %> :</td>
+                        <td colspan="14" style="background-color: yellow;"><%Response.Write((dtnew.Rows[0]["BordingFrom"]).ToString().Split('(')[0] + (dtnew.Rows[0]["BoadingTo"]).ToString().Split('(')[0] + "" + name + ", Starting " + Convert.ToDateTime(dtnew.Rows[0]["StartDate"].ToString()).ToString("dd MMMM yyyy")); %></td>
                         <% 
-                            int Sno = 1;
-                            for (int i = 0; i < dt.Rows.Count; i++)
+                           
+
+
+                            for (int i = 0; i < dtnew.Rows.Count; i++)
                             {%>
                     </tr>
                     <tr>
                         <td><%
 
-                                if (dt.Rows[i]["StartDate"].ToString() != "")
+                                if (dtnew.Rows[i]["StartDate"].ToString() != "")
                                 {
                                     Response.Write(Sno);
                                 }
@@ -132,9 +181,9 @@
 
                         %></td>
 
-                        <td class="auto-style2"><%Response.Write(Convert.ToDateTime(dt.Rows[i]["StartDate"].ToString()).ToString("dd-MMM-yyyy")); %></td>
-                        <td><%Response.Write((dt.Rows[i]["NoOFNights"]).ToString()); %></td>
-                        <td>
+                        <td class="auto-style2"><%Response.Write(Convert.ToDateTime(dtnew.Rows[i]["StartDate"].ToString()).ToString("dd-MMM-yyyy")); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["NoOFNights"]).ToString()); %></td>
+                      <%--  <td>
                             <%
                                 if (dt.Rows[i]["PackageName"].ToString().Contains("Downstream"))
                                 {
@@ -149,20 +198,20 @@
 
                                 }
                             %>
-                        </td>
+                        </td>--%>
                         <%--<td><%Response.Write((dt.Rows[i]["PackageName"]).ToString().Split(' ')[28]); %></td>--%>
-                        <td><%Response.Write((dt.Rows[i]["BookingCode"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["BookingRef"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["AgentName"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["Lagent"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["BordingFrom"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["BoadingTo"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["RoomStatus"]).ToString()); %> </td>
-                        <td><%Response.Write((dt.Rows[i]["TotalSuit"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["TotalSwb"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["TotalSwob"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                        <td><%Response.Write((dt.Rows[i]["PaidAmt"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["BookingCode"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["BookingRef"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["AgentName"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["RefAgent"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["BordingFrom"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["BoadingTo"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["BStaus"]).ToString()); %> </td>
+                        <td><%Response.Write((dtnew.Rows[i]["TotalSuit"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["TotalSwb"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["TotalSwob"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["AllTotal"]).ToString()); %></td>
+                        <td><%Response.Write((dtnew.Rows[i]["PaidAmt"]).ToString()); %></td>
 
                     </tr>
                     <% 
@@ -170,7 +219,7 @@
                             Sno++;
                         }%>
                     <tr>
-                        <td class="auto-style2">Booking Details</td>
+                        <td class="auto-style2"><b>Booking Details</b></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -179,23 +228,27 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                     <%--   <td></td>--%>
 
                         <td>
                             <table class="auto-style1">
                                 <tr>
-                                    <td>Propsed</td>
+                                    <td><b> Proposed</b></td>
+                                    
 
+                                </tr>
+                                <tr>
 
+                                     <td><b> Confirmed</b></td>
                                 </tr>
                                 <tr>
-                                    <td>Booked/Confirmed</td>
+                                    <td><b> Booked</b></td>
                                 </tr>
                                 <tr>
-                                    <td>Waitlisted</td>
+                                    <td><b> Waitlisted</b></td>
                                 </tr>
                                 <tr>
-                                    <td>Total</td>
+                                    <td><b> Total </b></td>
                                 </tr>
                             </table>
                         </td>
@@ -204,68 +257,275 @@
                             <table class="auto-style3">
 
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SuitP"]).ToString()); %> </td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["SuitP"]).ToString()); %>--%>
+                                        <%
+                                            int sum = 0;
+                                            System.Data.DataRow[] foundAuthors = dtnew.Select("BStaus = 'Proposed'");
+                                            if (foundAuthors.Length != 0)
+                                            {
+                                                sum = Convert.ToInt32(dtnew.Compute("SUM(TotalSuit)", "BStaus='Proposed'"));
+
+                                            }
+                                            Response.Write(sum);
+
+                                             %>
+
+                                    </td>
+                                    </tr>
+                             <%--   <tr>
+                                  <td>
+                                        <%
+                                            int sum7 = 0;
+                                            System.Data.DataRow[] check7 = dtnew.Select("BStaus = 'Proposed'");
+                                            if (check7.Length != 0)
+                                            {
+                                                sum7 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwob)", "BStaus='Proposed'"));
+
+                                            }
+
+                                            Response.Write(sum7);
+                                             %>
+                                    </td>
+                                    
+
+                                    </tr>--%>
+                                <tr>
+                                    <td>
+
+                                         <%
+                                            int sumc = 0;
+                                            System.Data.DataRow[] foundAuthorsc = dtnew.Select("BStaus = 'Confirm'");
+                                            if (foundAuthorsc.Length != 0)
+                                            {
+                                                sumc = Convert.ToInt32(dtnew.Compute("SUM(TotalSuit)", "BStaus='Confirm'"));
+
+                                            }
+                                            Response.Write(sumc);
+
+                                             %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SuitB"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["SuitB"]).ToString()); %>--%>
+                                         <%
+                                             int sum2 = 0;
+                                             System.Data.DataRow[] check2 = dtnew.Select("BStaus = 'Booked'");
+                                             if (check2.Length != 0)
+                                             {
+                                                 sum2 = Convert.ToInt32(dtnew.Compute("SUM(TotalSuit)", "BStaus='Booked'"));
+
+                                             }
+                                             Response.Write(sum2);
+                                             %>
+                                    </td>
+                                  
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SuitW"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["SuitW"]).ToString()); %>--%>
+
+                                          <%
+                                              int sum3 = 0;
+                                              System.Data.DataRow[] check3 = dtnew.Select("BStaus = 'Waiting'");
+                                              if (check3.Length != 0)
+                                              {
+                                                  sum3 = Convert.ToInt32(dtnew.Compute("SUM(TotalSuit)", "BStaus='Waiting'"));
+
+                                              }
+
+                                              Response.Write(sum3);
+                                             %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["TotalSuit"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["TotalSuit"]).ToString()); %>--%>
+
+                                       <%
+                                           Response.Write(sum + Convert.ToInt32(sum2) + sum3+sumc);
+                                            %>
+
+                                    </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             <table class="auto-style3">
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwbP"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["SwbP"]).ToString()); %>--%>
+                                       <%
+                                           int sum4 = 0;
+                                           System.Data.DataRow[] check4 = dtnew.Select("BStaus = 'Proposed'");
+                                           if (check4.Length != 0)
+                                           {
+                                               sum4 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwb)", "BStaus='Proposed'"));
+
+                                           }
+
+                                           Response.Write(sum4);
+
+                                            %>
+                                    </td>
+                                     </tr>
+                                <tr>
+                                     <td><%--<%Response.Write((dt2.Rows[0]["SwbP"]).ToString()); %>--%>
+                                       <%
+                                           int sum4c = 0;
+                                           System.Data.DataRow[] check4c = dtnew.Select("BStaus = 'Confirm'");
+                                           if (check4c.Length != 0)
+                                           {
+                                               sum4c = Convert.ToInt32(dtnew.Compute("SUM(TotalSwb)", "BStaus='Confirm'"));
+
+                                           }
+
+                                           Response.Write(sum4c);
+
+                                            %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwbB"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["SwbB"]).ToString()); %>--%>
+                                    <%
+                                        int sum5 = 0;
+                                        System.Data.DataRow[] check5 = dtnew.Select("BStaus = 'Booked'");
+                                        if (check5.Length != 0)
+                                        {
+                                            sum5 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwb)", "BStaus='Booked'"));
+
+                                        }
+
+                                        Response.Write(sum5);
+
+                                        %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwbW"]).ToString()); %></td>
+                                    <td> 
+                                         <%  
+                                             int sum6 = 0;
+                                             System.Data.DataRow[] check6 = dtnew.Select("BStaus = 'Waiting'");
+                                             if (check6.Length != 0)
+                                             {
+                                                 sum6 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwb)", "BStaus='Waiting'"));
+
+                                             }
+
+                                             Response.Write(sum6);
+
+
+                                               %>
+
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["TotalSwb"]).ToString()); %></td>
+                                    <td><%--<%Response.Write((dt2.Rows[0]["TotalSwb"]).ToString()); %>--%>
+                                        <%    Response.Write(sum4 + sum5 + sum6+sum4c);
+
+                                               %>
+
+                                    </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             <table class="auto-style3">
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwobP"]).ToString()); %></td>
+                                    <td>
+                                        <%
+                                            int sum7 = 0;
+                                            System.Data.DataRow[] check7 = dtnew.Select("BStaus = 'Proposed'");
+                                            if (check7.Length != 0)
+                                            {
+                                                sum7 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwob)", "BStaus='Proposed'"));
+
+                                            }
+
+                                            Response.Write(sum7);
+                                             %>
+                                    </td>
+                                     </tr>
+                                <tr>
+                                      <td>
+                                        <%
+                                            int sum7c = 0;
+                                            System.Data.DataRow[] check7c = dtnew.Select("BStaus = 'Confirm'");
+                                            if (check7c.Length != 0)
+                                            {
+                                                sum7c = Convert.ToInt32(dtnew.Compute("SUM(TotalSwob)", "BStaus='Confirm'"));
+
+                                            }
+
+                                            Response.Write(sum7c);
+                                             %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwobB"]).ToString()); %></td>
+                                    <td> <%
+                                             int sum8 = 0;
+                                             System.Data.DataRow[] check8 = dtnew.Select("BStaus = 'Booked'");
+                                             if (check8.Length != 0)
+                                             {
+                                                 sum8 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwob)", "BStaus='Booked'"));
+
+                                             }
+
+                                             Response.Write(sum8);
+                                             %></td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["SwobW"]).ToString()); %></td>
+                                    <td>
+                                         <%
+                                             int sum9 = 0;
+                                             System.Data.DataRow[] check9 = dtnew.Select("BStaus = 'Waiting'");
+                                             if (check9.Length != 0)
+                                             {
+                                                 sum9 = Convert.ToInt32(dtnew.Compute("SUM(TotalSwob)", "BStaus='Waiting'"));
+
+                                             }
+
+                                             Response.Write(sum9);
+                                             %>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["TotalSwob"]).ToString()); %></td>
+                                    <td><%
+
+                                            Response.Write(sum7 + sum8 + sum9+sum7c);
+                                             %></td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             <table class="auto-style3">
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["AllP"]).ToString()); %></td>
+                                    <td>
+                                        <%
+
+                                            Response.Write(sum + sum4 + sum7);
+                                             %>
+
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+ <%
+
+                                            Response.Write(sumc + sum4c + sum7c);
+                                             %>
+
+                                        </td>
+                                    
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["AllB"]).ToString()); %></td>
+                                    <td><%Response.Write(sum2 + sum5 + sum8); %></td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["AllW"]).ToString()); %></td>
+                                    <td><% Response.Write(sum3 + sum6 + sum9); %></td>
                                 </tr>
                                 <tr>
-                                    <td><%Response.Write((dt2.Rows[0]["AllTotal"]).ToString()); %></td>
+                                    <td><%Response.Write(sum + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9+sumc+sum4c+sum7c); %></td>
                                 </tr>
                             </table>
                         </td>
-                        <td>
+                    <%--    <td>
                             <table class="auto-style3">
                                 <tr>
                                 </tr>
@@ -277,616 +537,22 @@
                                     <td><%Response.Write((dt2.Rows[0]["PaidAmt"]).ToString()); %></td>
                                 </tr>
                             </table>
-                        </td>
+                        </td>--%>
                     </tr>
 
-                    <tr>
-                        <td>Availbility</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-
-
-                            <table>
-                                <% 
-                                    for (int i = 0; i < dt4.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt4.Rows[i]["Getpackage"]).ToString()); %></td>
-                                </tr>
-                                <%} %>
-                            </table>
-
-                        </td>
-
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt4.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt4.Rows[i]["suite"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                               
-
-                                <%} %>
-
-                                <%--<tr>
-                                    <td><%Response.Write((dt.Rows[i]["supwithbal"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["supwithoutbal"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt4.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt4.Rows[i]["supwithbal"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%-- <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt4.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt4.Rows[i]["supwithoutbal"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%--  <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-                            <table class="auto-style3">
-
-                                <% 
-
-                                    for (int i = 0; i < dt4.Rows.Count; i++)
-                                    {%>
-
-                                <tr>
-                                    <td><%Response.Write((dt4.Rows[i]["getcaabtot"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                               
-                                <%} %>
-
-                                <%--  <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-
-                    </tr>
+                    
 
                     <%
-                            }
-                            catch
-                            {
-                            }
+                                }
+                                catch (Exception ex)
+                                {
+                                }
 
+                            }
                         }
                     %>
 
-                    <tr>
-                        <% if (dt1 != null && dt1.Rows.Count > 0)
-                            { %>
-
-
-                        <% 
-                            try
-                            {
-                        %>
-                        <td style="background-color: yellow;">Group2:</td>
-                        <td style="width: 23%; background-color: yellow;"><%Response.Write((dt1.Rows[0]["BordingFrom"]).ToString().Split('(')[0] + (dt1.Rows[0]["BoadingTo"]).ToString().Split('(')[0] + "Downstream,Starting " + Convert.ToDateTime(dt1.Rows[0]["StartDate"].ToString()).ToString("dd MMMM yyyy")); %></td>
-                        <% 
-                            int Sno = 1;
-                            for (int i = 0; i < dt1.Rows.Count; i++)
-                            {%>
-                    </tr>
-                    <tr>
-                        <td><%
-
-                                if (dt1.Rows[i]["StartDate"].ToString() != "")
-                                {
-                                    Response.Write(Sno);
-                                }
-
-
-                        %></td>
-
-                        <td class="auto-style2"><%Response.Write(Convert.ToDateTime(dt1.Rows[i]["StartDate"].ToString()).ToString("dd-MMM-yyyy")); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["NoOFNights"]).ToString()); %></td>
-                        <td>
-                            <%
-                                if (dt1.Rows[i]["PackageName"].ToString().Contains("Downstream"))
-                                {
-                                    Response.Write("Downstream");
-                                }
-                                else if (dt1.Rows[i]["PackageName"].ToString().Contains("Upstream"))
-                                {
-                                    Response.Write("Upstream");
-                                }
-                                else
-                                {
-
-                                }
-                            %>
-                        </td>
-                        <%--<td><%Response.Write((dt.Rows[i]["PackageName"]).ToString().Split(' ')[28]); %></td>--%>
-                        <td><%Response.Write((dt1.Rows[i]["BookingCode"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["BookingRef"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["AgentName"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["Lagent"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["BordingFrom"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["BoadingTo"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["RoomStatus"]).ToString()); %> </td>
-                        <td><%Response.Write((dt1.Rows[i]["TotalSuit"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["TotalSwb"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["TotalSwob"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["AllTotal"]).ToString()); %></td>
-                        <td><%Response.Write((dt1.Rows[i]["PaidAmt"]).ToString()); %></td>
-
-                    </tr>
-                    <% 
-
-                            Sno++;
-                        }%>
-                    <tr>
-                        <td class="auto-style2">Booking Details</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                        <td>
-                            <table class="auto-style1">
-                                <tr>
-                                    <td>Propsed</td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>Booked/Confirmed</td>
-                                </tr>
-                                <tr>
-                                    <td>Waitlisted</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                </tr>
-                            </table>
-                        </td>
-
-                        <td>
-                            <table class="auto-style3">
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SuitP"]).ToString()); %> </td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SuitB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SuitW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["TotalSuit"]).ToString()); %></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table class="auto-style3">
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwbP"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwbB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwbW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["TotalSwb"]).ToString()); %></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table class="auto-style3">
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwobP"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwobB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["SwobW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["TotalSwob"]).ToString()); %></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table class="auto-style3">
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["AllP"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["AllTotal"]).ToString()); %></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table class="auto-style3">
-                                <tr>
-                                </tr>
-                                <tr>
-                                </tr>
-                                <tr>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt3.Rows[0]["PaidAmt"]).ToString()); %></td>
-                                </tr>
-                            </table>
-                        </td>
-
-                    </tr>
-
-                    <tr>
-                        <td>Availbility</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-
-                            <table>
-                                <% 
-
-                                    for (int i = 0; i < dt5.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt5.Rows[i]["Getpackage"]).ToString()); %></td>
-                                </tr>
-                                <%} %>
-                            </table>
-
-                        </td>
-
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt5.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt5.Rows[i]["suite"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%--<tr>
-                                    <td><%Response.Write((dt.Rows[i]["supwithbal"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["supwithoutbal"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt5.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt5.Rows[i]["supwithbal"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%-- <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt5.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt5.Rows[i]["supwithoutbal"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%--  <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-                        <td>
-
-                            <table class="auto-style3">
-                                <% 
-
-                                    for (int i = 0; i < dt5.Rows.Count; i++)
-                                    {%>
-                                <tr>
-                                    <td><%Response.Write((dt5.Rows[i]["getcaabtot"]).ToString()); %></td>
-                                </tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                <tr></tr>
-                                
-                                <%} %>
-
-                                <%--  <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllB"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllW"]).ToString()); %></td>
-                                </tr>
-                                <tr>
-                                    <td><%Response.Write((dt.Rows[i]["AllTotal"]).ToString()); %></td>
-                                </tr>--%>
-                            </table>
-
-                        </td>
-
-                    </tr>
-
-                    <%
-                            }
-                            catch
-                            {
-                            }
-
-                        }
-                    %>
+                  
                 </table>
 
             </div>

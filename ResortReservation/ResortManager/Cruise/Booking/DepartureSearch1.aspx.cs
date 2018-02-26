@@ -264,11 +264,24 @@ public partial class Cruise_Booking_DepartureSearch1 : System.Web.UI.Page
                 dtres.Columns.Add("OpenClose", typeof(string));
                 DataRow dr = dtres.NewRow();
 
+                DataTable getdtall = dlsrch.fetchdiscountAll();
+                DataTable getallopnendate = dlsrch.GetCruiseOpenDatesPackageSearch(blsrch);
+
                 for (int i = 0; i < dtres.Rows.Count; i++)
                 {
-                    DataTable getdt = dlsrch.fetchdiscount(dtres.Rows[i]["packageId"].ToString(), Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()), Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()), Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString()));
+                    // DataTable getdt = dlsrch.fetchdiscount(dtres.Rows[i]["packageId"].ToString(), Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()), Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()), Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString()));
+                    DataView dvdis = new DataView(getdtall);
+                      string st = "Packageid = '" + dtres.Rows[i]["packageId"].ToString() + "' and Boardingdate='" + Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()) + "' and Deboardingdate='" + Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()) + "' and price=" + Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString());
+                  //  string st = "Packageid = '" + dtres.Rows[i]["packageId"].ToString() + "',Boardingdate =" + dtres.Rows[i]["CheckInDate"];
+                    dvdis.RowFilter = st;
+                    DataTable getdt = dvdis.ToTable();
 
-                    DataTable dt45 = bindroomddl(dtres.Rows[i]["packageId"].ToString(), Convert.ToInt32(dtres.Rows[i]["Id"].ToString()));
+                    DataView dvopendates = new DataView(getallopnendate);
+                    string filter = "PackageId='"+ dtres.Rows[i]["packageId"].ToString()+ "' and Depid="+ Convert.ToInt32(dtres.Rows[i]["Id"].ToString());
+                    dvopendates.RowFilter = filter;
+                    DataTable dt45 = dvopendates.ToTable();
+
+                 //   DataTable dt45 = bindroomddl(dtres.Rows[i]["packageId"].ToString(), Convert.ToInt32(dtres.Rows[i]["Id"].ToString()));
                     if (Session["UserCode"] != null)
                     {
                         lblSuite.Visible = true;

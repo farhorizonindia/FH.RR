@@ -14,19 +14,23 @@
     string sFName = Request.QueryString["FirstName"].Trim();
     string sLName = Request.QueryString["LastName"].Trim();
     string sAddress = Request.QueryString["BillingAddress"].Trim();
-    string sCity = Request.QueryString["City"].Trim();
-    string sState = Request.QueryString["State"].Trim();
-    string sCountry = Request.QueryString["Country"].Trim();
-    string sPincode = Request.QueryString["PinCode"].Trim();
+
+    //string sCity = Request.QueryString["City"].Trim();
+    //string sState = Request.QueryString["State"].Trim();
+    //string sCountry = Request.QueryString["Country"].Trim();
+    //string sPincode = Request.QueryString["PinCode"].Trim();
     
+        string sCity = (Request.QueryString["City"] != null) ? Request.QueryString["City"].Trim() : "";
+        string sState = (Request.QueryString["State"] != null) ? Request.QueryString["State"].Trim() : "";
+        string sCountry = (Request.QueryString["Country"] != null) ? Request.QueryString["Country"].Trim() : "";
+        string sPincode = (Request.QueryString["PinCode"] != null) ? Request.QueryString["PinCode"].Trim() : "";
+
     string sAmount = Request.QueryString["PaidAmt"].Trim();
     string sOrderId = Request.QueryString["BookingPayId"].Trim();
-
-    ////string sCity = "Lucknow";
-    ////string sState = "UP";
-    ////string sCountry = "INDIA";
-    ////string sPincode = "226005";
-
+    //string sCity = "Lucknow";
+    //string sState = "UP";
+    //string sCountry = "INDIA";
+    //string sPincode = "226005";
     // server side validation
     validatepost(sEmail, sPhone, sFName, sLName, sAddress, sCity, sState, sCountry, sPincode, sAmount, sOrderId);
 

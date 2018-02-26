@@ -453,14 +453,14 @@ function showBubbleTooltip(id, e) {
 
     if (popped == "") {
         document.getElementById(id).style.display = 'block';
-        document.getElementById(id).style.top = tempY + 'px';
-        document.getElementById(id).style.left = tempX + 'px';
+        document.getElementById(id).style.top = (tempY+10) + 'px';
+        document.getElementById(id).style.left = (tempX+10) + 'px';
         popped = id;
     } else {
         document.getElementById(popped).style.display = 'none';
         document.getElementById(id).style.display = 'block';
-        document.getElementById(id).style.top = tempY + 'px';
-        document.getElementById(id).style.left = tempX + 'px';
+        document.getElementById(id).style.top = (tempY+10) + 'px';
+        document.getElementById(id).style.left = (tempX+10) + 'px';
         popped = id;
     }
     return false;

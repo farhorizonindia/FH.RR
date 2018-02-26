@@ -335,6 +335,41 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+
+
+        public DataTable getmonthlyrevenueAll(BALBooking obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getBookingPositionNew]", cn);
+                da.SelectCommand.Parameters.Clear();
+              //  da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
+                da.SelectCommand.Parameters.AddWithValue("@Boardingdate", obj._dtStartDate);
+                da.SelectCommand.Parameters.AddWithValue("@Deboardingdate", obj._dtEndDate);
+
+             //   da.SelectCommand.Parameters.AddWithValue("@Packageid", obj.PackageId);
+                //da.SelectCommand.Parameters.AddWithValue("@Deboardingdate", obj._dtEndDate);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception exp)
+            {
+                Console.Write(exp.Message);
+                return null;
+            }
+        }
         public DataTable getmonthlyrevenue(BALBooking obj)
         {
             try
@@ -1226,7 +1261,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@PricePerPerson", obj.priceperperson);
                 da.InsertCommand.Parameters.AddWithValue("@Gross", obj.ToTal);
                 da.InsertCommand.Parameters.AddWithValue("@bconfig", obj.bedconfig);
-
+                da.InsertCommand.Parameters.AddWithValue("@invoiceno", obj.InvoiceNo);
+                da.InsertCommand.Parameters.AddWithValue("@invoiceSequence", obj.InvoiceSequence);
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.InsertCommand.ExecuteNonQuery();

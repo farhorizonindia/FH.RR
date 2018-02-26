@@ -2,18 +2,24 @@
 
 <%@ Register TagName="PageHeaderControl" TagPrefix="phc" Src="~/userControl/pageheader.ascx" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
+      <script  type="text/javascript" src="../js/calendar/calendar.js"></script>
+    <script  type="text/javascript" src="../js/calendar/calendar-en.js"></script>
+    <script type="text/javascript" src="../js/calendar/calendar-setup.js"></script>
+        <script  type="text/javascript" src="../js/global.js"></script>
+    <script  type="text/javascript" src="../js/client/viewbookings.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="../../css/pageheader.css" />
     <link rel="stylesheet" type="text/css" media="all" href="../../style.css" />
     <link href="../../css/roleRights.css" rel="stylesheet" type="text/css" />
+       <link rel="stylesheet" type="text/css" media="all" href="../css/calendar-blue2.css"
     <title>Open Dates Master</title>
 
     <script type="text/javascript">
         function dateSelectionChanged(sender, args) {
-            alert("ok");
             selectedDate = sender.get_selectedDate();
             var hdnfNoOfRooms = document.getElementById("hdnfNoOfRooms").value;
             convertdate(selectedDate, hdnfNoOfRooms)
@@ -50,6 +56,8 @@
             height: 19px;
         }
     </style>
+
+
 </head>
 <body>
     <form id="form1" runat="server">
@@ -57,8 +65,53 @@
         <div>
             <asp:ScriptManager ID="scmgrLocation" runat="server">
             </asp:ScriptManager>
+             <br />
+             <table>
+                    <tr>
+                       
+                        <td>Start Date:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtfrom" runat="server"></asp:TextBox>
+                            <ajaxToolkit:CalendarExtender ID="CalendarExtender1" TargetControlID="txtfrom" runat="server" />
+                        </td>
+                        <td>End Date:
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtTo" runat="server"></asp:TextBox>
+                            <ajaxToolkit:CalendarExtender ID="CalendarExtender2" TargetControlID="txtTo" runat="server" />
+                        </td>
+                         <td>Packages:
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="drppackaging" runat="server"></asp:DropDownList>
+                        </td>
+                        <td>Close/Open:
+                        </td>
+                        <td>
+                              <asp:DropDownList ID="drpcloseopen" runat="server">
+                                        <asp:ListItem Value="">All</asp:ListItem>
+                                        <asp:ListItem Value="false">Open</asp:ListItem>
+                                        <asp:ListItem Value="true">Close</asp:ListItem>
+                                      
+                                    </asp:DropDownList>
+                        </td>
+                       <td>   </td> <td>  </td> <td></td> <td></td>
+                        <td>
+                            <asp:Button ID="Button1" runat="server" Text="Search" OnClick="Button1_Click" />
+                        </td>
+                    </tr>
+                    
+                </table>
+            <br />
             <asp:UpdatePanel ID="updatepanel1" runat="server">
                 <ContentTemplate>
+
+
+                    
+
+
+
                     <div id="gridsection" class="gridsection">
                         <asp:GridView ID="GridOpenDates" ForeColor="#333333" AutoGenerateColumns="False" BorderStyle="Ridge" runat="server" Width="964px" OnRowDeleting="GridOpenDates_RowDeleting1" DataKeyNames="Id" OnRowCommand="GridOpenDates_RowCommand">
                             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -241,7 +294,10 @@
             </asp:UpdatePanel>
 
         </div>
-         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
+
+
+
+        <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
         <ProgressTemplate>
             <iframe id="pgrIFrame" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
                 src="javascript:'<html></html>';" style="position: absolute; top: 729px; left: 36px;
@@ -249,8 +305,7 @@
             <asp:Panel ID="Panel1" runat="server" BackColor="white" BorderColor="#C2D3FC" BorderStyle="solid"
                 BorderWidth="1" Height="100" Style="z-index: 20000" Width="300">
                 <div style="position: relative; top: 20px; left: 70px;">
-                    <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />
-                    
+                    <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />                    
                 Please Wait....
             </asp:Panel>
         </ProgressTemplate>

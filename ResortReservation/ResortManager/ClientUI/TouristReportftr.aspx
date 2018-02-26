@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="TouristReportftr.aspx.cs" Inherits="ClientUI_TouristReportftr" %>
 <%@ Register TagName="PageHeaderControl" TagPrefix="phc" Src="~/userControl/pageheader.ascx" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -221,6 +222,23 @@
                 </Triggers>
         </asp:UpdatePanel>
     </div>
+         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
+        <ProgressTemplate>
+            <iframe id="pgrIFrame" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
+                src="javascript:'<html></html>';" style="position: absolute; top: 729px; left: 36px;
+                height: 68px; width: 208px; z-index: 19999"></iframe>
+            <asp:Panel ID="Panel1" runat="server" BackColor="white" BorderColor="#C2D3FC" BorderStyle="solid"
+                BorderWidth="1" Height="100" Style="z-index: 20000" Width="300">
+                <div style="position: relative; top: 20px; left: 70px;">
+                    <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />
+                    
+                Please Wait....
+            </asp:Panel>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+    <cc1:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1" runat="server"
+        TargetControlID="Panel1" HorizontalOffset="300" VerticalOffset="150">
+    </cc1:AlwaysVisibleControlExtender>
     </form>
 </body>
 </html>

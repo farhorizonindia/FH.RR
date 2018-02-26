@@ -114,6 +114,11 @@
                             <HeaderStyle CssClass="columnHeader" />
 
                         </asp:BoundColumn>
+                        <asp:BoundColumn DataField="Invoiceno" HeaderText="Invoice Number">
+                            <ItemStyle CssClass="column" />
+                            <HeaderStyle CssClass="columnHeader" />
+
+                        </asp:BoundColumn>
                         <asp:BoundColumn DataField="PaidAmt" HeaderText="Paid Amount">
                             <ItemStyle CssClass="column" />
                             <HeaderStyle CssClass="columnHeader" />

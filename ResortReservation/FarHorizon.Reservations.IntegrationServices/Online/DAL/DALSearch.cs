@@ -214,6 +214,43 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+
+
+
+
+        public DataTable fetchallPackageHome()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "fetchallpackageHome");
+                da.SelectCommand.Parameters.AddWithValue("@packageId", "");
+
+                da.SelectCommand.Parameters.AddWithValue("@startdate", DateTime.Now);
+                da.SelectCommand.Parameters.AddWithValue("@enddate", DateTime.Now);
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
         public DataTable fetchFilterPackagewise(BALBooking obj)
         {
             try
@@ -245,6 +282,36 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+
+        public DataTable getavaialablemonthHome(DateTime sdate, DateTime edate)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "getavaialablemonthhome");
+                da.SelectCommand.Parameters.AddWithValue("@startdate", sdate);
+                da.SelectCommand.Parameters.AddWithValue("@enddate", edate);
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public DataTable getavaialablemonth()
         {
             try
@@ -254,6 +321,36 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
                 da.SelectCommand.Parameters.Clear();
                 da.SelectCommand.Parameters.AddWithValue("@action", "getavaialablemonth");
+          
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
+        public DataTable getavaialableYear()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "getyear");
 
 
 
@@ -274,6 +371,65 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+
+
+        public DataTable getavaialableMonthbyyearPackage(string package,DateTime sdate,DateTime edate)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "getmonthbyyearandpackage");
+                da.SelectCommand.Parameters.AddWithValue("@packageId", package);
+                da.SelectCommand.Parameters.AddWithValue("@startdate", sdate);
+                da.SelectCommand.Parameters.AddWithValue("@enddate", edate);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public DataTable fetchdiscountAll()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_Discountmaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "fetchdiscountall");
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public DataTable fetchdiscount(string packageid, DateTime bordingdate, DateTime debordingdate, decimal price)
         {
             try
@@ -411,6 +567,41 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+
+        public DataTable GetCruiseOpenDatesPackageSearch(BALSearch obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_getsearchresults]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", "GetOpenDatesCruiseSearch");
+                da.SelectCommand.Parameters.AddWithValue("@packageId", obj.PackageId);
+
+                da.SelectCommand.Parameters.AddWithValue("@startdate", obj.StartDate);
+                da.SelectCommand.Parameters.AddWithValue("@enddate", obj.EndDate);
+                da.SelectCommand.Parameters.AddWithValue("@AgentId", obj.AgentId);
+
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public DataTable GetCruiseallOpenDatesPackage(BALSearch obj)
         {
             try

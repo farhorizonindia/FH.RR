@@ -800,7 +800,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomId", DbType.Int32, getBookingsInput.AccomodationId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentId", DbType.Int32, getBookingsInput.AgentId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, getBookingsInput.BookingCode);
-
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RefAgentId", DbType.String, getBookingsInput.RefAgentId);
                 dsBookingData = oDB.ExecuteDataSet(oDB.DbCmd);
             }
             catch (Exception exp)
@@ -895,7 +895,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomId", DbType.Int32, getBookingsInput.AccomodationId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AgentId", DbType.Int32, getBookingsInput.AgentId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingCode", DbType.String, getBookingsInput.BookingCode);
-
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RefAgentId", DbType.String, getBookingsInput.RefAgentId);
                 dsBookingData = oDB.ExecuteDataSet(oDB.DbCmd);
             }
             catch (Exception exp)

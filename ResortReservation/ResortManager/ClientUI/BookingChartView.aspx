@@ -27,7 +27,14 @@
     <script language="javascript" type="text/javascript" src="../js/popups.js"></script>
 
     <script language="javascript" type="text/javascript" src="../js/global.js"></script>
-    
+    <style type="text/css">
+        .love
+        {
+
+
+            z-index:999999;
+        }
+    </style>
  
  
 

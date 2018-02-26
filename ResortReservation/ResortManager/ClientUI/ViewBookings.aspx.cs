@@ -113,12 +113,12 @@ public partial class ViewBookings : ClientBasePage
 
 
     }
-    public void sendMail(string email, string name, string lastname, int bookingid, double amount, double paidamount, string stratdate, string enddate, string bookingcode, DateTime BookingDate, string packagename, string accomname, string regionname, string title)
+    public void sendMail(string email, string name, string lastname, int bookingid, double amount, double paidamount, string stratdate, string enddate, string bookingcode, DateTime BookingDate, string packagename, string accomname, string regionname, string title,string password)
     {
 
         try
         {
-
+           // email = "randeep@xportsoft.com";
 
             //if (Session["AccomId"] != "" && Session["AccomId"] != null)
             //{
@@ -135,14 +135,14 @@ public partial class ViewBookings : ClientBasePage
             SmtpClient SmtpServer = new SmtpClient(SmtpHost);
             //  SmtpClient SmtpServer = new SmtpClient("adventureresortscruises.in");
             // mail.From = new MailAddress("reservations@adventureresortscruises.in", "ARC Reservations");
-            mail.From = new MailAddress(CompanyEmail, "Reservations");
+            mail.From = new MailAddress(SmtpUserId, "Reservations");
             mail.To.Add(email);
-            mail.CC.Add(ccEmail);
+           // mail.CC.Add(ccEmail);
 
             mail.Subject = "Balance Due Payment for Reservation -" + title + " " + name + " " + lastname + " – " + bookingcode + "";
 
-            Random rnd = new Random();
-            string Code = rnd.Next(10000, 99999).ToString();
+            //  Random rnd = new Random();
+            string Code = password;
 
             string dateInString = "01.10.2009";
 
@@ -158,6 +158,12 @@ public partial class ViewBookings : ClientBasePage
             sb.Append("<div>");
             sb.Append("<div> Booking No: " + bookingcode + "</div><div><br/></div><div>Date of Booking: " + Convert.ToDateTime(BookingDate).ToString("d MMMM, yyyy") + "</div>");
             sb.Append("<div><br/></div>");
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                sb.Append("<div> You Password is:" + password + " </div>");
+                sb.Append("<div><br/></div>");
+            }
             if (lastname == "XYZ")
             {
                 sb.Append("<div> Dear MR. " + name + ",</div><div><br/></div><div>Namaskar! Greetings from " + CompanyName + "</ div><div><br/><div><div>Thank you for booking " + accomname + ", " + regionname + ". </div><div><br/></div><div> Your balance due is Rs. " + (amount - paidamount) + ". </div><div><br/></div><div><a href=http://test1.adventureresortscruises.in/Cruise/Booking/FinalpaymentLinkPage.aspx?bid=" + bookingid + ">Click To Pay</a></div><div><br/></div><div>Please pay by " + dueDate.ToString("d MMMM, yyyy") + ". Please ignore if paid </ div><div><br/><div><div><br/></div><div><br/></div><div><br/></div><div>Best wishes, </div><div><br/></div><div>The " + accomname + " Team!</ div>");
@@ -276,7 +282,7 @@ public partial class ViewBookings : ClientBasePage
                                 dt.Rows[0]["LastName"] = "XYZ";
                             }
 
-                            sendMail(DataSecurityManager.Decrypt(dt.Rows[0]["Email"].ToString()), DataSecurityManager.Decrypt(dt.Rows[0]["Name"].ToString()), DataSecurityManager.Decrypt(dt.Rows[0]["LastName"].ToString()), iBookingID, amt, Convert.ToDouble(dt.Rows[0]["PaidAmt"].ToString()), dt.Rows[0]["StartDate"].ToString(), dt.Rows[0]["enddate"].ToString(), dt.Rows[0]["BookingCode"].ToString(), Convert.ToDateTime(dt.Rows[0]["BookingDate"].ToString()), dt.Rows[0]["Packagename"].ToString(), dt.Rows[0]["AccomName"].ToString(), dt.Rows[0]["RegionName"].ToString(), DataSecurityManager.Decrypt(dt.Rows[0]["Title"].ToString()));
+                            sendMail(DataSecurityManager.Decrypt(dt.Rows[0]["Email"].ToString()), DataSecurityManager.Decrypt(dt.Rows[0]["Name"].ToString()), DataSecurityManager.Decrypt(dt.Rows[0]["LastName"].ToString()), iBookingID, amt, Convert.ToDouble(dt.Rows[0]["PaidAmt"].ToString()), dt.Rows[0]["StartDate"].ToString(), dt.Rows[0]["enddate"].ToString(), dt.Rows[0]["BookingCode"].ToString(), Convert.ToDateTime(dt.Rows[0]["BookingDate"].ToString()), dt.Rows[0]["Packagename"].ToString(), dt.Rows[0]["AccomName"].ToString(), dt.Rows[0]["RegionName"].ToString(), DataSecurityManager.Decrypt(dt.Rows[0]["Title"].ToString()), DataSecurityManager.Decrypt(dt.Rows[0]["Password"].ToString()));
 
                             // }
 

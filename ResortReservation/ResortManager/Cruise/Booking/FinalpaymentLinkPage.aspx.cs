@@ -42,6 +42,11 @@ public partial class Cruise_Booking_FinalpaymentLinkPage : System.Web.UI.Page
     double total1 = 0;
     string bookingid = "";
     string amount = "";
+    string address1=String.Empty;
+    string address2 = String.Empty;
+    string city = String.Empty;
+    string state = String.Empty;
+    string postalCode = String.Empty;
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -56,11 +61,7 @@ public partial class Cruise_Booking_FinalpaymentLinkPage : System.Web.UI.Page
     public string GetBillingAddress(DataTable dataRow)
 
     {
-        string address1;
-        string address2;
-        string city;
-        string state;
-        string postalCode;
+       
 
         address1 = DataSecurityManager.Decrypt(dataRow.Rows[0]["Address1"].ToString());
         address2 = DataSecurityManager.Decrypt(dataRow.Rows[0]["Address2"].ToString());
@@ -172,8 +173,8 @@ public partial class Cruise_Booking_FinalpaymentLinkPage : System.Web.UI.Page
                     dt.Rows[0]["lastname"] = "XYZ";
                 }
 
-                //  Response.Redirect("~/Cruise/booking/PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + dt.Rows[0]["Email"].ToString() + "&PhoneNumber=" + dt.Rows[0]["Telephone"].ToString() + "&FirstName=" + dt.Rows[0]["Name"].ToString() + "&LastName=" + dt.Rows[0]["lastname"].ToString() + "&PaidAmt=" + PaidAmt + "&BillingAddress=" + lblBillingAddress.Text);
-                Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + dt.Rows[0]["Email"].ToString() + "&PhoneNumber=" + dt.Rows[0]["Telephone"].ToString() + "&FirstName=" + dt.Rows[0]["Name"].ToString() + "&LastName=" + dt.Rows[0]["lastname"].ToString() + "&PaidAmt=" + Convert.ToDecimal(PaidAmt) + "&BillingAddress=" + lblBillingAddress.Text);
+                 Response.Redirect("~/Cruise/booking/PaymentGatewayResponse.aspx?BookingPayId=" + PaymentId + "&EmailId=" + dt.Rows[0]["Email"].ToString() + "&PhoneNumber=" + dt.Rows[0]["Telephone"].ToString() + "&FirstName=" + dt.Rows[0]["Name"].ToString() + "&LastName=" + dt.Rows[0]["lastname"].ToString() + "&PaidAmt=" + PaidAmt + "&BillingAddress=" + lblBillingAddress.Text);
+              //  Response.Redirect("~/Cruise/booking/sendtoairpay.aspx?BookingPayId=" + PaymentId + "&EmailId=" + dt.Rows[0]["Email"].ToString() + "&PhoneNumber=" + dt.Rows[0]["Telephone"].ToString() + "&FirstName=" + dt.Rows[0]["Name"].ToString() + "&LastName=" + dt.Rows[0]["lastname"].ToString() + "&PaidAmt=" + Convert.ToDecimal(PaidAmt) + "&BillingAddress=" + lblBillingAddress.Text + "&City=" + city + "&State=" + state + "&PinCode=" + postalCode);
             }
 
         }

@@ -101,7 +101,7 @@ function showRoomBookings(parentCellId, contentPanelId) {
 function showRoomBookingsm(parentCellId, contentPanelId) {
     var currDiv, lastDiv, headerDiv, parentCell;
     var divId, toolTipText, lastselectedDiv;
-
+    debugger;
     //document.getElementById('bookingdetails').innerHTML = "Click on booking cell to see the booking details.";
     currDiv = document.getElementById(contentPanelId);
     parentCell = document.getElementById(parentCellId);

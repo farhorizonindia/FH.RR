@@ -1174,7 +1174,7 @@ public partial class _Default : ClientBasePage
 
                             if (bookingDetail.bookingDetailHtml.Contains("span")) //This is a hack to find if there is single booking or multibooking
                             {
-                                tc.Attributes.Add("class", "multibookingcell");
+                                tc.Attributes.Add("class", "multibookingcell tdblock");
                             }
                             else if (tc.Attributes["class"] != "multibookingcell")
                             {
@@ -1367,6 +1367,7 @@ public partial class _Default : ClientBasePage
         divRoomHeader.ID = Constants.CHART_ROOM_CELL_DIV_HEADER + idSuffix;
 
         divRoomDetail = new HtmlGenericControl("div");
+        divRoomDetail.Attributes.Add("class", "love");
         divRoomDetail.ID = Constants.CHART_ROOM_CELL_DIV_DETAIL + idSuffix;
         id = Constants.CHART_ROOM_CELL_DIV_DETAIL + idSuffix;
         divRoomDetail.Style.Add(HtmlTextWriterStyle.Display, "none");
@@ -1384,10 +1385,10 @@ public partial class _Default : ClientBasePage
         switch (bookingDetail.BookingStatusType)
         {
             case BookingStatusTypes.BOOKED:
-                divRoomHeader.Attributes.Add("class", "bookedCell tdblock");
+                divRoomHeader.Attributes.Add("class", "bookedCell");
                 break;
             case BookingStatusTypes.CONFIRMED:
-                divRoomHeader.Attributes.Add("class", "confirmedCell tdblock");
+                divRoomHeader.Attributes.Add("class", "confirmedCell");
 
                 break;
             case BookingStatusTypes.WAITLISTED:

@@ -96,6 +96,131 @@ public partial class response : System.Web.UI.Page
     string CompanyLogo = ConfigurationManager.AppSettings["cLogo"];
     string ccEmail = ConfigurationManager.AppSettings["ccEmail"];
     SqlConnection con;
+
+
+    private void BindInvoice()
+    {
+        Int32 bid = Convert.ToInt32(Session["getbid"]);
+        string strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
+
+        SqlConnection cn = new SqlConnection(strCon);
+        SqlDataAdapter da = new SqlDataAdapter("select Invoiceno from tblPayment where BookingId=@bid", cn);
+        da.SelectCommand.Parameters.AddWithValue("@bid", bid);
+        //   da.SelectCommand.Parameters.AddWithValue("@CheckOutDate", Convert.ToDateTime(txtEndDate.Text.Trim()));
+        DataTable dtReturnData = new DataTable();
+        da.Fill(dtReturnData);
+        if (dtReturnData != null && dtReturnData.Rows.Count>0)
+        {
+            //  blsr.PackageId = dtReturnData.Rows[0][0].ToString();
+            string invno = Convert.ToString(dtReturnData.Rows[0][0]);
+
+            if (!string.IsNullOrEmpty(invno))
+            {
+
+                lbInvoiceNO.Text = Convert.ToString(dtReturnData.Rows[0]["Invoiceno"]);
+            }
+            else
+            {
+                SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
+                con.Open();
+                string sqlQuery = "select max(invoicesequence )as InvSeq from tblPayment";
+                SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
+                DataTable dtGetinvoiceno = new DataTable();
+                adp.Fill(dtGetinvoiceno);
+                string invo = "";
+                if (dtGetinvoiceno.Rows.Count > 0)
+                {
+                    invo = dtGetinvoiceno.Rows[0][0].ToString();
+                }
+                con.Close();
+                if (invo == "")
+                {
+                    invo = "1";
+                }
+                else
+                {
+                    int invonus = Convert.ToInt32(invo) + 1;
+                    invo = Convert.ToInt32(invonus).ToString();
+                }
+                int invonu = Convert.ToInt32(invo);
+                string catalies = "";
+                //Random getrand = new Random();
+                if (Session["categoryAlias"] != null)
+                {
+                    //catalies = Session["categoryAlias"].ToString() + getrand.Next(10000, 90000);
+                    catalies = Session["categoryAlias"].ToString() + invonu;
+                }
+                else
+                {
+                    //catalies = "MVM" + getrand.Next(10000, 90000);
+                    catalies = "MVM" + invonu;
+                }
+                lbInvoiceNO.Text = catalies;
+
+                string sqlQuery2 = "update tblPayment set invoiceno=@invno,invoicesequence=@seq where BookingId=@bid";
+                SqlDataAdapter adp2 = new SqlDataAdapter(sqlQuery2, con);
+                adp2.SelectCommand.Parameters.AddWithValue("@invno", catalies);
+                adp2.SelectCommand.Parameters.AddWithValue("@seq", invonu);
+                adp2.SelectCommand.Parameters.AddWithValue("@bid", bid);
+                DataTable dtGetinvoiceno2 = new DataTable();
+                adp2.Fill(dtGetinvoiceno2);
+
+
+            }
+        }
+        else
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString);
+            con.Open();
+            string sqlQuery = "select max(invoicesequence )as InvSeq from tblPayment";
+            SqlDataAdapter adp = new SqlDataAdapter(sqlQuery, con);
+            DataTable dtGetinvoiceno = new DataTable();
+            adp.Fill(dtGetinvoiceno);
+            string invo = "";
+            if (dtGetinvoiceno.Rows.Count > 0)
+            {
+                invo = dtGetinvoiceno.Rows[0][0].ToString();
+            }
+            con.Close();
+            if (invo == "")
+            {
+                invo = "1";
+            }
+            else
+            {
+                int invonus = Convert.ToInt32(invo) + 1;
+                invo = Convert.ToInt32(invonus).ToString();
+            }
+            int invonu = Convert.ToInt32(invo);
+            string catalies = "";
+            //Random getrand = new Random();
+            if (Session["categoryAlias"] != null)
+            {
+                //catalies = Session["categoryAlias"].ToString() + getrand.Next(10000, 90000);
+                catalies = Session["categoryAlias"].ToString() + invonu;
+            }
+            else
+            {
+                //catalies = "MVM" + getrand.Next(10000, 90000);
+                catalies = "MVM" + invonu;
+            }
+            lbInvoiceNO.Text = catalies;
+
+            string sqlQuery2 = "update tblPayment set invoiceno=@invno,invoicesequence=@seq where BookingId=@bid";
+            SqlDataAdapter adp2 = new SqlDataAdapter(sqlQuery2, con);
+            adp2.SelectCommand.Parameters.AddWithValue("@invno", catalies);
+            adp2.SelectCommand.Parameters.AddWithValue("@seq", invonu);
+            adp2.SelectCommand.Parameters.AddWithValue("@bid",bid);
+            DataTable dtGetinvoiceno2 = new DataTable();
+            adp2.Fill(dtGetinvoiceno2);
+
+        }
+
+
+
+    }
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
         con = new SqlConnection(GetConnectionString());
@@ -105,7 +230,17 @@ public partial class response : System.Web.UI.Page
             Session["nullsession"] = 1;
             ViewState["sentMail"] = "0";
             lbBookinDate.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
-            lbInvoiceNO.Text = getinvoice();
+            // lbInvoiceNO.Text = getinvoice();
+            try
+            {
+                lbInvoiceNO.Text = Session["invoiceno"].ToString();
+            }
+            catch
+            {
+                BindInvoice();
+
+
+            }
             dated.Text = Convert.ToDateTime(System.DateTime.Now).ToString("d MMMM, yyyy");
         }
 
@@ -187,7 +322,7 @@ public partial class response : System.Web.UI.Page
                 lbpackageName.Text = dt.Rows[0]["Packagename"].ToString();
                 // lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(Session["gettotal"].ToString()));
                 lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(Session["gettotal"].ToString()));
-                
+
                 lblTotAMt.Text = Convert.ToDecimal(Session["gettotal"].ToString()).ToString("##,0");
                 lbladvance.Text = Convert.ToDecimal(Session["getpaid"]).ToString("##,0");
                 lblTotPaid.Text = Convert.ToDecimal(Session["balancamnt"]).ToString("##,0");
@@ -201,7 +336,8 @@ public partial class response : System.Web.UI.Page
                 tradvance.Visible = false;
                 double tax = 0;
                 Session["categoryAlias"] = dt.Rows[0]["AccomInitial"].ToString();
-                lbInvoiceNO.Text = getinvoice();
+                // lbInvoiceNO.Text = getinvoice();
+                lbInvoiceNO.Text = Session["invoiceno"].ToString();
                 //  DataTable Bookingdt = SessionServices.RetrieveSession<DataTable>("Bookingdt");
                 // DataTable Bookingdt = Session["Bookingdt"] as DataTable;
                 //if (dt != null && dt.Rows.Count > 0)
@@ -336,10 +472,10 @@ public partial class response : System.Web.UI.Page
         //}
         lblGross.Text = invoiceamount.ToString("##,0");
         Label3.Text = TaxAmount.ToString("##,0");
-//        lblTaxableAmount.Text = TaxableAmount.ToString("##,0");
+        //lblTaxableAmount.Text = TaxableAmount.ToString("##,0");
         lblgetTotal.Text = gross.ToString("##,0");
 
-       // Label7.Text = "Taxable Amount";
+       // la.Text = "Taxable Amount";
         if (discount != 0)
         {
             Label4.Text = "Discount";
@@ -513,6 +649,13 @@ public partial class response : System.Web.UI.Page
             else
             {
                 sb.Append("<div>The booking policy of the cruise can be referred to at <a href='http://www.mahabaahucruiseindia.com/cruise-policy' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=en&amp;q=http://www.mahabaahucruiseindia.com/cruise-policy&amp;source=gmail&amp;ust=1470139247045000&amp;usg=AFQjCNH3vyzjL507K4FspRY6TihAfogUug'>http://www.mahabaahucruiseindia.com/cruise-policy </a>.</div><div><br/></div><div> Enclosure:</div><div> Invoice for your booking is attached with this email showing full payment received.</div> ");
+            }
+            if (Session["guest"] != null)
+            {
+                sb.Append("<div>");
+                sb.Append("Your Password for future login is=" + Convert.ToString(Session["userpass"]));
+                sb.Append("</div>");
+
             }
 
             #endregion
@@ -1088,7 +1231,7 @@ public partial class response : System.Web.UI.Page
                                                                                     //lblTaxableAmount.Text = "INR " + Convert.ToInt32((totalAmount1 - totdiscount).ToString()).ToString("##,0");
 
                     lblgetTotal.Text = Convert.ToInt32(totalAmount1.ToString()).ToString("##,0");
-                   // lblTaxableAmount.Text = Convert.ToInt32((totalAmount1 - totdiscount).ToString()).ToString("##,0");
+                    //lblTaxableAmount.Text = Convert.ToInt32((totalAmount1 - totdiscount).ToString()).ToString("##,0");
 
                     //gdvCruiseRooms.FooterRow.Cells[2].Text = "Total <br> Service Tax @ 4.50% <br> <b> Grand Total </b>";
                     Label1.Text = Session["gettax"].ToString() + "%";
@@ -1139,7 +1282,7 @@ public partial class response : System.Web.UI.Page
 
                     //  lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblGross.Text.Split('R')[1].Replace(",", "")));
                     //lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblGross.Text));
-                    lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblGross.Text.Replace(",", ""))); 
+                    lbRuppeeinwords.Text = GF.NumbersToWords(Convert.ToInt32(lblGross.Text.Replace(",", "")));
                 }
                 catch
                 {
@@ -1255,6 +1398,18 @@ public partial class response : System.Web.UI.Page
 
             sb.Append("</div>");
             sb.Append("<div><br/><div><div>Enclosure: Invoice for your booking is attached with this email.<div>");
+            if (Session["guest"] != null)
+            {
+                sb.Append("<div>Your crendentials for future login is</div>");
+                sb.Append("<div>");
+                sb.Append("User Name=" + Convert.ToString(Session["guest"]));
+                sb.Append("</div>");
+
+                sb.Append("<div>");
+                sb.Append("Your Password for future login is=" + Convert.ToString(Session["userpass"]));
+                sb.Append("</div>");
+
+            }
             #endregion
 
             mail.IsBodyHtml = true;
@@ -1356,6 +1511,18 @@ public partial class response : System.Web.UI.Page
             else
             {
                 sb.Append("<div>The booking policy of the cruise can be referred to at <a href='http://www.mahabaahucruiseindia.com/cruise-policy' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=en&amp;q=http://www.mahabaahucruiseindia.com/cruise-policy&amp;source=gmail&amp;ust=1470139247045000&amp;usg=AFQjCNH3vyzjL507K4FspRY6TihAfogUug'>http://www.mahabaahucruiseindia.com/cruise-policy </a>.</div><div><br/></div><div> Enclosure:</div><div> Invoice for your booking is attached with this email.</div>");
+            }
+            if (Session["guest"] != null)
+            {
+                sb.Append("<div>Your crendentials for future login is</div>");
+                sb.Append("<div>");
+                sb.Append("User Name=" + Convert.ToString(Session["guest"]));
+                sb.Append("</div>");
+
+                sb.Append("<div>");
+                sb.Append("Your Password for future login is=" + Convert.ToString(Session["userpass"]));
+                sb.Append("</div>");
+
             }
 
             #endregion
@@ -1509,7 +1676,7 @@ public partial class response : System.Web.UI.Page
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
-        Response.Redirect("SearchProperty1.aspx");
+        Response.Redirect("SearchProperty.aspx");
     }
 
     protected void btnPrint_Click(object sender, EventArgs e)

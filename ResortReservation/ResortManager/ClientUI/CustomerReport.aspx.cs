@@ -24,6 +24,8 @@ using iTextSharp.tool.xml;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 using System.Text;
+using FarHorizon.Reservations.MasterServices;
+using System.Net.Mail;
 
 public partial class ClientUI_CustomerReport : MasterBasePage
 {
@@ -32,6 +34,16 @@ public partial class ClientUI_CustomerReport : MasterBasePage
     BALCustomers balcustomer = new BALCustomers();
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
+    EventMessageMaster emsg = new EventMessageMaster();
+    string CompanyName = ConfigurationManager.AppSettings["cName"];
+    string CompanyEmail = ConfigurationManager.AppSettings["cEmail"];
+    string CompanyAddress = ConfigurationManager.AppSettings["cAddress"];
+    string CompanyPhoneNo = ConfigurationManager.AppSettings["cPhoneNo"];
+    string CompanyMobile = ConfigurationManager.AppSettings["cMobile"];
+    string CompanyLogo = ConfigurationManager.AppSettings["cLogo"];
+    string SmtpUserId = ConfigurationManager.AppSettings["SMTPUserId"];
+    string SmtpPassword = ConfigurationManager.AppSettings["SMTPPwd"];
+    string SmtpHost = ConfigurationManager.AppSettings["SMTPServer"];
     string strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -273,6 +285,83 @@ public partial class ClientUI_CustomerReport : MasterBasePage
 
             }
         }
+
+        if (e.CommandName == "Sendmail")
+        {
+            int custid = Convert.ToInt32(e.CommandArgument.ToString());
+            hfId.Value = custid.ToString();
+            balcustomer.action = "selectbyCustid";
+            balcustomer.CustId = custid;
+            DataTable dt = selectbyCustid(balcustomer);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string name = DataSecurityManager.Decrypt(dt.Rows[0]["FirstName"].ToString());
+                string email = DataSecurityManager.Decrypt(dt.Rows[0]["Email"].ToString());
+                var chars = "ABCDEF!GHIJKLMNOP@QRSTUVWXYZabc#defghijklm$nopqr&stuvwx*yz0123456789";
+                var stringChars = new char[6];
+                var random = new Random();
+                for (int i = 0; i < stringChars.Length; i++)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                var pass = new String(stringChars);
+                string password = DataSecurityManager.Encrypt(pass);
+
+
+                balcustomer.CustId = custid;
+              
+                balcustomer.Password = password;
+                int n = dalcustomer.UpdateforadminPassword(pass, custid);
+           
+
+                sendMail(name, email, pass);
+
+            }
+        }
+
+
+
+    }
+
+
+    public void sendMail(string name, string email, string password)
+    {
+        try
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient(SmtpHost);
+            mail.From = new MailAddress(CompanyEmail);
+            mail.To.Add(email);
+            mail.Subject = "Change Password";
+            string msgsubject = "";
+            Random rnd = new Random();
+            string Code = rnd.Next(10000, 99999).ToString();
+            DataTable dt = emsg.getmessgaeforpassword();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                msgsubject = dt.Rows[0]["EventMessage"].ToString();
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>");
+            sb.Append(msgsubject);
+            sb.Append(" <div>Dear User : " + name + ", </div> <br/>");
+            sb.Append(" <div>Your password is: " + password + "  </div> <div><br/> </div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
+            sb.Append("</div>");
+            CompanyLogo = "http://adventureresortscruises.in/Cruise/booking/ARC_Logo.jpg.png";
+            //sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/ARC_Logo.jpg.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
+            sb.Append("<img src='" + CompanyLogo + "' alt='Image'/><br /><div> " + CompanyName + "</div><div> " + CompanyAddress + " </div> <div> Phone: " + CompanyPhoneNo + " </div><div> Mobile: " + CompanyMobile + " </div><div><br/> </div> ");
+            mail.IsBodyHtml = true;
+            mail.Body = sb.ToString();
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential(SmtpUserId, SmtpPassword);
+            SmtpServer.EnableSsl = false;
+            SmtpServer.Send(mail);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Password has been sent to your email id " + email + "')", true);
+        }
+        catch (Exception ex)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('" + ex.Message.ToString() + "')", true);
+        }
     }
 
 
@@ -380,6 +469,11 @@ public partial class ClientUI_CustomerReport : MasterBasePage
     }
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
+        if (ddlCountry.SelectedIndex == 0)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Plaese Choose Country')", true);
+            return;
+        }
         if (txtFisrtName.Text == "" || txtLastName.Text == "" || txtContactNo.Text == "" || txtAddress1.Text == "" || txtCity.Text == "" || txtState.Text == "" || txtPost.Text == "" || ddlCountry.SelectedIndex == 0)
         {
             //Session["Phonecheck"] = 1;
@@ -405,26 +499,26 @@ public partial class ClientUI_CustomerReport : MasterBasePage
                 return;
             }
         }
-        if (txtPost.Text != null && txtPost.Text != "")
-        {
-            if (txtPost.Text.Length < 6)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid post code')", true);
-                return;
-            }
-            else
-            {
-                try
-                {
-                    long post = Convert.ToInt64(txtPost.Text);
-                }
-                catch
-                {
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid post code')", true);
-                    return;
-                }
-            }
-        }
+        //if (txtPost.Text != null && txtPost.Text != "")
+        //{
+        //    if (txtPost.Text.Length < 6)
+        //    {
+        //        ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid post code')", true);
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            long post = Convert.ToInt64(txtPost.Text);
+        //        }
+        //        catch
+        //        {
+        //            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid post code')", true);
+        //            return;
+        //        }
+        //    }
+        //}
         balcustomer.CustId = Convert.ToInt32(hfId.Value);
 
         balcustomer.action = "updateinadmin";
@@ -447,7 +541,7 @@ public partial class ClientUI_CustomerReport : MasterBasePage
             lblmsg.ForeColor = System.Drawing.Color.Green;
             hfId.Value = "";
 
-            load();
+            btnSearch_Click(this, e);
             clear();
         }
         else
@@ -589,7 +683,7 @@ public partial class ClientUI_CustomerReport : MasterBasePage
         }
         if (dt1 != null && dt1.Rows.Count > 0)
         {
-            // Session["getcustomer"] = dt1;
+             Session["getcustomer"] = dt1;
             dgTouristCount.DataSource = dt1;
             dgTouristCount.DataBind();
 

@@ -73,8 +73,33 @@
         .auto-style3 {
             height: 31px;
         }
+
+        area {
+     outline: none;
+     border:#000 solid 4px;
+     background:#000;
+     font-size:28px;
+}
+area:focus {outline: none!important; border:0!important; }
+
+        a {
+    outline: none;
+    outline-color:transparent;
+    outline-style: auto;
+    outline-width: 0px;
+}
+
+        a:focus {
+    outline: none;
+    outline-color:transparent;
+    outline-style: auto;
+    outline-width: 0px;
+}
+
     </style>
     <script>
+
+   
         function disp_confirm() {
 
             $("html, body").delay(500).animate({
@@ -285,7 +310,7 @@
                                     <%-- <asp:DropDownList ID="ddlAgentRef" AutoPostBack="true" runat="server" OnSelectedIndexChanged="ddlAgentRef_SelectedIndexChanged"></asp:DropDownList>--%>
                                 </div>
                                 <div style="width: 58%; overflow-x: scroll; margin: 0 auto;">
-                                    <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="~/images/aspnet_imagemap.png"
+                                    <asp:ImageMap ID="ImageMap1" runat="server" hidefocus="true"  ImageUrl="~/images/aspnet_imagemap.png"
                                         OnClick="ImageMap1_Click" Style="width: auto;">
                                         <%-- <asp:PolygonHotSpot Coordinates="346,15,374,16,375,59,347,56" AlternateText="210"
                                             HotSpotMode="PostBack" PostBackValue="210" />

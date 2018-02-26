@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CustomerReport.aspx.cs" Inherits="ClientUI_CustomerReport"  EnableEventValidation="false" %>
 
 <%@ Register TagName="PageHeaderControl" TagPrefix="phc" Src="~/userControl/pageheader.ascx" %>
-
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -102,6 +102,11 @@
                                     </ItemTemplate>
 
                                 </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Reset Password">
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("CustId")%>' CommandName="Sendmail">Send Email</asp:LinkButton>                                     
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                             </Columns>
                             <EditRowStyle BackColor="#2461BF" />
                             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -144,7 +149,9 @@
                             <tr>
                                 <td>First Name</td>
                                 <td>
-                                    <asp:TextBox ID="txtFisrtName" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtFisrtName" runat="server"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="abc" ControlToValidate="txtFisrtName" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                    </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -152,7 +159,10 @@
                             <tr>
                                 <td>Last Name</td>
                                 <td>
-                                    <asp:TextBox ID="txtLastName" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtLastName" runat="server"></asp:TextBox>
+
+                                  <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="abc" ControlToValidate="txtLastName" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -160,7 +170,9 @@
                             <tr>
                                 <td>Email</td>
                                 <td>
-                                    <asp:TextBox ID="txtEmail" ReadOnly="true" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtEmail" ReadOnly="false" runat="server"></asp:TextBox>
+                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator9" ValidationGroup="abc" ControlToValidate="txtEmail" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -168,7 +180,9 @@
                             <tr>
                                 <td>Contact No</td>
                                 <td>
-                                    <asp:TextBox ID="txtContactNo" runat="server" MaxLength="10"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtContactNo" runat="server" MaxLength="10"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="abc" ControlToValidate="txtContactNo" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -176,7 +190,9 @@
                             <tr>
                                 <td>Address1</td>
                                 <td>
-                                    <asp:TextBox ID="txtAddress1" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtAddress1" runat="server"></asp:TextBox>
+                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="abc" ControlToValidate="txtAddress1" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -192,7 +208,9 @@
                             <tr>
                                 <td>City</td>
                                 <td>
-                                    <asp:TextBox ID="txtCity" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtCity" runat="server"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" ValidationGroup="abc" ControlToValidate="txtCity" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -200,7 +218,10 @@
                             <tr>
                                 <td>State</td>
                                 <td>
-                                    <asp:TextBox ID="txtState" runat="server"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtState" runat="server"></asp:TextBox>
+
+                              <asp:RequiredFieldValidator ID="RequiredFieldValidator6" ValidationGroup="abc" ControlToValidate="txtState" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -208,7 +229,10 @@
                             <tr>
                                 <td>Post Code</td>
                                 <td>
-                                    <asp:TextBox ID="txtPost" runat="server" MaxLength="6"></asp:TextBox></td>
+                                    <asp:TextBox ID="txtPost" runat="server" ></asp:TextBox>
+
+                                  <asp:RequiredFieldValidator ID="RequiredFieldValidator7" ValidationGroup="abc" ControlToValidate="txtPost" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -216,7 +240,10 @@
                             <tr>
                                 <td>Country</td>
                                 <td>
-                                    <asp:DropDownList ID="ddlCountry" runat="server" Width="52%"></asp:DropDownList></td>
+                                    <asp:DropDownList ID="ddlCountry" runat="server" Width="52%"></asp:DropDownList>
+
+                              <asp:RequiredFieldValidator ID="RequiredFieldValidator8" ValidationGroup="abc" ControlToValidate="ddlCountry" ForeColor="Red" runat="server" Text="*" ErrorMessage=""></asp:RequiredFieldValidator>
+                                          </td>
                             </tr>
                             <tr>
                                 <td style="height: 3px;"></td>
@@ -233,7 +260,7 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_Click" /></td>
+                                    <asp:Button ID="btnUpdate" runat="server" ValidationGroup="abc" Text="Update" OnClick="btnUpdate_Click" /></td>
                                 <td>
                                     <%-- <asp:Button ID="btnDelete" runat="server" Text="Delete" />--%></td>
                             </tr>
@@ -248,7 +275,23 @@
             </asp:UpdatePanel>
         </div>
 
-
+         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
+        <ProgressTemplate>
+            <iframe id="pgrIFrame" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
+                src="javascript:'<html></html>';" style="position: absolute; top: 729px; left: 36px;
+                height: 68px; width: 208px; z-index: 19999"></iframe>
+            <asp:Panel ID="Panel1" runat="server" BackColor="white" BorderColor="#C2D3FC" BorderStyle="solid"
+                BorderWidth="1" Height="100" Style="z-index: 20000" Width="300">
+                <div style="position: relative; top: 20px; left: 70px;">
+                    <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />
+                    
+                Please Wait....
+            </asp:Panel>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+    <cc1:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1" runat="server"
+        TargetControlID="Panel1" HorizontalOffset="300" VerticalOffset="150">
+    </cc1:AlwaysVisibleControlExtender>
     </form>
 </body>
 </html>
