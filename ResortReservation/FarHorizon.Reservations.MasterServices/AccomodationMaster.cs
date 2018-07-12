@@ -48,6 +48,7 @@ namespace FarHorizon.Reservations.MasterServices
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAccomodation", DbType.String, oAccomData.AccomodationName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RegionId", DbType.Int32, oAccomData.RegionId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomInitial", DbType.String, oAccomData.AccomInitial);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomPolicyUrl", DbType.String, oAccomData.AccomPolicyUrl);
                 int accomId = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
 
             }
@@ -112,6 +113,7 @@ namespace FarHorizon.Reservations.MasterServices
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sAccomodation", DbType.String, oAccomData.AccomodationName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RegionId", DbType.Int32, oAccomData.RegionId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomInitial", DbType.String, oAccomData.AccomInitial);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomPolicyUrl", DbType.String, oAccomData.AccomPolicyUrl);
                 oDB.ExecuteNonQuery(oDB.DbCmd);
             }
             catch (Exception exp)
@@ -185,6 +187,31 @@ namespace FarHorizon.Reservations.MasterServices
             catch (Exception exp)
             {
                 GF.LogError("clsAccomodationMaster.Delete", exp.Message.ToString());
+                oDB = null;
+                return false;
+            }
+            finally
+            {
+                oDB = null;
+            }
+            return true;
+        }
+        public bool updateStatus(AccomodationDTO oAccomData)
+        {
+            string sProcName;
+            DatabaseManager oDB;
+            try
+            {
+                oDB = new DatabaseManager();
+
+                sProcName = "up_Upd_Activate";
+                oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, oAccomData.AccomodationId);
+                oDB.ExecuteNonQuery(oDB.DbCmd);
+            }
+            catch (Exception exp)
+            {
+                GF.LogError("clsAccomodationMaster.updateStatus", exp.Message.ToString());
                 oDB = null;
                 return false;
             }
@@ -336,6 +363,7 @@ namespace FarHorizon.Reservations.MasterServices
                         AccomData[i].RegionId = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
                         AccomData[i].Region = Convert.ToString(ds.Tables[0].Rows[i][5]);
                         AccomData[i].AccomInitial = Convert.ToString(ds.Tables[0].Rows[i][6]);
+                        AccomData[i].AccomPolicyUrl = Convert.ToString(ds.Tables[0].Rows[i][7]);
                     }
                 }
             }
@@ -382,6 +410,7 @@ namespace FarHorizon.Reservations.MasterServices
                         AccomData[i].RegionId = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
                         AccomData[i].Region = Convert.ToString(ds.Tables[0].Rows[i][5]);
                         AccomData[i].AccomInitial = Convert.ToString(ds.Tables[0].Rows[i][6]);
+                        //AccomData[i].AccomPolicyUrl = Convert.ToString(ds.Tables[0].Rows[i][7]);
                         AccomData[i].AccomodationSeasonList = GetAccomodationSeasonDates(AccomData[i].AccomodationId);
                     }
                 }
@@ -397,7 +426,53 @@ namespace FarHorizon.Reservations.MasterServices
             }
             return AccomData;
         }
+        public AccomodationDTO[] GetData1(int RegionId, int AccomodationTypeId, int AccomodationId)
+        {
+            DataSet ds;
+            AccomodationDTO[] AccomData;
+            AccomData = null;
+            ds = null;
+            string sProcName;
+            DatabaseManager oDB;
+            try
+            {
+                oDB = new DatabaseManager();
 
+                sProcName = "up_Get_Accomodations1";
+                oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomTypeId", DbType.Int32, AccomodationTypeId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, AccomodationId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iRegionId", DbType.Int32, RegionId);
+                ds = oDB.ExecuteDataSet(oDB.DbCmd);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    AccomData = new AccomodationDTO[ds.Tables[0].Rows.Count];
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        AccomData[i] = new AccomodationDTO();
+                        AccomData[i].AccomodationTypeId = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
+                        AccomData[i].AccomodationType = Convert.ToString(ds.Tables[0].Rows[i][1]);
+                        AccomData[i].AccomodationId = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
+                        AccomData[i].AccomodationName = Convert.ToString(ds.Tables[0].Rows[i][3]);
+                        AccomData[i].RegionId = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
+                        AccomData[i].Region = Convert.ToString(ds.Tables[0].Rows[i][5]);
+                        AccomData[i].AccomInitial = Convert.ToString(ds.Tables[0].Rows[i][6]);
+                        AccomData[i].AccomPolicyUrl = Convert.ToString(ds.Tables[0].Rows[i][7]);
+                        AccomData[i].AccomodationSeasonList = GetAccomodationSeasonDates(AccomData[i].AccomodationId);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                GF.LogError("clsAccomodationMaster.Update", exp.Message.ToString());
+                oDB = null;
+            }
+            finally
+            {
+                oDB = null;
+            }
+            return AccomData;
+        }
         public List<AccomodationSeasonDTO> GetAccomodationSeasonDates(int AccomodationId)
         {
             DataSet ds;

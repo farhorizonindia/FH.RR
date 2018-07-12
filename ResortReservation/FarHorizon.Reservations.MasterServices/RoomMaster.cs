@@ -57,6 +57,38 @@ namespace FarHorizon.Reservations.MasterServices
             }
             return true;
         }
+        public bool updatestatus(RoomDTO oAccomRoomData)
+        {
+            string sProcName;
+            DatabaseManager oDB;
+            try
+            {
+                oDB = new DatabaseManager();
+
+                sProcName = "updateactivestatus";
+                oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sRoomNo", DbType.String, oAccomRoomData.RoomNo);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, oAccomRoomData.AccomodationId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@roomcatid", DbType.Int32, oAccomRoomData.roomcategoryid);
+
+
+                oDB.ExecuteNonQuery(oDB.DbCmd);
+            }
+            catch (Exception exp)
+            {
+                oDB = null;
+                oAccomRoomData = null;
+                GF.LogError("clsRoomMaster.Insert", exp.Message);
+                return false;
+            }
+            finally
+            {
+                oDB = null;
+                oAccomRoomData = null;
+            }
+            return true;
+        }
 
         public bool Update(RoomDTO oAccomRoomData)
         {
@@ -136,7 +168,7 @@ namespace FarHorizon.Reservations.MasterServices
             return GetData("");
         }
 
-        public RoomDTO[] GetData(int AccomodationId, string RoomNo)
+        public RoomDTO[] GetData(int AccomodationId, string RoomNo,int RoomcatID)
         {
             //clsAccomRoomData[] oAccomRoomData;
             //oAccomRoomData = null;
@@ -145,6 +177,8 @@ namespace FarHorizon.Reservations.MasterServices
                 wClause += " and AccomId=" + AccomodationId;
             if (RoomNo != "")
                 wClause += " and RoomNo='" + RoomNo + "'";
+            if (RoomcatID != 0)
+                wClause += " and RoomCategoryId='" + RoomcatID + "'";
             return GetData(wClause);
         }               
 
@@ -359,6 +393,8 @@ namespace FarHorizon.Reservations.MasterServices
                         oAccomRoomData[i].ExtraBeds = Convert.ToInt32(ds.Tables[0].Rows[i][5]);
                         oAccomRoomData[i].No_of_Beds = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
                         oAccomRoomData[i].Status = Convert.ToBoolean(ds.Tables[0].Rows[i][6]);
+                        oAccomRoomData[i].activestatus = Convert.ToString(ds.Tables[0].Rows[i][7]);
+                        oAccomRoomData[i].roomcategoryid = Convert.ToInt32(ds.Tables[0].Rows[i][8]);
                     }
                 }
             }

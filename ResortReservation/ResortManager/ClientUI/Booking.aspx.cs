@@ -16,27 +16,42 @@ using System.Configuration;
 using System.Data.SqlClient;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using System.Text;
+using FarHorizon.Reservations.DataBaseManager;
+using FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine;
+using NewControls;
+
 
 public partial class ClientUI_Booking : ClientBasePage
 {
     BALHotelBooking blht = new BALHotelBooking();
     DALHotelBooking dlht = new DALHotelBooking();
-
+    DALOpenDates opndal = new DALOpenDates();
     BALBooking blsr = new BALBooking();
     DALBooking dlsr = new DALBooking();
+    BALPackageMaster bpm = new BALPackageMaster();
+    DALPackageMaster dpm = new DALPackageMaster();
+    DALAgentPayment dagent = new DALAgentPayment();
     DataTable Returndt;
     DataView dv;
     double total = 0;
-
+    decimal paid = 0;
     AccomTypeDTO[] oAccomTypeData;
     int iBookingId = 0;
     Table tblMaster = null;
+    BALAgentPayment blAgentpayment = new BALAgentPayment();
+    DALAgentPayment dlAgentpayment = new DALAgentPayment();
+    int GetQueryResponse = 0;
+    DataTable dtGetReturenedData;
 
+    BALLinks blLinks = new BALLinks();
+    DALLinks dlLinks = new DALLinks();
+    DataTable dtGetReturnedData;
     int totalEventHandlersAdded = 0;
     int eventCounter = 0;
 
     List<AddRoomEventingTracker> addRoomEventingTrackers;
-
+    DatabaseManager oDB;
     #region Event handlers
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -56,7 +71,7 @@ public partial class ClientUI_Booking : ClientBasePage
         #region Adding Attributes
         AddAttributesToControls();
         #endregion Adding Attributes
-
+        SetButtonsState();
         #region Not Postback
         if (!IsPostBack)
         {
@@ -66,7 +81,7 @@ public partial class ClientUI_Booking : ClientBasePage
             FillAgents();
             SessionServices.Booking_BookingId = -1; ;
             btnReset.Visible = true;
-
+            getlocalagent();
             #region If Existing Booking
             if (iBookingId > 0)
             {
@@ -83,16 +98,16 @@ public partial class ClientUI_Booking : ClientBasePage
 
                 if (Convert.ToBoolean(hdnchartered.Value) == true)
                 {
-                    PrepareRoomChartpgload(sd, ed, iAccomId);
+                    PrepareRoomChartpgload(sd, ed.AddHours(12).AddMinutes(60).AddSeconds(60), iAccomId);
                 }
                 else
                 {
-                    PrepareRoomChart(sd, ed, iAccomId);
+                    PrepareRoomChart(sd, ed.AddHours(12).AddMinutes(60).AddSeconds(60), iAccomId);
                 }
 
 
                 #region Buttons State when Existing Booking
-                SetButtonsState();
+
 
                 #endregion Buttons State when Existing Booking
             }
@@ -121,7 +136,24 @@ public partial class ClientUI_Booking : ClientBasePage
                     txtStartDate.Text = "";
                     txtEndDate.Text = "";
                 }
+                if (ddlAccomType.SelectedValue == "8" || ddlAccomType.SelectedValue == "0")
+                {
 
+                    // Out.Visible = false;
+                    Out.Style.Add("display", "none");
+                    ddlpackage.Visible = true;
+                    lP.Visible = true;
+                    lblPackages.Visible = true;
+                }
+                else
+                {
+
+                    // Out.Visible = true;
+                    Out.Style.Add("display", "true");
+                    ddlpackage.Visible = false;
+                    lP.Visible = false;
+                    lblPackages.Visible = false;
+                }
                 #region Button State When New Booking
                 btnBookTour.Visible = true;
                 btnBookTour.Enabled = true;
@@ -134,8 +166,30 @@ public partial class ClientUI_Booking : ClientBasePage
 
                 btnReset.Visible = true;
                 btnReset.Enabled = true;
+
                 #endregion Button State When New Booking
 
+            }
+            else
+            {
+                if (ddlAccomType.SelectedValue == "8")
+                {
+
+                    // Out.Visible = false;
+                    Out.Style.Add("display", "none");
+                    ddlpackage.Visible = true;
+                    lP.Visible = true;
+                    lblPackages.Visible = true;
+                }
+                else
+                {
+
+                    // Out.Visible = true;
+                    Out.Style.Add("display", "true");
+                    ddlpackage.Visible = false;
+                    lP.Visible = false;
+                    lblPackages.Visible = false;
+                }
             }
             #endregion
         }
@@ -192,8 +246,28 @@ public partial class ClientUI_Booking : ClientBasePage
                 //}
                 //else
                 //{
-                PrepareRoomChart();
+               
+                    PrepareRoomChart();
+                
                 //}
+            }
+            if (ddlAccomType.SelectedValue == "8" || ddlAccomType.SelectedValue == "0")
+            {
+                //  txtEndDate.Visible = false;
+                // Out.Visible = false;
+                Out.Style.Add("display", "none");
+                ddlpackage.Visible = true;
+                lP.Visible = true;
+                lblPackages.Visible = true;
+            }
+            else
+            {
+                //txtEndDate.Visible = true;
+                //Out.Visible = true;
+                Out.Style.Add("display", "true");
+                ddlpackage.Visible = false;
+                lP.Visible = false;
+                lblPackages.Visible = false;
             }
         }
         else { totalEventHandlersAdded = 0; }
@@ -225,17 +299,30 @@ public partial class ClientUI_Booking : ClientBasePage
             }
         }
         SendAccomodationSeasonDetailtoJS();
-    }
 
+    }
+    private decimal getcommission(int accomtype, int accomname, decimal paid)
+    {
+        decimal commission = 0;
+        DataTable dt = dagent.selectbyaccom(accomtype, accomname);
+        if (dt != null && dt.Rows.Count > 0)
+        {
+            commission = Convert.ToDecimal(dt.Rows[0]["Commision"].ToString());
+            commission = (paid * commission) / 100;
+        }
+        return commission;
+    }
     public void bindRoomRatesCruise(int totalpax)
     {
         try
         {
             ViewState["Rrate"] = null;
-            blsr.AgentId = Convert.ToInt32(ddlAgent.SelectedValue);
+            blsr.AgentId = Convert.ToInt32(ddlAgentType.SelectedValue);
+            blsr.AgentIdRef = Convert.ToInt32(ddlAgent.SelectedValue);
 
             blsr.action = "RoomRates";
-            blsr.AgentId = Convert.ToInt32(ddlAgent.SelectedValue);
+            blsr.AgentId = Convert.ToInt32(ddlAgentType.SelectedValue);
+            blsr.AgentIdRef = Convert.ToInt32(ddlAgent.SelectedValue);
 
 
 
@@ -385,31 +472,62 @@ public partial class ClientUI_Booking : ClientBasePage
 
     protected void btnGetAvailableRooms_Click(object sender, EventArgs e)
     {
-        gdvRatesCruise.DataSource = null;
-        gdvRatesHotel.DataSource = null;
-        gdvRatesCruise.DataBind();
-        gdvRatesHotel.DataBind();
-        checkwaitlisted();
-        DateTime sd, ed;
-        int iAccomodationId;
-        DateTime.TryParse(txtStartDate.Text, out sd);
-        DateTime.TryParse(txtEndDate.Text, out ed);
-        int.TryParse(ddlAccomName.SelectedValue.ToString(), out iAccomodationId);
-        RemoveRoomObjectFromSession();
-        PrepareRoomChart(sd, ed, iAccomodationId);
+        if (ddlpackage.SelectedIndex > 0)
+        {
+            gdvRatesCruise.DataSource = null;
+            gdvRatesHotel.DataSource = null;
+            gdvRatesCruise.DataBind();
+            gdvRatesHotel.DataBind();
+            checkwaitlisted();
+            DateTime sd, ed;
+            int iAccomodationId;
+            DateTime.TryParse(txtStartDate.Text, out sd);
+            DateTime.TryParse(txtEndDate.Text, out ed);
+            int.TryParse(ddlAccomName.SelectedValue.ToString(), out iAccomodationId);
+            RemoveRoomObjectFromSession();
+            PrepareRoomChart(sd, ed, iAccomodationId);
+        }
+        else if (ddlAccomName.SelectedValue != "7")
+        {
+            gdvRatesCruise.DataSource = null;
+            gdvRatesHotel.DataSource = null;
+            gdvRatesCruise.DataBind();
+            gdvRatesHotel.DataBind();
+            checkwaitlisted();
+            DateTime sd, ed;
+            int iAccomodationId;
+            DateTime.TryParse(txtStartDate.Text, out sd);
+            DateTime.TryParse(txtEndDate.Text, out ed);
+            int.TryParse(ddlAccomName.SelectedValue.ToString(), out iAccomodationId);
+            RemoveRoomObjectFromSession();
+            PrepareRoomChart(sd, ed, iAccomodationId);
 
+            DateTime StartDate = DateTime.MinValue;
+            StartDate = Convert.ToDateTime(txtStartDate.Text);
+            DateTime EndDate = DateTime.MinValue;
+            EndDate = Convert.ToDateTime(txtEndDate.Text);
+            String Diff = (EndDate - StartDate).TotalDays.ToString();
+            txtNoOfNights.Text = Diff;
+
+
+        }
     }
 
     protected void btnBookTour_Click(object sender, EventArgs e)
     {
-        if (GetRoomObjectFromSession() == null)
-        {
-            string msg = "Please click on 'Get Available Rooms' to get the current room status.";
-            lblErrorMsg.Text = msg;
-            base.DisplayAlert(msg);
-            return;
-        }
+
+        //if (GetRoomObjectFromSession() == null)
+        //{
+        //    string msg = "Please click on 'Get Available Rooms' to get the current room status.";
+        //    lblErrorMsg.Text = msg;
+        //    base.DisplayAlert(msg);
+        //    return;
+        //}
+
+        //dont need this
         SaveBooking();
+
+
     }
     protected void btnReset_Click(object sender, EventArgs e)
     {
@@ -441,6 +559,7 @@ public partial class ClientUI_Booking : ClientBasePage
     }
     protected void ddlAccomType_SelectedIndexChanged(object sender, EventArgs e)
     {
+
         FillAccomodations(Convert.ToInt32(ddlAccomType.SelectedValue));
     }
     #endregion Event handlers
@@ -468,7 +587,21 @@ public partial class ClientUI_Booking : ClientBasePage
         txtNoOfNights.Attributes.Add("onkeydown", "return disableInput()");
         txtBookingStatus.Attributes.Add("onkeydown", "return disableInput()");
     }
+    private void getlocalagent()
+    {
+        DataTable dt = dlAgentpayment.getlocalagent();
+        if (dt != null && dt.Rows.Count > 0)
+        {
+            ddlAgentType.Items.Clear();
+            ddlAgentType.DataSource = dt;
 
+            ddlAgentType.DataTextField = "AgentName";
+            ddlAgentType.DataValueField = "AgentId";
+            ddlAgentType.DataBind();
+            ddlAgentType.Items.Insert(0, "Select Main Agent");
+
+        }
+    }
     private void SetAccomodationTypeDetails()
     {
         //Filling the Object which contains the Accomodation type and also all the respective accomodations
@@ -534,19 +667,23 @@ public partial class ClientUI_Booking : ClientBasePage
 
     private void FillAgents()
     {
-        AgentMaster oAgentMaster = new AgentMaster();
-        AgentDTO[] oAgentData = oAgentMaster.GetData();
-        ListItemCollection li = new ListItemCollection();
-        ListItem l = new ListItem("Choose Agent", "0");
-        ddlAgent.Items.Insert(0, l);
-        if (oAgentData != null)
+        try
         {
-            for (int i = 0; i < oAgentData.Length; i++)
+            AgentMaster oAgentMaster = new AgentMaster();
+            AgentDTO[] oAgentData = oAgentMaster.GetData();
+            ListItemCollection li = new ListItemCollection();
+            ListItem l = new ListItem("Select Ref Agent", "0");
+            ddlAgent.Items.Insert(0, l);
+            if (oAgentData != null)
             {
-                l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
-                ddlAgent.Items.Insert(i + 1, l);
+                for (int i = 0; i < oAgentData.Length; i++)
+                {
+                    l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
+                    ddlAgent.Items.Insert(i + 1, l);
+                }
             }
         }
+        catch { }
     }
 
     private void FillAccomodationTypes()
@@ -623,6 +760,7 @@ public partial class ClientUI_Booking : ClientBasePage
         BookingDTO oBookingData = null;
         DateTime dt;
         ListItem li = null;
+        ListItem liref = null;
         if (BookingId != 0)
             oBookingData = oBookingManager.GetBookingDetails(BookingId);
         hdnchartered.Value = oBookingData.Chartered != null ? oBookingData.Chartered.ToString() : "False";
@@ -648,8 +786,18 @@ public partial class ClientUI_Booking : ClientBasePage
             FillAccomodations(Convert.ToInt32(ddlAccomType.SelectedValue));
             ddlAccomName.SelectedValue = oBookingData.AccomodationId.ToString();
             txtNoOfPersons.Text = oBookingData.NoOfPersons.ToString();
-            rdProposedBookingYes.Checked = oBookingData.ProposedBooking;
+            Session["getpackegforedit"] = oBookingData.packagid.ToString();
+            loadpackage();
+            ddlpackage.SelectedValue = oBookingData.packagid.ToString();
+            {
+                rdProposedBookingYes.Checked = oBookingData.ProposedBooking;
+            }
+
+
             rdProposedBookingNo.Checked = !oBookingData.ProposedBooking;
+
+
+
             SessionServices.Booking_TotalNights = oBookingData.NoOfNights;
 
             if (oBookingData.BookingStatusId == 1)
@@ -670,9 +818,14 @@ public partial class ClientUI_Booking : ClientBasePage
                 txtBookingStatus.ForeColor = System.Drawing.Color.Orange;
             }
 
-            li = ddlAgent.Items.FindByValue(oBookingData.AgentId.ToString());
+            li = ddlAgentType.Items.FindByValue(oBookingData.AgentId.ToString());
+
+            liref = ddlAgent.Items.FindByValue(oBookingData.AgentIdRef.ToString());
+
             if (li != null)
-                ddlAgent.SelectedIndex = ddlAgent.Items.IndexOf(li);
+                ddlAgentType.SelectedIndex = ddlAgentType.Items.IndexOf(li);
+            if (liref != null)
+                ddlAgent.SelectedIndex = ddlAgent.Items.IndexOf(liref);
             btnBookTour.Text = "Update Tour";
         }
         else
@@ -715,7 +868,7 @@ public partial class ClientUI_Booking : ClientBasePage
         txtNoOfPersons.Text = string.Empty;
         ddlAgent.SelectedIndex = 0;
         rdProposedBookingYes.Checked = false;
-        rdProposedBookingNo.Checked = true;
+        //rdProposedBookingNo.Checked = true;
     }
 
     private void PrepareRoomChart()
@@ -782,26 +935,29 @@ public partial class ClientUI_Booking : ClientBasePage
 
     private void checkwaitlisted()
     {
-
-        DateTime sd;
-        DateTime ed;
-        int iAccomId = 0;
-        DateTime.TryParse(txtStartDate.Text, out sd);
-        DateTime.TryParse(txtEndDate.Text, out ed);
-        if (ddlAccomName.SelectedItem != null)
-            int.TryParse(ddlAccomName.SelectedItem.Value, out iAccomId);
-        BookedRooms[] oBookedRooms;
-        oBookedRooms = GetAllRooms(sd, ed, iAccomId);
-        for (int k = 0; k < oBookedRooms.Length; k++)
+        try
         {
-            if (oBookedRooms[k].RoomStatus == Constants.WAITLISTED || oBookedRooms[k].RoomStatus == Constants.BOOKED)
+            DateTime sd;
+            DateTime ed;
+            int iAccomId = 0;
+            DateTime.TryParse(txtStartDate.Text, out sd);
+            DateTime.TryParse(txtEndDate.Text, out ed);
+            if (ddlAccomName.SelectedItem != null)
+                int.TryParse(ddlAccomName.SelectedItem.Value, out iAccomId);
+            BookedRooms[] oBookedRooms;
+            oBookedRooms = GetAllRooms(sd, ed, iAccomId);
+            for (int k = 0; k < oBookedRooms.Length; k++)
             {
-                ViewState["atleastonewaitlisted"] = true;
-                break;
-            }
-            ViewState["atleastonewaitlisted"] = false;
+                if (oBookedRooms[k].RoomStatus == Constants.WAITLISTED || oBookedRooms[k].RoomStatus == Constants.BOOKED)
+                {
+                    ViewState["atleastonewaitlisted"] = true;
+                    break;
+                }
+                ViewState["atleastonewaitlisted"] = false;
 
+            }
         }
+        catch { }
     }
 
     private void PrepareRoomChart(DateTime dtStartDate, DateTime dtEndDate, int iAccomID, bool PrepareFromDB)
@@ -1282,6 +1438,7 @@ public partial class ClientUI_Booking : ClientBasePage
         #endregion
         if (rdProposedBookingYes.Checked)
         {
+            SessionServices.Booking_Propsed = "Proposed Booking";
             btnBookTour.Visible = true;
             btnBookTour.Enabled = true;
 
@@ -1765,6 +1922,7 @@ public partial class ClientUI_Booking : ClientBasePage
         if (ctrl != null)
         {
             lbl = (Label)ctrl;
+            // lbl.Text = "Total(Including Tax @9%): " + Pax.ToString();
             lbl.Text = "Total: " + Pax.ToString();
         }
     }
@@ -1860,7 +2018,7 @@ public partial class ClientUI_Booking : ClientBasePage
             ddl = (DropDownList)ctrl;
             int.TryParse(ddl.SelectedItem.Text, out iRoomsToBeBooked);
 
-            if (addRoomEventingTrackers.Exists(t => string.Compare(t.ControlName, sCtrlName, StringComparison.OrdinalIgnoreCase) == 0 && (t.Value == iRoomsToBeBooked)))            
+            if (addRoomEventingTrackers.Exists(t => string.Compare(t.ControlName, sCtrlName, StringComparison.OrdinalIgnoreCase) == 0 && (t.Value == iRoomsToBeBooked)))
             {
                 if (eventCounter == totalEventHandlersAdded)
                 {
@@ -1947,7 +2105,20 @@ public partial class ClientUI_Booking : ClientBasePage
                     }
                     else if (oBR[i].RoomStatus.CompareTo(Constants.Maintainence) == 0)
                     {
-                        intmnt++;
+                        if (chkChartered.Checked)
+                        {
+                            if (slRoomsAvailable == null)
+                                slRoomsAvailable = new SortedList();
+                            if (!slRoomsAvailable.ContainsValue(scntrlId))
+                            {
+                                slRoomsAvailable.Add(i, scntrlId);
+                            }
+                        }
+                        else
+                        {
+                            intmnt++;
+                        }
+
                     }
 
                     #endregion
@@ -2053,8 +2224,18 @@ public partial class ClientUI_Booking : ClientBasePage
 
                         if (oBR[index].PaxStaying > 0)
                             iRPax = iRPax + oBR[index].PaxStaying;
+                       
                         else
                             iRPax = iRPax + oBR[index].DefaultNoOfBeds;
+
+
+                        if (oBR[index].PaxStaying <= 0)
+                        {
+                            oBR[index].PaxStaying = oBR[index].DefaultNoOfBeds;
+                        }
+
+
+
 
 
 
@@ -2070,7 +2251,7 @@ public partial class ClientUI_Booking : ClientBasePage
                             }
                             else
                             {
-                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), iRPax, Convert.ToInt32(ddlAgent.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), iChkSelected, oBR[index].RoomTypeId);
+                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), iRPax, Convert.ToInt32(ddlAgentType.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), iChkSelected, oBR[index].RoomTypeId);
                             }
 
                             if (index > 0)
@@ -2086,11 +2267,22 @@ public partial class ClientUI_Booking : ClientBasePage
 
                                 total = 0;
                             }
+                            //if (oBR[index].PaxStaying > 0)
+                            //{
                             oBR[index].Price = CalcaulateRates(oBR[index].RoomCategoryId, oBR[index].RoomTypeId, oBR[index].PaxStaying);
+                            //}
+                            //else
+                            //{
+                            // oBR[index].Price = CalcaulateRates(oBR[index].RoomCategoryId, oBR[index].RoomTypeId, iRPax);
+                            //}
+
                             oBR[index].action = "AddPriceDetailsToo";
                             oBR[index].PaymentId = "DR" + DateTime.Now.ToString("MMddhhmmssfff");
 
+                            itotalAmt = itotalAmt + oBR[index].Price;
 
+
+                            txtTotalAmount.Text = itotalAmt.ToString();
                             //   itotalAmt = itotalAmt + oBR[index].Price;
 
                         }
@@ -2514,7 +2706,7 @@ public partial class ClientUI_Booking : ClientBasePage
     {
         blsr.action = "AddPriceDetailsToo";
         blsr._Amt = amt;
-        blsr.PaymentId =  Session["BookingPayId"] == null ? Session["BookingPayId"].ToString() : string.Empty;
+        blsr.PaymentId = Session["BookingPayId"] == null ? Session["BookingPayId"].ToString() : string.Empty;
         blsr._PaidAmount = Session["Paid"] != null ? Convert.ToDouble(Session["Paid"]) : 0;
         int GetQueryResponse = dlsr.AddRoomBookingDetails(blsr);
     }
@@ -2543,12 +2735,39 @@ public partial class ClientUI_Booking : ClientBasePage
             oRoomBookingInfo.BookingData.EndDate = Convert.ToDateTime(txtEndDate.Text.ToString());
             oRoomBookingInfo.BookingData.AccomodationTypeId = Convert.ToInt32(ddlAccomType.SelectedItem.Value.ToString());
             oRoomBookingInfo.BookingData.AccomodationId = Convert.ToInt32(ddlAccomName.SelectedItem.Value.ToString());
-            oRoomBookingInfo.BookingData.NoOfNights = Convert.ToInt32(txtNoOfNights.Text.ToString());
-            oRoomBookingInfo.BookingData.NoOfPersons = Convert.ToInt32(txtNoOfPersons.Text.ToString());
-            oRoomBookingInfo.BookingData.AgentId = Convert.ToInt32(ddlAgent.SelectedItem.Value.ToString());
+            if (ddlAgentType.SelectedIndex > 0)
+            {
+                oRoomBookingInfo.BookingData.AgentType = ddlAgent.SelectedValue.ToString();
+            }
+            else
+            {
+
+            }
+
+            try
+            {
+                oRoomBookingInfo.BookingData.NoOfNights = Convert.ToInt32(txtNoOfNights.Text.ToString());
+            }
+            catch
+            {
+                oRoomBookingInfo.BookingData.NoOfNights = 1;
+            }
+            try
+            {
+                oRoomBookingInfo.BookingData.NoOfPersons = Convert.ToInt32(txtNoOfPersons.Text.ToString());
+            }
+            catch
+            {
+                oRoomBookingInfo.BookingData.NoOfPersons = 1;
+            }
+
+            oRoomBookingInfo.BookingData.AgentId = Convert.ToInt32(ddlAgentType.SelectedItem.Value.ToString());
+            oRoomBookingInfo.BookingData.AgentIdRef = Convert.ToInt32(ddlAgent.SelectedItem.Value.ToString());
             oRoomBookingInfo.BookingData.BookingStatusId = 1; //If the room is in booked state and no rooms is in waitlist state.
             oRoomBookingInfo.BookingData.ProposedBooking = rdProposedBookingYes.Checked == true ? true : false;
             oRoomBookingInfo.BookingData.Chartered = chkChartered.Checked == true ? true : false;
+            oRoomBookingInfo.BookingData.packagid = ddlpackage.SelectedValue.ToString();
+
 
             objBookingMgr = new BookingServices();
             int iBRC = objBookingMgr.GetBookingReferenceCount(oRoomBookingInfo.BookingData);
@@ -2562,15 +2781,19 @@ public partial class ClientUI_Booking : ClientBasePage
 
             //oBookedRooms = GetFinalizedRooms(iBookingId, oRoomBookingInfo.BookingData.AccomodationId);
             GetFinalizedRooms(iBookingId, oRoomBookingInfo.BookingData.AccomodationId, out oBookedRooms, out oBookingWaitlistList);
+            for (int i = 0; i < oBookedRooms.Count; i++)
+            {
+                paid = paid + Convert.ToDecimal(oBookedRooms[i].Paid);
+            }
 
             //oBookingWaitListData = GetWaitlistedRooms(iBookingId, oRoomBookingInfo.BookingData.AccomodationId, out bRoomsAreWaitlisted); //ADDED THE OUT PARAMETER TO KNOW THE BOOKING STATUS
 
-            if (oBookedRooms.Count == 0 && oBookingWaitlistList.Count == 0)
-            {
-                base.DisplayAlert("Please choose rooms to be booked.");
-                return;
-            }
-
+            //if (oBookedRooms.Count == 0 && oBookingWaitlistList.Count == 0)
+            //{
+            //    base.DisplayAlert("Please choose rooms to be booked.");
+            //    return;
+            //}
+            oRoomBookingInfo.BookingData.agentcommission = getcommission(Convert.ToInt32(ddlAccomType.SelectedValue.ToString()), Convert.ToInt32(ddlAccomName.SelectedValue.ToString()), paid);
             if (oBookingWaitlistList.Count > 0)
                 oRoomBookingInfo.BookingData.BookingStatusId = 3;
 
@@ -2649,11 +2872,101 @@ public partial class ClientUI_Booking : ClientBasePage
 
             if (bRoomsAreWaitlisted == true)
                 Response.Redirect("afterBookingactions.aspx?bid=" + iBookingId + "&bstatus=waitlisted" + updated);
+            else if (rdProposedBookingYes.Checked == true)
+                Response.Redirect("afterBookingactions.aspx?bid=" + iBookingId + "&bstatus=Proposed Booking" + updated);
             else
                 Response.Redirect("afterBookingactions.aspx?bid=" + iBookingId + "&bstatus=booked" + updated);
         }
     }
+    public bool AddBooking(BookingDTO oBookingData, BookedRooms[] oBookedRooms, BookingWaitListDTO[] oBookingWaitListData, out int BookingId)
+    {
+        int iBKID = 0;
+        bool bActionCompleted = false;
 
+
+        bActionCompleted = AddBooking(oBookingData, out iBKID);
+        if (bActionCompleted == true)
+        {
+            if (oBookedRooms != null)
+            {
+                for (int i = 0; i < oBookedRooms.Length; i++)
+                {
+                    if (oBookedRooms[i] != null)
+                        oBookedRooms[i].BookingId = iBKID;
+                }
+            }
+
+            if (oBookingWaitListData != null)
+            {
+                for (int i = 0; i < oBookingWaitListData.Length; i++)
+                {
+                    if (oBookingWaitListData[i] != null)
+                        oBookingWaitListData[i].BookingId = iBKID;
+                }
+            }
+            if (oBookedRooms != null)
+            {
+
+            }
+            if (bActionCompleted == true)
+            {
+                if (oBookingWaitListData != null)
+                {
+
+                }
+            }
+        }
+        else
+        {
+            iBKID = 0;
+        }
+        BookingId = iBKID;
+        return bActionCompleted;
+
+    }
+
+    private bool AddBooking(BookingDTO objBooking, out int BookingId)
+    {
+        int iBookingID;
+
+        try
+        {
+            if (oDB == null)
+                oDB = new DatabaseManager();
+            string sProcName = "up_Ins_Booking";
+            oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sBookingRef", DbType.String, objBooking.BookingReference.Trim());
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@dtStartDate", DbType.DateTime, objBooking.StartDate);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@dtEndDate", DbType.DateTime, objBooking.EndDate);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomTypeId", DbType.Int32, objBooking.AccomodationTypeId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, objBooking.AccomodationId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAgentId", DbType.Int32, objBooking.AgentId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNights", DbType.Int32, objBooking.NoOfNights);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iPersons", DbType.Int32, objBooking.NoOfPersons);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingStatusId", DbType.Int32, objBooking.BookingStatusId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@SeriesId", DbType.Int32, objBooking.SeriesId);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@proposedBooking", DbType.Boolean, objBooking.ProposedBooking);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@chartered", DbType.Boolean, objBooking.Chartered);
+
+
+            iBookingID = Convert.ToInt32(oDB.ExecuteScalar(oDB.DbCmd));
+            BookingId = iBookingID;
+        }
+        catch (Exception exp)
+        {
+            objBooking = null;
+            oDB = null;
+            GF.LogError("clsBookingHandler.AddBooking", exp.Message);
+            BookingId = 0;
+            return false;
+        }
+        finally
+        {
+            objBooking = null;
+            oDB = null;
+        }
+        return true;
+    }
     private void DeleteBooking()
     {
         if (base.ValidateIfCommandAllowed(Request.Url.ToString(), ENums.PageCommand.Delete))
@@ -2809,13 +3122,34 @@ public partial class ClientUI_Booking : ClientBasePage
                         oFinallyBookedRooms.PaxStaying = oAllRooms[j].PaxStaying != 0 ? oAllRooms[j].PaxStaying : oAllRooms[j].DefaultNoOfBeds;
                         oFinallyBookedRooms.ConvertTo_Double_Twin = oAllRooms[j].ConvertTo_Double_Twin;
                         oFinallyBookedRooms.RoomStatus = oAllRooms[j].RoomStatus;
+                        oFinallyBookedRooms.RoomCategoryId = oAllRooms[j].RoomCategoryId;
                         try
                         {
-                            oFinallyBookedRooms.Amount = Convert.ToDouble(txtTotalAmount.Text.Trim());
-                            oFinallyBookedRooms.PaymentId = oAllRooms[j].PaymentId;
+                            if (txtCharterrates.Text != "")
+                            {
+                                oFinallyBookedRooms.Amount = Convert.ToDouble(txtCharterrates.Text.Trim());
+                            }
+                            else
+                            {
+                                oFinallyBookedRooms.Amount = Convert.ToDouble(txtTotalAmount.Text.Trim());
+                            }
+                            if (oAllRooms[j].PaymentId != null)
+                            {
+                                oFinallyBookedRooms.PaymentId = oAllRooms[j].PaymentId;
+                            }
+                            else
+                            {
+                                oFinallyBookedRooms.PaymentId = "DR" + DateTime.Now.ToString("MMddhhmmssfff");
+                            }
+
                             oFinallyBookedRooms.Paid = oAllRooms[j].Paid;
                             oFinallyBookedRooms.action = oAllRooms[j].action;
                             oFinallyBookedRooms.Price = oAllRooms[j].Price;
+                            oFinallyBookedRooms.taxableprice = 0;
+                            oFinallyBookedRooms.tax = 0;
+                            oFinallyBookedRooms.taxamount = 0;
+                            oFinallyBookedRooms.Discount = 0;
+                            oFinallyBookedRooms.DiscountPrice = 0;
                         }
                         catch
                         {
@@ -2834,6 +3168,7 @@ public partial class ClientUI_Booking : ClientBasePage
                         {
                             oFinallyWaitListed = (BookingWaitListDTO)slWaitListed[Key];
                             oFinallyWaitListed.No_Of_RoomsWaitListed++;
+                            //oFinallyWaitListed.paxstying = oAllRooms[j].PaxStaying != 0 ? oAllRooms[j].PaxStaying : oAllRooms[j].DefaultNoOfBeds;
                         }
                         else
                         {
@@ -2843,6 +3178,7 @@ public partial class ClientUI_Booking : ClientBasePage
                             oFinallyWaitListed.RoomCategoryId = oAllRooms[j].RoomCategoryId;
                             oFinallyWaitListed.RoomTypeId = oAllRooms[j].RoomTypeId;
                             oFinallyWaitListed.No_Of_RoomsWaitListed = 1;
+                            oFinallyWaitListed.paxstying = oAllRooms[j].PaxStaying;
                             slWaitListed.Add(Key, oFinallyWaitListed);
                             break;
                         }
@@ -2961,7 +3297,8 @@ public partial class ClientUI_Booking : ClientBasePage
                     }
                     else if (TaxStatus == "Not Applied")
                     {
-                        arr = dv.ToTable().Rows[0][2].ToString().Split(' ');
+                        // arr = dv.ToTable().Rows[0][2].ToString().Split(' ');
+                        arr = dv.ToTable().Rows[0][5].ToString().Split(' ');
                     }
 
                 }
@@ -2979,15 +3316,16 @@ public partial class ClientUI_Booking : ClientBasePage
                     }
                     else if (TaxStatus == "Not Applied")
                     {
-                        arr = dv.ToTable().Rows[0][1].ToString().Split(' ');
+                        // arr = dv.ToTable().Rows[0][1].ToString().Split(' ');
+                        arr = dv.ToTable().Rows[0][4].ToString().Split(' ');
                     }
                 }
 
-                total = Convert.ToDouble(arr[1]);
+                total = Convert.ToDouble(arr[1]) * Convert.ToDouble(pax);
             }
             return total;
         }
-        catch
+        catch (Exception ex)
         {
             return 0;
         }
@@ -3111,11 +3449,11 @@ public partial class ClientUI_Booking : ClientBasePage
                         {
                             if (oAllRooms[i].ConvertTo_Double_Twin == true)
                             {
-                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), oRCTRSCDTO.TotalPax, Convert.ToInt32(ddlAgent.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), oRCTRSCDTO.Booked, 2);
+                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), oRCTRSCDTO.TotalPax, Convert.ToInt32(ddlAgentType.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), oRCTRSCDTO.Booked, 2);
                             }
                             else
                             {
-                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), oRCTRSCDTO.TotalPax, Convert.ToInt32(ddlAgent.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), oRCTRSCDTO.Booked, oAllRooms[i].RoomTypeId);
+                                bindRoomRates(Convert.ToInt32(ddlAccomName.SelectedValue), oRCTRSCDTO.TotalPax, Convert.ToInt32(ddlAgentType.SelectedValue), Convert.ToDateTime(txtStartDate.Text.Trim()), Convert.ToDateTime(txtEndDate.Text.Trim()), oRCTRSCDTO.Booked, oAllRooms[i].RoomTypeId);
                             }
                         }
 
@@ -3162,6 +3500,16 @@ public partial class ClientUI_Booking : ClientBasePage
                     if (!slBookedWithThisId.ContainsKey(oAllRooms[i].RoomNo))
                         slBookedWithThisId.Add(oAllRooms[i].RoomNo, null);
                     oRCTRSCDTO.WaitListed = oRCTRSCDTO.WaitListed + 1;
+                    if (oAllRooms[i].PaxStaying <= 0)
+                    {
+                        oAllRooms[i].PaxStaying = oAllRooms[i].DefaultNoOfBeds;
+                    }
+
+
+
+
+
+                    oRCTRSCDTO.TotalPax = oRCTRSCDTO.TotalPax + oAllRooms[i].PaxStaying;
                 }
                 else if (oAllRooms[i].RoomStatus == Constants.AVAILABLE) //This shall not be working
                 {
@@ -3215,6 +3563,8 @@ public partial class ClientUI_Booking : ClientBasePage
                         {
                             oAllRooms[i].PaxStaying = oAllRooms[i].DefaultNoOfBeds;
                         }
+
+
 
                         oRCTRSCDTO.Booked = oRCTRSCDTO.Booked + 1;
                         oRCTRSCDTO.TotalPax = oRCTRSCDTO.TotalPax + oAllRooms[i].PaxStaying;
@@ -3433,13 +3783,23 @@ public partial class ClientUI_Booking : ClientBasePage
             for (int i = 0; i < slCatTypeRooms.Count; i++)
             {
                 oRCTRSCDTO = (RoomCategoryTypeRoomStatusCountDTO)slCatTypeRooms.GetByIndex(i);
-                SetTotalRooms(ParentControl, oRCTRSCDTO.Booked, 0, oRCTRSCDTO.WaitListed, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType, (oRCTRSCDTO.TotalRooms - oRCTRSCDTO.Maintained));
+
+                if (chkChartered.Checked)
+                {
+                    SetTotalRooms(ParentControl, oRCTRSCDTO.Booked, 0, oRCTRSCDTO.WaitListed, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType, oRCTRSCDTO.TotalRooms);
+                }
+                else
+                {
+                    SetTotalRooms(ParentControl, oRCTRSCDTO.Booked, 0, oRCTRSCDTO.WaitListed, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType, (oRCTRSCDTO.TotalRooms - oRCTRSCDTO.Maintained));
+                }
+
                 SetRoomsWaitlistedLabel(ParentControl, oRCTRSCDTO.WaitListed, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType);
                 SetTotalRoomsBookedLabel(ParentControl, oRCTRSCDTO.Booked, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType);
                 SetRoomsPaxLabel(ParentControl, oRCTRSCDTO.TotalPax, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType);
                 iTotalPax = iTotalPax + oRCTRSCDTO.TotalPax;
 
-                // CalcaulateRates(oRCTRSCDTO.RoomCategoryId, oRCTRSCDTO.RoomTypeId);
+                // CalcaulateRates(oRCTRSCDTO.RoomCategoryId, oRCTRSCDTO.RoomTypeId, oRCTRSCDTO.TotalPax);
+
 
                 SetRoomsTotalPriceLabel(ParentControl, oRCTRSCDTO.TotalPriceCategory, oRCTRSCDTO.RoomCategory, oRCTRSCDTO.RoomType);
             }
@@ -3448,6 +3808,149 @@ public partial class ClientUI_Booking : ClientBasePage
         #endregion
     }
     #endregion Helper Methods
+    private void loadpackage()
+    {
+        if (txtStartDate.Text != "" && txtEndDate.Text != "")
+        {
+            TimeSpan period = Convert.ToDateTime(txtEndDate.Text) - Convert.ToDateTime(txtStartDate.Text);
+            int days = period.Days;
+            bpm._Action = "Getpackagebydates";
+            //bpm._NoOfNights = days;
+            bpm.Checkin = Convert.ToDateTime(txtStartDate.Text).Date;
+            bpm.checkout = Convert.ToDateTime(txtEndDate.Text).Date;
+            DataTable dt = dpm.Getpackagebydates(bpm);
+            ddlpackage.Items.Clear();
+
+            ddlpackage.DataSource = dt;
+            ddlpackage.DataValueField = "packageId";
+            ddlpackage.DataTextField = "PackageName";
+            ddlpackage.DataBind();
+            ddlpackage.Items.Insert(0, "Select Package");
+            if (Session["getpackegforedit"] != null)
+            {
+                ddlpackage.SelectedValue = Session["getpackegforedit"].ToString();
+                Session["getpackegforedit"] = null;
+            }
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < ddlpackage.Items.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        ListItem item = ddlpackage.Items[i];
+                        item.Attributes["NooOfNights"] = "0";
+                    }
+                    else
+                    {
+                        ListItem item = ddlpackage.Items[i];
+                        item.Attributes["NooOfNights"] = dt.Rows[i - 1]["NoOfNights"].ToString();
+                    }
+                }
+            }
+            StringBuilder builder = new StringBuilder();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    builder.Append(dt.Rows[i]["PackageName"].ToString()).Append("<br/>");
+                }
+
+
+            }
+            lblPackages.Text = builder.ToString();
+        }
+    }
+    protected void ddlAccomName_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        //...
+        if (txtStartDate.Text != "" && txtEndDate.Text != "")
+        {
+            TimeSpan period = Convert.ToDateTime(txtEndDate.Text) - Convert.ToDateTime(txtStartDate.Text);
+            int days = period.Days;
+            bpm._Action = "Getpackagebydates";
+            //bpm._NoOfNights = days;
+            bpm.Checkin = Convert.ToDateTime(txtStartDate.Text).Date;
+            bpm.checkout = Convert.ToDateTime(txtEndDate.Text).Date;
+            DataTable dt = dpm.Getpackagebydates(bpm);
+            ddlpackage.Items.Clear();
+
+            ddlpackage.DataSource = dt;
+            ddlpackage.DataValueField = "packageId";
+            ddlpackage.DataTextField = "PackageName";
+            ddlpackage.DataBind();
+            ddlpackage.Items.Insert(0, "Select Package");
+
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < ddlpackage.Items.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        ListItem item = ddlpackage.Items[i];
+                        item.Attributes["NooOfNights"] = "0";
+                    }
+                    else
+                    {
+                        ListItem item = ddlpackage.Items[i];
+                        item.Attributes["NooOfNights"] = dt.Rows[i - 1]["NoOfNights"].ToString();
+                    }
+                }
+            }
+
+            StringBuilder builder = new StringBuilder();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    builder.Append(dt.Rows[i]["PackageName"].ToString()).Append("<br/>");
+                }
+
+
+            }
+            lblPackages.Text = builder.ToString();
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Check in and check out can not be blank')", true);
+            return;
+        }
+
+    }
+    protected void ddlPackage_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DateTime StartDate = DateTime.MinValue;
+        StartDate = Convert.ToDateTime(txtStartDate.Text);
+        txtNoOfNights.Text = ddlpackage.SelectedItem.Attributes["nooofnights"];
+        txtEndDate.Text = GF.GetDD_MMM_YYYY(StartDate.AddDays(Convert.ToDouble(txtNoOfNights.Text)), false);
+    }
+
+
+    protected void chkChartered_CheckedChanged(object sender, EventArgs e)
+    {
+        gdvRatesCruise.DataSource = null;
+        gdvRatesHotel.DataSource = null;
+        gdvRatesCruise.DataBind();
+        gdvRatesHotel.DataBind();
+        checkwaitlisted();
+        DateTime sd, ed;
+        int iAccomodationId;
+        DateTime.TryParse(txtStartDate.Text, out sd);
+        DateTime.TryParse(txtEndDate.Text, out ed);
+        int.TryParse(ddlAccomName.SelectedValue.ToString(), out iAccomodationId);
+        RemoveRoomObjectFromSession();
+        if (chkChartered.Checked == true)
+        {
+            PrepareRoomChartpgload(sd, ed, iAccomodationId, true);
+          //  PrepareRoomChart(sd, ed, iAccomodationId);
+        }
+        else
+        {
+        }
+    }
+
+
 }
 
 public class AddRoomEventingTracker

@@ -16,9 +16,14 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.DataBaseManager;
 
 public partial class MasterUI_AccomMaster : MasterBasePage
 {
+    DALBooking dal = new DALBooking();
+    BALBooking bal = new BALBooking();
     #region ControlsEvents
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -103,12 +108,27 @@ public partial class MasterUI_AccomMaster : MasterBasePage
     {
         //DateTime dt;
         int iAccomID = Convert.ToInt32(dgAccomodations.DataKeys[dgAccomodations.SelectedIndex]);
+        Session["accomid"] = iAccomID;
         hfId.Value = iAccomID.ToString();
         txtAccomName.Text = dgAccomodations.SelectedItem.Cells[1].Text.ToString().Trim();
         ddlAccomTypeId.SelectedValue = Convert.ToString(dgAccomodations.SelectedItem.Cells[2].Text).Trim();
         ddlRegion.SelectedValue = Convert.ToString(dgAccomodations.SelectedItem.Cells[4].Text).Trim();
         txtAccomInitial.Text = Convert.ToString(dgAccomodations.SelectedItem.Cells[6].Text).Trim();
-
+        txtAccomPolicyUrl.Text= Convert.ToString(dgAccomodations.SelectedItem.Cells[7].Text).Trim();
+        btnInactive.Visible = true;
+        bal.accomId = iAccomID;
+        DataTable dt = dal.getdetailsbyaccomid(bal);
+        if (dt != null && dt.Rows.Count > 0)
+        {
+            if (dt.Rows[0]["ActiveStatus"].ToString() == "")
+            {
+                btnInactive.Text = "Inactive";
+            }
+            if (dt.Rows[0]["ActiveStatus"].ToString() == "True")
+            {
+                btnInactive.Text = "Active";
+            }
+        }
         //dt = DateTime.MinValue;
         //DateTime.TryParse(dgAccomodations.SelectedItem.Cells[7].Text, out dt);
         //txtSeasonStartDate.Text = dt != DateTime.MinValue ? GF.Handle19000101(dt, false) : "";
@@ -179,7 +199,7 @@ public partial class MasterUI_AccomMaster : MasterBasePage
         if (!base.ValidateIfCommandAllowed(Request.Url.AbsoluteUri, ENums.PageCommand.Add))
             return;
 
-        if (!ValidateValues())
+        if (!ValidateValues("save"))
             return;
 
         AccomodationDTO oAccomData = new AccomodationDTO();
@@ -204,7 +224,7 @@ public partial class MasterUI_AccomMaster : MasterBasePage
         if (!base.ValidateIfCommandAllowed(Request.Url.AbsoluteUri, ENums.PageCommand.Update))
             return;
 
-        if (!ValidateValues())
+        if (!ValidateValues("update"))
             return;
 
         bool bActionCompleted;
@@ -278,11 +298,11 @@ public partial class MasterUI_AccomMaster : MasterBasePage
         oAccomMaster = null;
         oAccomData = null;
     }
-    private bool ValidateValues()
+    private bool ValidateValues(string type)
     {
         int Id = 0;
         int.TryParse(hfId.Value, out Id);
-        if (Id == 0)
+        if (Id == 0 && type.ToLower()!="save")
         {
             lblStatus.Text = "Please click on edit again.";
             return false;
@@ -305,13 +325,14 @@ public partial class MasterUI_AccomMaster : MasterBasePage
         oAccomData.AccomodationTypeId = Convert.ToInt32(ddlAccomTypeId.SelectedValue.ToString());
         oAccomData.RegionId = Convert.ToInt32(ddlRegion.SelectedValue.ToString());
         oAccomData.AccomInitial = txtAccomInitial.Text.ToString();
+        oAccomData.AccomPolicyUrl = txtAccomPolicyUrl.Text.ToString();
         return oAccomData;
     }
 
     private void RefreshGrid(int AccomodationTypeId, int RegionId)
     {
         AccomodationMaster oAccomMaster = new AccomodationMaster();
-        AccomodationDTO[] oAccomData = oAccomMaster.GetData(RegionId, AccomodationTypeId, 0);
+        AccomodationDTO[] oAccomData = oAccomMaster.GetData1(RegionId, AccomodationTypeId, 0);
         if (oAccomData != null)
         {
             if (oAccomData.Length > 0)
@@ -338,9 +359,75 @@ public partial class MasterUI_AccomMaster : MasterBasePage
     private void ClearControls()
     {
         txtAccomName.Text = "";
-        txtAccomInitial.Text = "";        
+        txtAccomInitial.Text = "";
+        txtAccomPolicyUrl.Text = "";
     }
 
     #endregion UserDefinedFuntions
 
+
+    protected void btnInactive_Click(object sender, EventArgs e)
+    {
+        AccomodationMaster oAccomMaster = new AccomodationMaster();
+        AccomodationDTO oAccomData = new AccomodationDTO();
+
+
+        int accomid = 0;
+        if (Session["accomid"] != null)
+        {
+            accomid = Convert.ToInt32(Session["accomid"].ToString());
+            oAccomData.AccomodationId = accomid;
+        }
+
+
+        if (btnInactive.Text == "Inactive")
+        {
+            bool n = updateStatus(oAccomData);
+            if (n == true)
+            {
+                lblStatus.Text = "Successfully Inctive";
+                lblStatus.ForeColor = System.Drawing.Color.Green; 
+                btnInactive.Text = "Active";
+            }
+        }
+        else
+        {
+            bool n = updateStatus(oAccomData);
+            if (n == true)
+            {
+                lblStatus.Text = "Successfully Active";
+                lblStatus.ForeColor = System.Drawing.Color.Green;
+                btnInactive.Text = "Inactive";
+            }
+        }
+
+        //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "if (!confirm('Do you want to continue?')) return false;", true);
+
+
+    }
+    public bool updateStatus(AccomodationDTO oAccomData)
+    {
+        string sProcName;
+        DatabaseManager oDB;
+        try
+        {
+            oDB = new DatabaseManager();
+
+            sProcName = "up_Upd_Activate";
+            oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, oAccomData.AccomodationId);
+            oDB.ExecuteNonQuery(oDB.DbCmd);
+        }
+        catch (Exception exp)
+        {
+            GF.LogError("clsAccomodationMaster.updateStatus", exp.Message.ToString());
+            oDB = null;
+            return false;
+        }
+        finally
+        {
+            oDB = null;
+        }
+        return true;
+    }
 }

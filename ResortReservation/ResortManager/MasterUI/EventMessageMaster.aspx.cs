@@ -15,6 +15,7 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 
 using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
+using FarHorizon.Reservations.DataBaseManager;
 
 public partial class MasterUI_EventMessageMaster : MasterBasePage
 {
@@ -123,6 +124,18 @@ public partial class MasterUI_EventMessageMaster : MasterBasePage
         bool bActionCompleted = false;
         EventMessageDTO oEventData = new EventMessageDTO();
         oEventData.EventName = txtEventName.Text.ToString();
+        oEventData.EventMessage = txtEventMesssage.Text.ToString();
+        oEventData.EventSubject = txtEventSubject.Text.ToString();
+        oEventData.EventName = txtEventName.Text.ToString();
+        oEventData.EventMessageDefault = "";
+        if (chkAllowMails.Checked)
+        {
+            oEventData.MailAllowed = true;
+        }
+        else
+        {
+            oEventData.MailAllowed = false;
+        }
         EventMessageMaster oEventMaster = new EventMessageMaster();
         bActionCompleted = oEventMaster.Insert(oEventData);
         if (bActionCompleted == true)
@@ -132,7 +145,7 @@ public partial class MasterUI_EventMessageMaster : MasterBasePage
             txtEventName.Text = string.Empty;
             txtEventMesssage.Text = string.Empty;
             txtEventSubject.Text = string.Empty;
-            chkAllowMails.Checked = false;  
+            chkAllowMails.Checked = false;
             lblStatus.Text = "Saved";
         }
         else
@@ -140,6 +153,36 @@ public partial class MasterUI_EventMessageMaster : MasterBasePage
 
         oEventData = null;
         oEventMaster = null;
+    }
+    public bool Insert(EventMessageDTO oEventMessageData)
+    {
+        string sProcName;
+        DatabaseManager oDB;
+        try
+        {
+            oDB = new DatabaseManager();
+
+            sProcName = "up_Ins_EventMessage";
+            oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventName", DbType.String, oEventMessageData.EventName);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventMessage", DbType.String, oEventMessageData.EventMessage);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventSubject", DbType.String, oEventMessageData.EventSubject);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@EventMessageDefault", DbType.String, oEventMessageData.EventMessageDefault);
+            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@MailAllowed", DbType.Boolean, oEventMessageData.MailAllowed);
+
+            oDB.ExecuteNonQuery(oDB.DbCmd);
+        }
+        catch (Exception exp)
+        {
+            GF.LogError("clsEventMessageMaster.Insert", exp.Message.ToString());
+            oDB = null;
+            return false;
+        }
+        finally
+        {
+            oDB = null;
+        }
+        return true;
     }
     private void Update()
     {
@@ -158,7 +201,7 @@ public partial class MasterUI_EventMessageMaster : MasterBasePage
         }
         EventMessageDTO oEventData = new EventMessageDTO();
         oEventData.MessageId = Id;
-        oEventData.EventName = txtEventName.Text.ToString();        
+        oEventData.EventName = txtEventName.Text.ToString();
         oEventData.EventMessage = txtEventMesssage.Text;
         oEventData.EventSubject = txtEventSubject.Text;
         oEventData.MailAllowed = chkAllowMails.Checked;
@@ -249,7 +292,7 @@ public partial class MasterUI_EventMessageMaster : MasterBasePage
         txtEventName.Text = "";
         txtEventSubject.Text = ""; ;
         txtEventMesssage.Text = "";
-        chkAllowMails.Checked = false;  
+        chkAllowMails.Checked = false;
         oEventMaster = null;
         oEventData = null;
     }

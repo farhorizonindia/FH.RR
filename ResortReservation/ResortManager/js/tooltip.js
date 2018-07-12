@@ -101,7 +101,7 @@ function initTT() {
     var wx = document.createElement("div"); var x = document.createElement("input"); x.id = "TT_Exit";
 
     x.src = '/content/images/Phase2_buttons_X_On.gif';
-    x.src = '../images/dateicon.jpg';
+    x.src = '../../images/date-icon.png';
     x.type = 'image';
     x.style.display = "none";
     x.style.zIndex = "100012";

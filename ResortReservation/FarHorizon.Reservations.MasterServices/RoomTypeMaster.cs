@@ -127,6 +127,33 @@ namespace FarHorizon.Reservations.MasterServices
             }
             return oRoomTypeData;
         }
+        public DataSet GetallData()
+        {
+            DataSet ds;
+            RoomTypeDTO[] oRoomTypeData;
+            oRoomTypeData = null;
+            ds = null;
+            DataTable dt;
+            string query = "select RoomTypeId, RoomType, DefaultNoOfBeds from tblRoomTypeMaster where 1=1";
+            //if (RoomTypeId != 0)
+            //{
+            //    query += " and RoomTypeId=" + RoomTypeId;
+            //}
+            //query += " order by RoomType";
+            ds = GetDataFromDB(query);
+            //if (ds != null && ds.Tables[0].Rows.Count > 0)
+            //{
+            //    oRoomTypeData = new RoomTypeDTO[ds.Tables[0].Rows.Count];
+            //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            //    {
+            //        oRoomTypeData[i] = new RoomTypeDTO();
+            //        oRoomTypeData[i].RoomTypeId = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
+            //        oRoomTypeData[i].RoomType = Convert.ToString(ds.Tables[0].Rows[i][1]).Trim();
+            //        oRoomTypeData[i].DefaultNoOfBeds = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
+            //    }
+            //}
+            return ds;
+        }
         private DataSet GetDataFromDB(string query)
         {
             DatabaseManager oDB;

@@ -34,5 +34,9 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string PackageDescription { get; set; }
 
         public string ItineraryLink { get; set; }
+        public DateTime Checkin { get; set; }
+        public DateTime checkout { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

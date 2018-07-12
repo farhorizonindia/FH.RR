@@ -1,434 +1,661 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="Cruise_booking_SearchProperty"
-    CodeFile="~/Cruise/booking/SearchProperty.aspx.cs" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="searchproperty.aspx.cs" Inherits="Cruise_Booking_searchproperty" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<%@ Register TagName="PageHeaderControl" TagPrefix="phc" Src="~/userControl/pageheader.ascx" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
-    <link rel="stylesheet" type="text/css" media="all" href="../../css/calendar-blue2.css" title="win2k-cold-1" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" media="all" href="../../css/pageheader.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="../../style.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="../../bootstrap.min.css" />
-    <link href="css/style.css" rel="stylesheet" />
-    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar-en.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/calendar/calendar-setup.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/popups.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/global.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/client/booking.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/jquery-1.11.1.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../../js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css" />
-    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-    <link href="../../css/newcss.css" rel="stylesheet" />
-    <style type="text/css">
-        .tbl-main {
-        }
+    <title>Resorts a Hotels and Restaurants </title>
 
-            .tbl-main table {
-                width: 60%;
-                margin: 0 auto;
-                float: none;
-                background-color: #eaeaea;
-                border: 1px solid #ddd;
-                padding: 10px;
-            }
+    <!-- Meta-Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-                .tbl-main table tr td {
-                    width: 33.3%;
-                    font-size: 17px;
-                    color: #333;
-                }
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //Meta-Tags -->
+    <%--  --%>
+    <!-- Custom-Stylesheet-Links -->
+    <!-- Bootstrap-CSS -->
+    <link rel="stylesheet" href="css/Newcss/bootstrap.min.css" type="text/css" media="all"/>
+    <!-- Index-Page-CSS -->
+    <link href="css/Newcss/style.css" rel="stylesheet" />
 
-                    .tbl-main table tr td table {
-                        width: 100%;
-                    }
+    <!-- Index-Page-CSS -->
+    <link rel="stylesheet" href="css/Newcss/jquery-ui.css" type="text/css" media="all"/>
+    <!-- Animate.CSS -->
+    <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all"/>
+    <!-- //Custom-Stylesheet-Links -->
 
-
-
-
-        .tbl-main2 table {
-            width: 60%;
-            margin: 0 auto;
-            float: none;
-            background-color: #eaeaea;
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-
-            .tbl-main2 table tr td {
-                width: 25%;
-                font-size: 17px;
-                color: #333;
-            }
-
-                .tbl-main2 table tr td select {
-                    border: solid 1px #CCCCCC;
-                    background-color: #FFFFFF;
-                    text-align: left !important;
-                    padding: 7px 12px;
-                    font-weight: 400;
-                    line-height: 1.42857143;
-                    width: 100%;
-                }
-
-
-                .tbl-main2 table tr td input[type=submit] {
-                    color: #fff;
-                    background-color: #5bc0de;
-                    border-color: #46b8da;
-                    display: inline-block;
-                    padding: 6px 12px;
-                    margin-bottom: 0;
-                    font-size: 14px;
-                    font-weight: 400;
-                    line-height: 1.42857143;
-                    text-align: center;
-                    white-space: nowrap;
-                    vertical-align: middle;
-                    -ms-touch-action: manipulation;
-                    touch-action: manipulation;
-                    cursor: pointer;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none;
-                    background-image: none;
-                    border: 1px solid transparent;
-                    border-radius: 4px;
-                    float: right;
-                }
-
-        .tbl-main4 {
-            width: 60%;
-            margin: 0 auto;
-            float: none;
-            background-color: #eaeaea;
-        }
-
-            .tbl-main4 table {
-                width: 60%;
-                margin: 0 auto;
-                float: none;
-                background-color: #eaeaea;
-                border: 1px solid #ddd;
-                padding: 10px;
-            }
-
-                .tbl-main4 table tr td {
-                    width: 33.3%;
-                    font-size: 17px;
-                    color: #333;
-                }
-
-
-                    .tbl-main4 table tr td select {
-                        border: solid 1px #CCCCCC;
-                        background-color: #FFFFFF;
-                        text-align: left !important;
-                        padding: 7px 12px;
-                        font-weight: 400;
-                        line-height: 1.42857143;
-                        width: 100%;
-                    }
-
-
-
-        .tbl-main5 table {
-            width: 60%;
-            margin: 0 auto;
-            float: none;
-            background-color: #eaeaea;
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-
-            .tbl-main5 table tr td {
-                width: 27.3%;
-                font-size: 17px;
-                color: #333;
-            }
-
-
-
-                .tbl-main5 table tr td input[type=text] {
-                    border: solid 1px #CCCCCC;
-                    background-color: #FFFFFF;
-                    text-align: left !important;
-                    padding: 7px 12px;
-                    font-weight: 400;
-                    line-height: 1.42857143;
-                    width: 95%;
-                }
-
-
-                .tbl-main5 table tr td .datebutton {
-                    background-color: #5bc0de;
-                    border-color: #46b8da;
-                    height: 34px;
-                    width: 30px;
-                    margin-left: -6px;
-                    color: #fff;
-                }
-
-
-                .tbl-main5 table tr td input[type=submit] {
-                    color: #fff;
-                    background-color: #5bc0de;
-                    border-color: #46b8da;
-                    display: inline-block;
-                    padding: 6px 12px;
-                    margin-bottom: 0;
-                    font-size: 14px;
-                    font-weight: 400;
-                    line-height: 1.42857143;
-                    text-align: center;
-                    white-space: nowrap;
-                    vertical-align: middle;
-                    -ms-touch-action: manipulation;
-                    touch-action: manipulation;
-                    cursor: pointer;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none;
-                    background-image: none;
-                    border: 1px solid transparent;
-                    border-radius: 4px;
-                    width: 100%;
-                    margin-top: 15px;
-                }
-
-                .tbl-main5 table tr td select {
-                    border: solid 1px #CCCCCC;
-                    background-color: #FFFFFF;
-                    text-align: left !important;
-                    padding: 7px 12px;
-                    font-weight: 400;
-                    line-height: 1.42857143;
-                    width: 100%;
-                }
-
-
-        .header-part {
-            padding: 20px;
-            background-color: #5bc0de;
-            border-color: #46b8da;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-
-            .header-part h2 {
-                color: #fff;
-                font-size: 30px;
-            }
-
-        .auto-style1 {
-            width: 33%;
-        }
-
-        .button-link {
-            padding: 10px 15px;
-            background: #4479BA;
-            color: #FFF;
-            font-size: medium;
-        }
-    </style>
-    <script type="text/javascript">
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            },
-            i[r].l = 1 * new Date();
-            a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-81338023-3', 'auto');
-        ga('send', 'pageview');
-    </script>
+    <!-- Fonts -->
+    <!-- Body-Font -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" type="text/css">
+    <!-- Logo-Font -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel+Decorative:400,900,700" type="text/css">
+    <!-- Navbar-Font -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" type="text/css">
+    <!-- //Fonts -->
 </head>
-<body class="bg-img">
-    <script type="text/javascript">
-        function setDate() {
-            $("#txtChkin").datepicker({
-                dateFormat: "dd-MM-yy",
-                minDate: new Date(),
-                onSelect: function () {
-                    var dt2 = $('#txtChkOut');
-                    var startDate = $(this).datepicker('getDate');
-                    //add 30 days to selected date
-                    startDate.setDate(startDate.getDate() + 30);
-                    var minDate = $("#txtChkin").datepicker('getDate', '+1d');
-                    minDate.setDate(minDate.getDate() + 1);
-                    //minDate of dt2 datepicker = dt1 selected day
-                    dt2.datepicker('setDate', minDate);
-                    //sets dt2 maxDate to the last day of 30 days window
-                    dt2.datepicker('option', 'maxDate', startDate);
-                    //first day which can be selected in dt2 is selected date in dt1
-                    dt2.datepicker('option', 'minDate', minDate);
-
-                }
-            });
-            $('#txtChkOut').datepicker({
-                dateFormat: "dd-MM-yy"
-            });
-        }
-        $(document).ready(function () {
-            setDate();
-        });
-    </script>
-
+<body>
+    <div class="loaderbody">
+        <div class="loader">
+            <img src="../../images/loading1.gif" alt="Loading..." />
+            Please Wait</div>
+    </div>
     <form id="form1" runat="server">
-        <div class="sitecontainer whiteBackground1">
-            <%--<section>--%>
-            <asp:ScriptManager ID="scmgrLocation" runat="server">
-            </asp:ScriptManager>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 text-center White-Box">
-                        <h2>Search Accomodations <span class=" pull-right" style="padding-top: 7px;">
-                            <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton></span></h2>
-                        <div class=" clearfix"></div>
+
+        <div class="header agileits " id="home">
+
+            <!-- Navbar -->
+            <nav class="navbar navbar-default  aits wow bounceInUp agileits ">
+                <div class="container">
+
+                    <div class="navbar-header agileits ">
+
+                        <button type="button" class="navbar-toggle agileits  collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                            <span class="sr-only agileits ">Toggle navigation</span>
+                            <span class="icon-bar "></span>
+                            <span class="icon-bar "></span>
+                            <span class="icon-bar "></span>
+                        </button>
+                        <a class="navbar-brand agileits " id="logoheading" runat="server" href=" ">Booking System</a>
+                    </div>
+
+                    <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
+                        <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton>
+                        <ul class="nav agileits  navbar-nav" runat="server" id="navlogin">
+                            <li class="dropdown">
+                                <a id="lblLoginas" runat="server" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LOGIN <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a runat="server" id="lnkLogin" href="agentLogin.aspx">Partner</a></li>
+                                    <li><a runat="server" id="lnkCustomerRegis" href="../Masters/NewRegister.aspx">Customer </a>
+
+
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </nav>
+            <!-- //Navbar -->
+
+
+            <div class="ak-banner-booking">
+                <!-- Slider1 -->
+                <div class="slider agileits ">
+
+                    <div class="slider-1 agileits ">
+
+                        <ul class="rslides agileits " id="slider1">
+                            <asp:Repeater ID="rpt1" runat="server">
+                                <ItemTemplate>
+                                    <li>
+                                      <%--  <img style="width: 1700px; height: 700px;" src='<%#Eval("Image") %>' alt="Agileits ">--%>
+                                          <img style="width: 100%;" src='<%#Eval("Image") %>' alt="Agileits ">
+                                        <div class="layer agileits "></div>
+                                        <div class="caption agileits ">
+                                            <!-- <h3>Welcome To <span>TROPICAL RESORTS</span></h3> -->
+                                        </div>
+                                    </li>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                            <%--   <li>
+                                <img src="images/slide-1.jpg" alt="Agileits ">
+                                <div class="layer agileits "></div>
+                                <div class="caption agileits ">
+                                    <!-- <h3>Welcome To <span>TROPICAL RESORTS</span></h3> -->
+                                </div>
+                            </li>
+                            <li>
+                                <img src="images/slide-2.jpg" alt="Agileits ">
+                                <div class="caption agileits ">
+                                    <!-- <h3>Choose The Best Resort For You</h3> -->
+                                </div>
+                            </li>
+                            <li>
+                                <img src="images/slide-3.jpg" alt="Agileits ">
+                                <div class="caption agileits ">
+                                    <!-- <h3>Stay Right Next To The Exotic Beaches</h3> -->
+                                </div>
+                            </li>
+                            <li>
+                                <img src="images/slide-4.jpg" alt="Agileits ">
+                                <div class="caption agileits ">
+                                    <!-- <h3>Spend The Best Moments In Our Resorts</h3> -->
+                                </div>
+                            </li>
+                            <li>
+                                <img src="images/slide-5.jpg" alt="Agileits ">
+                                <div class="layer agileits "></div>
+                                <div class="caption agileits ">
+                                    <!-- <h3>Experience The Best Luxury & Hospitality</h3> -->
+                                </div>
+                            </li>--%>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <asp:UpdatePanel ID="updatepanel1" runat="server">
-                <ContentTemplate>
-                    <div class="tbl-main White-Box2 padding2">
-                        <table class="table table-striped">
-                            <tr>
-                                <td>
-                                    <asp:Label ID="lblLoginas" runat="server" Text=" Login as "></asp:Label>
-                                    <asp:LinkButton ID="lnkLogin" runat="server" PostBackUrl="~/Cruise/booking/agentLogin.aspx" Font-Underline="True"> Agent</asp:LinkButton>
-                                    <asp:LinkButton ID="lnkCustLogin" runat="server" Font-Underline="True" OnClick="lnkCustLogin_Click">Customer</asp:LinkButton>
-                                    <asp:LinkButton ID="lnkView" Style="margin-left: 10px" runat="server" OnClick="lnkView_Click">View your Bookings</asp:LinkButton>
-                                </td>
-                                <td>
-                                    <asp:RadioButtonList ID="rbtnSelectAccomtype" runat="server" OnSelectedIndexChanged="rbtnSelectAccomtype_SelectedIndexChanged" RepeatDirection="Horizontal" AutoPostBack="True">
+                <!-- //Slider1 -->
+                <div class="clearfix"></div>
+                <!-- ##############SEARCH ACCOMODATION############# -->
+
+                <div class=" avilable">
+                    <h1>Search</h1>
+                    <div>
+                        <div>
+
+                            <!-- Nav tabs -->
+                            <%--<asp:RadioButtonList class="nav ak-nav nav-tabs" OnSelectedIndexChanged="rbtnSelectAccomtype_SelectedIndexChanged" role="tablist" ID="rbtnSelectAccomtype" runat="server"  RepeatDirection="Horizontal" AutoPostBack="True">
                                         <asp:ListItem>Cruise</asp:ListItem>
                                         <asp:ListItem>Other</asp:ListItem>
-                                    </asp:RadioButtonList>
-                                </td>
-                            </tr>
-                        </table>
+                                    </asp:RadioButtonList>--%>
+                            <ul class="nav ak-nav nav-tabs" role="tablist">
 
-                        <div id="divCruise" runat="server">
-                            <div class="tbl-main2">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <asp:DropDownList Enabled="false" ID="ddlDestination" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDestination_SelectedIndexChanged">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList ID="ddlDates" runat="server">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList ID="ddlRiver" runat="server">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:Button ID="btnSearch" runat="server" OnClick="btnSearch_Click" Text="Search" />
-                                        </td>
-                                    </tr>
-                                </table>
+                                <li id="cruise" runat="server" class="active current " data-tab="nav-1">Cruise</li>
+                                <li id="othr" runat="server" data-tab="nav-2">Other</li>
+                            </ul>
+
+
+                            <!-- Tab panes -->
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row cruise-trip nav-content current" id="nav-1">
+
+                        <div class="col-sm-12 booking-div">
+                            <div class="dropdown">
+                                <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						    Dropdown
+						    <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						    <li><a href="#">7 night 8 day MV Mahabaahu Upstream Cruise</a></li>
+						    <li><a href="#">7 night 8 day MV Mahabaahu Downstream Cruise</a></li>
+						    <li><a href="#">5 night 6 day MV Mahabaahu Upstream Cruise</a></li>
+						    <li><a href="#">3 night 4 day MV Mahabaahu Downstream Cruise</a></li>
+						     <li><a href="#">2 night 3 day MV Mahabaahu Upstream Cruise</a></li>
+						     <li><a href="#">4 night 5 day MV Mahabaahu Downstream Cruise</a></li>
+						  </ul> -->
+                                <asp:DropDownList Enabled="false" ID="ddlDestination" Visible="false" runat="server" AutoPostBack="True">
+                                </asp:DropDownList>
+                                <asp:DropDownList class="form-control" ID="ddlPackege" runat="server">
+                                </asp:DropDownList>
+                                <%-- <select class="form-control" id="sel1">
+                                    <option>7 night 8 day MV Mahabaahu Upstream Cruise</option>
+                                    <option>7 night 8 day MV Mahabaahu Downstream Cruise</option>
+                                    <option>5 night 6 day MV Mahabaahu Upstream Cruise</option>
+                                    <option>3 night 4 day MV Mahabaahu Downstream Cruise</option>
+                                    <option>2 night 3 day MV Mahabaahu Upstream Cruise</option>
+                                    <option>4 night 5 day MV Mahabaahu Downstream Cruise</option>
+                                </select>--%>
                             </div>
+                            <div class="dropdown">
+                                <asp:DropDownList class="form-control" ID="ddlYear" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlYear_SelectedIndexChanged">
+                                </asp:DropDownList>
+                                <%--<select class="form-control" id="sel1">
+                                    <option>--Year--</option>
+                                    <option>2017</option>
+                                    <option>2018</option>
+                                    <option>2019</option>
+                                </select>--%>
+                            </div>
+                            <div class="dropdown">
+                                <asp:DropDownList class="form-control" ID="ddlDates" runat="server">
+                                    <%-- <asp:ListItem Text="Month"></asp:ListItem>
+                                    <asp:ListItem Text="Jan"></asp:ListItem>
+                                    <asp:ListItem Text="Feb"></asp:ListItem>
+                                    <asp:ListItem Text="Mar"></asp:ListItem>
+                                    <asp:ListItem Text="Apr"></asp:ListItem>
+                                    <asp:ListItem Text="May"></asp:ListItem>
+                                    <asp:ListItem Text="Jun"></asp:ListItem>
+                                    <asp:ListItem Text="Jul"></asp:ListItem>
+                                    <asp:ListItem Text="Aug"></asp:ListItem>
+                                    <asp:ListItem Text="Sept"></asp:ListItem>
+                                    <asp:ListItem Text="Oct"></asp:ListItem>
+                                    <asp:ListItem Text="Nov"></asp:ListItem>
+                                    <asp:ListItem Text="Dec"></asp:ListItem>--%>
+                                </asp:DropDownList>
+                                <asp:DropDownList ID="ddlRiver" Visible="false" runat="server">
+                                </asp:DropDownList>
+                                <%--<select class="form-control" id="sel1">
+                                    <option>Month</option>
+                                    <option>Jan</option>
+                                    <option>Feb</option>
+                                    <option>Mar</option>
+                                    <option>Apr</option>
+                                    <option>May</option>
+                                    <option>Jun</option>
+                                    <option>Jul</option>
+                                    <option>Aug</option>
+                                    <option>Sep</option>
+                                    <option>Oct</option>
+                                    <option>Nov</option>
+                                    <option>Dec</option>
+                                </select>--%>
+                            </div>
+
+                            <asp:Button ID="btnSearch" type="button" runat="server" class="btn btn-primary" hover="Orange" OnClick="btnSearch_Click" Text="Search" />
+                        </div>
+                        <%-- <div class="col-sm-3 search-btn">
+                            
+                            <%-- <a href="cruise.html" title="">
+                                        <button type="button" class="btn btn-primary">Search</button></a>--%>
+                        <%--</div>--%>
+                    </div>
+                    <!--############# OTHER TAB SECTION START ###############  -->
+
+                    <div class="row other-tab nav-content " id="nav-2" style="margin-left: 0; margin-right: 0;">
+                        <div class="col-sm-12" style="display: inline-flex;">
+                            <%-- <li>
+                                <div class="dropdown">
+                                    <asp:DropDownList class="form-control" ID="ddlAccomType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlAccomType_SelectedIndexChanged">
+                                    </asp:DropDownList>
+                                    <%-- <select class="form-control" id="sel1">
+					  				<option>--Select--</option>
+							    	<option>Houseboats</option>
+							    	<option>Resort</option>
+							    	<option>Retreat</option>
+							  	</select>--%>
+                            <%-- </div>
+                            </li>--%>
+
+                            <div class="dropdown" style="width: 69%; margin-right: 1rem;">
+                                <asp:DropDownList class="form-control" ID="ddlAccomodationName" runat="server">
+                                </asp:DropDownList>
+                                <%-- <select class="form-control" id="sel1">
+                                        <option>--Select--</option>
+                                        <option>Vaikundam</option>
+                                        <option>Sauvernigam</option>
+
+                                    </select>--%>
+                            </div>
+
+
+
+
+                            <div class="book-pag-frm1 agileits ">
+                                <!-- <label>Check In</label> -->
+                                <asp:TextBox class="date agileits " runat="server" ID="datepicker1" type="text" value="Date" required=""></asp:TextBox>
+                                <%-- <input class="date agileits " id="datepicker1" type="text" value="Date" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" required="">--%>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+
+                            <div class="book-pag-frm2 agileits ">
+                                <!-- <label>Check Out</label> -->
+                                <asp:TextBox class="date agileits " runat="server" ID="datepicker2" type="text" value="Date" required=""></asp:TextBox>
+                                <%-- <input class="date agileits " id="datepicker2" type="text" value="Date" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}" required="">--%>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <%-- <li>
+                                <!-- <label>No of Rooms:</label> -->
+                                <div class="dropdown">
+                                    <asp:DropDownList ID="ddlNoofrooms" class="form-control" runat="server" Width="95%" AutoPostBack="True" OnSelectedIndexChanged="ddlNoofrooms_SelectedIndexChanged">
+                                        <asp:ListItem Value="0">-Select-</asp:ListItem>
+                                        <asp:ListItem>1</asp:ListItem>
+                                        <asp:ListItem>2</asp:ListItem>
+                                        <asp:ListItem>3</asp:ListItem>
+                                        <asp:ListItem>4</asp:ListItem>
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" InitialValue="0" ValidationGroup="Search" ControlToValidate="ddlNoofrooms" runat="server" ErrorMessage="*" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    <%-- <select class="form-control" id="sel1">
+                                        <option>--Select Room--</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+
+                                    </select>--%>
+                            <%--</div>
+                            </li>--%>
+
+
+                            <a href="available.html" title="">
+                                <asp:Button class="btn btn-primary agileits  " data-toggle="modal" data-target="#myModal3" ID="btnSearchOthAccom" runat="server" ValidationGroup="Search" Text="Check Availability" OnClick="btnSearchOthAccom_Click" />
+                                <%--<button class="btn  agileits  " id="btnSearchOthAccom" runat="server" data-toggle="modal"  data-target="#myModal3">Check Availability--%></a>
+
+
+                        </div>
+                        <div class="grid-room" style="width: 50%;">
+                            <asp:GridView ID="gdvRooms" runat="server" AutoGenerateColumns="False" Width="55%" CellPadding="4" BackColor="#ffffff" ForeColor="#333333" GridLines="None">
+                                <AlternatingRowStyle BackColor="White" />
+                                <Columns>
+                                    <asp:TemplateField HeaderText="Rooms">
+                                        <ItemTemplate>
+                                            <%#Container.DataItemIndex+1 %>
+                                        </ItemTemplate>
+
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Guests">
+                                        <ItemTemplate>
+                                            <asp:DropDownList ID="ddlGuests" runat="server">
+                                                <asp:ListItem>1</asp:ListItem>
+                                                <asp:ListItem>2</asp:ListItem>
+                                                <asp:ListItem>3</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                                <HeaderStyle BackColor="#8fdde4" Font-Bold="True" ForeColor="#222" />
+                                <%-- <EditRowStyle BackColor="#2461BF" />
+                                    <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                                    
+                                    <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                                    <RowStyle BackColor="#EFF3FB" />
+                                    <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                                    <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                                    <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                                    <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                                    <SortedDescendingHeaderStyle BackColor="#4870BE" />--%>
+                            </asp:GridView>
                         </div>
 
-                        <div id="OtherAccoms" runat="server">
-                            <div class="tbl-main4">
-                                <table style="width: 80%;">
-                                    <tr>
-                                        <td>
-                                            <asp:DropDownList ID="ddlAccomType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlAccomType_SelectedIndexChanged">
-                                            </asp:DropDownList>
-                                        </td>
-                                        <td>
-                                            <asp:DropDownList ID="ddlAccomodationName" runat="server">
-                                            </asp:DropDownList>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="tbl-main5">
-                                <table>
-                                    <tr>
-                                        <td>Check in
-                        <asp:TextBox ID="txtChkin" runat="server" FontSize="17"></asp:TextBox>
-                                            <%--<input type="button" id="btnStartDate" name="btnStartDate" onfocus="return setupCalendar('txtChkin', 'btnStartDate')"
-                                                onclick="return setupCalendar('txtChkin', 'btnStartDate')" value="..." style="background: url('../../images/calender.png') no-repeat; background-size: 100%; width: 30px; height: 30px; color: white" />--%>
-                                        </td>
-                                        <td class="auto-style1">Check out
-                        <asp:TextBox ID="txtChkOut" runat="server"></asp:TextBox>
-                                            <%--<input type="button" id="btnEndDate" name="btnEndDate" onclick="return setupCalendar('txtChkOut', 'btnEndDate')"
-                                                onfocus="return setupCalendar('txtChkOut','btnEndDate')" value="..." style="background: url('../../images/calender.png') no-repeat; background-size: 100%; width: 30px; height: 30px; color: white" />--%>
-                                        </td>
-                                        <td>No of Rooms :<asp:DropDownList ID="ddlNoofrooms" runat="server" OnSelectedIndexChanged="ddlNoofrooms_SelectedIndexChanged" Width="95%" AutoPostBack="True">
-                                            <asp:ListItem Value="0">-Select-</asp:ListItem>
-                                            <asp:ListItem>1</asp:ListItem>
-                                            <asp:ListItem>2</asp:ListItem>
-                                            <asp:ListItem>3</asp:ListItem>
-                                            <asp:ListItem>4</asp:ListItem>
-                                        </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" InitialValue="0" ValidationGroup="Search" ControlToValidate="ddlNoofrooms" runat="server" ErrorMessage="*" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <asp:GridView ID="gdvRooms" runat="server" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None">
-                                                <AlternatingRowStyle BackColor="White" />
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="Rooms">
-                                                        <ItemTemplate>
-                                                            <%#Container.DataItemIndex+1 %>
-                                                        </ItemTemplate>
+                    </div>
 
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Guests">
-                                                        <ItemTemplate>
-                                                            <asp:DropDownList ID="ddlGuests" runat="server">
-                                                                <asp:ListItem>1</asp:ListItem>
-                                                                <asp:ListItem>2</asp:ListItem>
-                                                                <asp:ListItem>3</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                </Columns>
-                                                <EditRowStyle BackColor="#2461BF" />
-                                                <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                                                <HeaderStyle BackColor="#9abfda" Font-Bold="True" ForeColor="White" />
-                                                <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-                                                <RowStyle BackColor="#EFF3FB" />
-                                                <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-                                                <SortedAscendingCellStyle BackColor="#F5F7FB" />
-                                                <SortedAscendingHeaderStyle BackColor="#6D95E1" />
-                                                <SortedDescendingCellStyle BackColor="#E9EBEF" />
-                                                <SortedDescendingHeaderStyle BackColor="#4870BE" />
-                                            </asp:GridView>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <asp:Button ID="btnSearchOthAccom" runat="server" ValidationGroup="Search" Text="Check Availability" OnClick="btnSearchOthAccom_Click" />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%--</section>--%>
+                </div>
+
+            </div>
+
+            <%--<Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnSearch" />
+            </Triggers>--%>
+
+            <!-- ##############OTHER TAB SECTION  END ############# -->
         </div>
 
+
+        <!-- //Header -->
+
+
+
+        <!-- Projects -->
+        <%--<div class="projects agileits ">
+            <div class="container">
+
+                <div class="col-md-8 col-sm-8 projects-grid agileits  projects-grid1 wow slideInLeft">
+                    <!-- Slider2 -->
+                    <div class="slider-2 agileits ">
+                        <ul class="rslides agileits " id="slider2">
+                            <li>
+                                <img src="images/project-1.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-2.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-3.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-4.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-5.jpg" alt="Agileits ">
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //Slider2 -->
+
+                    <!-- Slider3 -->
+                    <div class="slider-3 agileits ">
+                        <ul class="rslides agileits " id="slider3">
+                            <li>
+                                <img src="images/project-6.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-7.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-8.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-9.jpg" alt="Agileits ">
+                            </li>
+                            <li>
+                                <img src="images/project-10.jpg" alt="Agileits ">
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //Slider3 -->
+                </div>
+
+                <div class="col-md-4 col-sm-4 projects-grid agileits  projects-grid2 wow slideInRight">
+                    <h1>Featured Resorts</h1>
+                    <h4>BEST BEACH RESORTS</h4>
+                    <div class="h4-underline agileits  wow slideInLeft"></div>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <a class="agileits  slideInLeft" href="gallery.html">Read More <span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></a>
+                </div>
+
+            </div>
+        </div>--%>
+        <!-- //Projects -->
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Footer -->
+        <%--<div class="footer agileits ">
+            <div class="container">
+
+                <div class="col-md-6 col-sm-6 agileits  footer-grids">
+                    <div class="col-md-4 col-sm-4 footer-grid agileits  footer-grid-1 wow fadeInUp">
+                        <ul class="agileits ">
+                            <%--<li class="agileits ">5 Star Hotels</li>
+                            <li class="agileits ">Beach Resorts</li>
+                            <li class="agileits ">Beach Houses</li>
+                            <li class="agileits ">Water Houses</li>--%>
+        <%--    </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 footer-grid agileits  footer-grid-2 wow fadeInUp">
+                        <ul class="agileits ">--%>
+        <%--  <li class="agileits "><a href="gallery.html">Bahamas</a></li>
+                            <li class="agileits "><a href="gallery.html">Hawaii</a></li>
+                            <li class="agileits "><a href="gallery.html">Miami</a></li>
+                            <li class="agileits "><a href="gallery.html">Ibiza</a></li>--%>
+        <%-- </ul>
+                    </div>
+                    <div class="col-md-4 col-sm-4 footer-grid agileits  footer-grid-3 wow fadeInUp">
+                        <ul class="agileits ">--%>
+        <%-- <li class="agileits "><a href="about.html">About</a></li>
+                            <li class="agileits "><a href="cuisines.html">Cuisines</a></li>
+                            <li class="agileits "><a href="gallery.html">Gallery</a></li>
+                            <li class="agileits "><a href="booking.html">Contact</a></li>--%>
+        <%-- </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="col-md-6 col-sm-6 footer-grids agileits  social wow fadeInUp">
+                    <ul class="social-icons">--%>
+        <%--  <li class="agileits "><a href="#" class="facebook agileits " title="Go to Our Facebook Page"></a></li>
+                        <li class="agileits "><a href="#" class="twitter agileits " title="Go to Our Twitter Account"></a></li>
+                        <li class="agileits "><a href="#" class="googleplus agileits " title="Go to Our Google Plus Account"></a></li>
+                        <li class="agileits "><a href="#" class="instagram agileits " title="Go to Our Instagram Account"></a></li>
+                   <%--     <li class="agileits "><a href="#" class="youtube agileits " title="Go to Our Youtube Channel"></a></li>--%>
+        <%--</ul>
+                </div>
+
+                <div class="col-md-6 col-sm-6 footer-grids agileits  copyright wow fadeInUp">
+                    <p>&copy; 2017 Resorts. All Rights Reserved | Design by</p>
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+        </div>--%>
+        <!-- //Footer -->
+
+
+
+        <!-- Custom-JavaScript-File-Links -->
+
+        <!-- Default-JavaScript -->
+        <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+        <!-- Bootstrap-JavaScript -->
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+        <!-- Animate.CSS-JavaScript -->
+        <script src="js/wow.min.js"></script>
+        <script type="js/index.js"></script>
+        <script>
+            new WOW().init();
+        </script>
+        <!-- //Animate.CSS-JavaScript -->
+
+        <!-- Slider-JavaScript -->
+        <script src="js/responsiveslides.min.js"></script>
+        <script>
+
+            $(function () {
+                $("#slider1, #slider2, #slider3, #slider4").responsiveSlides({
+                    auto: true,
+                    nav: true,
+                    speed: 1500,
+                    namespace: "callbacks",
+                    pager: true,
+                });
+            });
+        </script>
+        <!-- //Slider-JavaScript -->
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('ul.nav.ak-nav li').click(function () {
+                    var nav_id = $(this).attr('data-tab');
+
+                    $('ul.nav li').removeClass('current');
+                    $('.nav-content').removeClass('current');
+
+                    $(this).addClass('current');
+                    $("#" + nav_id).addClass('current');
+                    localStorage.setItem('activeTab', $(this).text());
+                })
+
+
+                var activeTab = localStorage.getItem('activeTab');
+
+                if (activeTab == 'Cruise') {
+                    $('#cruise').trigger('click');
+                } else if (activeTab == 'Other') {
+                    $('#othr').trigger('click');
+                }
+                var getUrlParameter = function getUrlParameter(sParam) {
+                    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                        sURLVariables = sPageURL.split('&'),
+                        sParameterName,
+                        i;
+
+                    for (i = 0; i < sURLVariables.length; i++) {
+                        sParameterName = sURLVariables[i].split('=');
+
+                        if (sParameterName[0] === sParam) {
+                            return sParameterName[1] === undefined ? true : sParameterName[1];
+                        }
+                    }
+                };
+                var prop = getUrlParameter('Prop');
+                console.log(prop);
+                if (prop) {
+                    $('#othr').trigger('click');
+                }
+            })
+        </script>
+
+        <!-- Date-Picker-JavaScript -->
+        <script src="js/jquery-ui.js">
+
+
+            var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+            var prop = getUrlParameter('Prop');
+            if(prop!="")
+            {
+            $('#othr').trigger('click');
+            }
+        </script>
+
+        <%--<script>
+            $(function () {
+                $("#datepicker,#datepicker1,#datepicker2").datepicker();
+            });
+        </script>--%>
+        <script>
+            localStorage.clear("get");
+            localStorage.clear('activeTab12');
+            $(function () {
+                //$("#datepicker1").datepicker({ dateFormat: "dd-mm-yy" }).val()
+                //$("#datepicker2").datepicker({ dateFormat: "dd-mm-yy" }).val()
+                //var dates = $('#datepicker2, #datepicker1').datepicker({
+                //    onSelect: function (selectedDate) {
+                //        var option = this.id == "datepicker1" ? "minDate" : "maxDate";
+                //        dates.not(this).datepicker("option", option, $(this).datepicker('getDate'));
+                //    }
+                //});
+                $('#datepicker2').datepicker({
+                    dateFormat: "dd MM yy"
+                });
+
+                $("#datepicker1").datepicker({
+                    dateFormat: "dd MM yy",
+                    minDate: 0,
+                    onSelect: function (date) {
+                        var date1 = $('#datepicker1').datepicker('getDate');
+                        var date = new Date(Date.parse(date1));
+                        date.setDate(date.getDate() + 1);
+                        var newDate = date.toDateString();
+                        newDate = new Date(Date.parse(newDate));
+                        $('#datepicker2').datepicker("option", "minDate", newDate);
+                    }
+
+
+                });
+                $('#datepicker1').datepicker("setDate", 1);
+                $('#datepicker2').datepicker("setDate", 2);
+
+                $('#datepicker1').datepicker("option", "minDate", 1);
+                $('#datepicker2').datepicker("option", "minDate", 2);
+
+            });
+
+            $(document).ready(function () {
+                $('.loaderbody').css('display', 'none');
+                $('#ddlYear').change(function () {
+                    $('.loaderbody').css('display', 'block');
+                });
+                $('#btnSearch').click(function () {
+                    $('.loaderbody').css('display', 'block');
+                });
+            });
+
+        </script>
     </form>
 </body>
 </html>

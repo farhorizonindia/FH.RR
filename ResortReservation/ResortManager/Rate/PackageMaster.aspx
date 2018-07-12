@@ -179,6 +179,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>IsActive</td>
+                                <td>
+                                    <asp:CheckBox ID="chkActive" Text=" " runat="server" />
+                                    
+                            </tr>
+                            <tr>
                                 <td>Package Image</td>
                                 <td>
                                     <input type="file" cssclass="appbutton" runat="server" id="uploadLogo" onchange="ShowImagePreview()" />

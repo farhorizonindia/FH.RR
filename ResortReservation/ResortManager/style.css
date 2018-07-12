@@ -1,4 +1,12 @@
-﻿html, body, p, input, td, h1, h2, h3, h4, h5, h6 { margin:0; padding:0; font:normal 12px Arial; line-height:17px; }
+﻿html, body, p, input, td, h1, h2, h3, h4, h5, h6 { padding:0; line-height:17px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: Arial;
+    margin-left: 0;
+    margin-right: 0;
+    }
 p { padding-bottom:10px; overflow:hidden; }	
 td { vertical-align:middle; }
 
@@ -9,8 +17,10 @@ a.applink:hover {text-decoration:underline; color:orange; }
 
 a img { border-width:0; }
 .select { width:auto; height:auto; border:1px solid #96959A; color:#2A4A5B; font-size:11px; margin-left:4px;}
-.input { height:17px; text-align:left; font-family:Arial; font-size:8pt; margin-left:4px; width:70px; }
-.appbutton { font-size:9px; height:23px; text-align:center; vertical-align:middle; width:60px; margin-left:4px;}
+.input { text-align:left; font-family:Arial; font-size:8pt; margin-left:4px; }
+.appbutton { font-size:9px; text-align:center; vertical-align:middle; width:60px; margin-left:4px;
+    height: 20px;
+}
 
 .label { font-size:12px; padding-right:4px; padding-left:4px; width:auto;}
 

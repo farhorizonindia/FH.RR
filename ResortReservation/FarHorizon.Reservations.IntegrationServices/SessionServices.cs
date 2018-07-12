@@ -65,6 +65,11 @@ namespace FarHorizon.Reservations.BusinessServices
             get { return SessionHelper.Booking_BookingId; }
             set { SessionHelper.Booking_BookingId = value; }
         }
+        public static string Booking_Propsed
+        {
+            get { return SessionHelper.PropsedBook; }
+            set { SessionHelper.PropsedBook = value; }
+        }
         public static BookedRooms[] Booking_AllRoomsData
         {
             get { return SessionHelper.Booking_AllRoomsData; }
@@ -304,6 +309,13 @@ namespace FarHorizon.Reservations.BusinessServices
             //if (typeof(T) == typeof(DataTable))
             //{
             string json = JsonConvert.SerializeObject(value);
+
+       //     string json = JsonConvert.SerializeObject(value, Formatting.Indented,
+       //    new JsonSerializerSettings()
+       //    {
+       //        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+       //    }
+       //);
             SessionHelper.SaveSession(key, json);
             //return;
             //}

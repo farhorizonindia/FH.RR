@@ -22,6 +22,7 @@ namespace FarHorizon.Reservations.UserManager
                 string sProcName = "up_ValidateUser";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sUserId", DbType.String, oUserData.UserId);
+         //    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPwd", DbType.String, oUserData.Password);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sPwd", DbType.String, DataSecurityManager.Encrypt(oUserData.Password));
                 DataSet ds = oDB.ExecuteDataSet(oDB.DbCmd);
                 if (ds != null)

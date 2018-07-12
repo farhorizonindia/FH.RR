@@ -188,6 +188,17 @@
                             <td>&nbsp;</td>
                             <td class="auto-style5">&nbsp;</td>
                         </tr>
+                         <tr>
+                            <td style="width: 128px">Select Agent</td>
+                            <td class="auto-style8">
+                                <asp:DropDownList ID="ddlagent" CssClass="ddlStyling" runat="server" OnSelectedIndexChanged="ddlRatecategory_SelectedIndexChanged">
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlRatecategory" ErrorMessage="*" ForeColor="Red" InitialValue="-Select-" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td class="auto-style5">&nbsp;</td>
+                        </tr>
                         <tr>
                             <td class="auto-style10">Accom. Type</td>
                             <td class="auto-style11">

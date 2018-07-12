@@ -7,11 +7,11 @@
 <head runat="server">
     <title>Reservation Manager</title>
     <style type="text/css">
-        .auto-style1
+        /*.auto-style1
         {
             width: 321px;
             height: 208px;
-        }
+        }*/
     </style>
 </head>
 <body>

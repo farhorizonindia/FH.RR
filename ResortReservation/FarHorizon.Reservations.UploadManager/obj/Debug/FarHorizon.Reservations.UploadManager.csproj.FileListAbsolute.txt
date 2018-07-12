@@ -1,0 +1,14 @@
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.UploadManager.dll.config
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.UploadManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.UploadManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.DataSecurity.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.Common.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.XMLManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.DataSecurity.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.Common.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\bin\Debug\FarHorizon.Reservations.XMLManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Debug\FarHorizon.Reservations.UploadManager.csprojResolveAssemblyReference.cache
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Debug\FarHorizon.Reservations.UploadManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.UploadManager\obj\Debug\FarHorizon.Reservations.UploadManager.pdb

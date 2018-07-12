@@ -71,6 +71,11 @@
                             <td class="filtersectionCell">
                                 <asp:DropDownList CssClass="select" ID="ddlAgent" runat="server" Width="220px">
                                 </asp:DropDownList></td>
+                               <td class="filtersectionCell">
+                                Ref Agent:</td>
+                            <td class="filtersectionCell">
+                                <asp:DropDownList CssClass="select" ID="ddlRefAgent" runat="server" Width="220px">
+                                </asp:DropDownList></td>
                             <td class="filtersectionCell">
                                 </td>
                             <td class="filtersectionCell">
@@ -106,6 +111,10 @@
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
                                 <asp:BoundColumn DataField="agentname" HeaderText="Agent" >
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:BoundColumn>
+                                  <asp:BoundColumn DataField="refagentname" HeaderText="RefAgent" >
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
@@ -153,7 +162,7 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
-
+                                
                                 <asp:BoundColumn DataField="BookingAmt" HeaderText="Booking Amount" >
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />

@@ -1,0 +1,12 @@
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.WebHelper.dll.config
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.WebHelper.dll
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.WebHelper.pdb
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.Common.dll
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.SessionManager.dll
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.Common.pdb
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.SessionManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\obj\Debug\FarHorizon.Reservations.WebHelper.csprojResolveAssemblyReference.cache
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\obj\Debug\FarHorizon.Reservations.WebHelper.dll
+D:\AllProject\FH.RR\ResortReservation\FaarHorizon.Reservations.Bases\obj\Debug\FarHorizon.Reservations.WebHelper.pdb

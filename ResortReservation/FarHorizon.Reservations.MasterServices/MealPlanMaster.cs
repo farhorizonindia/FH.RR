@@ -174,8 +174,8 @@ namespace FarHorizon.Reservations.MasterServices
             DataSet ds;
             if (MealPlanId == 0)
                 return oMealPlanData;
-            string query = "select MealPlanId, MealPlanCode, MealPlan, MealPlanDesc, " +
-                " WelcomeDrink, BreakFast, Lunch, EveSnacks, Dinner from tblMealPlanMaster where 1=1";
+            string query = "select MealPlanId, MealPlanCode, MealPlan,  " +
+                " WelcomeDrink, BreakFast, Lunch, EveSnacks, Dinner,MealPlanDesc from tblMealPlanMaster where 1=1";
             if (MealPlanId != 0)
             {
                 query += " and MealPlanId=" + MealPlanId;
@@ -188,6 +188,7 @@ namespace FarHorizon.Reservations.MasterServices
                     oMealPlanData.MealPlanId = Convert.ToInt32(ds.Tables[0].Rows[0][0]);
                     oMealPlanData.MealPlanCode = Convert.ToString(ds.Tables[0].Rows[0][1]);
                     oMealPlanData.MealPlan = Convert.ToString(ds.Tables[0].Rows[0][2]);
+             
                     if (ds.Tables[0].Rows[0][3] != DBNull.Value && !ds.Tables[0].Rows[0][3].Equals(string.Empty))
                         oMealPlanData.WelcomeDrink = Convert.ToBoolean(ds.Tables[0].Rows[0][3]);
                     if (ds.Tables[0].Rows[0][4] != DBNull.Value && !ds.Tables[0].Rows[0][4].Equals(string.Empty))
@@ -198,6 +199,7 @@ namespace FarHorizon.Reservations.MasterServices
                         oMealPlanData.EveningSnacks = Convert.ToBoolean(ds.Tables[0].Rows[0][6]);
                     if (ds.Tables[0].Rows[0][7] != DBNull.Value && !ds.Tables[0].Rows[0][7].Equals(string.Empty))
                         oMealPlanData.Dinner = Convert.ToBoolean(ds.Tables[0].Rows[0][7]);
+                oMealPlanData.MealPlanDesc = Convert.ToString(ds.Tables[0].Rows[0][8]);
             }
             return oMealPlanData;
         }

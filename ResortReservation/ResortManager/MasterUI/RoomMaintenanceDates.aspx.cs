@@ -10,7 +10,7 @@ using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.MasterServices;
 using System.Data;
 
-public partial class MasterUI_RoomMaintenanceDates : System.Web.UI.Page
+public partial class MasterUI_RoomMaintenanceDates : MasterBasePage
 {
     DataSet ds;
     protected void Page_Load(object sender, EventArgs e)

@@ -9,5 +9,6 @@ namespace FarHorizon.Reservations.UploadManager
     interface ITouristUploader
     {
         bool processUplodedFile(int BookingId, ArrayList RecordList, XmlDocument XMLMapper);
+        
     }
 }

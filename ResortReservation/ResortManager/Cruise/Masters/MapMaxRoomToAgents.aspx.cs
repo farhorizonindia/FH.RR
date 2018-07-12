@@ -11,8 +11,9 @@ using System.Globalization;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.DataSecurity;
+using FarHorizon.Reservations.Bases.BasePages;
 
-public partial class Cruise_Masters_MapMaxRoomToAgents : System.Web.UI.Page
+public partial class Cruise_Masters_MapMaxRoomToAgents : MasterBasePage
 {
     DataTable dtGetReturnedData;
     int getQueryResponse = 0;

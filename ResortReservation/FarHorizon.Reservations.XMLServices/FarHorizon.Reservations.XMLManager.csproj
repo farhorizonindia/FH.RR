@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="System\Web\HttpContext.cs" />
     <Compile Include="XMLHelper.cs" />
     <Compile Include="XMLHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,5 +21,6 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 
         public string EmailId { get; set; }
         public string Password { get; set; }
+        public int BookingId { get; set; }
     }
 }

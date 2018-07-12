@@ -34,7 +34,7 @@
       </Rights>
     </Page>
     <Page Key="BookingChartView" Description="Booking Chart View">
-      <Rights>        
+      <Rights>
         <Right Key="View" Description="View Chart View"></Right>
       </Rights>
     </Page>
@@ -168,6 +168,22 @@
         <Right Key="View" Description="View"></Right>
       </Rights>
     </Page>
+    <Page Key="HotelRate" Description="Hotel Rate Card">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="CruiseRateCard" Description="Cruise Rate Card">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
     <Page Key="MailServerDetailsMaster" Description="Mail Server Details">
       <Rights>
         <Right Key="Add" Description="Add"></Right>
@@ -180,6 +196,13 @@
       <Rights>
         <Right Key="Update" Description="Update"></Right>
         <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+
+    <Page Key="CommisionMaster" Description="Commision Master">
+      <Rights>
+        <Right Key="View" Description="View"></Right>
+        <Right Key="Add" Description="Add"></Right>
       </Rights>
     </Page>
     <Page Key="Menu" Description="Menu">
@@ -266,30 +289,122 @@
         <Right Key="View" Description="View"></Right>
       </Rights>
     </Page>
+    <Page Key="Discount Master" Description="Discount Master">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AgentContract" Description="Agent Contract">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+    </Page>
+    <Page Key="AgentAuth" Description="Agent Auth">
+      <Rights>
+
+        <Right Key="View" Description="Agent Auth"></Right>
+
+      </Rights>
+
+    </Page>
+
+
+    <Page Key="PackageDepartureDates" Description="Package Departure Dates">
+      <Rights>
+        <Right Key="Add" Description="Add"></Right>
+        <Right Key="Update" Description="Update"></Right>
+        <Right Key="Delete" Description="Delete"></Right>
+        <Right Key="View" Description="View"></Right>
+      </Rights>
+
+    </Page>
+    
+    
   </PageType>
   <PageType Description="Reports">
     <Page Key="CFormReport" Description="C Form">
       <Rights>
-        <Right Key="View" Description="View C Form"></Right>    
-     
+        <Right Key="View" Description="View C Form"></Right>
+
       </Rights>
-    
-    </Page>
-  
-<Page Key="FHReport" Description="Resort Report">
-      <Rights>
-        <Right Key="View" Description="Resort Report"></Right>    
-     
-      </Rights>
-    
+
     </Page>
 
-<Page Key="TouristReportftr" Description="Tourist Report">
+    <Page Key="FHReport" Description="Resort Report">
       <Rights>
-        <Right Key="View" Description="Tourist Report"></Right>    
-     
+        <Right Key="View" Description="Resort Report"></Right>
+
       </Rights>
-    
+
     </Page>
+
+    <Page Key="TouristReportftr" Description="Tourist Report">
+      <Rights>
+        <Right Key="View" Description="Tourist Report"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="CruiseRepTest" Description="Cruise Booking Report">
+      <Rights>
+        <Right Key="View" Description="Cruise Booking Report"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="CustomerReport" Description="Registration Report">
+      <Rights>
+        <Right Key="View" Description="Registration Report"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="BookingSummeryReport" Description="Revenue Summery Report">
+      <Rights>
+        <Right Key="View" Description="Revenue Summery Report"></Right>
+
+      </Rights>
+
+    </Page>
+
+    <Page Key="AgentProductivity" Description="Agent Productivity Report">
+      <Rights>
+        <Right Key="View" Description="Agent Productivity Report"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="BookingDetailreportCruise" Description="Booking Details Report(Cruise)">
+      <Rights>
+        <Right Key="View" Description="Booking Details Report(Cruise)"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="BookingDetailsReportForHotel" Description="Booking Details Report(Hotel)">
+      <Rights>
+        <Right Key="View" Description="Booking Details Report(Hotel)"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="PaymentRegister" Description="Payment Register">
+      <Rights>
+        <Right Key="View" Description="Payment Register"></Right>
+
+      </Rights>
+
+    </Page>
+    <Page Key="Packagewiseavailability" Description="Packagewise Availability">
+      <Rights>
+        <Right Key="View" Description="Packagewise Availability"></Right>
+
+      </Rights>
+
+    </Page>
+
+
   </PageType>
 </Pages>

@@ -16,14 +16,33 @@
     <link rel="stylesheet" type="text/css" media="all" href="../css/calendar-blue2.css"
         title="win2k-cold-1" />
     <style type="text/css">
-        .auto-style1
-        {
+        .auto-style1 {
             width: 79px;
         }
     </style>
+    <script type="text/javascript">
+        function confirmation(Email) {
+             <%--var sessionValue = '<%= Session["Email"] %>';
+               alert(sessionValue);--%> 
+            if (confirm('Are you sure you want to send reminder to the guest for the payment at ' + Email)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+         function Sent() {
+            
+             alert('Reminder mail has been sent');
+            
+        }
+
+        
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
+       <%-- <asp:Label ID="lableid" runat="server" Text="Label"></asp:Label>--%>
         <phc:PageHeaderControl ID="pageheader1" runat="server" PageTitle="Bookings List" />
         <div>
             <asp:ScriptManager ID="scmgrViewBookings" runat="server">
@@ -32,51 +51,49 @@
                 <ContentTemplate>
                     <table id="filtersection" class="filtersection">
                         <tr>
-                            <td class="filtersectionCell">
-                                Check-In:</td>
+                            <td class="filtersectionCell">Check-In:</td>
                             <td class="filtersectionCell">
                                 <asp:TextBox CssClass="input" ID="txtStartDate" runat="server" Font-Size="8pt" Width="95px"></asp:TextBox>
                                 <input type="button" class="datebutton" id="btnStartDate" name="btnStartDate" onfocus="return setupCalendar('txtStartDate','btnStartDate')"
-                                    onclick="return setupCalendar('txtStartDate','btnStartDate')" value="..." /></td>
-                            <td class="filtersectionCell">
-                                Check-out:</td>
+                                    onclick="return setupCalendar('txtStartDate', 'btnStartDate')" value="..." /></td>
+                            <td class="filtersectionCell">Check-out:</td>
                             <td class="filtersectionCell">
                                 <asp:TextBox CssClass="input" ID="txtEndDate" runat="server" Font-Size="8pt" Width="95px"></asp:TextBox>
-                                <input type="button" class="datebutton" id="btnEndDate" name="btnEndDate" onclick="return setupCalendar('txtEndDate','btnEndDate')"
+                                <input type="button" class="datebutton" id="btnEndDate" name="btnEndDate" onclick="return setupCalendar('txtEndDate', 'btnEndDate')"
                                     onfocus="return setupCalendar('txtEndDate','btnEndDate')" value="..." /></td>
-                            <td class="filtersectionCell">
-                                Booking Code:</td>
+                            <td class="filtersectionCell">Booking Code:</td>
                             <td class="filtersectionCell">
                                 <asp:TextBox CssClass="input" ID="txtBookingCode" runat="server" Font-Size="8pt" Width="213px"></asp:TextBox></td>
-                            <td class="filtersectionCell">
-                                </td>
-                            <td class="filtersectionCell">
-                                </td>                            
+                            <td class="filtersectionCell"></td>
+                            <td class="filtersectionCell"></td>
+                            <td class="filtersectionCell"></td>
                         </tr>
                         <tr>
-                            <td class="filtersectionCell">
-                                Accom Type:</td>
+                            <td class="filtersectionCell">Accom Type:</td>
                             <td class="filtersectionCell">
                                 <asp:DropDownList CssClass="select" ID="ddlAccomType" runat="server" OnSelectedIndexChanged="ddlAccomType_SelectedIndexChanged"
                                     Width="150px">
                                 </asp:DropDownList></td>
-                            <td class="filtersectionCell">
-                                Booking State:</td>
+                            <td class="filtersectionCell">Booking State:</td>
                             <td class="filtersectionCell">
                                 <asp:DropDownList CssClass="select" ID="ddlBookingStatusTypes" runat="server" Width="125px">
                                 </asp:DropDownList></td>
-                            <td class="filtersectionCell">
-                                Agent:</td>
+                            <td class="filtersectionCell">Agent:</td>
                             <td class="filtersectionCell">
                                 <asp:DropDownList CssClass="select" ID="ddlAgent" runat="server" Width="220px">
                                 </asp:DropDownList></td>
+                            <td>Ref Agent</td>
+                              <td class="filtersectionCell">
+                                <asp:DropDownList CssClass="select" ID="ddlRefAgent" runat="server" Width="220px">
+                                </asp:DropDownList></td>
+                            <td class="filtersectionCell"></td>
                             <td class="filtersectionCell">
-                                </td>
-                            <td class="filtersectionCell">
-                                <asp:Button CssClass="appbutton" ID="btnShow" runat="server" Text="Show" OnClick="btnShow_Click" /></td>                           
+                                <asp:Button CssClass="appbutton" ID="btnShow" runat="server" Text="Show" OnClick="btnShow_Click" /></td>
                         </tr>
+
                     </table>
                     <div id="gridsection">
+
                         <asp:DataGrid ID="dgBookings" DataKeyField="BookingID" runat="server" AutoGenerateColumns="False"
                             Width="100%" OnEditCommand="dgBookings_EditCommand" CellPadding="4" ForeColor="#333333"
                             GridLines="None" OnDeleteCommand="dgBookings_DeleteCommand" OnItemCommand="dgBookings_ItemCommand"
@@ -103,7 +120,12 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
-                                <asp:BoundColumn DataField="BookingStatus" HeaderText="Booking Status" Visible="False">
+
+                                <%--<asp:BoundColumn DataField="agentType" HeaderText="Agent Type">
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:BoundColumn>--%>
+                                <asp:BoundColumn DataField="BookingStatus" HeaderText="Booking Status" Visible="false">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
@@ -131,11 +153,11 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:ButtonColumn>
-                                <asp:ButtonColumn CommandName="CFormForeignNational" HeaderText="[...]" Text="C-Form Foreign National">
+                                <asp:ButtonColumn CommandName="CFormForeignNational" HeaderText="[...]" Text="C-Form Foreign National" Visible="true">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:ButtonColumn>
-                                <asp:ButtonColumn CommandName="CFormIndianNational" HeaderText="[...]" Text="C-Form Indian National">
+                                <asp:ButtonColumn CommandName="CFormIndianNational" HeaderText="[...]" Text="C-Form Indian National" Visible="true">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:ButtonColumn>
@@ -143,7 +165,7 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:ButtonColumn>
-                                
+
 
                                 <asp:BoundColumn DataField="ProposedBooking" HeaderText="ProposedBooking" Visible="false">
                                     <ItemStyle CssClass="column" />
@@ -157,42 +179,70 @@
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
-                                
-                                  <asp:BoundColumn DataField="CharteredBooking" HeaderText="CharteredBooking" Visible="false">
+
+                                <asp:BoundColumn DataField="CharteredBooking" HeaderText="CharteredBooking" Visible="false">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
 
-                                  <asp:TemplateColumn HeaderText="Status" >
-                                       <ItemStyle CssClass="column" />
-                                         <ItemTemplate>
+                                <asp:TemplateColumn HeaderText="Status" Visible="false">
+                                    <ItemStyle CssClass="column" />
+                                    <ItemTemplate>
 
-                                          <asp:Label ID="lblpStatus" Visible="false" Text='<%#Bind("PaymentStatus") %>' runat="server"></asp:Label>
-                                         
-                                               </ItemTemplate>
-                                      </asp:TemplateColumn>
+                                        <asp:Label ID="lblpStatus" Visible="true" Text='<%#Bind("PaymentStatus") %>' runat="server"></asp:Label>
 
-                              
-                                <asp:TemplateColumn HeaderText="Payment Received">
-                                     <ItemStyle CssClass="column" />
-                                    
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
 
-                                  <ItemTemplate>
-                                        <asp:CheckBox ID="chkPayStatus" AutoPostBack="true"  runat="server" OnCheckedChanged="chkPayStatus_CheckedChanged" />
+
+                                <asp:TemplateColumn HeaderText="Payment Received" Visible="false">
+                                    <ItemStyle CssClass="column" />
+
+
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="chkPayStatus" AutoPostBack="true" runat="server" OnCheckedChanged="chkPayStatus_CheckedChanged" />
                                     </ItemTemplate>
 
 
 
                                 </asp:TemplateColumn>
-                                 <asp:BoundColumn DataField="PaidAmt" HeaderText="Paid Amount" >
+                                <asp:BoundColumn DataField="PaidAmt" HeaderText="Paid Amount">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
 
-                                  <asp:BoundColumn DataField="InvoiceAmount" HeaderText="Invoice Amount" >
+                                <asp:BoundColumn DataField="InvoiceAmount" HeaderText="Invoice Amount">
                                     <ItemStyle CssClass="column" />
                                     <HeaderStyle CssClass="columnHeader" />
                                 </asp:BoundColumn>
+
+                                <asp:TemplateColumn>
+                                    <ItemStyle CssClass="column" />
+
+
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="ReminderButton" CommandName="REMINDER"
+                                            OnClientClick="btnShow_Click"
+                                            runat="server" Text="Reminder"></asp:LinkButton>
+                                    </ItemTemplate>
+
+                                    <%--OnClientClick="return confirmation();"--%>
+
+                                </asp:TemplateColumn>
+                                <asp:BoundColumn DataField="Agentname" HeaderText="Agent Name">
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:BoundColumn>
+
+                                <asp:BoundColumn DataField="RefAgentname" HeaderText="RefAgent Name">
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:BoundColumn>
+                                <%--  <asp:ButtonColumn CommandName="REMINDER" HeaderText="[...]" Text="Reminder">
+
+                                    <ItemStyle CssClass="column" />
+                                    <HeaderStyle CssClass="columnHeader" />
+                                </asp:ButtonColumn>--%>
                             </Columns>
                             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                             <EditItemStyle BackColor="#2461BF" />
@@ -205,22 +255,16 @@
                     </div>
                     <table id="LegendSection">
                         <tr>
-                            <td style="background-color: blue; width: 80px; color: White; padding-left: 4px;">
-                                Proposed</td>
-                            <td style="background-color: Aqua; width: 80px; padding-left: 4px;">
-                                Booked</td>
-                            <td style="background-color: orange; width: 80px; padding-left: 4px;">
-                                Wait Listed</td>
-                            <td style="background-color: Lime; width: 80px; padding-left: 4px;">
-                                Confirmed</td>
-                            <td style="background-color: Red; width: 80px; padding-left: 4px;">
-                                Cancelled</td>
-                             <td style=" padding-left: 4px;" class="auto-style1">
-                                * Chartered Booking</td>
+                            <td style="background-color: blue; width: 80px; color: White; padding-left: 4px;">Proposed</td>
+                            <td style="background-color: Aqua; width: 80px; padding-left: 4px;">Booked</td>
+                            <td style="background-color: orange; width: 80px; padding-left: 4px;">Wait Listed</td>
+                            <td style="background-color: Lime; width: 80px; padding-left: 4px;">Confirmed</td>
+                            <td style="background-color: Red; width: 80px; padding-left: 4px;">Cancelled</td>
+                            <td style="padding-left: 4px;" class="auto-style1">* Chartered Booking</td>
 
                         </tr>
                     </table>
-             
+
 
 
 

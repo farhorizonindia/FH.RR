@@ -8,6 +8,19 @@
     return true;
 }
 
+function validateInputForTourist() {
+   
+    var theForm = document.forms['form1'];
+    if (!theForm)
+        theForm = document.form1;
+    if (theForm.ddlAccomName.selectedIndex == 0 || theForm.ddlAccomName.selectedIndex < 0) {
+        alert("Please choose the accomodation.");
+        theForm.ddlAccomName.focus();
+        return false;
+    }
+    return true;
+}
+
 function validateInputForGettingBookings()  {
     var theForm = document.forms['form1'];
     if (!theForm) 

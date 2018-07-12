@@ -52,13 +52,13 @@ namespace FarHorizon.Reservations.BusinessServices
             }
         }
 
-        public BookingChartDTO[] GetRoomDetailsNew(int RegionId, int AccomodationTypeId, int AccomodationId)
+        public BookingChartDTO[] GetRoomDetailsNew(int RegionId, int AccomodationTypeId, int AccomodationId, DateTime sdate)
         {
             try
             {
                 BookingChartHelper bookingChartProxy;
                 bookingChartProxy = new BookingChartHelper();
-                return bookingChartProxy.GetRoomDetailsNew(RegionId, AccomodationTypeId, AccomodationId);
+                return bookingChartProxy.GetRoomDetailsNew(RegionId, AccomodationTypeId, AccomodationId,sdate);
             }
             catch (Exception exp)
             {

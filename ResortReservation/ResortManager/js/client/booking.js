@@ -170,11 +170,11 @@ function validateForm() {
         theForm.ddlAgent.focus();
         return false;
     }
-    if (theForm.txtNoOfPersons.value == "") {
-        alert("Please Enter The No. Of Pax");
-        theForm.txtNoOfPersons.focus();
-        return false;
-    }
+    //if (theForm.txtNoOfPersons.value == "") {
+    //    alert("Please Enter The No. Of Pax");
+    //    theForm.txtNoOfPersons.focus();
+    //    return false;
+    //}
     return true;
 }
 
@@ -202,7 +202,7 @@ function validateBookingDates() {
             return false;
         }
         else {
-            theForm.txtNoOfNights.value = daysdif;
+            //theForm.txtNoOfNights.value = daysdif;
         }
     }
     return true;
@@ -384,6 +384,7 @@ function setTooltipDataMaintenance(roomno, bookingid) {
 
 
 function setTooltipData(roomno, bookingid) {
+    debugger;
     var detailText = "";
     var found = false;
     var cntr = 0;
@@ -452,14 +453,14 @@ function showBubbleTooltip(id, e) {
 
     if (popped == "") {
         document.getElementById(id).style.display = 'block';
-        document.getElementById(id).style.top = tempY + 'px';
-        document.getElementById(id).style.left = tempX + 'px';
+        document.getElementById(id).style.top = (tempY+10) + 'px';
+        document.getElementById(id).style.left = (tempX+10) + 'px';
         popped = id;
     } else {
         document.getElementById(popped).style.display = 'none';
         document.getElementById(id).style.display = 'block';
-        document.getElementById(id).style.top = tempY + 'px';
-        document.getElementById(id).style.left = tempX + 'px';
+        document.getElementById(id).style.top = (tempY+10) + 'px';
+        document.getElementById(id).style.left = (tempX+10) + 'px';
         popped = id;
     }
     return false;

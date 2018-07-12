@@ -19,11 +19,11 @@
                     <div id="gridsection" class="gridsection">
                     <asp:DataGrid ID="dgNationality" runat="server" AutoGenerateColumns="False" BorderStyle="Ridge"
                         CellPadding="4" DataKeyField="NationalityId" ForeColor="#333333" GridLines="None"
-                        OnSelectedIndexChanged="dgNationality_SelectedIndexChanged1" Width="391px" AllowPaging="True">
+                        OnSelectedIndexChanged="dgNationality_SelectedIndexChanged1" Width="391px" AllowPaging="True"  OnPageIndexChanged="dgNationality_PageIndexChanged" PageSize="20">
                         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
                         <EditItemStyle BackColor="#2461BF" />
                         <SelectedItemStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-                        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" Mode="NumericPages" />
                         <AlternatingItemStyle BackColor="White" />
                         <ItemStyle BackColor="#EFF3FB" />
                         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -34,6 +34,7 @@
                             </asp:ButtonColumn>
                         </Columns>
                     </asp:DataGrid>
+                        <br />
                     </div>
                     <table id="inputsection" class="inputsection">
                         <tr>

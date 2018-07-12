@@ -7,14 +7,17 @@ using System.Web.UI.WebControls;
 using System.Data;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.Bases.BasePages;
 
-public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
+public partial class Cruise_Masters_CruiseOpenDatesMaster : MasterBasePage
 {
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
+    DALPackageRateCard dalp = new DALPackageRateCard();
     DataTable dtGetReturnedData;
     int getQueryResponse = 0;
-
+    BALBooking blsr = new BALBooking();
+    DALBooking dlsr = new DALBooking();
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -105,6 +108,13 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                 ddlpackage.DataValueField = "PackageId";
                 ddlpackage.DataBind();
                 ddlpackage.Items.Insert(0, "-Select-");
+
+                drppackaging.DataSource = dtGetReturnedData;
+                drppackaging.DataTextField = "PackageName";
+                drppackaging.DataValueField = "PackageId";
+                drppackaging.DataBind();
+                ListItem li = new ListItem { Text = "-Select-", Value = "0" };
+                drppackaging.Items.Insert(0, li);
             }
             else
             {
@@ -112,6 +122,11 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                 ddlpackage.DataSource = null;
                 ddlpackage.DataBind();
                 ddlpackage.Items.Insert(0, "-No Package-");
+
+                drppackaging.Items.Clear();
+                drppackaging.DataSource = null;
+                drppackaging.DataBind();
+                drppackaging.Items.Insert(0, "-No Package-");
             }
         }
         catch (Exception sqe)
@@ -129,6 +144,7 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
         try
         {
             blOpenDates._Action = "GetAllOpenDates";
+
             dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
             if (dtGetReturnedData.Rows.Count > 0)
             {
@@ -177,7 +193,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                 if (getQueryResponse > 0)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cruise OpenDate has been added successfully')", true);
-                    BindGridOpenDates();
+                    //  BindGridOpenDates();
+                    Button1_Click(this,e);
                 }
             }
             else
@@ -188,7 +205,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                 if (getQueryResponse > 0)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cruise OpenDate has been updated successfully')", true);
-                    BindGridOpenDates();
+                    Button1_Click(this, e);
+                    //  BindGridOpenDates();
 
                 }
                 else
@@ -280,6 +298,8 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                     dt1 = dlOpenDates.SeasonCheck(blOpenDates);
                     if (dt1 != null)
                     {
+
+
                         if (dt1.Rows.Count > 0)
                         {
                             blOpenDates._Action = "checkduplicatedeparture";
@@ -397,7 +417,7 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
             if (res > 0)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Departure Deleted')", true);
-                BindGridOpenDates();
+                Button1_Click(this, e);
             }
             else
             {
@@ -408,6 +428,38 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
         catch
         {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Departure could not be Deleted')", true);
+        }
+    }
+    public DataTable bindroomddl(int departureid, string packageid)
+    {
+        try
+        {
+            blsr.action = "GetcruiseRooms";
+            blsr.PackageId = packageid;
+
+
+            blsr.DepartureId = departureid;
+
+            if (Session["UserCode"] != null)
+            {
+                blsr._iAgentId = Convert.ToInt32(Session["UserCode"].ToString());
+            }
+            DataTable dt = new DataTable();
+            dt = dlsr.GetCruiseRooms(blsr);
+            if (dt != null)
+            {
+
+                return dt;
+            }
+            else
+            {
+                return null;
+
+            }
+        }
+        catch
+        {
+            return null;
         }
     }
     protected void GridOpenDates_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -447,16 +499,255 @@ public partial class Cruise_Masters_CruiseOpenDatesMaster : System.Web.UI.Page
                     ddlCountry.SelectedIndex = 0;
                     ddlpackage.SelectedIndex = 0;
                     ddlRiver.SelectedIndex = 0;
+                }
+            }
+            if (e.CommandName == "Open")
+            {
+                int getid = Convert.ToInt32(e.CommandArgument.ToString());
+                blOpenDates.Id = getid;
+                blOpenDates._Action = "GetOpenDatesbyId";
+                DataTable dt = dlOpenDates.getOpenDatesbyId(blOpenDates);
+                DataTable getavialabl = bindroomddl(getid, dt.Rows[0]["packageId"].ToString());
+                DataView dv = new DataView();
+                dv = new DataView(getavialabl, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                DataTable dt2 = dv.ToTable();
+                bool check = Convert.ToBoolean(dt.Rows[0]["Openclose"]);
+                if (dt2 != null && dt2.Rows.Count > 0 && check != true)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Close can only happen if there is no booking on those departures')", true);
+                    return;
 
                 }
+                else
+                {
+                    blsr.action = "getchilid";
+                    blsr.PackageId = dt.Rows[0]["packageId"].ToString();
+                    DataTable dtchild = dlsr.getchilid(blsr);
+                    if (dtchild != null && dtchild.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dtchild.Rows.Count; i++)
+                        {
+                            blsr.action = "getdepartureid";
+                            blsr.PackageId = dtchild.Rows[i]["PackageId"].ToString();
+                            blsr._dtStartDate = Convert.ToDateTime(dt.Rows[0]["CheckInDate"].ToString());
+                            blsr._dtEndDate = Convert.ToDateTime(dt.Rows[0]["CheckOutDate"].ToString());
+                            DataTable dtgetdepurtureid = dlsr.getdepartureid(blsr);
+                            if (dtgetdepurtureid != null && dtgetdepurtureid.Rows.Count > 0)
+                            {
+                                blsr.action = "GetcruiseRooms";
+                                blsr.DepartureId = Convert.ToInt32(dtgetdepurtureid.Rows[0]["Id"].ToString());
+                                DataTable dtgetchild = dlsr.GetCruiseRooms(blsr);
+                                DataView dvgetchild = new DataView();
+                                dvgetchild = new DataView(dtgetchild, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                                dtgetchild = dvgetchild.ToTable();
+                                if (dtgetchild != null && dtgetchild.Rows.Count > 0)
+                                {
+                                    Session["set"] = null;
+                                }
+                                else
+                                {
+                                    Session["set"] = 1;
+                                }
+                            }
+                            else
+                            {
+                                Session["set"] = 1;
+                            }
 
+                        }
+                    }
+                    else
+                    {
+                        blsr.action = "getdepartureid";
+                        blsr.PackageId = dt.Rows[0]["PackageId"].ToString();
+                        blsr._dtStartDate = Convert.ToDateTime(dt.Rows[0]["CheckInDate"].ToString());
+                        blsr._dtEndDate = Convert.ToDateTime(dt.Rows[0]["CheckOutDate"].ToString());
+                        DataTable dtgetdepurtureid = dlsr.getdepartureid(blsr);
+                        if (dtgetdepurtureid != null && dtgetdepurtureid.Rows.Count > 0)
+                        {
+                            blsr.action = "GetcruiseRooms";
+                            blsr.DepartureId = Convert.ToInt32(dtgetdepurtureid.Rows[0]["Id"].ToString());
+                            DataTable dtgetchild = dlsr.GetCruiseRooms(blsr);
+                            DataView dvgetchild = new DataView();
+                            dvgetchild = new DataView(dtgetchild, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                            dtgetchild = dvgetchild.ToTable();
+                            if (dtgetchild != null && dtgetchild.Rows.Count > 0)
+                            {
+                                Session["set"] = null;
+                            }
+                            else
+                            {
+                                Session["set"] = 1;
+                            }
+                        }
+                    }
+                    if (Session["set"] != null || check ==true)
+                    {
+                        int n = dalp.updateopenclose(getid);
+                        if (n == 1)
+                        {
+                            for (int i = 0; i < dtchild.Rows.Count; i++)
+                            {
+                                blsr.action = "getdepartureid";
+                                blsr.PackageId = dtchild.Rows[i]["PackageId"].ToString();
+                                blsr._dtStartDate = Convert.ToDateTime(dt.Rows[0]["CheckInDate"].ToString());
+                                blsr._dtEndDate = Convert.ToDateTime(dt.Rows[0]["CheckOutDate"].ToString());
+                                DataTable dtgetdepurtureid = dlsr.getdepartureid(blsr);
+                                try
+                                {
+                                    int n1 = dalp.updateopenclosebydate(Convert.ToInt32(dtgetdepurtureid.Rows[0]["Id"].ToString()));
+                                    if (n1 == 1)
+                                    {
 
+                                    }
+                                }
+                                catch (Exception ex) { }
+                            }
+                            Session["set"] = null;
+                            Button1_Click(this, e);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Update Successfully')", true);
 
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please try again')", true);
+                            return;
+                        }
+                    }
+                }
             }
+            //if (e.CommandName == "Open")
+            //{
+            //    int getid = Convert.ToInt32(e.CommandArgument.ToString());
+            //    blOpenDates.Id = getid;
+            //    blOpenDates._Action = "GetOpenDatesbyId";
+            //    DataTable dt = dlOpenDates.getOpenDatesbyId(blOpenDates);
+            //    DataTable getavialabl = bindroomddl(getid, dt.Rows[0]["packageId"].ToString());
+            //    DataView dv = new DataView();
+            //    dv = new DataView(getavialabl, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
+            //    DataTable dt2 = dv.ToTable();
+            //    if (dt2 != null && dt2.Rows.Count > 0)
+            //    {
+            //        ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Close can only happen if there is no booking on those departures')", true);
+            //        return;
+
+            //    }
+            //    else
+            //    {
+            //        blsr.action = "getchilid";
+            //        blsr.PackageId = dt.Rows[0]["packageId"].ToString();
+            //        DataTable dtchild = dlsr.getchilid(blsr);
+            //        if (dtchild != null && dtchild.Rows.Count > 0)
+            //        {
+            //            for (int i = 0; i < dtchild.Rows.Count; i++)
+            //            {
+            //                blsr.action = "getdepartureid";
+            //                blsr.PackageId = dt.Rows[0]["PackageId"].ToString();
+            //                blsr._dtStartDate = Convert.ToDateTime(dt.Rows[0]["CheckInDate"].ToString());
+            //                blsr._dtEndDate = Convert.ToDateTime(dt.Rows[0]["CheckOutDate"].ToString());
+            //                DataTable dtgetdepurtureid = dlsr.getdepartureid(blsr);
+            //                if (dtgetdepurtureid != null && dtgetdepurtureid.Rows.Count > 0)
+            //                {
+            //                    blsr.action = "GetcruiseRooms";
+            //                    blsr.DepartureId = Convert.ToInt32(dtgetdepurtureid.Rows[0]["Id"].ToString());
+            //                    DataTable dtgetchild = dlsr.GetCruiseRooms(blsr);
+            //                    DataView dvgetchild = new DataView();
+            //                    dvgetchild = new DataView(dtgetchild, "BookedStatus='Not Available'", "BookedStatus", DataViewRowState.CurrentRows);
+            //                    dtgetchild = dvgetchild.ToTable();
+            //                    if (dtgetchild != null && dtgetchild.Rows.Count > 0)
+            //                    {
+            //                        Session["set"] = null;
+            //                    }
+            //                    else
+            //                    {
+            //                        Session["set"] = 1;
+            //                    }
+            //                }
+
+            //            }
+            //        }
+
+            //        if (Session["set"] != null)
+            //        {
+            //            int n = dalp.updateopenclose(getid);
+            //            if (n == 1)
+            //            {
+            //                for (int i = 0; i < dt.Rows.Count; i++)
+            //                {
+            //                    blsr.action = "getdepartureid";
+            //                    blsr.PackageId = dt.Rows[i]["PackageId"].ToString();
+            //                    blsr._dtStartDate = Convert.ToDateTime(dt.Rows[0]["CheckInDate"].ToString());
+            //                    blsr._dtEndDate = Convert.ToDateTime(dt.Rows[0]["CheckOutDate"].ToString());
+            //                    DataTable dtgetdepurtureid = dlsr.getdepartureid(blsr);
+            //                    try
+            //                    {
+            //                        int n1 = dalp.updateopenclosebydate(Convert.ToInt32(dtgetdepurtureid.Rows[0]["Id"].ToString()));
+            //                        if (n1 == 1)
+            //                        {
+
+            //                        }
+            //                    }
+            //                    catch (Exception ex) { }
+            //                }
+            //                Session["set"] = null;
+            //                this.BindGridOpenDates();
+            //                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Update Successfully')", true);
+
+            //            }
+            //            else
+            //            {
+            //                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please try again')", true);
+            //                return;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
-        catch
+        catch (Exception ex)
         {
+            throw ex;
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            blOpenDates._Action = "GetAllOpenDatesfilter";
+            blOpenDates._PackageId = drppackaging.SelectedValue;
+            if (txtfrom.Text != string.Empty || txtTo.Text != string.Empty)
+            {
+                blOpenDates._checkInDate = DateTime.Parse(txtfrom.Text);
+                blOpenDates._checkOutDate = DateTime.Parse(txtTo.Text);
+            }
+            else
+            {
+                blOpenDates._checkInDate = DateTime.Parse("1990/01/01");
+                blOpenDates._checkOutDate = DateTime.Parse("1990/01/01");
+            }
+            string ss = drpcloseopen.SelectedValue;
+            if (ss != "")
+            {
+                blOpenDates.Status = Convert.ToBoolean(drpcloseopen.SelectedValue);
+            }
+
+            dtGetReturnedData = dlOpenDates.BindControlsFilter(blOpenDates);
+            if (dtGetReturnedData.Rows.Count > 0)
+            {
+                GridOpenDates.DataSource = dtGetReturnedData;
+                GridOpenDates.DataBind();
+            }
+            else
+            {
+                GridOpenDates.DataSource = null;
+                GridOpenDates.DataBind();
+            }
+        }
+        catch (Exception sqe)
+        {
+            GridOpenDates.DataSource = null;
+            GridOpenDates.DataBind();
         }
     }
 }

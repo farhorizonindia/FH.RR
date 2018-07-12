@@ -20,6 +20,7 @@ public partial class ClientUI_TouristReportftr : ClientBasePage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        AddAttributes();
         if (!IsPostBack)
         {
             SetAccomodationTypeDetails();
@@ -32,6 +33,13 @@ public partial class ClientUI_TouristReportftr : ClientBasePage
         
     }
 
+    private void AddAttributes()
+    {
+        //txtStartDate.Attributes.Add("onchange", "fillEndDate()");
+        btnShow.Attributes.Add("onclick", "return validateInputForTourist()");
+
+        btnExport.Attributes.Add("onclick", "return validateInputForTourist()");
+    }
 
     private void FillAccomodationTypes()
     {

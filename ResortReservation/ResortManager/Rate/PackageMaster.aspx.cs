@@ -191,6 +191,16 @@ public partial class Rate_PackageMaster : MasterBasePage
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
+               
+                if(chkActive.Checked==true)
+                {
+                    blPackage.IsActive = true;
+                }
+                if (chkActive.Checked == false)
+                {
+                    blPackage.IsActive = false;
+                }
+
                 blPackage.ImagePath = UploadImage();
 
                 //  blPackage.Direction = ddlDirection.SelectedValue;
@@ -225,7 +235,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                     ddlPackageType.ClearSelection();
                     txtPackageDesc.Text = "";
                     Image1.ImageUrl = "";
-                    txtItineraryLink.Text = "";
+                    txtItineraryLink.Text = ""; chkActive.Checked = false;
 
                 }
                 else
@@ -239,6 +249,15 @@ public partial class Rate_PackageMaster : MasterBasePage
                 blPackage.PackageDescription = txtPackageDesc.Text;
                 blPackage.ItineraryLink = txtItineraryLink.Text.Trim();
 
+                if (chkActive.Checked == true)
+                {
+                    blPackage.IsActive = true;
+                }
+                if (chkActive.Checked == false)
+                {
+                    blPackage.IsActive = false;
+                }
+
                 blPackage.ImagePath = UploadImage();
 
                 int res = dlPakage.UpdatePackage(blPackage);
@@ -251,7 +270,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                     ddlBoardingTo.SelectedIndex = 0;
                     ddlMasterPackage.SelectedIndex = 0;
                     ddlnights.SelectedIndex = 0;
-                    ddlPackageType.SelectedIndex = 0;
+                    ddlPackageType.SelectedIndex = 0; chkActive.Checked = false;
                 }
                 else
                 {
@@ -279,13 +298,14 @@ public partial class Rate_PackageMaster : MasterBasePage
 
                 string savepath = rootedpath + filename;
                 string newpath = rename(savepath);
+                uploadLogo.PostedFile.SaveAs(newpath);
 
                 string newFileName = Path.GetFileName(newpath);
                 imagePath = uploadPath + newFileName;
 
                 byte[] fileBytes = new BinaryReader(uploadLogo.PostedFile.InputStream).ReadBytes(uploadLogo.PostedFile.ContentLength);
                 string fn = Path.GetFileName(newpath);
-                UploadFileToSites(fn, fileBytes);
+               // UploadFileToSites(fn, fileBytes);
             }
         }
         catch (Exception exp)
@@ -618,6 +638,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                         txtPackageDesc.Text = dtGetReturnedData.Rows[0]["PackageDescription"].ToString();
                         Image1.ImageUrl = dtGetReturnedData.Rows[0]["PackageImage"].ToString();
                         txtItineraryLink.Text = dtGetReturnedData.Rows[0]["ItineraryLink"].ToString();
+                        chkActive.Checked= Convert.ToBoolean(dtGetReturnedData.Rows[0]["IsActive"].ToString());
                         btnSbmit.Text = "Update";
                         BindNights(packgid);
                     }
@@ -632,6 +653,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                         txtPackageDesc.Text = "";
                         Image1.ImageUrl = "";
                         txtItineraryLink.Text = "";
+                        chkActive.Checked = false;
 
                     }
                 }
@@ -645,7 +667,7 @@ public partial class Rate_PackageMaster : MasterBasePage
                     ddlPackageType.ClearSelection();
                     txtPackageDesc.Text = "";
                     Image1.ImageUrl = "";
-                    txtItineraryLink.Text = "";
+                    txtItineraryLink.Text = ""; chkActive.Checked = false;
                 }
 
             }
@@ -661,7 +683,7 @@ public partial class Rate_PackageMaster : MasterBasePage
             ddlPackageType.ClearSelection();
             txtPackageDesc.Text = "";
             Image1.ImageUrl = "";
-            txtItineraryLink.Text = "";
+            txtItineraryLink.Text = ""; chkActive.Checked = false;
         }
     }
 

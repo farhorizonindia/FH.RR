@@ -23,8 +23,10 @@ public partial class MasterUI_NationalityMaster : MasterBasePage
     {
         btnDelete.Attributes.Add("onclick", "return confirm('Are you sure you want to delete this record?')");
         if (!IsPostBack)
+        {
             RefreshGrid();
-        EnableNewButton();
+            EnableNewButton();
+        }
     }
     protected void btnAddNew_Click(object sender, EventArgs e)
     {
@@ -222,6 +224,7 @@ public partial class MasterUI_NationalityMaster : MasterBasePage
             {
                 dgNationality.DataSource = oNationalityData;
                 dgNationality.DataBind();
+                
             }
         }
         else
@@ -253,4 +256,10 @@ public partial class MasterUI_NationalityMaster : MasterBasePage
         return true;
     }
     #endregion UserDefinedFunctions
+
+    protected void dgNationality_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
+    {
+        dgNationality.CurrentPageIndex = e.NewPageIndex;
+        RefreshGrid();
+    }
 }

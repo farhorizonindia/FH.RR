@@ -75,7 +75,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingChart
             return oAccomTypeData;
         }
 
-        public BookingChartDTO[] GetRoomDetailsNew(int RegionId, int AccomodationTypeId, int AccomodationId)
+        public BookingChartDTO[] GetRoomDetailsNew(int RegionId, int AccomodationTypeId, int AccomodationId, DateTime sdate)
         {
             DataSet dsBookingChartData;
             DataRow dr;
@@ -94,6 +94,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingChart
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iRegionId", DbType.Int32, RegionId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomodationTypeId", DbType.Int32, AccomodationTypeId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomodationId", DbType.Int32, AccomodationId);
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sdate", DbType.Date, sdate);
                 dsBookingChartData = oDB.ExecuteDataSet(oDB.DbCmd);
 
                 if (dsBookingChartData != null)
@@ -319,6 +320,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingChart
                             dateWiseBookingDTO.BookingStatusId = 0;
                         if (dr.ItemArray.GetValue(9) != null && dr.ItemArray.GetValue(9) != DBNull.Value)
                             dateWiseBookingDTO.AgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(9)));
+                        if (dr.ItemArray.GetValue(15) != null && dr.ItemArray.GetValue(15) != DBNull.Value)
+                            dateWiseBookingDTO.RefAgentName = DataSecurityManager.Decrypt(Convert.ToString(dr.ItemArray.GetValue(15)));
                         if (dr.ItemArray.GetValue(10) != null && dr.ItemArray.GetValue(10) != DBNull.Value)
                             dateWiseBookingDTO.BookingReference = Convert.ToString(dr.ItemArray.GetValue(10));
                         if (dr.ItemArray.GetValue(11) != null && dr.ItemArray.GetValue(11) != DBNull.Value)

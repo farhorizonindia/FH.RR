@@ -36,7 +36,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 if (oBookingWaitListData != null && oBookingWaitListData.Length > 0)
                 {
                     if (oDB == null)
-                        oDB = new DatabaseManager();                   
+                        oDB = new DatabaseManager();
 
                     //sProcName = "up_Ins_BookingWaitList2";
                     sProcName = "up_Ins_BookingWaitList3";
@@ -49,7 +49,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, oBookingWaitListData[i].AccomId);
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iRoomCategoryId", DbType.Int32, oBookingWaitListData[i].RoomCategoryId);
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iRoomTypeId", DbType.Int32, oBookingWaitListData[i].RoomTypeId);
-                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNo_Of_Rooms_Waitlisted", DbType.Int32, oBookingWaitListData[i].No_Of_RoomsWaitListed);                            
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iNo_Of_Rooms_Waitlisted", DbType.Int32, oBookingWaitListData[i].No_Of_RoomsWaitListed);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@pax", DbType.Int32, oBookingWaitListData[i].paxstying);
                             oDB.ExecuteNonQuery(oDB.DbCmd);
                             oDB.DbCmd.Parameters.Clear();
                         }
@@ -95,7 +96,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
             }
             finally
             {
-                oDB = null;                
+                oDB = null;
             }
             return true;
         }
@@ -129,7 +130,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomTypeId", DbType.Int32, RoomTypeId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomId", DbType.Int32, AccomId);
                 oDB.ExecuteNonQuery(oDB.DbCmd);
-            }              
+            }
             catch (Exception exp)
             {
                 oDB = null;
@@ -264,7 +265,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB = new DatabaseManager();
                 sProcName = "up_GetWaitlistedBookings";
                 oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iBookingId", DbType.Int32, BookingId);          
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iBookingId", DbType.Int32, BookingId);
                 dsBlockedBooking = oDB.ExecuteDataSet(oDB.DbCmd);
                 oDB = null;
             }

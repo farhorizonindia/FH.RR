@@ -88,6 +88,14 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             set { _agentname = value; }
         }
 
+        private string _refagentname;
+
+        public string RefAgentName
+        {
+            get { return _refagentname; }
+            set { _refagentname = value; }
+        }
+
         private string _accomodation;
         public string Accomodation
         {
@@ -143,8 +151,12 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _chartered; }
             set { _chartered = value; }
         }
-   
-
+        private string _packagename;
+        public string packagename
+        {
+            get { return _packagename; }
+            set { _packagename = value; }
+        }
 
 
     }

@@ -1,0 +1,54 @@
+.navbar-default .navbar-brand {
+    color: #6fda44;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #6fda44;
+}
+.callbacks_tabs a:after {
+    background: #6fda44;
+}
+ul.nav li.current {
+    background: rgba(111, 218, 68, 0.35);
+}
+.avilable .cruise-trip {
+    background: rgba(111, 218, 68, 0.35);
+}
+.cruise-trip .form-control {
+    border: 1px solid #5acc2d;
+}
+.other-tab .form-control {
+    border: 1px solid #5acc2d;
+}
+select.dropdown, input#datepicker1, input#datepicker2 {
+    border: 1px solid #5acc2d;
+}
+.btn {
+    border-color: #5acc2d;
+    color: #5acc2d;
+    border: 1px solid #5acc2d;
+}
+.btn:hover {
+    border-color: #6fda44; color:#fff;
+    background-color: #4fb925;
+}
+.nav-tabs li:active {
+    background: #6fda44;
+}
+.nav-content {
+    background: rgba(111, 218, 68, 0.35);
+}
+
+@media only screen and (min-width: 768px)
+.cd-breadcrumb.triangle li.current > * {
+    background-color: #6fda44;
+    border-color: #6fda44;
+}
+
+#upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button3, #upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button2, #upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button1 {
+    border-color: #6fda44 !important;
+    border: 1px solid #6fda44 !important;
+    border-right: 1px solid #6fda44 !important;
+}
+#upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button3:hover, #upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button2:hover, #upd1 .booking-online-box .booking-online-left1 #ButtonsDiv #Button1:hover {
+    background-color: #6fda44 !important;
+}

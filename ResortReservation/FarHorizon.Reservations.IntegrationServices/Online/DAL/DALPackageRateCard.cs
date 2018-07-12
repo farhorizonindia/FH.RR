@@ -72,7 +72,32 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             }
         }
 
-
+        public DataTable getPackageFilterData(BALPackageRateCard obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_packagemaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+                da.SelectCommand.Parameters.AddWithValue("@packageId", obj._packageId);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
 
 
@@ -101,7 +126,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
 
                 da.InsertCommand.Parameters.AddWithValue("@FrompaxMain", obj.FrompaxMain);
                 da.InsertCommand.Parameters.AddWithValue("@ToPaxMain", obj.ToPaxMain);
-
+        
 
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
@@ -138,6 +163,10 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@PPNc", obj._PPNc);
                 da.InsertCommand.Parameters.AddWithValue("@SRSNc", obj._SRSNc);
                 da.InsertCommand.Parameters.AddWithValue("@Date", obj._Date);
+                da.InsertCommand.Parameters.AddWithValue("@AgentId", obj.AgentId);
+                da.InsertCommand.Parameters.AddWithValue("@AgentIdRef", obj.AgentIdRef);
+                da.InsertCommand.Parameters.AddWithValue("@AgentIdCommission", obj.AgentIdCommission);
+                da.InsertCommand.Parameters.AddWithValue("@AgentCommission", obj.AgentCommission);
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.InsertCommand.ExecuteNonQuery();
@@ -152,7 +181,112 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return 0;
             }
         }
+        public int savediscount(string packageid, DateTime boardingdate, DateTime deboardingdate, decimal price, decimal discountamount, decimal lastminutesale)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Discountmaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "Save");
+                da.InsertCommand.Parameters.AddWithValue("@Packageid", packageid);
+                da.InsertCommand.Parameters.AddWithValue("@Boardingdate", boardingdate);
+                da.InsertCommand.Parameters.AddWithValue("@Deboardingdate", deboardingdate);
+                da.InsertCommand.Parameters.AddWithValue("@price", price);
+                da.InsertCommand.Parameters.AddWithValue("@Discountamount", discountamount);
+                da.InsertCommand.Parameters.AddWithValue("@lastminutesale", lastminutesale);
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+        public int updateopenclose(int id)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Discountmaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "updateopenclose");
+                da.InsertCommand.Parameters.AddWithValue("@Id", id);
+                
 
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public int updateopenclosebydate(int depurtueid)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Discountmaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "updateopenclosebydate");
+                da.InsertCommand.Parameters.AddWithValue("@Id", depurtueid);
+                
+
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public int updatepayment(string bookingcode, string paymnetid,decimal paidamount)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_Discountmaster]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@Action", "updatepayment");
+                da.InsertCommand.Parameters.AddWithValue("@bookingcode", bookingcode);
+                da.InsertCommand.Parameters.AddWithValue("@paymentid", paymnetid);
+                da.InsertCommand.Parameters.AddWithValue("@paidamount", paidamount);
+
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
         public int updatenewPackageRateCard(BALPackageRateCard obj)
         {
             try
@@ -215,6 +349,10 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.UpdateCommand.Parameters.AddWithValue("@fromPaxup", obj._fromPaxup);
                 da.UpdateCommand.Parameters.AddWithValue("@ToPaxup", obj._ToPaxup);
                 da.UpdateCommand.Parameters.AddWithValue("@RoomCategoryIdup", obj._RoomCategoryIdup);
+                da.UpdateCommand.Parameters.AddWithValue("@AgentId", obj.AgentId);
+                da.UpdateCommand.Parameters.AddWithValue("@AgentIdRef", obj.AgentIdRef);
+                da.UpdateCommand.Parameters.AddWithValue("@AgentIdCommission", obj.AgentIdCommission);
+                da.UpdateCommand.Parameters.AddWithValue("@AgentCommission", obj.AgentCommission);
                 da.UpdateCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.UpdateCommand.ExecuteNonQuery();
@@ -224,7 +362,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 else
                     return 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }

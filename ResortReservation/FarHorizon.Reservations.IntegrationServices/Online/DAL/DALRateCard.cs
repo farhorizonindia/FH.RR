@@ -102,6 +102,60 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return null;
             }
         }
+        public DataTable GetAccomname(BALRateCard obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_cardMaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+               
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public DataTable GetallAccomname(BALRateCard obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_cardMaster]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@Action", obj._Action);
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public DataTable GetRoomsTypes(BALRateCard obj)
         {
             try
@@ -205,6 +259,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@FitOrGit", obj._FitOrGit);
                 da.InsertCommand.Parameters.AddWithValue("@RoomTypeId", obj._RoomTypeId);
                 da.InsertCommand.Parameters.AddWithValue("@Amt", obj._Amt);
+                da.InsertCommand.Parameters.AddWithValue("@agentid", obj.agentid);
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.InsertCommand.ExecuteNonQuery();
@@ -395,6 +450,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.UpdateCommand.Parameters.AddWithValue("@FitOrGit", obj._FitOrGit);
                 da.UpdateCommand.Parameters.AddWithValue("@RoomTypeId", obj._RoomTypeId);
                 da.UpdateCommand.Parameters.AddWithValue("@Amt", obj._Amt);
+                da.UpdateCommand.Parameters.AddWithValue("@agentid", obj.agentid);
                 da.UpdateCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 int Status = da.UpdateCommand.ExecuteNonQuery();

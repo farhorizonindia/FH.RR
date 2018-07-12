@@ -1,0 +1,9 @@
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.EMailManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.EMailManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.Common.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.Common.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\FarHorizon.Reservations.EMailManager.csprojResolveAssemblyReference.cache
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\FarHorizon.Reservations.EMailManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.EmailManager\obj\Debug\FarHorizon.Reservations.EMailManager.pdb

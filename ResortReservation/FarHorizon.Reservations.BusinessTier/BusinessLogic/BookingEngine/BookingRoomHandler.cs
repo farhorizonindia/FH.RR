@@ -22,7 +22,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB = new DatabaseManager();
                 string sProcName = "up_Ins_BookingRoom";
                 if (oBookedRooms != null)
-                {                        
+                {
                     for (int i = 0; i < oBookedRooms.Length; i++)
                     {
                         if (oBookedRooms[i] != null)
@@ -41,6 +41,12 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@Amt", DbType.Double);
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@PaymentId", DbType.String);
                             oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@paidAmt", DbType.Double);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomCategoryId", DbType.Int32);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TaxableAmount", DbType.Int32);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TaxPercentage", DbType.Int32);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@TaxAmount", DbType.Int32);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DiscountPercent", DbType.Int32);
+                            oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@DiscountAmount", DbType.Int32);
 
                             oDB.DbCmd.Parameters[0].Value = oBookedRooms[i].BookingId;
                             oDB.DbCmd.Parameters[1].Value = oBookedRooms[i].AccomodationId;
@@ -53,14 +59,21 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 
                             if (oBookedRooms[i].ConvertTo_Double_Twin == true)
                                 oDB.DbCmd.Parameters[6].Value = 1;
-                            else if(oBookedRooms[i].ConvertTo_Double_Twin ==false)
+                            else if (oBookedRooms[i].ConvertTo_Double_Twin == false)
                                 oDB.DbCmd.Parameters[6].Value = 0;
                             oDB.DbCmd.Parameters[7].Value = oBookedRooms[i].RoomStatus;
 
                             oDB.DbCmd.Parameters[8].Value = oBookedRooms[i].action;
+
                             oDB.DbCmd.Parameters[9].Value = oBookedRooms[i].Price;
                             oDB.DbCmd.Parameters[10].Value = oBookedRooms[i].PaymentId;
                             oDB.DbCmd.Parameters[11].Value = oBookedRooms[i].Amount;
+                            oDB.DbCmd.Parameters[12].Value = oBookedRooms[i].RoomCategoryId;
+                            oDB.DbCmd.Parameters[13].Value = oBookedRooms[i].taxableprice;
+                            oDB.DbCmd.Parameters[14].Value = oBookedRooms[i].tax;
+                            oDB.DbCmd.Parameters[15].Value = oBookedRooms[i].taxamount;
+                            oDB.DbCmd.Parameters[16].Value = oBookedRooms[i].Discount;
+                            oDB.DbCmd.Parameters[17].Value = oBookedRooms[i].DiscountPrice;
 
                             oDB.ExecuteNonQuery(oDB.DbCmd);
                             oDB.DbCmd.Parameters.Clear();
@@ -73,7 +86,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB = null;
                 oBookedRooms = null;
                 GF.LogError("clsBookingRoomHandler.AddBookingRooms", exp.Message);
-                return false;   
+                return false;
             }
             finally
             {
@@ -112,7 +125,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oDB.DbCmd.Parameters[4].Value = GF.HandleMaxMinDates(SeriesBokingDTO[i].StartDate, false);
                             oDB.DbCmd.Parameters[5].Value = GF.HandleMaxMinDates(SeriesBokingDTO[i].EndDate, false);
                             oDB.DbCmd.Parameters[6].Value = SeriesBokingDTO[i].NoOfRooms;
-                            
+
                             oDB.ExecuteNonQuery(oDB.DbCmd);
                             oDB.DbCmd.Parameters.Clear();
                         }
@@ -184,21 +197,21 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
             }
             return true;
         }
-        
+
         public BookingRoomDTO[] GetBookingRoomDetails(int BookingId)
-        {            
-            return GetBookingRoomDetails(BookingId,0,"",DateTime.MinValue,DateTime.MinValue);
+        {
+            return GetBookingRoomDetails(BookingId, 0, "", DateTime.MinValue, DateTime.MinValue);
         }
 
         public BookingRoomDTO[] GetBookingRoomDetails(int BookingId, int AccomodationId)
-        {            
-            return GetBookingRoomDetails(BookingId,AccomodationId,"",DateTime.MinValue, DateTime.MinValue);
+        {
+            return GetBookingRoomDetails(BookingId, AccomodationId, "", DateTime.MinValue, DateTime.MinValue);
         }
 
         public BookingRoomDTO GetBookingRoomDetails(int BookingId, int AccomodationId, string RoomNo)
         {
             BookingRoomDTO[] oBRD;
-            oBRD = GetBookingRoomDetails(BookingId, AccomodationId, RoomNo,DateTime.MinValue,DateTime.MinValue);
+            oBRD = GetBookingRoomDetails(BookingId, AccomodationId, RoomNo, DateTime.MinValue, DateTime.MinValue);
             if (oBRD != null)
             {
                 if (oBRD.Length > 0)
@@ -212,8 +225,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
         }
 
         public BookingRoomDTO[] GetBookingRoomDetails(DateTime FromDate, DateTime ToDate)
-        {            
-            return GetBookingRoomDetails(0,0,"",FromDate,ToDate);
+        {
+            return GetBookingRoomDetails(0, 0, "", FromDate, ToDate);
         }
 
         private BookingRoomDTO[] GetBookingRoomDetails(int BookingId, int AccomodationId, string RoomNo, DateTime FromDate, DateTime ToDate)
@@ -249,7 +262,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 dsBookingRoomData = oDB.ExecuteDataSet(oDB.DbCmd);
                 oDB = null;
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 oDB = null;
                 dsBookingRoomData = null;
@@ -296,7 +309,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@CurrentBookingId", DbType.Int32, notThisBookingId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomTypeId", DbType.Int32, AccomTypeId);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomId", DbType.Int32, AccomId);
-                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomNo", DbType.String, RoomNo);                
+                oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomNo", DbType.String, RoomNo);
                 dsRoomOtherBookings = oDB.ExecuteDataSet(oDB.DbCmd);
                 oDB = null;
             }
@@ -306,7 +319,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 dsRoomOtherBookings = null;
                 GF.LogError("clsBookingRoomHandler.GetRoomOtherBookings", exp.Message);
             }
-            if (dsRoomOtherBookings != null && dsRoomOtherBookings.Tables.Count>0)
+            if (dsRoomOtherBookings != null && dsRoomOtherBookings.Tables.Count > 0)
             {
                 if (dsRoomOtherBookings.Tables[0].Rows.Count > 0)
                 {
@@ -326,20 +339,20 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 }
             }
             return oBookingRoomDataDateWise;
-        }                
+        }
 
         public bool DeleteBookingRooms(int BookingId)
-        {            
-            return DeleteBookingRooms(BookingId,0);
+        {
+            return DeleteBookingRooms(BookingId, 0);
         }
 
         public bool DeleteBookingRooms(int BookingId, int AccomodationId)
-        {            
-            return DeleteBookingRooms(BookingId,AccomodationId,"");
+        {
+            return DeleteBookingRooms(BookingId, AccomodationId, "");
         }
 
         public bool DeleteBookingRooms(int BookingId, int AccomodationId, string RoomNo)
-        {            
+        {
             DatabaseManager oDB;
             try
             {
@@ -354,7 +367,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
             }
             catch (Exception exp)
             {
-                oDB = null;                
+                oDB = null;
                 GF.LogError("clsBookingRoomHandler.DeleteBookings", exp.Message);
                 return false;
             }
@@ -390,7 +403,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
 
         public bool UpdateBookingRooms(BookedRooms[] objBookedRooms)
         {
-            if (objBookedRooms !=null && objBookedRooms.Length >0 && objBookedRooms[0] != null)
+            if (objBookedRooms != null && objBookedRooms.Length > 0 && objBookedRooms[0] != null)
             {
                 DeleteBookingRooms(objBookedRooms[0].BookingId);
                 return AddBookingRooms(objBookedRooms);
@@ -409,10 +422,10 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                 for (int i = 0; i < TotallyRemovedRCRT.Length; i++)
                 {
                     oDB.DbCmd = oDB.GetStoredProcCommand(sProcName);
-                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingId", DbType.Int32,TotallyRemovedRCRT[i].BookingId);
-                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomID", DbType.Int32,TotallyRemovedRCRT[i].AccomodationId);
-                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomCategory", DbType.String,TotallyRemovedRCRT[i].RoomCategory);
-                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomType", DbType.String,TotallyRemovedRCRT[i].RoomType);
+                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@BookingId", DbType.Int32, TotallyRemovedRCRT[i].BookingId);
+                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@AccomID", DbType.Int32, TotallyRemovedRCRT[i].AccomodationId);
+                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomCategory", DbType.String, TotallyRemovedRCRT[i].RoomCategory);
+                    oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@RoomType", DbType.String, TotallyRemovedRCRT[i].RoomType);
                     oDB.ExecuteNonQuery(oDB.DbCmd);
                     oDB.DbCmd.Parameters.Clear();
                 }
@@ -489,14 +502,14 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
             return GetAvailableRoomNos(0, dtStartDate, iAccomID);
         }
 
-        public BookedRooms[] GetAllRooms(DateTime dtStartDate, DateTime EndDate, int iAccomID,int BookingId)
+        public BookedRooms[] GetAllRooms(DateTime dtStartDate, DateTime EndDate, int iAccomID, int BookingId)
         {
             DatabaseManager oDB;
             BookedRooms[] oTotalRooms = null;
             DateTime dt;
-            
+
             try
-            {             
+            {
                 oDB = new DatabaseManager();
                 string sProcName = "";
                 oDB = new DatabaseManager();
@@ -549,8 +562,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             }
                             if (dsRooms.Tables[0].Rows[i][16] != DBNull.Value)
                             {
-                             DateTime.TryParse(dsRooms.Tables[0].Rows[i][16].ToString(), out dt);
-                             oTotalRooms[i].EndDate = dt;
+                                DateTime.TryParse(dsRooms.Tables[0].Rows[i][16].ToString(), out dt);
+                                oTotalRooms[i].EndDate = dt;
                             }
 
                             if (dsRooms.Tables[0].Rows[i][17] == DBNull.Value)
@@ -563,8 +576,8 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             else
                                 oTotalRooms[i].Amount = Convert.ToDouble(dsRooms.Tables[0].Rows[i][18].ToString());
 
-                          
-                           
+
+
 
 
                             oTotalRooms[i].PrevBookingId = oTotalRooms[i].BookingId;
@@ -575,14 +588,14 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oTotalRooms[i].OriginalPaxStaying = oTotalRooms[i].PaxStaying;
                             oTotalRooms[i].OriginalRoomStatus = oTotalRooms[i].RoomStatus;
 
-                            
+
 
 
                             #endregion Get All Rooms
                         }
                         oTotalRooms = SetWaitListRooms(oTotalRooms, BookingId);
                     }
-                }               
+                }
 
             }
             catch (Exception exp)
@@ -629,6 +642,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             oTotalRooms[i].BookingId = Convert.ToInt32(dsRooms.Tables[0].Rows[i][7].ToString());
                             oTotalRooms[i].DefaultNoOfBeds = Convert.ToInt32(dsRooms.Tables[0].Rows[i][8].ToString());
                             oTotalRooms[i].Status = Convert.ToString(dsRooms.Tables[0].Rows[i][9].ToString());
+
                             if (dsRooms.Tables[0].Rows[i][10] == DBNull.Value)
                                 oTotalRooms[i].PaxStaying = 0;
                             else
@@ -685,7 +699,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
         {
             BookingWaitListDTO[] oBookingWaitListData = null;
             BookingWaitListHandler oBookingWaitListHandler = null;
-            int j=0, iWLRCounter = 0;
+            int j = 0, iWLRCounter = 0;
             if (BookingId != 0)
             {
                 oBookingWaitListHandler = new BookingWaitListHandler();
@@ -712,9 +726,9 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.BookingEngine
                             }
                         }
                     }
-                }                
+                }
             }
             return oAllRooms;
         }
-    }   
+    }
 }

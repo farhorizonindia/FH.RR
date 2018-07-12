@@ -16,8 +16,9 @@
 
             var preview = document.querySelector('#<%=Image1.ClientID %>');
             var file = document.querySelector('#<%=uploadLogo.ClientID %>').files[0];
-            var reader = new FileReader();
 
+        
+            var reader = new FileReader();
             reader.onloadend = function () {
                 preview.src = reader.result;
             }

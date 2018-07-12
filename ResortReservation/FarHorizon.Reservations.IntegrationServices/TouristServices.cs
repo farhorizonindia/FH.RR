@@ -26,7 +26,21 @@ namespace FarHorizon.Reservations.BusinessServices
             }
         }
         #endregion
-
+      
+        public bool AddBookingTouristentry(BookingTouristDTO oBookingTouristDTO, out int TouristNo)
+        {
+            try
+            {
+                if (touristHelper == null)
+                    touristHelper = new TouristHelper();
+                return touristHelper.Addtouristentry(oBookingTouristDTO, out TouristNo);
+            }
+            catch (Exception exp)
+            {
+                throw exp;
+            }
+        }
+       
         #region Update Method(s)
         public bool UpdateBookingTourist(BookingTouristDTO oBookingTouristDTO)
         {

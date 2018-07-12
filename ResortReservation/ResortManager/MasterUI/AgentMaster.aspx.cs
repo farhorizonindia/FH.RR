@@ -1,13 +1,11 @@
 using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
-using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
+using System.Data;
+using System.IO;
 
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.BusinessServices;
@@ -18,6 +16,10 @@ using FarHorizon.Reservations.Bases;
 using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using FarHorizon.DataSecurity;
+using System.Text.RegularExpressions;
+using System.Data.SqlClient;
+
 
 public partial class MasterUI_AgentMaster : MasterBasePage
 {
@@ -26,19 +28,99 @@ public partial class MasterUI_AgentMaster : MasterBasePage
     int GetQueryResponse = 0;
     DataTable dtGetReturenedData;
 
+    string agenturl = "";
+
     BALLinks blLinks = new BALLinks();
     DALLinks dlLinks = new DALLinks();
     DataTable dtGetReturnedData;
-
-
+    DALOpenDates dlOpenDates = new DALOpenDates();
+    BALOpenDates blOpenDates = new BALOpenDates();
+    SqlConnection con;
     #region ControlsEvents
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        btnDelete.Attributes.Add("onclick", "return confirm('Are you sure you want to delete this record?')");
-        if (!IsPostBack)
-            RefreshGrid();
-        EnableNewButton();
+        try
+        {
+            if (!IsPostBack)
+            {
+                con = new SqlConnection(GetConnectionString());
+                string url = Request.Url.ToString();
+
+                int index = url.LastIndexOf("/");
+                if (index > 0)
+                    url = url.Substring(0, index); // or index + 1 to keep slash
+                url = url.Substring(0, url.LastIndexOf("/") + 1);
+
+
+
+                SqlDataAdapter adp = new SqlDataAdapter("select max(agentid) from tblAgentMaster", con);
+                DataTable dt = new DataTable();
+                adp.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    int id = Convert.ToInt32(dt.Rows[0][0]) + 1;
+                    txtUrl.Text = url + "Cruise/Booking/searchproperty.aspx?agentid=" + id + "";
+                  ViewState["agenturl"] = url + "Cruise/Booking/searchproperty.aspx?agentid=" + id + "";
+                }
+
+
+                Commission.Visible = false;
+                btnDelete.Attributes.Add("onclick", "return confirm('Are you sure you want to delete this record?')");
+
+                RefreshGrid();
+                EnableNewButton();
+                FillAgents();
+                LoadCountries();
+                loadoncredits();
+                loadagenttype();
+                Commission.Visible = false;
+            }
+        }
+        catch { }
+    }
+
+    private string GetConnectionString()
+    {
+
+        return Convert.ToString(System.Configuration.ConfigurationManager.ConnectionStrings["ReservationConnectionString"]);
+
+
+    }
+    private void LoadCountries()
+    {
+        try
+        {
+            blOpenDates._Action = "GetCountry";
+            DataTable dtCountries = dlOpenDates.BindControls(blOpenDates);
+            if (dtCountries.Rows.Count > 0)
+            {
+                ddlCountry.DataSource = dtCountries;
+                ddlCountry.DataTextField = "CountryName";
+                ddlCountry.DataValueField = "CountryId";
+                ddlCountry.DataBind();
+                ddlCountry.Items.Insert(0, new ListItem("-Select Country-", "0"));
+
+
+            }
+            else
+            {
+                ddlCountry.Items.Clear();
+                ddlCountry.DataSource = null;
+                ddlCountry.DataBind();
+                ddlCountry.Items.Insert(0, new ListItem("-Select Country-", "0"));
+
+            }
+        }
+        catch (Exception sqe)
+        {
+            ddlCountry.Items.Clear();
+            ddlCountry.DataSource = null;
+            ddlCountry.DataBind();
+            ddlCountry.Items.Insert(0, "-No Accom-");
+
+
+        }
     }
     protected void btnAddNew_Click(object sender, EventArgs e)
     {
@@ -58,6 +140,16 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         txtAgentCode.Text = String.Empty;
         txtAgentEmailId.Text = String.Empty;
         txtPassword.Text = String.Empty;
+        txtPhone.Text = String.Empty;
+        txtCategory.Text = String.Empty;
+        txtCountry.Text = String.Empty;
+        txtCreditLimit.Text = String.Empty;
+        txtBillingAddress.Text = String.Empty;
+        txtAgntUrl.Text = String.Empty;
+        chkPmntbypass.Checked = false;
+       // txtUrl.Text= String.Empty;
+
+
 
     }
 
@@ -104,9 +196,12 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         //SessionHandler"AgentID"] = null;
         lblStatus.Text = "Action Cancelled";
     }
+
+   
     protected void dgAgents_SelectedIndexChanged(object sender, EventArgs e)
     {
         int iAgentID = Convert.ToInt32(dgAgents.DataKeys[dgAgents.SelectedIndex].ToString());
+
         hfId.Value = iAgentID.ToString();
         //SessionHandler"AgentID"] = iAgentID;
         AgentMaster oAgentMaster = new AgentMaster();
@@ -118,7 +213,35 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             txtAgentEmailId.Text = oAgentData[0].EmailId.ToString();
             //  txtPassword.TextMode =TextBoxMode.SingleLine ;
             txtPassword.Text = oAgentData[0].Password.ToString();
+            txtCountry.Text = oAgentData[0].country.ToString();
+            txtCategory.Text = oAgentData[0].category.ToString();
+            txtUrl.Text = oAgentData[0].RedirectURL.ToString();
+            if (txtUrl.Text == "")
+            {
+                string url = Request.Url.ToString();
 
+                int index = url.LastIndexOf("/");
+                if (index > 0)
+                    url = url.Substring(0, index);
+                url = url.Substring(0, url.LastIndexOf("/") + 1);
+                txtUrl.Text = url + "Cruise/Booking/searchproperty.aspx?agentid=" + iAgentID + "";
+            }
+            if (oAgentData[0].IsPaymentBypass == 1)
+            {
+                chkPmntbypass.Checked = true;
+                chkPmntbypass_CheckedChanged(this, e);
+                txtAgntUrl.Text = oAgentData[0].AgentURL.ToString();
+            }
+            else
+            {
+                chkPmntbypass.Checked = false;
+                chkPmntbypass_CheckedChanged(this, e);
+            }
+            if (oAgentData[0].localagent == 1)
+            {
+                chklocal.Checked = true;
+            }
+            HiddenField1.Value= oAgentData[0].CssPath.ToString();
             //   txtPassword.TextMode = TextBoxMode.Password;
         }
         oAgentMaster = null;
@@ -138,6 +261,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
                 chkOnCredit.Checked = Convert.ToBoolean(dtGetReturenedData.Rows[0]["OnCredit"].ToString() == "" ? "false" : dtGetReturenedData.Rows[0]["OnCredit"].ToString());
                 ddlpaymentMethod.SelectedValue = dtGetReturenedData.Rows[0]["PaymentMethod"].ToString();
                 txtPhone.Text = dtGetReturenedData.Rows[0]["phone"].ToString();
+                txtCommission.Text = dtGetReturenedData.Rows[0]["Commision"].ToString();
             }
             else
             {
@@ -154,6 +278,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         btnDelete.Enabled = true;
         btnCancel.Visible = true;
         btnEdit.Text = "Update";
+        //txtAgentEmailId.ReadOnly = true;
         //btnSave.Enabled = false;
         lblStatus.Text = "";
 
@@ -187,7 +312,53 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         oAgentData.AgentName = Convert.ToString(txtAgentName.Text.Trim());
         oAgentData.EmailId = txtAgentEmailId.Text.Trim();
         oAgentData.Password = txtPassword.Text.Trim();
+        oAgentData.category = txtCategory.Text.Trim();
+        oAgentData.country = txtCountry.Text.Trim();
+        oAgentData.category = txtCategory.Text.Trim();
+        //oAgentData.RedirectURL = txtUrl.Text.Trim();
+        oAgentData.RedirectURL = ViewState["agenturl"].ToString();
+        oAgentData.AgentURL = txtAgntUrl.Text.Trim();
+        if (chkPmntbypass.Checked)
+        {
+            oAgentData.IsPaymentBypass = 1;
+        }
+        else
+        {
+            oAgentData.IsPaymentBypass = 0;
+        }
+        if (chklocal.Checked)
+        {
+            oAgentData.localagent = 1;
+        }
+        else
+        {
+            oAgentData.localagent = 0;
+        }
+
+        var guid = Guid.NewGuid().ToString();
+        string filename = uploadLogo.PostedFile.FileName;
+       
+
+        if (uploadLogo.PostedFile.ContentLength > 0)
+        {
+            filename = guid + filename;
+            string uploadPath = "/Cruise/Booking/css/agent_css/";
+            string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
+            string savepath = rootedpath + filename;
+           
+            string newpath = rename(savepath);
+            uploadLogo.PostedFile.SaveAs(newpath);         
+            string newfilename = Path.GetFileName(newpath);
+            oAgentData.CssPath = uploadPath + newfilename;
+        }
+        else
+        {
+            oAgentData.CssPath = null;
+        }
+
+
         AgentMaster oAgentMaster = new AgentMaster();
+
         agentId = oAgentMaster.Insert(oAgentData);
 
         if (agentId > -1)
@@ -198,6 +369,32 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         }
         else
             lblStatus.Text = "Error Occured while insertion: Please refer to the error log.";
+    }
+
+
+    public string rename(string fullpath)
+    {
+        try
+        {
+            int count = 1;
+
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fullpath);
+            string extension = Path.GetExtension(fullpath);
+            string path = Path.GetDirectoryName(fullpath);
+            string newFullPath = fullpath;
+
+            while (File.Exists(newFullPath))
+            {
+                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
+                newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+            return newFullPath;
+        }
+        catch
+        {
+            return null;
+        }
+
     }
 
     private void PaymentInfo(int agentId)
@@ -216,10 +413,21 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             //   blAgentpayment._AgentCode = Convert.ToInt32(dtGetReturenedData.Rows[0]["AgentId"].ToString());
             blAgentpayment._Password = txtPassword.Text.Trim();
             blAgentpayment.Phone = txtPhone.Text.Trim();
-
+            blAgentpayment._country = txtCountry.Text.Trim();
+            blAgentpayment._category = txtCategory.Text.Trim();
             blAgentpayment._BillingAddress = txtBillingAddress.Text.Trim().ToString();
             blAgentpayment.OnCredit = chkOnCredit.Checked;
             blAgentpayment.CreditLimit = Convert.ToDecimal(txtCreditLimit.Text.Trim() == "" ? "0" : txtCreditLimit.Text.Trim());
+            decimal commission = 0;
+            if (txtCommission.Text == "")
+            {
+                blAgentpayment.comission = 0;
+            }
+            else
+            {
+                blAgentpayment.comission = Convert.ToDecimal(txtCommission.Text);
+            }
+
 
             GetQueryResponse = dlAgentpayment.AddpaymentDetails(blAgentpayment);
             if (GetQueryResponse > 0)
@@ -271,13 +479,18 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             blAgentpayment._BillingAddress = txtBillingAddress.Text.Trim().ToString();
             blAgentpayment.OnCredit = chkOnCredit.Checked;
             blAgentpayment.CreditLimit = Convert.ToDecimal(txtCreditLimit.Text.Trim() == "" ? "0" : txtCreditLimit.Text.Trim());
-            
+            blAgentpayment._category = txtCategory.Text.Trim().ToString();
+            blAgentpayment._country = txtCountry.Text.Trim().ToString();
+            blAgentpayment.comission = Convert.ToDecimal(txtCommission.Text);
+            //Make update changes
             GetQueryResponse = dlAgentpayment.UpdatepaymentDetails(blAgentpayment);
+            //show changes response
             if (GetQueryResponse > 0)
             {
                 //  ClearAllControls();
                 lbStatus.Text = "Payment details saved successfully.";
                 lbStatus.ForeColor = System.Drawing.Color.Green;
+                txtAgentEmailId.ReadOnly = false;
             }
             else
             {
@@ -317,6 +530,20 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         oAgentData.AgentName = txtAgentName.Text.Trim();
         oAgentData.AgentCode = txtAgentCode.Text.Trim();
         oAgentData.EmailId = txtAgentEmailId.Text.Trim();
+        oAgentData.category = txtCategory.Text.Trim();
+        oAgentData.country = txtCountry.Text.Trim();
+        oAgentData.RedirectURL = txtUrl.Text.Trim();
+
+        oAgentData.AgentURL = txtAgntUrl.Text.Trim();
+
+        if (chkPmntbypass.Checked)
+        {
+            oAgentData.IsPaymentBypass = 1;
+        }
+        else
+        {
+            oAgentData.IsPaymentBypass = 0;
+        }
         if (txtPassword.Text != "")
         {
             oAgentData.Password = txtPassword.Text.Trim();
@@ -325,6 +552,37 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             oAgentData.Password = null;
         }
+        if (chklocal.Checked)
+        {
+            oAgentData.localagent = 1;
+        }
+        else
+        {
+            oAgentData.localagent = 0;
+        }
+
+        var guid = Guid.NewGuid().ToString();
+        string filename = uploadLogo.PostedFile.FileName;
+
+
+        if (uploadLogo.PostedFile.ContentLength > 0)
+        {
+            filename = guid + filename;
+            string uploadPath = "/Cruise/Booking/css/agent_css/";
+            string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
+            string savepath = rootedpath + filename;
+
+            string newpath = rename(savepath);
+            uploadLogo.PostedFile.SaveAs(newpath);
+            string newfilename = Path.GetFileName(newpath);
+            oAgentData.CssPath = uploadPath + newfilename;
+        }
+        else
+        {
+            oAgentData.CssPath = HiddenField1.Value;
+        }
+       
+
         AgentMaster oAgentMaster = new AgentMaster();
         bActionCompleted = oAgentMaster.Update(oAgentData);
         if (bActionCompleted == true)
@@ -332,6 +590,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             base.DisplayAlert("The record has been updated successfully");
             UpdatePaymentInfo();
             ClearControls();
+
         }
         else
             lblStatus.Text = "Error Occured while updation: Please refer to the error log.";
@@ -399,24 +658,41 @@ public partial class MasterUI_AgentMaster : MasterBasePage
     }
     private void RefreshGrid()
     {
+        DataTable dt = new DataTable();
         AgentMaster oAgentMaster = new AgentMaster();
-        AgentDTO[] oAgentData = oAgentMaster.GetData();
-        if (oAgentData != null)
+        try
         {
-            if (oAgentData.Length > 0)
+            AgentDTO[] oAgentData = oAgentMaster.GetData();
+            dt = dlAgentpayment.getPaymentInfoall(blAgentpayment);
+            //if (oAgentData != null)
+            if (dt != null && dt.Rows.Count > 0)
             {
-                dgAgents.DataSource = oAgentData;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    //dt.Rows[i]["AgentEmailId"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentEmailId"].ToString());
+                    dt.Rows[i]["AgentName"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentName"].ToString());
+                    dt.Rows[i]["AgentEmailId"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentEmailId"].ToString());
+                    dt.Rows[i]["Category"] = DataSecurityManager.Decrypt(dt.Rows[i]["Category"].ToString());
+                    dt.Rows[i]["Country"] = DataSecurityManager.Decrypt(dt.Rows[i]["Country"].ToString());
+                }
+
+                //if (oAgentData.Length > 0)
+                {
+                    Session["Getagentdetils"] = dt;
+                    dgAgents.DataSource = dt;
+                    dgAgents.DataBind();
+                }
+            }
+            else
+            {
+                dgAgents.DataSource = null;
                 dgAgents.DataBind();
             }
+            ClearControls();
+            oAgentData = null;
+            oAgentMaster = null;
         }
-        else
-        {
-            dgAgents.DataSource = null;
-            dgAgents.DataBind();
-        }
-        ClearControls();
-        oAgentData = null;
-        oAgentMaster = null;
+        catch { }
     }
     private void EnableNewButton()
     {
@@ -448,6 +724,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
                 return false;
             }
         }
+
         return true;
     }
     #endregion UserDefinedFunctions
@@ -472,6 +749,177 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             {
             }
 
+        }
+    }
+
+    protected void dgAgents_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
+    {
+        dgAgents.CurrentPageIndex = e.NewPageIndex;
+        RefreshGrid();
+    }
+    private void FillAgents()
+    {
+        try
+        {
+            AgentMaster oAgentMaster = new AgentMaster();
+            AgentDTO[] oAgentData = oAgentMaster.GetData();
+
+            ListItemCollection li = new ListItemCollection();
+            ListItem l = new ListItem("Choose Agent", "0");
+            ddlagent.Items.Insert(0, l);
+            if (oAgentData != null)
+            {
+                for (int i = 0; i < oAgentData.Length; i++)
+                {
+                    l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
+                    ddlagent.Items.Insert(i + 1, l);
+                }
+            }
+        }
+        catch { }
+    }
+    private void loadoncredits()
+    {
+        ddlOncredits.Items.Clear();
+        ListItem[] items = new ListItem[3];
+        items[0] = new ListItem("Select", "0");
+        items[1] = new ListItem("Yes", "1");
+        items[2] = new ListItem("No", "2");
+
+        ddlOncredits.Items.AddRange(items);
+        ddlOncredits.DataBind();
+
+
+    }
+    private void loadagenttype()
+    {
+        ddlAgentType.Items.Clear();
+        ListItem[] items = new ListItem[3];
+        items[0] = new ListItem("Select", "0");
+        items[1] = new ListItem("Local", "1");
+        items[2] = new ListItem("Foregin", "2");
+
+        ddlAgentType.Items.AddRange(items);
+        ddlAgentType.DataBind();
+
+
+    }
+    protected void dgAgents_ItemDataBound(object sender, DataGridItemEventArgs e)
+    {
+
+    }
+    private void ValidateEmail(string mail)
+    {
+        string email = mail;
+        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+        Match match = regex.Match(email);
+        if (match.Success)
+        {
+
+        }
+
+        else
+        {
+            Session["Phonecheck"] = 1;
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid email')", true);
+            return;
+        }
+    }
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        if (Session["Getagentdetils"] != null)
+        {
+            DataTable dt = Session["Getagentdetils"] as DataTable;
+            DataView dv = new DataView();
+            DataSet ds = new DataSet();
+            if (ddlagent.SelectedItem.ToString() != "Choose Agent" && txtEmail.Text == "" && ddlCountry.SelectedIndex == 0 && ddlOncredits.SelectedIndex == 0 && ddlAgentType.SelectedIndex == 0)
+            {
+                dv = new DataView(dt, "AgentName = '" + ddlagent.SelectedItem.ToString() + "'", "AgentName", DataViewRowState.CurrentRows);
+                dt = dv.ToTable();
+                dgAgents.DataSource = dt;
+                dgAgents.DataBind();
+
+                //dt.DefaultView.RowFilter = "AccomName='" + txtAccomdation.Text.Trim() + "'";
+            }
+            else if (ddlagent.SelectedItem.ToString() == "Choose Agent" && txtEmail.Text != "" && ddlCountry.SelectedIndex == 0 && ddlOncredits.SelectedIndex == 0 && ddlAgentType.SelectedIndex == 0)
+            {
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                Match match = regex.Match(txtEmail.Text);
+                if (match.Success)
+                {
+                    dv = new DataView(dt, "AgentEmailId = '" + txtEmail.Text + "'", "AgentEmailId", DataViewRowState.CurrentRows);
+                    dt = dv.ToTable();
+                    dgAgents.DataSource = dt;
+                    dgAgents.DataBind();
+
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please enter valid email')", true);
+                    return;
+                }
+
+                //dt.DefaultView.RowFilter = "AccomName='" + txtAccomdation.Text.Trim() + "'";
+            }
+            else if (ddlagent.SelectedItem.ToString() == "Choose Agent" && txtEmail.Text == "" && ddlCountry.SelectedIndex > 0 && ddlOncredits.SelectedIndex == 0 && ddlAgentType.SelectedIndex == 0)
+            {
+                dv = new DataView(dt, "Country = '" + ddlCountry.SelectedItem.ToString() + "'", "Country", DataViewRowState.CurrentRows);
+                dt = dv.ToTable();
+                dgAgents.DataSource = dt;
+                dgAgents.DataBind();
+
+                //dt.DefaultView.RowFilter = "AccomName='" + txtAccomdation.Text.Trim() + "'";
+            }
+            else if (ddlagent.SelectedItem.ToString() == "Choose Agent" && txtEmail.Text == "" && ddlCountry.SelectedIndex == 0 && ddlOncredits.SelectedIndex > 0 && ddlAgentType.SelectedIndex == 0)
+            {
+                dv = new DataView(dt, "Oncredits = '" + ddlOncredits.SelectedItem.ToString() + "'", "Oncredits", DataViewRowState.CurrentRows);
+                dt = dv.ToTable();
+                dgAgents.DataSource = dt;
+                dgAgents.DataBind();
+
+                //dt.DefaultView.RowFilter = "AccomName='" + txtAccomdation.Text.Trim() + "'";
+            }
+            else if (ddlagent.SelectedItem.ToString() == "Choose Agent" && txtEmail.Text == "" && ddlCountry.SelectedIndex == 0 && ddlOncredits.SelectedIndex == 0 && ddlAgentType.SelectedIndex > 0)
+            {
+                dv = new DataView(dt, "localagent = '" + ddlAgentType.SelectedItem.ToString() + "'", "localagent", DataViewRowState.CurrentRows);
+                dt = dv.ToTable();
+                dgAgents.DataSource = dt;
+                dgAgents.DataBind();
+
+                //dt.DefaultView.RowFilter = "AccomName='" + txtAccomdation.Text.Trim() + "'";
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Please search with one field')", true);
+                return;
+            }
+        }
+    }
+
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+        RefreshGrid();
+        txtEmail.Text = "";
+        loadagenttype();
+        FillAgents();
+        LoadCountries();
+        loadoncredits();
+        loadagenttype();
+    }
+
+
+
+    protected void chkPmntbypass_CheckedChanged(object sender, EventArgs e)
+    {
+        if(chkPmntbypass.Checked==true)
+        {
+            txtAgntUrl.Visible = true;
+            agnt.Visible = true;
+        }
+        if(chkPmntbypass.Checked==false)
+        {
+            txtAgntUrl.Visible = false;
+            agnt.Visible = false;
         }
     }
 }

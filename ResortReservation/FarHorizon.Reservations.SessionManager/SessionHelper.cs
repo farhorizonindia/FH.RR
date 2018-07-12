@@ -85,6 +85,18 @@ namespace FarHorizon.Reservations.SessionManager
             }
             set { SessionManager.SaveSession(Constants._BookingChart_TreeType, value); }
         }
+        public static string PropsedBook
+        {
+            get
+            {
+                Object O = SessionManager.RetrieveSession(Constants.Proposd);
+                if (O == null)
+                    return "";
+                else
+                    return Convert.ToString(O);
+            }
+            set { SessionManager.SaveSession(Constants.Proposd, value); }
+        }
         public static string BookingChart_TreeArrangeBy
         {
             get
@@ -295,15 +307,17 @@ namespace FarHorizon.Reservations.SessionManager
 
         public static SortedList BookingChangeRoomPax_DdlSelectedIndexes
         {
+
             get
             {
-                Object O = SessionManager.RetrieveSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes);
+                object O = SessionManager.RetrieveSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes);
                 if (O == null)
                     return null;
                 else
                     return (SortedList)O;
-            }            
-        }        
+
+            }
+        }
         #endregion
 
         #region Booking Confirmation
@@ -695,7 +709,7 @@ namespace FarHorizon.Reservations.SessionManager
         }
         #endregion
         #endregion
-        
+
         #region User Info
         public static string LoggedInUser_Key
         {

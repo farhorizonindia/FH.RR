@@ -33,7 +33,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
             EventMessageDTO = PrepareEmailMessage(eventName, out text);
             EmailText.Append(text);
 
-            EmailIdDTO emailIdDTO = new EmailIdDTO();            
+            EmailIdDTO emailIdDTO = new EmailIdDTO();
             EmailIdDTO accomodationEmailIdDto = GetAccomodationContact(BookingId);
             EmailIdDTO userAgentEmailIdDTO = GetAgentUsersContact(BookingId);
 
@@ -94,7 +94,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
                         }
                         emailIdDTO.TOs += user.EmailId + ";";
                     }
-                }                
+                }
                 if (!String.IsNullOrEmpty(agentUserMapperDTO.Agent.EmailId) && GF.ValidateEmailId(agentUserMapperDTO.Agent.EmailId))
                 {
                     if (emailIdDTO == null)
@@ -206,7 +206,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
         {
             StringBuilder emailText = new StringBuilder();
             emailText.Append(string.Empty);
-
+            string bookingtype = "";
             StringBuilder Labelstyle = new StringBuilder();
             Labelstyle.Append(string.Empty);
 
@@ -225,16 +225,30 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
             Datastyle.Append("border-color:#e0dfe3;");
             Datastyle.Append("border-bottom-width:1px;");
 
+            StringBuilder Datastyle1 = new StringBuilder();
+            Datastyle1.Append(string.Empty);
+            Datastyle1.Append("font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color:blue;");
+            Datastyle1.Append("padding-right:10px; padding-left:5px;");
+            Datastyle1.Append("border-style: none none solid;");
+            Datastyle1.Append("border-color:#e0dfe3;");
+            Datastyle1.Append("border-bottom-width:1px;");
+
+
             emailText.Append("<table id=tblBooking style='font-size:12px'>");
 
             #region Booking Details
             emailText.Append("<tr>");
             emailText.Append("<td style='" + Labelstyle + "'>Booking Id:</td>");
-            emailText.Append("<td style='" + Datastyle + "'>" + BookingDTO.BookingCode.ToString() + "</td>");
+            emailText.Append("<td style='" + Datastyle1 + "'>" + BookingDTO.BookingCode.ToString() + "</td>");
             emailText.Append("</tr>");
 
             emailText.Append("<tr>");
-            emailText.Append("<td style='" + Labelstyle + "'>Accomodation:</td>");
+            emailText.Append("<td style='" + Labelstyle + "'>Agent Name:</td>");
+            emailText.Append("<td style='" + Datastyle + "'>" + BookingDTO.AgentName + "</td>");
+            emailText.Append("</tr>");
+
+            emailText.Append("<tr>");
+            emailText.Append("<td style='" + Labelstyle + "'>Accommodation:</td>");
             emailText.Append("<td style='" + Datastyle + "'>" + BookingDTO.AccomodationName + "</td>");
             emailText.Append("</tr>");
 
@@ -247,6 +261,12 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
             emailText.Append("<td style='" + Labelstyle + "'>Check Out:</td>");
             emailText.Append("<td style='" + Datastyle + "'>" + GF.GetDD_MMM_YYYY(BookingDTO.EndDate, false) + "</td>");
             emailText.Append("</tr>");
+
+            emailText.Append("<tr>");
+            emailText.Append("<td style='" + Labelstyle + "'>Booking Status:</td>");
+            emailText.Append("<td style='" + Datastyle1 + "'>" + BookingDTO.BookingStatus.ToString() + "</td>");
+            emailText.Append("</tr>");
+           
 
             emailText.Append("<tr>");
             emailText.Append("<td style='" + Labelstyle + "'>Pax:</td>");
@@ -362,7 +382,7 @@ namespace FarHorizon.Reservations.BusinessTier.BusinessLogic.EventEmails
 
         public EmailIdDTO()
         {
-            _contactPerson =String.Empty;
+            _contactPerson = String.Empty;
             _tos = String.Empty;
             _ccs = String.Empty;
             _bccs = String.Empty;

@@ -1,0 +1,90 @@
+<HTML>
+<!-- FILE: basejpi.htm (Oracle Forms)                                 -->
+<!--                                                                  -->  
+<!-- This is the default base HTML file for running a form on the     -->
+<!-- web using the JDK Java Plugin. This is used for example when     -->
+<!-- running with Netscape on Unix.                                   -->
+<!--                                                                  -->  
+<!-- IMPORTANT NOTES:                                                 -->
+<!-- Default values for all the variables which appear below          -->
+<!-- (enclosed in percent characters) are defined in the servlet      -->
+<!-- configuration file (formsweb.cfg). It is preferable to make      -->
+<!-- changes in that file where possible, rather than this one.       -->
+<!--                                                                  -->  
+<!-- This file will be REPLACED if you reinstall Oracle Forms, so     -->
+<!-- you are advised to create your own version if you want to make   -->
+<!-- any modifications.  You should then set the baseHTMLjpi          -->
+<!-- parameter in the Forms Servlet configuration file (formsweb.cfg) -->
+<!-- to point to your new file instead of this one.                   -->
+
+<HEAD><TITLE>%pageTitle%</TITLE></HEAD>
+
+<BODY %HTMLbodyAttrs%>
+%HTMLbeforeForm%
+
+<!-- Forms applet definition (start) -->
+<OBJECT classid="%jpi_classid%"
+        codebase="%jpi_codebase%"
+        WIDTH="%Width%"
+        HEIGHT="%Height%"
+        HSPACE="0"
+        VSPACE="0">
+<PARAM NAME="TYPE"       VALUE="%jpi_mimetype%">
+<PARAM NAME="CODEBASE"   VALUE="%codebase%">
+<PARAM NAME="CODE"       VALUE="oracle.forms.engine.Main" >
+<PARAM NAME="ARCHIVE"    VALUE="%archive%" > 
+
+<PARAM NAME="serverURL" VALUE="%serverURL%">
+<PARAM NAME="networkRetries" VALUE="%networkRetries%">
+<PARAM NAME="serverArgs" 
+       VALUE="%escapeParams% module=%form% userid=%userid% sso_userid=%sso_userid% sso_formsid=%sso_formsid% sso_subDN=%sso_subDN% sso_usrDN=%sso_usrDN% debug=%debug% host=%host% port=%port% %otherParams%">
+<PARAM NAME="separateFrame" VALUE="%separateFrame%">
+<PARAM NAME="splashScreen"  VALUE="%splashScreen%">
+<PARAM NAME="background"  VALUE="%background%">
+<PARAM NAME="lookAndFeel"  VALUE="%lookAndFeel%">
+<PARAM NAME="colorScheme"  VALUE="%colorScheme%">
+<PARAM NAME="serverApp" VALUE="%serverApp%">
+<PARAM NAME="logo" VALUE="%logo%">
+<PARAM NAME="imageBase" VALUE="%imageBase%">
+<PARAM NAME="formsMessageListener" VALUE="%formsMessageListener%">
+<PARAM NAME="recordFileName" VALUE="%recordFileName%">
+<PARAM NAME="EndUserMonitoringEnabled" VALUE="%EndUserMonitoringEnabled%">
+<PARAM NAME="EndUserMonitoringURL" VALUE="%EndUserMonitoringURL%">
+<PARAM NAME="heartBeat" VALUE="%heartBeat%">
+<COMMENT> 
+<EMBED SRC="" PLUGINSPAGE="%jpi_download_page%" 
+        TYPE="%jpi_mimetype%" 
+        java_codebase="%codebase%" 
+        java_code="oracle.forms.engine.Main" 
+        java_archive="%archive%" 
+        WIDTH="%Width%"
+        HEIGHT="%Height%" 
+        HSPACE="0"
+        VSPACE="0"
+
+        serverURL="%serverURL%"
+        networkRetries="%networkRetries%"
+        serverArgs="%escapeParams% module=%form% userid=%userid% sso_userid=%sso_userid% sso_formsid=%sso_formsid% sso_subDN=%sso_subDN% sso_usrDN=%sso_usrDN% debug=%debug% host=%host% port=%port% %otherparams%"
+        separateFrame="%separateFrame%"
+        splashScreen="%splashScreen%"
+        background="%background%"
+        lookAndFeel="%lookAndFeel%"
+        colorScheme="%colorScheme%"
+        serverApp="%serverApp%"
+        logo="%logo%"
+        imageBase="%imageBase%"
+        recordFileName="%recordFileName%"
+        EndUserMonitoringEnabled="%EndUserMonitoringEnabled%"
+        EndUserMonitoringURL="%EndUserMonitoringURL%"
+        heartBeat="%heartBeat%"
+>
+<NOEMBED> 
+</COMMENT> 
+</NOEMBED></EMBED> 
+</OBJECT>
+<!-- Forms applet definition (end) -->
+
+%HTMLafterForm%
+
+</BODY>
+</HTML>

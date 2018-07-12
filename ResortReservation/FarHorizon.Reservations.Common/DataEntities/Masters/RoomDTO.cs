@@ -26,7 +26,9 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         private string _roomCategoryAlias;
         private bool _Status;
         private string _Imagepath;
-        
+        private string _activestatus;
+        private int _roomcategoryid;
+
         //clsBookingDataDateWise[] _oRoomBookingData;
         private RoomBookingDateWiseDTO[] _oRoomBookingData;                
         #endregion
@@ -37,7 +39,16 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
             get { return _Imagepath; }
             set { _Imagepath = value; }
         }
-
+        public string activestatus
+        {
+            get { return _activestatus; }
+            set { _activestatus = value; }
+        }
+        public int roomcategoryid
+        {
+            get { return _roomcategoryid; }
+            set { _roomcategoryid = value; }
+        }
         public bool Status
         {
             get { return _Status; }

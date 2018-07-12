@@ -110,6 +110,12 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private double _Paid;
 
         private double _Price;
+        private double _taxableprice;
+        private double _taxamount;
+        private double _tax;
+        private double _Discount;
+        private double _DiscountPrice;
+
 
 
 
@@ -127,7 +133,31 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return _Price; }
             set { _Price = value; }
         }
-
+        public double Discount
+        {
+            get { return _Discount; }
+            set { _Discount = value; }
+        }
+        public double DiscountPrice
+        {
+            get { return _DiscountPrice; }
+            set { _DiscountPrice = value; }
+        }
+        public double taxableprice
+        {
+            get { return _taxableprice; }
+            set { _taxableprice = value; }
+        }
+        public double taxamount
+        {
+            get { return _taxamount; }
+            set { _taxamount = value; }
+        }
+        public double tax
+        {
+            get { return _tax; }
+            set { _tax = value; }
+        }
         public string action
         {
             get { return _action; }
@@ -355,5 +385,11 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
             get { return oBookingData; }
             set { oBookingData = value; }
         }
+        public BookingDTO agentcommission
+        {
+            get { return oBookingData; }
+            set { oBookingData = value; }
+        }
+
     }
 }

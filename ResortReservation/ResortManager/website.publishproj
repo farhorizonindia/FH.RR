@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+***********************************************************************************************
+website.publishproj
+
+WARNING: DO NOT MODIFY this file, it is used for the web publish process.
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+***********************************************************************************************
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d9d3272c-caa7-4c0b-a162-98bda6fa5f7a}</ProjectGuid>
+    <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
+    <SourceWebVirtualPath>/ResortManager</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SourceWebProject>
+    </SourceWebProject>
+    <SourceWebMetabasePath>
+    </SourceWebMetabasePath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- for VS2010 we need to use 10.5 but for VS2012+ we should use VisualStudioVersion -->
+    <WebPublishTargetsVersion Condition=" '$(WebPublishTargetsVersion)' =='' and '$(VisualStudioVersion)' == 10.0 ">10.5</WebPublishTargetsVersion>
+    <WebPublishTargetsVersion Condition=" '$(WebPublishTargetsVersion)'=='' ">$(VisualStudioVersion)</WebPublishTargetsVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(WebPublishTargetsVersion)</VSToolsPath>
+    <_WebPublishTargetsPath Condition=" '$(_WebPublishTargetsPath)'=='' ">$(VSToolsPath)</_WebPublishTargetsPath>
+    <AssemblyFileVersion Condition="'$(AssemblyFileVersion)' == ''">1.0.0.0</AssemblyFileVersion>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">1.0.0.0</AssemblyVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <Value>$(AssemblyFileVersion)</Value>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <Value>$(AssemblyVersion)</Value>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\DataSecurity\FarHorizon.DataSecurity\FarHorizon.DataSecurity.csproj">
+      <Project>{D690E3B0-445C-4B6F-9211-5C2151E22239}</Project>
+      <Name>FarHorizon.DataSecurity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FaarHorizon.Reservations.Bases\FarHorizon.Reservations.WebHelper.csproj">
+      <Project>{909C75D2-6BD1-4ADB-AFEA-F75165710DDB}</Project>
+      <Name>FarHorizon.Reservations.WebHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.BusinessTier\FarHorizon.Reservations.BusinessTier.csproj">
+      <Project>{A9719C5E-7C55-476E-93E7-6ABA810B6F91}</Project>
+      <Name>FarHorizon.Reservations.BusinessTier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.Common\FarHorizon.Reservations.Common.csproj">
+      <Project>{2CF66C59-D704-4C60-BD41-1B3141F73E12}</Project>
+      <Name>FarHorizon.Reservations.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.DataTier\FarHorizon.Reservations.DataBaseManager.csproj">
+      <Project>{EB133CE4-2A4D-48B0-BD45-91D18634B3F4}</Project>
+      <Name>FarHorizon.Reservations.DataBaseManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.EmailManager\FarHorizon.Reservations.EMailManager.csproj">
+      <Project>{7A9FC9DA-D1A0-4426-A9F0-479B4F835434}</Project>
+      <Name>FarHorizon.Reservations.EMailManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.IntegrationServices\FarHorizon.Reservations.BusinessServices.csproj">
+      <Project>{BD88A350-4FE3-47C0-8E40-AA3564D847A2}</Project>
+      <Name>FarHorizon.Reservations.BusinessServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.MasterServices\FarHorizon.Reservations.MasterServices.csproj">
+      <Project>{C862145C-B545-4F67-8796-7A9F219E899A}</Project>
+      <Name>FarHorizon.Reservations.MasterServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.SessionManager\FarHorizon.Reservations.SessionManager.csproj">
+      <Project>{14E44D1D-E21E-4947-B65D-BBE949B1F708}</Project>
+      <Name>FarHorizon.Reservations.SessionManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.UploadManager\FarHorizon.Reservations.UploadManager.csproj">
+      <Project>{05F94F55-3C02-4588-B490-B9DC58A608A6}</Project>
+      <Name>FarHorizon.Reservations.UploadManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.UserManager\FarHorizon.Reservations.UserManager.csproj">
+      <Project>{2DBAFB3F-3277-4733-953D-84D5CD047125}</Project>
+      <Name>FarHorizon.Reservations.UserManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FarHorizon.Reservations.XMLServices\FarHorizon.Reservations.XMLManager.csproj">
+      <Project>{85B79E83-5A0A-4756-8643-F8E045B64A08}</Project>
+      <Name>FarHorizon.Reservations.XMLManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.WebSite.Publishing.targets" />
+</Project>

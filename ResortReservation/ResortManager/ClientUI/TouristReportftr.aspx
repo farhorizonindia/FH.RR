@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="TouristReportftr.aspx.cs" Inherits="ClientUI_TouristReportftr" %>
 <%@ Register TagName="PageHeaderControl" TagPrefix="phc" Src="~/userControl/pageheader.ascx" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,7 +58,7 @@
     <div>
         <asp:ScriptManager ID="scmgrviewbookings" runat="server">
         </asp:ScriptManager>
-        <asp:Label ID="lblTouristNotFound" runat="server"></asp:Label>
+     
         <asp:UpdatePanel ID="pnlviewbookings" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                 <table id="filtersection" class="filtersection">
@@ -119,7 +120,7 @@
                             <td class="filtersectionCell">Accomodation no:</td>
                             <td class="auto-style2"><asp:DropDownList CssClass="select filterselect" ID="ddlAccomName" runat="server"
                                 Width="150px"></asp:DropDownList></td>
-                            <td class="filtersectionCell"><asp:Button ID="btnShow" runat="server" CssClass="appbutton" OnClick="btnShow_Click" Text="Show" />
+                            <td class="filtersectionCell"><asp:Button ID="btnShow"   runat="server" CssClass="appbutton" OnClick="btnShow_Click" Text="Show" />
                                 <asp:Button ID="btnExport" runat="server" CssClass="appbutton" OnClick="btnExport_Click" Text="Download" /></td>
                             <td class="filtersectionCell">&nbsp;</td>
                             <td class="auto-style1">&nbsp;</td>
@@ -132,7 +133,7 @@
                             <td class="filtersectionCell">&nbsp;</td>
                         </tr>
                     </table>
-
+                   <asp:Label ID="lblTouristNotFound" runat="server"></asp:Label>
                 <div id="gridsection" class="gridsection">
                     <asp:DataGrid ID="dgTouristDetails" PageSize="30" runat="server" AutoGenerateColumns="False"
                         AllowPaging="True" OnPageIndexChanged="dgTouristDetails_PageIndexChanged" Width="100%" >
@@ -211,6 +212,7 @@
                         <AlternatingItemStyle BackColor="White" />
                         <ItemStyle BackColor="#EFF3FB" />
                         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                        
                     </asp:DataGrid>
                 </div>
             </ContentTemplate>
@@ -220,6 +222,23 @@
                 </Triggers>
         </asp:UpdatePanel>
     </div>
+         <asp:UpdateProgress ID="UpdateProgress1" runat="server" DisplayAfter="200">
+        <ProgressTemplate>
+            <iframe id="pgrIFrame" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
+                src="javascript:'<html></html>';" style="position: absolute; top: 729px; left: 36px;
+                height: 68px; width: 208px; z-index: 19999"></iframe>
+            <asp:Panel ID="Panel1" runat="server" BackColor="white" BorderColor="#C2D3FC" BorderStyle="solid"
+                BorderWidth="1" Height="100" Style="z-index: 20000" Width="300">
+                <div style="position: relative; top: 20px; left: 70px;">
+                    <asp:Image ID="image2" runat="server" ImageUrl="~/images/indicator.gif" />
+                    
+                Please Wait....
+            </asp:Panel>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+    <cc1:AlwaysVisibleControlExtender ID="AlwaysVisibleControlExtender1" runat="server"
+        TargetControlID="Panel1" HorizontalOffset="300" VerticalOffset="150">
+    </cc1:AlwaysVisibleControlExtender>
     </form>
 </body>
 </html>

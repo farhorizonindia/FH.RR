@@ -20,6 +20,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         private string _sStartDate;
         private string _sEndDate;
         private string _sAgentName;
+        private string _sRefAgentName;
         private string _bookingStatusType;
         private int _noofrooms;
         private int _paxStaying;
@@ -123,6 +124,11 @@ namespace FarHorizon.Reservations.Common.DataEntities.Client
         {
             get { return _sAgentName; }
             set { _sAgentName = value; }
+        }
+        public string RefAgentName
+        {
+            get { return _sRefAgentName; }
+            set { _sRefAgentName = value; }
         }
         #endregion
 

@@ -29,11 +29,22 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string action { get; set; }
         public string Password { get; set; }
 
+
+        public int? AgentId { get; set; }
         public int CustId { get; set; }
 
         public string PaymentMethod { get; set; }
 
-        public int AgentId { get; set; }
+        
+        public string nameoncard { get; set; }
+        public string caardnumber { get; set; }
+        public string expirydate { get; set; }
+        public string bilingaddress { get; set; }
+        public string specialqutos { get; set; }
+        public string Refrenceid { get; set; }
+        public bool term { get; set; }
+        public int BookingId { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

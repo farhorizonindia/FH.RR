@@ -13,6 +13,7 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         private int _RegionId;
         private string _sRegion;
         private string _sAccomInitial;
+        private string _sAccomPolicyUrl;
         List<AccomodationSeasonDTO> _accomodationSeasonList;
         RoomDTO[] _oAccomRoomData;
 
@@ -56,6 +57,12 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         {
             get { return _sAccomInitial; }
             set { _sAccomInitial = value; }
+        }
+
+        public string AccomPolicyUrl
+        {
+            get { return _sAccomPolicyUrl; }
+            set { _sAccomPolicyUrl = value; }
         }
 
         public List<AccomodationSeasonDTO> AccomodationSeasonList

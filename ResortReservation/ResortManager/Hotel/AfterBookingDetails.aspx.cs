@@ -345,7 +345,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
                     string PaymentId = BookingPayId.ToString();
                     string BillingAddress = "abc/wsdd,vasant vihar";// lblBillingAddress.Text.Trim().ToString();
                     Session["Address"] = lblBillingAddress.Text.Trim().ToString();
-                    Session["InvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString());
+                    Session["InvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["FirstName"].ToString()) + " " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString());
                     Session["SubInvName"] = DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["LastName"].ToString()) + ", " + DataSecurityManager.Decrypt(dtCustomerData.Rows[0]["Title"].ToString()) + " " + FirstName;
 
                     string[] arr = { };
@@ -604,6 +604,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
         sendMail();
 
         pnlCustReg.Visible = false;
+
         //try
         //{
         //    blcus.action = "InsCustomers";
@@ -658,7 +659,7 @@ public partial class Hotel_AfterBookingDetails : System.Web.UI.Page
             StringBuilder sb = new StringBuilder();
             sb.Append("<div>");
             sb.Append("<div> Dear " + txtFirstName.Text + ",</div> <div><br/></div><div>Thanks for your registering with us.</div> <div><br/> </div><div>For security reasons we have added this step so that we verify the email address before any booking details is sent across.</div> <div><br/></div> ");
-            sb.Append(" <div>To verify your email address please enter the code " + Code + " in the registration screen. </div> <div><br/> </div><div>Do contact us if you have any issue at reservations@adventureresort</div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
+            sb.Append(" <div>To verify your email address please enter the code " + Code + " in the registration screen. </div> <div><br/> </div><div>Do contact us if you have any issue at reservations@adventureresort.com</div><div><br/></div><div>Thanking you,</div><div><br/></div><div>Reservations Office</div> ");
             sb.Append("</div>");
             sb.Append("<img src='http://adventureresortscruises.in/Cruise/booking/img_logo.png' alt='Image'/><br /><div> Adventure Resorts & Cruises Pvt. Ltd.</div><div> B209, CR Park, New Delhi 110019 </div> <div> Phone: +91 - 011 - 41057370 / 1 / 2 </div><div> Mobile: +91 - 9599755353 </div><div><br/> </div> ");
 

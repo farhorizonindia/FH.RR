@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data;
-using FarHorizon.Reservations.Bases.BasePages;
+﻿using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+using System;
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class Rate_PackageRateCard : MasterBasePage
 {
@@ -15,6 +12,15 @@ public partial class Rate_PackageRateCard : MasterBasePage
     DALPackageRateCard dlRate = new DALPackageRateCard();
     DataTable dtGetReturnedData;
     int getQueryResponse = 0;
+
+    BALAgentPayment blAgentpayment = new BALAgentPayment();
+    DALAgentPayment dlAgentpayment = new DALAgentPayment();
+    int GetQueryResponse = 0;
+    DataTable dtGetReturenedData;
+
+    BALLinks blLinks = new BALLinks();
+    DALLinks dlLinks = new DALLinks();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -24,9 +30,89 @@ public partial class Rate_PackageRateCard : MasterBasePage
             //  this.BindLocation();
             this.bindGrid();
             this.BindRateCardIdddl();
+            this.BindAgentDD();
+            this.BindAgentRef();
+            this.BindAgentCommission();
         }
     }
+    private void BindAgentDD()
+    {
 
+        #region Bind Agent DD
+        blLinks._Action = "GetAllGetAllMainAgents";
+        dtGetReturnedData = dlLinks.BindControlsAgent(blLinks);
+        if (dtGetReturnedData != null)
+        {
+            ddlagent.Items.Clear();
+            ddlagent.DataSource = dtGetReturnedData;
+            ddlagent.DataTextField = "AgentName";
+            ddlagent.DataValueField = "AgentId";
+            ddlagent.DataBind();
+            ddlagent.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        else
+        {
+            ddlagent.Items.Clear();
+            ddlagent.DataSource = null;
+            ddlagent.DataBind();
+            ddlagent.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        #endregion
+    }
+    private void BindAgentRef()
+    {
+
+        #region Bind Agent DD
+        blLinks._Action = "GetAllGetAllAgents";
+        dtGetReturnedData = dlLinks.BindControlsAgent(blLinks);
+        if (dtGetReturnedData != null)
+        {
+            ddlAgentRef.Items.Clear();
+            ddlAgentRef.DataSource = dtGetReturnedData;
+            ddlAgentRef.DataTextField = "AgentName";
+            ddlAgentRef.DataValueField = "AgentId";
+            ddlAgentRef.DataBind();
+            ddlAgentRef.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        else
+        {
+            ddlAgentRef.Items.Clear();
+            ddlAgentRef.DataSource = null;
+            ddlAgentRef.DataBind();
+            ddlAgentRef.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        #endregion
+    }
+    private void BindAgentCommission()
+    {
+
+        #region Bind Agent DD
+        blLinks._Action = "GetAllGetAllAgents";
+        dtGetReturnedData = dlLinks.BindControlsAgent(blLinks);
+        if (dtGetReturnedData != null)
+        {
+            ddlAgentCommission.Items.Clear();
+            ddlAgentCommission.DataSource = dtGetReturnedData;
+            ddlAgentCommission.DataTextField = "AgentName";
+            ddlAgentCommission.DataValueField = "AgentId";
+            ddlAgentCommission.DataBind();
+            ddlAgentCommission.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        else
+        {
+            ddlAgentCommission.Items.Clear();
+            ddlAgentCommission.DataSource = null;
+            ddlAgentCommission.DataBind();
+            ddlAgentCommission.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        #endregion
+    }
     #region UDF
     private void BindPackages()
     {
@@ -107,6 +193,45 @@ public partial class Rate_PackageRateCard : MasterBasePage
     {
         try
         {
+           // string ss = txtValFrom.Text;
+            DateTime checkin = Convert.ToDateTime(txtValFrom.Text);
+            DateTime dd = Convert.ToDateTime("09/01/2019");
+            if (checkin < Convert.ToDateTime(dd))
+            {
+
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Sn");
+
+                for (int a = 0; a < 3; a++)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["Sn"] = (a + 1).ToString();
+                    dt.Rows.Add(dr);
+                }
+
+                GridRateSheet.DataSource = dt;
+                GridRateSheet.DataBind();
+            }
+            else
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Sn");
+
+                for (int a = 0; a < 4; a++)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["Sn"] = (a + 1).ToString();
+                    dt.Rows.Add(dr);
+                }
+
+                GridRateSheet.DataSource = dt;
+                GridRateSheet.DataBind();
+            }
+
+        }
+        catch
+        {
             DataTable dt = new DataTable();
             dt.Columns.Add("Sn");
 
@@ -119,11 +244,6 @@ public partial class Rate_PackageRateCard : MasterBasePage
 
             GridRateSheet.DataSource = dt;
             GridRateSheet.DataBind();
-
-        }
-        catch
-        {
-
         }
     }
     private void BindRateCardIdddl()
@@ -198,7 +318,10 @@ public partial class Rate_PackageRateCard : MasterBasePage
 
                 blRate._PPNc = Convert.ToDecimal(txtNcPP.Text.Trim().ToString());
                 blRate._SRSNc = Convert.ToDecimal(txtNcSrs.Text.Trim().ToString());
-
+                blRate.AgentId = Convert.ToInt32(ddlagent.SelectedValue.Trim().ToString());
+                blRate.AgentIdRef = Convert.ToInt32(ddlAgentRef.SelectedValue.Trim().ToString());
+                blRate.AgentIdCommission = Convert.ToInt32(ddlAgentCommission.SelectedValue.Trim().ToString());
+                blRate.AgentCommission = Convert.ToInt32(txtCommission.Text.Trim().ToString());
                 if (btnSbmit.Text == "Submit")
                 {
                     blRate._Action = "AddPackageRateDetails";
@@ -240,10 +363,10 @@ public partial class Rate_PackageRateCard : MasterBasePage
         ddlRatecategory.SelectedIndex = -1;
         ddlCurrency.SelectedIndex = 0;
         txtSupplier.Text = string.Empty;
-        txtTaxPercent.Text ="0";
+        txtTaxPercent.Text = "0";
         txtValFrom.Text = string.Empty;
         txtValto.Text = string.Empty;
-       
+
         this.bindGrid();
 
     }
@@ -266,7 +389,7 @@ public partial class Rate_PackageRateCard : MasterBasePage
             blRate._SupplierName = txtSupplier.Text.Trim().ToString();
             blRate.FrompaxMain = Convert.ToInt32(txtFrmPax.Text.Trim());
             blRate.ToPaxMain = Convert.ToInt32(txtToPax.Text.Trim());
-
+            //blRate.AgentId = Convert.ToInt32(ddlagent.SelectedValue.ToString());
             if (btnSbmit.Text == "Submit")
             {
                 blRate._RateCardId = RateId.ToString();
@@ -345,6 +468,17 @@ public partial class Rate_PackageRateCard : MasterBasePage
         //btnSbmit.Text = "Update";
         //lblStatus.Text = string.Empty;
     }
+    protected void ddlpackage_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlpackage.SelectedValue != "-Select-")
+        {
+            BindPackageFilterDetails(ddlpackage.SelectedValue);
+        }
+        else
+        {
+            BindRateCardIdddl();
+        }
+    }
     public void FillPackageMaster()
     {
         try
@@ -375,6 +509,47 @@ public partial class Rate_PackageRateCard : MasterBasePage
         {
         }
     }
+    private void BindPackageFilterDetails(string Package)
+    {
+        try
+        {
+
+            try
+            {
+                blRate._Action = "getPacksDetails";
+                blRate._packageId = Package;
+                dtGetReturnedData = new DataTable();
+                dtGetReturnedData = dlRate.getPackageFilterData(blRate);
+                if (dtGetReturnedData.Rows.Count > 0)
+                {
+
+                    gdvRateCards.DataSource = dtGetReturnedData;
+                    gdvRateCards.DataBind();
+                    // ViewState["RateCard"] = dtGetReturnedData;
+                }
+                else
+                {
+                    gdvRateCards.DataSource = null;
+                    gdvRateCards.DataBind();
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('Package rate card could not be Created ')", true);
+                lblStatus.Text = "please check your entries carefully.";
+                lblStatus.ForeColor = System.Drawing.Color.Red;
+            }
+
+        }
+        catch (Exception Ex)
+        {
+            Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('Package rate card could not be Created ')", true);
+            lblStatus.Text = "please check your entries carefully.";
+            lblStatus.ForeColor = System.Drawing.Color.Red;
+        }
+    }
+   
     public void fillPackageDetails(string rcardid)
     {
         try
@@ -415,6 +590,23 @@ public partial class Rate_PackageRateCard : MasterBasePage
                         txtBcTx.Text = Convert.ToDouble(dtGetReturnedData.Rows[i]["Taxvalue"]).ToString("#.##");
                         txtncpp.Text = Convert.ToDouble(dtGetReturnedData.Rows[i]["PPNc"]).ToString("#.##");
                         txtncsrs.Text = Convert.ToDouble(dtGetReturnedData.Rows[i]["SRSNc"]).ToString("#.##");
+                        txtCommission.Text = Convert.ToDouble(dtGetReturnedData.Rows[i]["AgentCommission"]).ToString("#.##");
+
+                        if (dtGetReturnedData.Rows[i]["AgentId"].ToString() != "")
+                        {
+                            ddlagent.SelectedValue = dtGetReturnedData.Rows[i]["AgentId"].ToString();
+                        }
+
+                        if (dtGetReturnedData.Rows[i]["AgentId"].ToString() != "")
+                        {
+                            ddlAgentRef.SelectedValue = dtGetReturnedData.Rows[i]["AgentIdRef"].ToString();
+                        }
+
+                        if (dtGetReturnedData.Rows[i]["AgentId"].ToString() != "")
+                        {
+                            ddlAgentCommission.SelectedValue = dtGetReturnedData.Rows[i]["AgentIdCommission"].ToString();
+                        }
+
                         chk.Checked = Convert.ToBoolean(dtGetReturnedData.Rows[i]["TaxEnclusive"].ToString());
                         hdnRoomCtid.Value = ddlRmCat.SelectedValue = dtGetReturnedData.Rows[i]["RoomCategoryId"].ToString();
 
@@ -443,6 +635,9 @@ public partial class Rate_PackageRateCard : MasterBasePage
         {
             if (e.CommandName == "Select")
             {
+
+                //txtValFrom_TextChanged(this, e);
+
                 LinkButton lnk = (LinkButton)e.CommandSource;
                 GridViewRow grow = (GridViewRow)lnk.NamingContainer;
                 string rcardid = grow.Cells[0].Text;
@@ -460,12 +655,49 @@ public partial class Rate_PackageRateCard : MasterBasePage
                     txtSupplier.Text = dtGetReturnedData.Rows[0]["SupplierName"].ToString();
                     txtTaxPercent.Text = dtGetReturnedData.Rows[0]["tax"].ToString();
                     txtValFrom.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["VaildFrom"]).ToString("MM/dd/yyyy");
+
+                 
                     txtValto.Text = Convert.ToDateTime(dtGetReturnedData.Rows[0]["ValidTo"]).ToString("MM/dd/yyyy");
 
 
 
+                    DateTime checkin = Convert.ToDateTime(txtValFrom.Text);
+                    DateTime dd = Convert.ToDateTime("09/01/2019");
+                    if (checkin < Convert.ToDateTime(dd))
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Sn");
+
+                        for (int a = 0; a < 3; a++)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["Sn"] = (a + 1).ToString();
+                            dt.Rows.Add(dr);
+                        }
+
+                        GridRateSheet.DataSource = dt;
+                        GridRateSheet.DataBind();
+                    }
+                    else
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Sn");
+
+                        for (int a = 0; a < 4; a++)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["Sn"] = (a + 1).ToString();
+                            dt.Rows.Add(dr);
+                        }
+
+                        GridRateSheet.DataSource = dt;
+                        GridRateSheet.DataBind();
+                    }
+
+
                     fillPackageDetails(rcardid);
                     btnSbmit.Text = "Update";
+                    
                 }
 
 
@@ -513,7 +745,40 @@ public partial class Rate_PackageRateCard : MasterBasePage
     }
 
 
+    protected void txtTaxPercent_TextChanged(object sender, EventArgs e)
+    {
 
+        try
+        {
+           // TextBox txtTaxPercent = (TextBox)sender;
+            for (int i = 0; i <= GridRateSheet.Rows.Count - 1; i++)
+            {
+                GridViewRow grow = GridRateSheet.Rows[i];
+              
+                TextBox txtNcPP = (TextBox)grow.FindControl("txtNcPP");
+                TextBox txtNcSrs = (TextBox)grow.FindControl("txtNcSrs");
+                TextBox taxPer = (TextBox)grow.FindControl("txtBcTaxValue");
+                CheckBox chk = (CheckBox)grow.FindControl("chktaxInc");
+                TextBox txtBcPP = (TextBox)grow.FindControl("txtBcPP");
+                TextBox txtBcSrs = (TextBox)grow.FindControl("txtBcSrs");
+
+                taxPer.Text = txtTaxPercent.Text.Trim();
+
+
+                txtNcPP.Text = Math.Round((Convert.ToDouble(txtBcPP.Text) + (Convert.ToDouble(txtBcPP.Text) / 100) * Convert.ToDouble(taxPer.Text))).ToString();
+                txtNcSrs.Text = Math.Round((Convert.ToDouble(txtBcSrs.Text) + (Convert.ToDouble(txtBcSrs.Text) / 100) * Convert.ToDouble(txtTaxPercent.Text))).ToString();
+
+            }
+
+
+
+
+        }
+
+        catch
+        {
+        }
+    }
 
     protected void txtBcPP_TextChanged(object sender, EventArgs e)
     {
@@ -530,10 +795,10 @@ public partial class Rate_PackageRateCard : MasterBasePage
 
 
             taxPer.Text = txtTaxPercent.Text.Trim();
-           
 
-                txtNcPP.Text = Math.Round((Convert.ToDouble(txtbcp.Text) + (Convert.ToDouble(txtbcp.Text) / 100) * Convert.ToDouble(txtTaxPercent.Text))).ToString();
-           
+
+            txtNcPP.Text = Math.Round((Convert.ToDouble(txtbcp.Text) + (Convert.ToDouble(txtbcp.Text) / 100) * Convert.ToDouble(txtTaxPercent.Text))).ToString();
+
 
 
 
@@ -557,9 +822,9 @@ public partial class Rate_PackageRateCard : MasterBasePage
             TextBox txtNcSrs = (TextBox)grow.FindControl("txtNcSrs");
             TextBox txtBcTaxValue = (TextBox)grow.FindControl("txtBcTaxValue");
             CheckBox chk = (CheckBox)grow.FindControl("chktaxInc");
-           
-                txtNcSrs.Text = Math.Round((Convert.ToDouble(txtBcSrs.Text) + (Convert.ToDouble(txtBcSrs.Text) / 100) * Convert.ToDouble(txtTaxPercent.Text))).ToString();
-           
+
+            txtNcSrs.Text = Math.Round((Convert.ToDouble(txtBcSrs.Text) + (Convert.ToDouble(txtBcSrs.Text) / 100) * Convert.ToDouble(txtTaxPercent.Text))).ToString();
+
         }
         catch
         {
@@ -587,7 +852,7 @@ public partial class Rate_PackageRateCard : MasterBasePage
                 txtNcSrs.Text = txtbcsrs.Text;
                 txtNcPP.Text = txtbcp.Text;
 
-               
+
             }
             else
             {
@@ -637,5 +902,10 @@ public partial class Rate_PackageRateCard : MasterBasePage
         {
         }
     }
-  
+
+
+    protected void txtValFrom_TextChanged(object sender, EventArgs e)
+    {
+        bindGrid();
+    }
 }

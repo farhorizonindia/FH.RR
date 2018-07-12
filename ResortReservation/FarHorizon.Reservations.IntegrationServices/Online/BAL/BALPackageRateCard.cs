@@ -42,5 +42,9 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 
         public int FrompaxMain { get; set; }
         public int ToPaxMain { get; set; }
+        public int AgentId { get; set; }
+        public int AgentIdRef { get; set; }
+        public int AgentIdCommission { get; set; }
+        public int AgentCommission { get; set; }
     }
 }

@@ -1,8 +1,12 @@
 using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
+using FarHorizon.Reservations.BusinessServices.Online.BAL;
+using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.Reservations.Common;
 using FarHorizon.Reservations.Common.DataEntities.Client;
+using FarHorizon.Reservations.Common.DataEntities.Masters;
 using FarHorizon.Reservations.Common.Models;
+using FarHorizon.Reservations.DataBaseManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +24,8 @@ public partial class _Default : ClientBasePage
 
     private int _totalDaysInChart = 31;
     private int _gridEndCol = 39;  //TOTALDAYSINCHART + 8 COLS FOR STATIC DATA 
-
+    BALSearch blsrch = new BALSearch();
+    DALSearch dlsrch = new DALSearch();
     public DateTime ChartStartDate
     {
         get
@@ -68,8 +73,9 @@ public partial class _Default : ClientBasePage
             today = GF.GetDate();
             TotalDaysInChart = DateTime.DaysInMonth(today.Year, today.Month);
             thisMonth = DateTime.Parse(today.Year + "/" + today.Month + "/" + "01");
-            txtFromDate.Text = GF.GetMonthName(thisMonth.Month) + " " + thisMonth.Year.ToString();
-
+         //   thisMonth = DateTime.Parse(2017 + "/" + 08 + "/" + "01");
+           txtFromDate.Text = GF.GetMonthName(thisMonth.Month) + " " + thisMonth.Year.ToString();
+            
             //txtStartDate.Text = "dd-mmm-yyyy";
             tBookingChart = PrepareBookingChartHeader(thisMonth);
             tBookingChart = FormatTable(tBookingChart);
@@ -664,7 +670,7 @@ public partial class _Default : ClientBasePage
         {
             bookingChartServices = new BookingChartServices();
             //oAccomTypeData = oBookingChartViewManager.GetBookingChart(RegionId, AccomodationTypeId, AccomodationId, StartDate, EndDate);
-            oBookingChartDTO = bookingChartServices.GetRoomDetailsNew(RegionId, AccomodationTypeId, AccomodationId);
+            oBookingChartDTO = bookingChartServices.GetRoomDetailsNew(RegionId, AccomodationTypeId, AccomodationId,StartDate);
             if (oBookingChartDTO != null)
             {
                 if (oBookingChartDTO.Length > 0)
@@ -848,8 +854,14 @@ public partial class _Default : ClientBasePage
                 {
                     ColumnCaption += Environment.NewLine;
                     ColumnCaption += cruiseLocation.StartLocation;
+                    DataTable dt = dlsrch.getbydate(StartDate.Date);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        ColumnCaption += Environment.NewLine;
+                        ColumnCaption += dt.Rows[0]["openclose"].ToString();
+                    }
                 }
-            }           
+            }
 
             thc = new TableCell();
             thc.Text = ColumnCaption;
@@ -883,7 +895,7 @@ public partial class _Default : ClientBasePage
                     " (select LocationName from dbo.Locations where LocationId = p.BoadingTo) as EndLocation " +
                         " from tblCruiseOpenDates cod join tblPackages p on cod.Packageid = p.PackageId " +
                         " where CheckInDate between Convert(nvarchar(27), @startDate,106) and Convert(nvarchar(27), @endDate,106)";
-                
+
         List<CruiseLocation> cruiseLocations = new List<CruiseLocation>();
 
         try
@@ -921,7 +933,7 @@ public partial class _Default : ClientBasePage
 
         }
         return cruiseLocations;
-    }    
+    }
 
     private TableRow GenerateHeaderMonthData(TableRow thr)
     {
@@ -1162,11 +1174,11 @@ public partial class _Default : ClientBasePage
 
                             if (bookingDetail.bookingDetailHtml.Contains("span")) //This is a hack to find if there is single booking or multibooking
                             {
-                                tc.Attributes.Add("class", "multibookingcell");
+                                tc.Attributes.Add("class", "multibookingcell tdblock");
                             }
                             else if (tc.Attributes["class"] != "multibookingcell")
                             {
-                                tc.Attributes.Add("class", "singlebookingcell");
+                                tc.Attributes.Add("class", "singlebookingcell tdblock");
                             }
 
                             divRoomMain.Attributes.Add("onmouseover", "javascript:showRoomBookings('" + tc.ClientID + "', '" + bookingDetailContainingId + "')");
@@ -1306,6 +1318,8 @@ public partial class _Default : ClientBasePage
         sBookingDetailsHTML += "<b>From:</b>" + oRoomBookingDateWiseData.StartDateFormatted + " <b>To: </b>" + oRoomBookingDateWiseData.EndDateFormatted + "<br/>";
 
         sBookingDetailsHTML += "<b>Agent: </b> " + oRoomBookingDateWiseData.AgentName + "<br/>";
+        sBookingDetailsHTML += "<b>Ref Agent: </b> " + oRoomBookingDateWiseData.RefAgentName + "<br/>";
+
         if (oRoomBookingDateWiseData.Chartered == true)
         {
             sBookingDetailsHTML += "<b>Booking Type:</b><font color=\"red\">Chartered</font><br/>";
@@ -1353,6 +1367,7 @@ public partial class _Default : ClientBasePage
         divRoomHeader.ID = Constants.CHART_ROOM_CELL_DIV_HEADER + idSuffix;
 
         divRoomDetail = new HtmlGenericControl("div");
+        divRoomDetail.Attributes.Add("class", "love");
         divRoomDetail.ID = Constants.CHART_ROOM_CELL_DIV_DETAIL + idSuffix;
         id = Constants.CHART_ROOM_CELL_DIV_DETAIL + idSuffix;
         divRoomDetail.Style.Add(HtmlTextWriterStyle.Display, "none");

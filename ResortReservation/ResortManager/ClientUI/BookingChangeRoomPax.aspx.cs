@@ -1,22 +1,12 @@
-using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Collections.Generic;
-using System.Web;
-using System.Text;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using FarHorizon.Reservations.Common.DataEntities.Client;
+using FarHorizon.Reservations.Bases.BasePages;
 using FarHorizon.Reservations.BusinessServices;
 using FarHorizon.Reservations.Common;
-
-using FarHorizon.Reservations.Bases;
-using FarHorizon.Reservations.Bases.BasePages;
-
+using FarHorizon.Reservations.Common.DataEntities.Client;
+using System;
+using System.Collections;
+using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 public partial class ChangeRoomPax : ClientBasePage
 {
     int count = 0;
@@ -1497,7 +1487,12 @@ public partial class ChangeRoomPax : ClientBasePage
     private void keepRoomDropDownsSelectedIndex(string dropDownId, int selectedItemIndex)
     {
         SortedList sl = null;
-        sl = (SortedList)SessionServices.BookingChangeRoomPax_DdlSelectedIndexes;
+
+        if (SessionServices.RetrieveSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes) != null)
+        {
+            sl = SessionServices.RetrieveSession<SortedList>(Constants._BookingChangeRoomPax_DdlSelectedIndexes);
+        }
+
         if (sl == null)
             sl = new SortedList();
 
@@ -1505,6 +1500,7 @@ public partial class ChangeRoomPax : ClientBasePage
             sl[dropDownId] = selectedItemIndex.ToString();
         else
             sl.Add(dropDownId, selectedItemIndex.ToString());
+
         SessionServices.SaveSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes, sl);
     }
 
@@ -1515,7 +1511,11 @@ public partial class ChangeRoomPax : ClientBasePage
         string[,] ddindexes = null;
         BookingServices oBookingManager = new BookingServices();
 
-        sl = (SortedList)SessionServices.BookingChangeRoomPax_DdlSelectedIndexes;
+        if (SessionServices.RetrieveSession(Constants._BookingChangeRoomPax_DdlSelectedIndexes) != null)
+        {
+            sl = SessionServices.RetrieveSession<SortedList>(Constants._BookingChangeRoomPax_DdlSelectedIndexes);
+        }
+
         if (sl != null && sl.Count > 0)
         {
             ddindexes = new string[sl.Count, 2];
@@ -1712,21 +1712,100 @@ public partial class ChangeRoomPax : ClientBasePage
             }
         }
         #endregion
-      
-     
-        
 
 
-       
-         
-            for (int j = 0; j < oFinalizedRooms.Length; j++)
+
+
+
+
+
+        for (int j = 0; j < oFinalizedRooms.Length; j++)
+        {
+            if (oFinalizedRooms[j].BookingId == iBookingId && GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) == sRoomCategory && GF.ReplaceSpace(oFinalizedRooms[j].RoomType) == sRoomType)
             {
-                if (oFinalizedRooms[j].BookingId == iBookingId && GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) == sRoomCategory && GF.ReplaceSpace(oFinalizedRooms[j].RoomType) == sRoomType)
+                sCntrlId = Constants.CHECKBOX_ROOM_NO + GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) + "*" + GF.ReplaceSpace(oFinalizedRooms[j].RoomType) + "*" + oFinalizedRooms[j].RoomNo;
+                if (slSelectedRooms.ContainsKey(sCntrlId))
                 {
-                    sCntrlId = Constants.CHECKBOX_ROOM_NO + GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) + "*" + GF.ReplaceSpace(oFinalizedRooms[j].RoomType) + "*" + oFinalizedRooms[j].RoomNo;
-                    if (slSelectedRooms.ContainsKey(sCntrlId))
+                    slSelectedRooms.Remove(sCntrlId);
+                    #region Setting the values of selected Rooms to the Object
+                    sCntrlId = sCntrlId.Replace(Constants.CHECKBOX_ROOM_NO, Constants.DROPDOWNLIST_PAX);
+                    c = null;
+                    c = FindControl(pnlChotu, sCntrlId);
+                    if (c != null)
                     {
-                        slSelectedRooms.Remove(sCntrlId);
+                        #region Set Pax
+                        ddl = (DropDownList)c;
+                        int.TryParse(ddl.SelectedItem.Text, out iPax);
+                        oFinalizedRooms[j].PaxStaying = iPax;
+                        iRoomsBooked++;
+                        #endregion
+                        #region Set the Conversion Status
+                        sCntrlId = sCntrlId.Replace(Constants.DROPDOWNLIST_PAX, Constants.DROPDOWNLIST_ROOMCONVERT);
+                        c = null;
+                        c = FindControl(pnlChotu, sCntrlId);
+                        if (c != null)
+                        {
+                            ddl = (DropDownList)c;
+                            if (string.Compare(ddl.SelectedItem.Text, "Yes", true) == 0)
+                            {
+                                oFinalizedRooms[j].ConvertTo_Double_Twin = true;
+                            }
+                            else if (string.Compare(ddl.SelectedItem.Text, "No", true) == 0)
+                            {
+                                oFinalizedRooms[j].ConvertTo_Double_Twin = false;
+                            }
+                        }
+                        #endregion
+                    }
+                    #endregion
+                }
+                else if (!slSelectedRooms.ContainsKey(sCntrlId))
+                {
+                    #region Releasing Previously Booked Rooms, if they are released
+                    if (oFinalizedRooms[j].RoomStatus == Constants.BOOKED)
+                    {
+                        oFinalizedRooms[j].BookingId = 0;
+                        oFinalizedRooms[j].RoomStatus = Constants.AVAILABLE;
+                        oFinalizedRooms[j].PaxStaying = oFinalizedRooms[j].DefaultNoOfBeds;
+                    }
+                    #endregion
+                }
+            }
+        }
+
+        #region Get Selected Rooms
+        for (int i = 0; i < sControls.Length; i++)
+        {
+            if (sControls[i].StartsWith(Constants.CHECKBOX_ROOM_NO))
+            {
+                if (slSelectedRooms.Contains(Convert.ToString(sControls[i])))
+                {
+                }
+                else
+                {
+                    slSelectedRooms.Add(Convert.ToString(sControls[i]), i);
+                }
+            }
+        }
+        #endregion
+
+
+        if (slSelectedRooms.Count > 0)
+        {
+            for (int i = 0; i < slSelectedRooms.Count; i++)
+            {
+                sCntrlId = Convert.ToString(slSelectedRooms.GetKey(i));
+                IdSplit = sCntrlId.Split('*');
+                Cat = IdSplit[1];
+                Type = IdSplit[2];
+                RoomNo = IdSplit[3];
+
+                for (int j = 0; j < oFinalizedRooms.Length; j++)
+                {
+                    if (oFinalizedRooms[j].BookingId == 0 && GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) == sRoomCategory && GF.ReplaceSpace(oFinalizedRooms[j].RoomType) == sRoomType && oFinalizedRooms[j].RoomNo == RoomNo && oFinalizedRooms[j].RoomStatus == Constants.AVAILABLE)
+                    {
+                        oFinalizedRooms[j].BookingId = iBookingId;
+                        oFinalizedRooms[j].RoomStatus = Constants.BOOKED;
                         #region Setting the values of selected Rooms to the Object
                         sCntrlId = sCntrlId.Replace(Constants.CHECKBOX_ROOM_NO, Constants.DROPDOWNLIST_PAX);
                         c = null;
@@ -1758,91 +1837,12 @@ public partial class ChangeRoomPax : ClientBasePage
                             #endregion
                         }
                         #endregion
-                    }
-                    else if (!slSelectedRooms.ContainsKey(sCntrlId))
-                    {
-                        #region Releasing Previously Booked Rooms, if they are released
-                        if (oFinalizedRooms[j].RoomStatus == Constants.BOOKED)
-                        {
-                            oFinalizedRooms[j].BookingId = 0;
-                            oFinalizedRooms[j].RoomStatus = Constants.AVAILABLE;
-                            oFinalizedRooms[j].PaxStaying = oFinalizedRooms[j].DefaultNoOfBeds;
-                        }
-                        #endregion
+                        break;
                     }
                 }
             }
+        }
 
-            #region Get Selected Rooms
-            for (int i = 0; i < sControls.Length; i++)
-            {
-                if (sControls[i].StartsWith(Constants.CHECKBOX_ROOM_NO))
-                {
-                    if(slSelectedRooms.Contains(Convert.ToString(sControls[i])))
-                    {
-                    }
-                    else
-                    {
-                    slSelectedRooms.Add(Convert.ToString(sControls[i]), i);
-                    }
-                }
-            }
-            #endregion
-
-
-            if (slSelectedRooms.Count > 0)
-            {
-                for (int i = 0; i < slSelectedRooms.Count; i++)
-                {
-                    sCntrlId = Convert.ToString(slSelectedRooms.GetKey(i));
-                    IdSplit = sCntrlId.Split('*');
-                    Cat = IdSplit[1];
-                    Type = IdSplit[2];
-                    RoomNo = IdSplit[3];
-
-                    for (int j = 0; j < oFinalizedRooms.Length; j++)
-                    {
-                        if (oFinalizedRooms[j].BookingId == 0 && GF.ReplaceSpace(oFinalizedRooms[j].RoomCategory) == sRoomCategory && GF.ReplaceSpace(oFinalizedRooms[j].RoomType) == sRoomType && oFinalizedRooms[j].RoomNo == RoomNo && oFinalizedRooms[j].RoomStatus == Constants.AVAILABLE)
-                        {
-                            oFinalizedRooms[j].BookingId = iBookingId;
-                            oFinalizedRooms[j].RoomStatus = Constants.BOOKED;
-                            #region Setting the values of selected Rooms to the Object
-                            sCntrlId = sCntrlId.Replace(Constants.CHECKBOX_ROOM_NO, Constants.DROPDOWNLIST_PAX);
-                            c = null;
-                            c = FindControl(pnlChotu, sCntrlId);
-                            if (c != null)
-                            {
-                                #region Set Pax
-                                ddl = (DropDownList)c;
-                                int.TryParse(ddl.SelectedItem.Text, out iPax);
-                                oFinalizedRooms[j].PaxStaying = iPax;
-                                iRoomsBooked++;
-                                #endregion
-                                #region Set the Conversion Status
-                                sCntrlId = sCntrlId.Replace(Constants.DROPDOWNLIST_PAX, Constants.DROPDOWNLIST_ROOMCONVERT);
-                                c = null;
-                                c = FindControl(pnlChotu, sCntrlId);
-                                if (c != null)
-                                {
-                                    ddl = (DropDownList)c;
-                                    if (string.Compare(ddl.SelectedItem.Text, "Yes", true) == 0)
-                                    {
-                                        oFinalizedRooms[j].ConvertTo_Double_Twin = true;
-                                    }
-                                    else if (string.Compare(ddl.SelectedItem.Text, "No", true) == 0)
-                                    {
-                                        oFinalizedRooms[j].ConvertTo_Double_Twin = false;
-                                    }
-                                }
-                                #endregion
-                            }
-                            #endregion
-                            break;
-                        }
-                    }
-                }
-            }
-        
         #region Old Code
         /* 
         for (int i = 0; i < oFinalizedRooms.Length; i++)

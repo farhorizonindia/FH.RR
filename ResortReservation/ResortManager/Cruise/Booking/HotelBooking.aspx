@@ -1,4 +1,4 @@
-﻿<%@ page language="C#" autoeventwireup="true" CodeFile="~/Hotel/HotelBooking.aspx.cs"  inherits="Hotel_HotelBooking" %>
+﻿<%@ page language="C#" autoeventwireup="true" CodeFile="HotelBooking.aspx.cs"  inherits="Hotel_HotelBooking" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <!DOCTYPE html>
