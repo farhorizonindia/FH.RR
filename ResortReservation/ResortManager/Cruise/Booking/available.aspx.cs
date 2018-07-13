@@ -11,8 +11,11 @@ using FarHorizon.Reservations.BusinessServices;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Text;
+<<<<<<< HEAD
 using System.Net;
 using Newtonsoft.Json.Linq;
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
 public partial class Cruise_Booking_available : System.Web.UI.Page
 {
@@ -962,6 +965,7 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
             Session["AId"] = Session["Agid"].ToString();
             if (Session["RedUrl"] == null)
             {
+<<<<<<< HEAD
                 string redurl = "";
                 if (Session["agentid"] !=null)
                 {
@@ -972,6 +976,9 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
                     redurl = "AfterBookingDetails3.aspx?AccomName=" + Request.QueryString["AccomName"].ToString() + "";
                 }
                  
+=======
+                string redurl = "AfterBookingDetails3.aspx?AccomName=" + Request.QueryString["AccomName"].ToString() + "";
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 Session["RedUrl"] = redurl;
             }
 
@@ -1007,6 +1014,7 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
             Session["AId"] = Session["Agid"].ToString();
             if (Session["RedUrl"] == null)
             {
+<<<<<<< HEAD
                 string redurl = "";
                 if (Session["agentid"] != null)
                 {
@@ -1016,6 +1024,10 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
                 {
                     redurl = "AfterBookingDetails3.aspx?AccomName=" + Request.QueryString["AccomName"].ToString() + "";
                 }
+=======
+                string redurl = "AfterBookingDetails3.aspx?AccomName=" + Request.QueryString["AccomName"].ToString() + "";
+                Session["RedUrl"] = redurl;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
 
             Response.Redirect(Session["RedUrl"].ToString());
@@ -1935,6 +1947,7 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
     {
         GridViewRow row = gdvHotelRoomRates.SelectedRow;
     }
+<<<<<<< HEAD
 
 
     public string currency(string amount, string code)
@@ -2111,4 +2124,6 @@ public partial class Cruise_Booking_available : System.Web.UI.Page
         {
         }
     }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 }

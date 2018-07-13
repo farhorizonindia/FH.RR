@@ -10,7 +10,11 @@ using System.Linq;
 using System.Web.UI;
 using System.Web;
 
+<<<<<<< HEAD
 public partial class Cruise_Booking_Packageserachresult1 : BaseClass
+=======
+public partial class Cruise_Booking_Packageserachresult1 : System.Web.UI.Page
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 {
     int cityid = 0;
     string date = "";
@@ -27,6 +31,7 @@ public partial class Cruise_Booking_Packageserachresult1 : BaseClass
     public string CheckoutDep;
     protected void Page_Load(object sender, EventArgs e)
     {
+<<<<<<< HEAD
        
         string url = HttpContext.Current.Request.Url.AbsoluteUri;
         Session["getavailable"] = url;
@@ -34,6 +39,14 @@ public partial class Cruise_Booking_Packageserachresult1 : BaseClass
         //{
         //    Response.Redirect("searchproperty1.aspx");
         //}
+=======
+        string url = HttpContext.Current.Request.Url.AbsoluteUri;
+        Session["getavailable"] = url;
+        if (Session["check"] == null)
+        {
+            Response.Redirect("searchproperty1.aspx");
+        }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (Session["CustName"] != null)
         {
             lblUsername.Text = "Hello " + Session["CustName"].ToString();
@@ -58,8 +71,11 @@ public partial class Cruise_Booking_Packageserachresult1 : BaseClass
 
         if (!IsPostBack)
         {
+<<<<<<< HEAD
          
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             if (Session["UserCode"] != null || Session["CustomerCode"] != null)
             {
                 LinkButton1.Visible = true;

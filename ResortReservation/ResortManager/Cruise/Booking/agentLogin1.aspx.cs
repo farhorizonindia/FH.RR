@@ -11,7 +11,11 @@ using FarHorizon.Reservations.Common;
 using FarHorizon.DataSecurity;
 using FarHorizon.Reservations.Common.DataEntities.Masters;
 
+<<<<<<< HEAD
 public partial class Cruise_Booking_agentLogin1 : BaseClass
+=======
+public partial class Cruise_Booking_agentLogin1 : System.Web.UI.Page
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 {
     protected void Page_Load(object sender, EventArgs e)
     {

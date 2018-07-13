@@ -82,7 +82,10 @@ public partial class ClientUI_CustomerReport : MasterBasePage
         dt1.Columns.Add("CountryName");
         dt1.Columns.Add("Password");
         dt1.Columns.Add("PaymentMethod");
+<<<<<<< HEAD
         dt1.Columns.Add("AgentName");
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
         if (dt != null && dt.Rows.Count > 0)
         {
@@ -103,7 +106,10 @@ public partial class ClientUI_CustomerReport : MasterBasePage
                 dr["CountryName"] = DataSecurityManager.Decrypt(dt.Rows[i]["CountryName"].ToString());
                 dr["Password"] = DataSecurityManager.Decrypt(dt.Rows[i]["Password"].ToString());
                 dr["PaymentMethod"] = DataSecurityManager.Decrypt(dt.Rows[i]["PaymentMethod"].ToString());
+<<<<<<< HEAD
                 dr["agentname"] = DataSecurityManager.Decrypt(dt.Rows[i]["agentname"].ToString());
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 dt1.Rows.Add(dr);
             }
@@ -660,7 +666,10 @@ public partial class ClientUI_CustomerReport : MasterBasePage
         dt1.Columns.Add("CountryName");
         dt1.Columns.Add("Password");
         dt1.Columns.Add("PaymentMethod");
+<<<<<<< HEAD
         dt1.Columns.Add("AgentName");
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (dt != null && dt.Rows.Count > 0)
         {
             for (int i = 0; i < dt.Rows.Count; i++)
@@ -680,7 +689,10 @@ public partial class ClientUI_CustomerReport : MasterBasePage
                 dr["CountryName"] = DataSecurityManager.Decrypt(dt.Rows[i]["CountryName"].ToString());
                 dr["Password"] = DataSecurityManager.Decrypt(dt.Rows[i]["Password"].ToString());
                 dr["PaymentMethod"] = DataSecurityManager.Decrypt(dt.Rows[i]["PaymentMethod"].ToString());
+<<<<<<< HEAD
                 dr["agentname"] = DataSecurityManager.Decrypt(dt.Rows[i]["agentname"].ToString());
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 dt1.Rows.Add(dr);
             }

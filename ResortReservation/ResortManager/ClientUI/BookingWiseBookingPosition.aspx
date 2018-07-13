@@ -64,7 +64,11 @@
                         <td>Operation Period To:
                         </td>
                         <td>
+<<<<<<< HEAD
                             <asp:TextBox ID="txtTo" runat="server" AutoPostBack="True" OnTextChanged="txtTo_TextChanged"></asp:TextBox>
+=======
+                            <asp:TextBox ID="txtTo" runat="server"></asp:TextBox>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             <ajaxToolkit:CalendarExtender ID="CalendarExtender2" TargetControlID="txtTo" runat="server" />
                         </td>
 
@@ -101,8 +105,13 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                     </tr>
                 </table>--%>
             </div>
+<<<<<<< HEAD
             <div id="div1" runat="server" class="cls_bokingdtl">
                 <table  border="1" cellpadding="0" cellspacing="0">
+=======
+            <div class="cls_bokingdtl">
+                <table border="1" cellpadding="0" cellspacing="0">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     <tr>
                         <th width="20" style="background-color: #507CD1;">Sno</th>
                         <th class="auto-style2" style="background-color: #507CD1;">Dispatch Date</th>
@@ -119,7 +128,10 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                         <th style="background-color: #507CD1;">Suite</th>
                         <th style="background-color: #507CD1;">Swb</th>
                         <th style="background-color: #507CD1;">Swob</th>
+<<<<<<< HEAD
                        <%--  <th style="background-color: #507CD1;">Lcwb</th>--%>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <th style="background-color: #507CD1;">Total</th>
                         <th width="80" style="background-color: #507CD1;">Booking/ Revenue Amount</th>
                     </tr>
@@ -163,7 +175,11 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                                                                       
 
                                                                   } %> :</td>
+<<<<<<< HEAD
                         <td colspan="15" style="background-color: yellow;"><%Response.Write((dtnew.Rows[0]["BordingFrom"]).ToString().Split('(')[0] + (dtnew.Rows[0]["BoadingTo"]).ToString().Split('(')[0] + "" + name + ", Starting " + Convert.ToDateTime(dtnew.Rows[0]["StartDate"].ToString()).ToString("dd MMMM yyyy")); %></td>
+=======
+                        <td colspan="14" style="background-color: yellow;"><%Response.Write((dtnew.Rows[0]["BordingFrom"]).ToString().Split('(')[0] + (dtnew.Rows[0]["BoadingTo"]).ToString().Split('(')[0] + "" + name + ", Starting " + Convert.ToDateTime(dtnew.Rows[0]["StartDate"].ToString()).ToString("dd MMMM yyyy")); %></td>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <% 
                            
 
@@ -211,7 +227,10 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                         <td><%Response.Write((dtnew.Rows[i]["TotalSuit"]).ToString()); %></td>
                         <td><%Response.Write((dtnew.Rows[i]["TotalSwb"]).ToString()); %></td>
                         <td><%Response.Write((dtnew.Rows[i]["TotalSwob"]).ToString()); %></td>
+<<<<<<< HEAD
                      <%--    <td><%Response.Write((dtnew.Rows[i]["TotalLcwb"]).ToString()); %></td>--%>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <td><%Response.Write((dtnew.Rows[i]["AllTotal"]).ToString()); %></td>
                         <td><%Response.Write((dtnew.Rows[i]["PaidAmt"]).ToString()); %></td>
 
@@ -229,9 +248,13 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                         <td></td>
                         <td></td>
                         <td></td>
+<<<<<<< HEAD
                       <%--  <td></td>--%>
 
                       <td></td>
+=======
+                        <td></td>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                      <%--   <td></td>--%>
 
                         <td>
@@ -276,7 +299,10 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
 
                                     </td>
                                     </tr>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                              <%--   <tr>
                                   <td>
                                         <%
@@ -352,8 +378,11 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
                                 </tr>
                             </table>
                         </td>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <td>
                             <table class="auto-style3">
                                 <tr>
@@ -564,6 +593,7 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
 
             </div>
 
+<<<<<<< HEAD
 
             <div id="div2" runat="server" visible="false" class="cls_bokingdtl">
                 <table  border="1" cellpadding="0" cellspacing="0">
@@ -1102,6 +1132,8 @@ as on:<asp:Label ID="lblCurrentDateTime" runat="server"></asp:Label> <asp:Label 
 
             </div>
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         </div>
     </form>
 </body>

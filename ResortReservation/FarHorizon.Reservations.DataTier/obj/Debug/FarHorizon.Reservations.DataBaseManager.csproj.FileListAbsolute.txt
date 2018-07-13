@@ -70,6 +70,12 @@ C:\Users\Akmund\resort10102017\resort-13-09ajit\Resort Reservation 31.7.2017\New
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll.config
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\bin\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+<<<<<<< HEAD
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.csprojResolveAssemblyReference.cache
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+=======
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.dll
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.pdb
+D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.DataTier\obj\Debug\FarHorizon.Reservations.DataBaseManager.csprojResolveAssemblyReference.cache
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955

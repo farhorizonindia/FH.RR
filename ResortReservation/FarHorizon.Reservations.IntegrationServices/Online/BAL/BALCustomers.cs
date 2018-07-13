@@ -35,7 +35,11 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
 
         public string PaymentMethod { get; set; }
 
+<<<<<<< HEAD
         
+=======
+        public int AgentId { get; set; }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         public string nameoncard { get; set; }
         public string caardnumber { get; set; }
         public string expirydate { get; set; }

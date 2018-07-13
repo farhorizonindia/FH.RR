@@ -18,8 +18,11 @@ using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using FarHorizon.DataSecurity;
 using System.Text.RegularExpressions;
+<<<<<<< HEAD
 using System.Data.SqlClient;
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
 public partial class MasterUI_AgentMaster : MasterBasePage
 {
@@ -35,11 +38,16 @@ public partial class MasterUI_AgentMaster : MasterBasePage
     DataTable dtGetReturnedData;
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
+<<<<<<< HEAD
     SqlConnection con;
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     #region ControlsEvents
 
     protected void Page_Load(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         try
         {
             if (!IsPostBack)
@@ -86,6 +94,20 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         return Convert.ToString(System.Configuration.ConfigurationManager.ConnectionStrings["ReservationConnectionString"]);
 
 
+=======
+        Commission.Visible = false;
+        btnDelete.Attributes.Add("onclick", "return confirm('Are you sure you want to delete this record?')");
+        if (!IsPostBack)
+        {
+            RefreshGrid();
+            EnableNewButton();
+            FillAgents();
+            LoadCountries();
+            loadoncredits();
+            loadagenttype();
+            Commission.Visible = false;
+        }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     }
     private void LoadCountries()
     {
@@ -145,9 +167,12 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         txtCountry.Text = String.Empty;
         txtCreditLimit.Text = String.Empty;
         txtBillingAddress.Text = String.Empty;
+<<<<<<< HEAD
         txtAgntUrl.Text = String.Empty;
         chkPmntbypass.Checked = false;
        // txtUrl.Text= String.Empty;
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
 
 
@@ -215,6 +240,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             txtPassword.Text = oAgentData[0].Password.ToString();
             txtCountry.Text = oAgentData[0].country.ToString();
             txtCategory.Text = oAgentData[0].category.ToString();
+<<<<<<< HEAD
             txtUrl.Text = oAgentData[0].RedirectURL.ToString();
             if (txtUrl.Text == "")
             {
@@ -237,11 +263,16 @@ public partial class MasterUI_AgentMaster : MasterBasePage
                 chkPmntbypass.Checked = false;
                 chkPmntbypass_CheckedChanged(this, e);
             }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             if (oAgentData[0].localagent == 1)
             {
                 chklocal.Checked = true;
             }
+<<<<<<< HEAD
             HiddenField1.Value= oAgentData[0].CssPath.ToString();
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             //   txtPassword.TextMode = TextBoxMode.Password;
         }
         oAgentMaster = null;
@@ -315,6 +346,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         oAgentData.category = txtCategory.Text.Trim();
         oAgentData.country = txtCountry.Text.Trim();
         oAgentData.category = txtCategory.Text.Trim();
+<<<<<<< HEAD
         //oAgentData.RedirectURL = txtUrl.Text.Trim();
         oAgentData.RedirectURL = ViewState["agenturl"].ToString();
         oAgentData.AgentURL = txtAgntUrl.Text.Trim();
@@ -326,6 +358,8 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             oAgentData.IsPaymentBypass = 0;
         }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (chklocal.Checked)
         {
             oAgentData.localagent = 1;
@@ -334,6 +368,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             oAgentData.localagent = 0;
         }
+<<<<<<< HEAD
 
         var guid = Guid.NewGuid().ToString();
         string filename = uploadLogo.PostedFile.FileName;
@@ -357,6 +392,8 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         }
 
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         AgentMaster oAgentMaster = new AgentMaster();
 
         agentId = oAgentMaster.Insert(oAgentData);
@@ -532,6 +569,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         oAgentData.EmailId = txtAgentEmailId.Text.Trim();
         oAgentData.category = txtCategory.Text.Trim();
         oAgentData.country = txtCountry.Text.Trim();
+<<<<<<< HEAD
         oAgentData.RedirectURL = txtUrl.Text.Trim();
 
         oAgentData.AgentURL = txtAgntUrl.Text.Trim();
@@ -544,6 +582,8 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             oAgentData.IsPaymentBypass = 0;
         }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (txtPassword.Text != "")
         {
             oAgentData.Password = txtPassword.Text.Trim();
@@ -560,6 +600,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         {
             oAgentData.localagent = 0;
         }
+<<<<<<< HEAD
 
         var guid = Guid.NewGuid().ToString();
         string filename = uploadLogo.PostedFile.FileName;
@@ -583,6 +624,8 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         }
        
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         AgentMaster oAgentMaster = new AgentMaster();
         bActionCompleted = oAgentMaster.Update(oAgentData);
         if (bActionCompleted == true)
@@ -666,6 +709,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             dt = dlAgentpayment.getPaymentInfoall(blAgentpayment);
             //if (oAgentData != null)
             if (dt != null && dt.Rows.Count > 0)
+<<<<<<< HEAD
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -685,6 +729,27 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             }
             else
             {
+=======
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    //dt.Rows[i]["AgentEmailId"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentEmailId"].ToString());
+                    dt.Rows[i]["AgentName"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentName"].ToString());
+                    dt.Rows[i]["AgentEmailId"] = DataSecurityManager.Decrypt(dt.Rows[i]["AgentEmailId"].ToString());
+                    dt.Rows[i]["Category"] = DataSecurityManager.Decrypt(dt.Rows[i]["Category"].ToString());
+                    dt.Rows[i]["Country"] = DataSecurityManager.Decrypt(dt.Rows[i]["Country"].ToString());
+                }
+
+                //if (oAgentData.Length > 0)
+                {
+                    Session["Getagentdetils"] = dt;
+                    dgAgents.DataSource = dt;
+                    dgAgents.DataBind();
+                }
+            }
+            else
+            {
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 dgAgents.DataSource = null;
                 dgAgents.DataBind();
             }
@@ -906,6 +971,7 @@ public partial class MasterUI_AgentMaster : MasterBasePage
         loadoncredits();
         loadagenttype();
     }
+<<<<<<< HEAD
 
 
 
@@ -922,4 +988,6 @@ public partial class MasterUI_AgentMaster : MasterBasePage
             agnt.Visible = false;
         }
     }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 }

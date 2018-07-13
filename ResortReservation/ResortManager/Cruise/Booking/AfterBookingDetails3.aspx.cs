@@ -14,6 +14,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
+<<<<<<< HEAD
 using System.Text;
 using System.Net;
 using Newtonsoft.Json.Linq;
@@ -31,6 +32,10 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
     string SmtpUserId = ConfigurationManager.AppSettings["SMTPUserId"];
     string SmtpPassword = ConfigurationManager.AppSettings["SMTPPwd"];
     string SmtpHost = ConfigurationManager.AppSettings["SMTPServer"];
+=======
+public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
+{
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     DataTable Bookingdt;
     DataTable bookingmealdt;
     DataTable dtroominfo;
@@ -86,7 +91,10 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
         }
         if (Session["CustName"] != null)
         {
+<<<<<<< HEAD
             
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             lblUsername.Text = "Hello " + Session["CustName"].ToString();
             dvpaneldefault.Visible = false;
@@ -300,8 +308,11 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                     dvRefrence.Visible = true;
                 }
             }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             //this.pnllogin.Visible = false;
 
             Bookingdt = new DataTable();
@@ -314,7 +325,11 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
             dtroominfo = SessionServices.RetrieveSession<DataTable>("RoomInfo");
             //dtroominfo = Session["RoomInfo"] as DataTable;
 
+<<<<<<< HEAD
             //loaddata();
+=======
+            loaddata();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             //lblChkin.Text = Session["Chkin"].ToString();
             //lblChkout.Text = Session["chkout"].ToString();
@@ -324,6 +339,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
             btnPayProceed.Visible = true;
             //pnlCustReg.Visible = false;
             //customerLogin.Visible = false;
+<<<<<<< HEAD
 
 
             if (Session["SetCurrency"].ToString() != "")
@@ -343,13 +359,18 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 loaddata();
             }
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
     }
     private void LoadCountries()
     {
         try
         {
+<<<<<<< HEAD
             
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             blOpenDates._Action = "GetCountry";
             DataTable dtGetReturnedData = dlOpenDates.BindControls(blOpenDates);
             if (dtGetReturnedData.Rows.Count > 0)
@@ -442,6 +463,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 {
                     total1 = total1 + Convert.ToDouble(Bookingdt.Rows[i]["Inclusivetax"].ToString().Split(' ')[1]);
                 }
+<<<<<<< HEAD
                 if(ddlCurrency.Text != "USD")
                 {
                     currency1(Convert.ToInt32(total1).ToString("##,0"), ddlCurrency.Text);
@@ -453,6 +475,9 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
 
                 }
                
+=======
+                lblAllTotal.Text = "INR " + Convert.ToInt32(total1).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
 
             gdvHotelRoomRates.DataSource = Bookingdt;
@@ -1483,6 +1508,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
         int iagentid = 0;
         DateTime chkin, chkout;
 
+<<<<<<< HEAD
         if (Session["AgentId"] != null)
         {
             iagentid = Convert.ToInt32(Session["AgentId"]);
@@ -1497,6 +1523,15 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
             {
                 iagentid = 248;
             }
+=======
+        if (Session["Usercode"] != null)
+        {
+            Int32.TryParse(Session["AId"].ToString(), out iagentid);
+        }
+        else
+        {
+            iagentid = 248;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
         Int32.TryParse(Session["AccomId"].ToString(), out iAccomId);
         Int32.TryParse(Session["iAccomtypeId"].ToString(), out iaccomtypeid);
@@ -1508,6 +1543,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
         string bookingPaymentId = Session["BookingPayId"].ToString();
 
         int bookingId = InsertBookingTableData(iAccomId, iaccomtypeid, iagentid, bookref, chkin, chkout);
+<<<<<<< HEAD
 
         Session["BookingID"] = bookingId;
 
@@ -1525,6 +1561,8 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
         }
         catch { }
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         InsertRoomBookingTableData(bookingId, bookingPaymentId);
     }
     private void RedirectToPaymentGatewayResponse()
@@ -1588,6 +1626,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
             throw ex;
         }
     }
+<<<<<<< HEAD
 
     public void sendMail_Proceed(string Name, string Email)
     {
@@ -1707,11 +1746,16 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
     protected void btnPayProceed_Click(object sender, EventArgs e)
     {
         
+=======
+    protected void btnPayProceed_Click(object sender, EventArgs e)
+    {
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
         if (lbltotAmt.Text != "")
         {
             try
             {
+<<<<<<< HEAD
                 if (ddlCurrency.Text == "INR")
                 {
                     ddlCurrency.Text = "USD";
@@ -1719,6 +1763,9 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 }
 
                 Session["Proceed"] = "Proceed";
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 Session["Hotel"] = 1;
                 if (btnPayProceed.Text == "Proceed For Payment")
                 {
@@ -1751,8 +1798,11 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                             string BillingAddress = lblBillingAddress.Text.Trim().ToString();
                             Session["BookingPayId"] = txtBookRef.Text.Trim();// BookingPayId;
 
+<<<<<<< HEAD
                             sendMail_Proceed(FirstName, Email);
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             Session["Address"] = BillingAddress;
                             Session["InvName"] = FirstName;
                             BookTheHotel();
@@ -1841,11 +1891,15 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                             string PaymentId = BookingPayId.ToString();
                             string BillingAddress = lblBillingAddress.Text.Trim().ToString();
                             Session["Address"] = BillingAddress;
+<<<<<<< HEAD
 
                             sendMail_Proceed(FirstName, Email);
 
 
                             Session["InvName"] = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Title"].ToString()) + ". " + FirstName + " " + LastName;
+=======
+                            Session["InvName"] = DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Title"].ToString()) + " " + FirstName + " " + LastName;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             Session["SubInvName"] = LastName + ", " + DataSecurityManager.Decrypt(dtCustomer.Rows[0]["Title"].ToString()) + " " + FirstName;
                             try
                             {
@@ -1960,6 +2014,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
 
                     tottax = tottax + Convert.ToDouble(dts.Rows[j]["Tax"].ToString().Split(' ')[1].Replace(",", string.Empty));
                 }
+<<<<<<< HEAD
                 if(ddlCurrency.Text != "USD")
                 {
                     currency1(tottax.ToString("##,0"), ddlCurrency.Text);
@@ -1977,11 +2032,16 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 }
 
               
+=======
+                lblTax.Text = "INR " + tottax.ToString("##,0");
+                lblGross.Text = dts.Rows[0]["Currency"].ToString() + " " + Session["gettotal"].ToString();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 hdnfTotalPaybleAmt.Value = lblGross.Text;
                 //lblGross.Text = Convert.ToInt32(lblGross.Text).ToString("##,0");
                 if (Convert.ToDateTime(Session["HCheckin"].ToString()).AddDays(-30) < System.DateTime.Now)
                 {
+<<<<<<< HEAD
                     if(ddlCurrency.Text != "USD")
                     {
                         currency1(Math.Round(((100 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0"), ddlCurrency.Text);
@@ -1993,6 +2053,9 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                     }
 
                   
+=======
+                    txtPaidAmt.Text = Math.Round(((100 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     lblpertext.Text = "";
                     Priorto.Text = " ";
                     ///lblPrToDate.Text = "N/A";
@@ -2002,6 +2065,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 }
                 else
                 {
+<<<<<<< HEAD
                     if (ddlCurrency.Text != "USD")
                     {
                         currency1(Math.Round(((25 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0"), ddlCurrency.Text);
@@ -2012,6 +2076,9 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                         txtPaidAmt.Text = Math.Round(((25 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0");
                     }
                     //txtPaidAmt.Text = Math.Round(((25 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0");
+=======
+                    txtPaidAmt.Text = Math.Round(((25 * Convert.ToDouble(Session["gettotal"].ToString())) / 100)).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     if (Session["HCheckin"] != null)
                     {
                         lblBalancedate.Text = Convert.ToDateTime(Session["HCheckin"].ToString()).AddDays(-30).ToString("dddd, MMMM d, yyyy");
@@ -2029,6 +2096,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 {
                     lbltextIn.Text = Session["Taxpax"].ToString() + "%";
                 }
+<<<<<<< HEAD
                 if(ddlCurrency.Text != "USD")
                 {
                     currency1(TotalPaybleAmt.ToString("##,0"), ddlCurrency.Text);
@@ -2050,11 +2118,16 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 }
 
                 
+=======
+                lbltotAmt.Text = Bookingdt.Rows[0]["Currency"].ToString() + " " + TotalPaybleAmt.ToString("##,0");
+                lblCurrency.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " ";
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
 
                 //txtPaidAmt.Text = Math.Round(((25 * TotalPaybleAmt) / 100)).ToString("#.##");
                 //hftxtpaidamt.Value = Convert.ToDouble(txtPaidAmt.Text).ToString("N2").Replace(",", "");
 
+<<<<<<< HEAD
                 if(ddlCurrency.Text !="USD")
                 {
                     currency1(Math.Round((Convert.ToDouble(Session["gettotal"].ToString()) - Convert.ToDouble(txtPaidAmt.Text.Replace(",", string.Empty)))).ToString("##,0"), ddlCurrency.Text);
@@ -2066,6 +2139,9 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 }
 
                 //lblBalanceAmt.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " " + Math.Round((Convert.ToDouble(Session["gettotal"].ToString()) - Convert.ToDouble(txtPaidAmt.Text.Replace(",", string.Empty)))).ToString("##,0");
+=======
+                lblBalanceAmt.Text = Bookingdt.Rows[0]["Currency"].ToString().ToString() + " " + Math.Round((Convert.ToDouble(Session["gettotal"].ToString()) - Convert.ToDouble(txtPaidAmt.Text.Replace(",", string.Empty)))).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 string getvalue = Math.Round((Convert.ToDouble(Session["gettotal"].ToString()) - Convert.ToDouble(txtPaidAmt.Text.Replace(",", string.Empty)))).ToString("##,0");
                 if (getvalue == "0")
                 {
@@ -2277,6 +2353,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
 
                 rtotal = rtotal + value;
             }
+<<<<<<< HEAD
             if(ddlCurrency.Text != "USD")
             {
                 currency1(rtotal.ToString("##,0"), ddlCurrency.Text);
@@ -2289,6 +2366,10 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
                 Session["gettotal"] = rtotal.ToString("##,0");
             }
           
+=======
+            lblAllTotal.Text = "INR " + rtotal.ToString("##,0");
+            Session["gettotal"] = rtotal.ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
         catch
         {
@@ -2394,6 +2475,7 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
             btnPayProceed.Visible = false;
         }
     }
+<<<<<<< HEAD
 
 
     public string currency(string amount, string code)
@@ -2603,4 +2685,6 @@ public partial class Cruise_Booking_AfterBookingDetails3 : System.Web.UI.Page
         btnPayProceed.Visible = true;
 
     }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 }

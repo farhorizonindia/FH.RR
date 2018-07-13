@@ -309,6 +309,7 @@
       </Rights>
 
     </Page>
+<<<<<<< HEAD
 
 
     <Page Key="PackageDepartureDates" Description="Package Departure Dates">
@@ -322,6 +323,8 @@
     </Page>
     
     
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
   </PageType>
   <PageType Description="Reports">
     <Page Key="CFormReport" Description="C Form">
@@ -346,6 +349,7 @@
 
       </Rights>
 
+<<<<<<< HEAD
     </Page>
     <Page Key="CruiseRepTest" Description="Cruise Booking Report">
       <Rights>
@@ -354,6 +358,16 @@
       </Rights>
 
     </Page>
+=======
+    </Page>
+    <Page Key="CruiseRepTest" Description="Cruise Booking Report">
+      <Rights>
+        <Right Key="View" Description="Cruise Booking Report"></Right>
+
+      </Rights>
+
+    </Page>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <Page Key="CustomerReport" Description="Registration Report">
       <Rights>
         <Right Key="View" Description="Registration Report"></Right>

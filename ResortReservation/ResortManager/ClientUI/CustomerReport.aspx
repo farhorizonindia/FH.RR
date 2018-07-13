@@ -94,7 +94,10 @@
                                 <asp:BoundField DataField="CountryName" HeaderText="Country Name" />
                                 <asp:BoundField DataField="Password" HeaderText="Password" Visible="false" />
                                 <asp:BoundField DataField="PaymentMethod" HeaderText="PaymentMethod" />
+<<<<<<< HEAD
                                  <asp:BoundField DataField="AgentName" HeaderText="AgentName" />
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                 <%--<asp:BoundField DataField="PostalCode" HeaderText="Postal Code" />--%>
                                 <asp:TemplateField>
                                     <ItemTemplate>

@@ -17,6 +17,7 @@
     <%--  --%>
     <!-- Custom-Stylesheet-Links -->
     <!-- Bootstrap-CSS -->
+<<<<<<< HEAD
     <link rel="stylesheet" href="css/Newcss/bootstrap.min.css" type="text/css" media="all"/>
     <!-- Index-Page-CSS -->
     <link href="css/Newcss/style.css" rel="stylesheet" />
@@ -25,6 +26,15 @@
     <link rel="stylesheet" href="css/Newcss/jquery-ui.css" type="text/css" media="all"/>
     <!-- Animate.CSS -->
     <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all"/>
+=======
+    <link rel="stylesheet" href="css/Newcss/bootstrap.min.css" type="text/css" media="all">
+    <!-- Index-Page-CSS -->
+    <link rel="stylesheet" href="css/Newcss/style.css" type="text/css" media="all">
+    <!-- Index-Page-CSS -->
+    <link rel="stylesheet" href="css/Newcss/jquery-ui.css" type="text/css" media="all">
+    <!-- Animate.CSS -->
+    <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- //Custom-Stylesheet-Links -->
 
     <!-- Fonts -->
@@ -58,7 +68,11 @@
                             <span class="icon-bar "></span>
                             <span class="icon-bar "></span>
                         </button>
+<<<<<<< HEAD
                         <a class="navbar-brand agileits " id="logoheading" runat="server" href=" ">Booking System</a>
+=======
+                        <a class="navbar-brand agileits " href="searchproperty.aspx">Booking System</a>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     </div>
 
                     <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">

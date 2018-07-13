@@ -95,7 +95,11 @@
                     </tr>
                 </table>
             </div>
+<<<<<<< HEAD
             <div id="div1" runat="server" style="padding-left: 23%; padding-top: 2%;">
+=======
+            <div style="padding-left: 23%; padding-top: 2%;">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 <asp:DataGrid CellPadding="4" ForeColor="#333333"
                     ID="dgBookings" runat="server" AutoGenerateColumns="false" AllowPaging="True" OnPageIndexChanged="dgBookings_PageIndexChanged">
                     <Columns>
@@ -129,6 +133,7 @@
                             <ItemStyle CssClass="column" />
                             <HeaderStyle CssClass="columnHeader" />
                         </asp:BoundColumn>
+<<<<<<< HEAD
 
                                 
                         <asp:BoundColumn DataField="Total" HeaderText="Total">
@@ -189,6 +194,8 @@
                             <ItemStyle CssClass="column" />
                             <HeaderStyle CssClass="columnHeader" />
                         </asp:BoundColumn>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <asp:BoundColumn DataField="Total" HeaderText="Total">
                             <ItemStyle CssClass="column" />
                             <HeaderStyle CssClass="columnHeader" />

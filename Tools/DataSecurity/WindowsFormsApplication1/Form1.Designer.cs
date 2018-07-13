@@ -34,6 +34,7 @@
             this.tblUserMasterTableAdapter = new WindowsFormsApplication1.cruiseDataSetTableAdapters.tblUserMasterTableAdapter();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblTotalLength = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtResult = new System.Windows.Forms.TextBox();
             this.btnDecryptText = new System.Windows.Forms.Button();
@@ -64,7 +65,7 @@
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtConnectionString = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.lblTotalLength = new System.Windows.Forms.Label();
+            this.btnDecrpytTheColumns = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tblUserMasterBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cruiseDataSet)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -119,6 +120,15 @@
             this.tabPage1.Size = new System.Drawing.Size(1022, 795);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Encrypt/ Decrypt Text";
+            // 
+            // lblTotalLength
+            // 
+            this.lblTotalLength.AutoSize = true;
+            this.lblTotalLength.Location = new System.Drawing.Point(19, 572);
+            this.lblTotalLength.Name = "lblTotalLength";
+            this.lblTotalLength.Size = new System.Drawing.Size(67, 13);
+            this.lblTotalLength.TabIndex = 8;
+            this.lblTotalLength.Text = "Total Length";
             // 
             // label5
             // 
@@ -347,6 +357,7 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage3.Controls.Add(this.btnDecrpytTheColumns);
             this.tabPage3.Controls.Add(this.btnEncryptTheColumns);
             this.tabPage3.Controls.Add(this.treeView1);
             this.tabPage3.Controls.Add(this.btnConnect);
@@ -393,7 +404,7 @@
             this.txtConnectionString.Name = "txtConnectionString";
             this.txtConnectionString.Size = new System.Drawing.Size(894, 20);
             this.txtConnectionString.TabIndex = 4;
-            this.txtConnectionString.Text = "Data Source=QJ07302866;Initial Catalog=cruise;Integrated Security=True;";
+            this.txtConnectionString.Text = "Data Source=QJ07302866;Initial Catalog=advenh49_test;Integrated Security=True;";
             // 
             // label6
             // 
@@ -404,14 +415,15 @@
             this.label6.TabIndex = 3;
             this.label6.Text = "Plain Text";
             // 
-            // lblTotalLength
+            // btnDecrpytTheColumns
             // 
-            this.lblTotalLength.AutoSize = true;
-            this.lblTotalLength.Location = new System.Drawing.Point(19, 572);
-            this.lblTotalLength.Name = "lblTotalLength";
-            this.lblTotalLength.Size = new System.Drawing.Size(67, 13);
-            this.lblTotalLength.TabIndex = 8;
-            this.lblTotalLength.Text = "Total Length";
+            this.btnDecrpytTheColumns.Location = new System.Drawing.Point(380, 107);
+            this.btnDecrpytTheColumns.Name = "btnDecrpytTheColumns";
+            this.btnDecrpytTheColumns.Size = new System.Drawing.Size(230, 31);
+            this.btnDecrpytTheColumns.TabIndex = 8;
+            this.btnDecrpytTheColumns.Text = "Decrypt The Columns";
+            this.btnDecrpytTheColumns.UseVisualStyleBackColor = true;
+            this.btnDecrpytTheColumns.Click += new System.EventHandler(this.btnDecrpytTheColumns_Click);
             // 
             // Form1
             // 
@@ -475,6 +487,7 @@
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button btnEncryptTheColumns;
         private System.Windows.Forms.Label lblTotalLength;
+        private System.Windows.Forms.Button btnDecrpytTheColumns;
     }
 }
 

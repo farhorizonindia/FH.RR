@@ -59,6 +59,7 @@
                             <span class="icon-bar "></span>
                         </button>
                         <a class="navbar-brand agileits " href="searchproperty1.aspx">Resorts</a>
+<<<<<<< HEAD
 
                           <asp:DropDownList id="ddlCurrency"
                 AppendDataBoundItems="True"
@@ -67,6 +68,8 @@
                              <asp:ListItem  Value="USD">INR</asp:ListItem>
                              <asp:ListItem  Value="INR">USD</asp:ListItem>
            </asp:DropDownList>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     </div>
 
                     <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
@@ -219,6 +222,7 @@
 
                                                                     </div>
                                                                     <div class="col-sm-12" style="padding-top: 13px;">
+<<<<<<< HEAD
                                                                         <div style="display:none">
                                                                     <%# Session["Amt"] = DataBinder.Eval(Container.DataItem, "Amt") %></div>
 
@@ -241,6 +245,13 @@
                                                                       <%--  </strong>--%>
                                                                         <%-- avg.per night--%>
                                                                         <%--</p>--%>
+=======
+
+                                                                        <p style="font-size: 24px; font-family: 'Montserrat', sans-serif;" class="text-right">
+                                                                            <strong>INR  <%# Eval("Amt", "{0:0,00}") %>
+                                                                                <%-- <%# Eval("Amtc") %>--%></strong><%-- avg.per night--%>
+                                                                        </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                                     </div>
                                                                 </div>
                                                             </div>

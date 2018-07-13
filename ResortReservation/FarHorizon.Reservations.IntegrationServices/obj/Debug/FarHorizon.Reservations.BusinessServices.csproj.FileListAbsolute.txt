@@ -8,7 +8,10 @@ D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationService
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.SessionManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.UploadManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.UserManager.dll
+<<<<<<< HEAD
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\Newtonsoft.Json.dll
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.DataBaseManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.EMailManager.dll
 D:\AllProject\FH.RR\ResortReservation\FarHorizon.Reservations.IntegrationServices\bin\Debug\FarHorizon.Reservations.XMLManager.dll

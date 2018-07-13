@@ -21,14 +21,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+<<<<<<< HEAD
    
+=======
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- //Meta-Tags -->
     <!-- <link rel="stylesheet" type="text/css" href="cruise.css"> -->
     <!-- Custom-Stylesheet-Links -->
     <!-- Bootstrap-CSS -->
     <link rel="stylesheet" href="css/Newcss/bootstrap.min.css" type="text/css" media="all">
 
+<<<<<<< HEAD
      <link  rel="stylesheet" id="csspath" runat="server" type="text/css" media="all"/>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- Animate.CSS -->
     <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all">
     <!-- Index-Page-CSS -->
@@ -43,6 +50,7 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel+Decorative:400,900,700" type="text/css">
     <!-- Navbar-Font -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" type="text/css">
+<<<<<<< HEAD
 
 
 </head>
@@ -59,6 +67,18 @@
             <nav class="navbar navbar-default  aits wow bounceInUp agileits ">
                 <div class="container">
                   
+=======
+</head>
+<body>
+      <div class="loaderbody"><div class="loader"><img src="../../images/loading1.gif" alt="Loading..." /> Please Wait</div></div>k
+    <form id="form1" runat="server">
+        <div class="header agileits " id="home">
+
+            <!-- Navbar -->
+            <nav class="navbar navbar-default  aits wow bounceInUp agileits ">
+                <div class="container">
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     <div class="navbar-header agileits ">
                         <button type="button" class="navbar-toggle agileits  collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                             <span class="sr-only agileits ">Toggle navigation</span>
@@ -66,6 +86,7 @@
                             <span class="icon-bar "></span>
                             <span class="icon-bar "></span>
                         </button>
+<<<<<<< HEAD
                      
                       
 
@@ -85,6 +106,10 @@
            </asp:DropDownList>
                       
                  
+=======
+                        <a class="navbar-brand agileits " href="searchproperty1.aspx">Resorts</a>
+                    </div>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                     <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
                         <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
@@ -116,11 +141,15 @@
                 </div>
             </nav>
             <!-- //Navbar -->
+<<<<<<< HEAD
            <%-- <div class="modal"  style="margin-left: 450px; margin-top:80px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 50px; height: 50px;  z-index: 30001; opacity: 0.8;">
         <div class="center">
             <img alt="" src="../../images/loading1.gif" />
         </div>--%>
     </div>
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
 
@@ -227,6 +256,7 @@
                                                         </div>
                                                         <div class="col-md-3 text-right" style="text-align: -webkit-center;">
 
+<<<<<<< HEAD
                                                             <% if (Session["PricePerPerson"] != null)
                                                                 {
                                                                     Response.Write("USD");
@@ -236,6 +266,9 @@
                                                                     Response.Write(dtres.Rows[i]["Currency"].ToString());
                                                                 }
                                                                %>
+=======
+                                                            <%Response.Write(dtres.Rows[i]["Currency"].ToString()); %>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                             <span class="offerPrice">
                                                                 <strong>
                                                                     <%if (dtres.Rows[i]["Rate"].ToString() == "0.00")
@@ -244,6 +277,7 @@
                                                                         }
                                                                         else
                                                                         {
+<<<<<<< HEAD
                                                                             if(Session["PricePerPerson"] != null)
                                                                             {
                                                                                 Response.Write(Session["PricePerPerson"]);
@@ -252,6 +286,9 @@
                                                                                 Response.Write(Convert.ToDouble(dtres.Rows[i]["Rate"]).ToString("##,0"));
                                                                             }
                                                                             
+=======
+                                                                            Response.Write(Convert.ToDouble(dtres.Rows[i]["Rate"]).ToString("##,0"));
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                                         }
                                                                     %>  
                                                                 </strong>
@@ -309,6 +346,7 @@
                                                             <%
                                                                 if (dtres.Rows[i]["Availability"].ToString() != "Sold Out")
                                                                 {
+<<<<<<< HEAD
                                                                     if (Session["agentid"] != null)
                                                                     {
                                                                         Response.Write("<a href='CruiseBooking.aspx?PackId=" + dtres.Rows[i]["packageId"].ToString() + "&PackageName=" + dtres.Rows[i]["NamePack"].ToString() + "&NoOfNights=" + dtres.Rows[i]["NoOfNights"].ToString() + "&CheckIndate=" + dtres.Rows[i]["CheckInDate"].ToString() + "&CheckOutdate=" + dtres.Rows[i]["CheckOutDate"].ToString() + "&Discount=" + dtres.Rows[i]["Discount %"].ToString() + "&DepartureId=" + dtres.Rows[i]["Id"].ToString() + "&agentid=" + Session["agentid"] + "'  class='btn btn-info font16 topMargin10 botMargin10 step2Btn' style='padding-left:12px;padding-right:12px;' data-departureid='5597' >Select</a>");
@@ -317,6 +355,9 @@
                                                                     {
                                                                         Response.Write("<a href='CruiseBooking.aspx?PackId=" + dtres.Rows[i]["packageId"].ToString() + "&PackageName=" + dtres.Rows[i]["NamePack"].ToString() + "&NoOfNights=" + dtres.Rows[i]["NoOfNights"].ToString() + "&CheckIndate=" + dtres.Rows[i]["CheckInDate"].ToString() + "&CheckOutdate=" + dtres.Rows[i]["CheckOutDate"].ToString() + "&Discount=" + dtres.Rows[i]["Discount %"].ToString() + "&DepartureId=" + dtres.Rows[i]["Id"].ToString() + "'  class='btn btn-info font16 topMargin10 botMargin10 step2Btn' style='padding-left:12px;padding-right:12px;' data-departureid='5597' >Select</a>");
                                                                     }
+=======
+                                                                    Response.Write("<a href='CruiseBooking.aspx?PackId=" + dtres.Rows[i]["packageId"].ToString() + "&PackageName=" + dtres.Rows[i]["NamePack"].ToString() + "&NoOfNights=" + dtres.Rows[i]["NoOfNights"].ToString() + "&CheckIndate=" + dtres.Rows[i]["CheckInDate"].ToString() + "&CheckOutdate=" + dtres.Rows[i]["CheckOutDate"].ToString() + "&Discount=" + dtres.Rows[i]["Discount %"].ToString() + "&DepartureId=" + dtres.Rows[i]["Id"].ToString() + "'  class='btn btn-info font16 topMargin10 botMargin10 step2Btn' style='padding-left:12px;padding-right:12px;' data-departureid='5597' >Select</a>");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                                 }
 
                                                             %>
@@ -518,10 +559,13 @@
                         $('.loaderbody').css('display', 'block');
                     });
                 });
+<<<<<<< HEAD
 
 
 
               
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             </script>
     </form>
 </body>

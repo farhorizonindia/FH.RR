@@ -10,9 +10,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
 using System.Globalization;
+<<<<<<< HEAD
 using FarHorizon.DataSecurity;
 
 public partial class Cruise_Booking_searchproperty : BaseClass
+=======
+
+public partial class Cruise_Booking_searchproperty : System.Web.UI.Page
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 {
     DALOpenDates dlOpenDates = new DALOpenDates();
     BALOpenDates blOpenDates = new BALOpenDates();
@@ -25,6 +30,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
     string strCon = ConfigurationManager.ConnectionStrings["ReservationConnectionString"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         //if (Request.QueryString["agentid"] != null)
         //{
         //    int agentid = 0;
@@ -42,6 +48,8 @@ public partial class Cruise_Booking_searchproperty : BaseClass
 
         //changeCss.Href = "~/Cruise/Booking/css/agent_css/green.css";
        // string ss = DataSecurityManager.Decrypt("VDIzaDQ1aXMxMjRJNTRzNTVNNjVpbDNxNDNGNVRpOXdoMHdnZGZnNDMzQzM0bDQ1U3RINTQ0aVNoNHM5U2YwbS4xXjyIfB44Vw8TBpYfVvSeV2iPVqJB/sskEZaAtu9O").ToString();
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         loadmonth();
         loadall();
         Session["check"] = 1;
@@ -66,7 +74,11 @@ public partial class Cruise_Booking_searchproperty : BaseClass
         Session["Getcateid1"] = null;
         Session["getbedconfig"] = null;
         Session["get"] = null;
+<<<<<<< HEAD
         Session["AddRoom"] = "";
+=======
+      
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (Session["CustName"] != null)
         {
             lblUsername.Text = "Hello " + Session["CustName"].ToString();
@@ -95,10 +107,15 @@ public partial class Cruise_Booking_searchproperty : BaseClass
         //}
         if (!IsPostBack)
         {
+<<<<<<< HEAD
             Session["Dollar"] = 1;
             Session["SetCurrency"] = "";
             Session["get"] = null;
 
+=======
+
+            Session["get"] = null;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             //string s = "";
             //if (Session["get"] != null)
             //{
@@ -161,6 +178,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                 {
                     //rbtnSelectAccomtype.SelectedIndex = 0;
                     //ToggleDisplay("Cruise");
+<<<<<<< HEAD
                 }
                 //DataTable dt = dlsearch.getavaialablemonth();
                 //ddlDates.Items.Clear();
@@ -219,7 +237,56 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                 else
                 {
                     logoheading.HRef = "searchproperty.aspx";
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 }
+                //DataTable dt = dlsearch.getavaialablemonth();
+                //ddlDates.Items.Clear();
+                //if (ddlYear.SelectedValue != "")
+                //{
+                //    string year = DateTime.Now.Year.ToString();
+                //    if (year == ddlYear.SelectedItem.ToString())
+                //    {
+
+                //        int month = System.DateTime.Now.Month;
+                //        ddlDates.Items.Insert(0, new ListItem("Select Month", "0"));
+                //        var months = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
+                //        string getmonth = DateTime.Now.ToString("MMMM");
+                //        for (int i = 0; i < dt.Rows.Count; i++)
+                //        {
+
+                //            if (Convert.ToInt32(dt.Rows[i]["monthid"].ToString()) >= month)
+                //            {
+
+
+
+                //                ddlDates.Items.Add(new System.Web.UI.WebControls.ListItem(dt.Rows[i]["name"].ToString(), dt.Rows[i]["monthid"].ToString()));
+                //            }
+                //            else if (Session["getrecntmonth"] != null)
+                //            {
+                //                ddlDates.Items.Add(new System.Web.UI.WebControls.ListItem(DateTimeFormatInfo.CurrentInfo.GetMonthName(i + 1), i + 1.ToString()));
+                //            }
+                //            //ddlMonth.Items.Add(i.ToString());
+                //        }
+                //        Session["getrecntmonth"] = null;
+                //    }
+                //    else
+                //    {
+                //        ddlDates.Items.Insert(0, new ListItem("Select Month", "0"));
+                //        var months = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames;
+                //        string getmonth = DateTime.Now.ToString("MMMM");
+                //        for (int i = 0; i < dt.Rows.Count; i++)
+                //        {
+
+
+
+                //            ddlDates.Items.Add(new System.Web.UI.WebControls.ListItem(dt.Rows[i]["name"].ToString(), dt.Rows[i]["monthid"].ToString()));
+
+
+                //            //ddlMonth.Items.Add(i.ToString());
+                //        }
+                //    }
+                //}
             }
             catch
             {
@@ -332,6 +399,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
             //ddlPackege.Enabled = false;
             //ddlDates.Enabled = false;
             //ddlYear.Enabled = false;
+<<<<<<< HEAD
 
             if (Session["agentid"] != null)
             {
@@ -341,6 +409,9 @@ public partial class Cruise_Booking_searchproperty : BaseClass
             {
                 Response.Redirect("Packagesearchresult.aspx?Package=" + ddlPackege.SelectedValue + "&Year=" + ddlYear.SelectedValue + "&month=" + ddlDates.SelectedItem);
             }
+=======
+            Response.Redirect("Packagesearchresult.aspx?Package=" + ddlPackege.SelectedValue + "&Year=" + ddlYear.SelectedValue + "&month=" + ddlDates.SelectedItem);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             //}
             //else
             //{
@@ -539,6 +610,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
             string getmonth = DateTime.Now.ToString("MMMM");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
+<<<<<<< HEAD
 
                 if (Convert.ToInt32(dt.Rows[i]["monthid"].ToString()) >= month)
                 {
@@ -560,10 +632,36 @@ public partial class Cruise_Booking_searchproperty : BaseClass
     }
     protected void ddlDestination_SelectedIndexChanged(object sender, EventArgs e)
     {
+=======
+
+                if (Convert.ToInt32(dt.Rows[i]["monthid"].ToString()) >= month)
+                {
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
+
+
+
+                    ddlDates.Items.Add(new System.Web.UI.WebControls.ListItem(dt.Rows[i]["name"].ToString(), dt.Rows[i]["monthid"].ToString()));
+                }
+                else if (Session["getrecntmonth"] != null)
+                {
+                    ddlDates.Items.Add(new System.Web.UI.WebControls.ListItem(DateTimeFormatInfo.CurrentInfo.GetMonthName(i + 1), i + 1.ToString()));
+                }
+                //ddlMonth.Items.Add(i.ToString());
+            }
+            Session["getrecntmonth"] = null;
+        }
+        catch(Exception ex)
+        { }
+    }
+<<<<<<< HEAD
+=======
+    protected void ddlDestination_SelectedIndexChanged(object sender, EventArgs e)
+    {
 
 
 
     }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     //protected void rbtnSelectAccomtype_SelectedIndexChanged(object sender, EventArgs e)
     //{
     //    ToggleDisplay(rbtnSelectAccomtype.SelectedItem.Text);
@@ -644,6 +742,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                     int[] arr = new int[10];
                     int pax = totalguests(out arr);
                     Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
+<<<<<<< HEAD
                     string url = "";
                     if (Session["agentid"] != null)
                     {
@@ -655,6 +754,9 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                     }
 
                         
+=======
+                    string url = "available.aspx?AId=" + Session["UserCode"].ToString() + "&AccomId=" + ddlAccomodationName.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + checkin + "&Checkout=" + checkout + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + "";
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     //string url = "available.aspx?AId=" + Request.QueryString["Aid"].ToString() + "&AccomId=" + ddlAccomodationName.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + checkin + "&Checkout=" + checkout + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + "";
                     for (int k = 0; k < gdvRooms.Rows.Count; k++)
                     {
@@ -671,6 +773,7 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                     int[] arr = new int[10];
                     int pax = totalguests(out arr);
                     Session["AccomName"] = ddlAccomodationName.SelectedItem.Text;
+<<<<<<< HEAD
                     string url = "";
                     if (Session["agentid"] != null)
                     {
@@ -680,6 +783,10 @@ public partial class Cruise_Booking_searchproperty : BaseClass
                     {
                          url = "available.aspx?AId=248&AccomId=" + ddlAccomodationName.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + checkin + "&Checkout=" + checkout + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + " ";
                     }
+=======
+                    string url = "available.aspx?AId=248&AccomId=" + ddlAccomodationName.SelectedValue + "&pax=" + pax.ToString() + "&Checkin=" + checkin + "&Checkout=" + checkout + "&AccomName=" + ddlAccomodationName.SelectedItem.Text + " ";
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     for (int k = 0; k < gdvRooms.Rows.Count; k++)
                     {
                         guests = guests + " &guest" + (k + 1).ToString() + "=" + arr[k].ToString();
@@ -809,9 +916,15 @@ public partial class Cruise_Booking_searchproperty : BaseClass
     {
         try
         {
+<<<<<<< HEAD
 
             blCard._Action = "GetAccomname";
 
+=======
+
+            blCard._Action = "GetAccomname";
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             dtGetReturnedData = dlcard.GetAccomname(blCard);
             if (dtGetReturnedData.Rows.Count > 0)
             {

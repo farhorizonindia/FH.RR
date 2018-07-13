@@ -18,12 +18,15 @@ namespace FarHorizon.Reservations.Common.DataEntities.Masters
         private byte _localagent;
         private int _BookingId;
         private string _TokenNo;
+<<<<<<< HEAD
 
         private string _CssPath;
         private string _RedirectURL;
         private string _AgentURL;
         private byte _IsPaymentBypass;
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         #region AgentMasterProperties
 
 

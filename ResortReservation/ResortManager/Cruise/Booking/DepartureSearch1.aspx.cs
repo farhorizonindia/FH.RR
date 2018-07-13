@@ -10,11 +10,16 @@ using System.Data;
 using System.Globalization;
 using FarHorizon.Reservations.BusinessServices.Online.BAL;
 using FarHorizon.Reservations.BusinessServices.Online.DAL;
+<<<<<<< HEAD
 using System.Net;
 using Newtonsoft.Json.Linq;
 
 
 public partial class Cruise_Booking_DepartureSearch1 : BaseClass
+=======
+
+public partial class Cruise_Booking_DepartureSearch1 : System.Web.UI.Page
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 {
     int cityid = 0;
     string date = "";
@@ -33,10 +38,17 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
         string url = HttpContext.Current.Request.Url.AbsoluteUri;
         Session["getavailable"] = url;
 
+<<<<<<< HEAD
         //if (Session["check"] == null)
         //{
         //    Response.Redirect("searchproperty.aspx");
         //}
+=======
+        if (Session["check"] == null)
+        {
+            Response.Redirect("searchproperty1.aspx");
+        }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (Session["CustName"] != null)
         {
             lblUsername.Text = "Hello " + Session["CustName"].ToString();
@@ -111,6 +123,7 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
             getpackagesearchresults(cityid, date, Riverid);
 
 
+<<<<<<< HEAD
             if (Request["agentid"] != null)
             {
                 logoheading.HRef = "searchproperty.aspx?agentid=" + Request["agentid"].ToString() + "";
@@ -132,6 +145,9 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
                     }
                 }
             }catch { }
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
         }
     }
@@ -261,6 +277,7 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
             }
             DataTable dt12 = new DataTable();
 
+<<<<<<< HEAD
             //  dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
             DataTable dtsorted = new DataTable();
             dtsorted = dlsrch.GetCruiseOpenDatesPackage(blsrch);
@@ -270,6 +287,17 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
                 dtsorted.DefaultView.Sort = "CheckInDate  ASC";
             }
             dtres = dtsorted;
+=======
+            DataTable dtsorted = new DataTable();
+            dtsorted= dlsrch.GetCruiseOpenDatesPackage(blsrch);
+
+           if(dtsorted != null && dtsorted.Rows.Count > 0)
+                {
+                dtsorted.DefaultView.Sort = "CheckInDate  ASC";
+                 }
+            dtres = dtsorted;
+          //  dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             //DataView dv = new DataView();
             //dv = new DataView(dtres, "Availability = 'Limited Availability' or Availability = 'Available'", "Availability", DataViewRowState.CurrentRows);
@@ -287,6 +315,7 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
                 dtres.Columns.Add("OpenClose", typeof(string));
                 DataRow dr = dtres.NewRow();
 
+<<<<<<< HEAD
                 for (int i = 0; i < dtres.Rows.Count; i++)
                 {
                     DataTable getdt = null;
@@ -310,6 +339,26 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
                     }
 
                     DataTable dt45 = bindroomddl(dtres.Rows[i]["packageId"].ToString(), Convert.ToInt32(dtres.Rows[i]["Id"].ToString()));
+=======
+                DataTable getdtall = dlsrch.fetchdiscountAll();
+                DataTable getallopnendate = dlsrch.GetCruiseOpenDatesPackageSearch(blsrch);
+
+                for (int i = 0; i < dtres.Rows.Count; i++)
+                {
+                    // DataTable getdt = dlsrch.fetchdiscount(dtres.Rows[i]["packageId"].ToString(), Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()), Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()), Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString()));
+                    DataView dvdis = new DataView(getdtall);
+                      string st = "Packageid = '" + dtres.Rows[i]["packageId"].ToString() + "' and Boardingdate='" + Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()) + "' and Deboardingdate='" + Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()) + "' and price=" + Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString());
+                  //  string st = "Packageid = '" + dtres.Rows[i]["packageId"].ToString() + "',Boardingdate =" + dtres.Rows[i]["CheckInDate"];
+                    dvdis.RowFilter = st;
+                    DataTable getdt = dvdis.ToTable();
+
+                    DataView dvopendates = new DataView(getallopnendate);
+                    string filter = "PackageId='"+ dtres.Rows[i]["packageId"].ToString()+ "' and Depid="+ Convert.ToInt32(dtres.Rows[i]["Id"].ToString());
+                    dvopendates.RowFilter = filter;
+                    DataTable dt45 = dvopendates.ToTable();
+
+                 //   DataTable dt45 = bindroomddl(dtres.Rows[i]["packageId"].ToString(), Convert.ToInt32(dtres.Rows[i]["Id"].ToString()));
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     if (Session["UserCode"] != null)
                     {
                         lblSuite.Visible = true;
@@ -447,7 +496,11 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
             {
                 // ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "<script> alert('There Is No Rate For This Package');window.open('CruiseBooking.aspx');</script>", true);
                 //Response.Redirect("<a href='CruiseBooking.aspx?PackId=" + Session["PackId"].ToString() + "&PackageName=0&NoOfNights=0&CheckIndate=0&CheckOutdate=0&Discount=0&DepartureId=0'  class='btn btn-info font16 topMargin10 botMargin10 step2Btn' style='padding-left:12px;padding-right:12px;' data-departureid='5597' >Select</a>");
+<<<<<<< HEAD
                 Response.Redirect("searchproperty.aspx");
+=======
+                Response.Redirect("searchproperty1.aspx");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
         }
         catch (Exception ex)
@@ -465,6 +518,7 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
         Session.RemoveAll();
         System.Web.Security.FormsAuthentication.SignOut();
         LinkButton1.Visible = false;
+<<<<<<< HEAD
 
         if (Session["agentid"] != null)
         {
@@ -475,6 +529,9 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
             Response.Redirect("Packageserachresult.aspx");
         }
         //Response.Redirect("Packagesearchresult.aspx");
+=======
+        Response.Redirect("Packageserachresult1.aspx");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     }
 
 
@@ -487,6 +544,7 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
     {
 
     }
+<<<<<<< HEAD
 
     private string currency(string amount, string code)
     {
@@ -603,4 +661,6 @@ public partial class Cruise_Booking_DepartureSearch1 : BaseClass
         getpackagesearchresults(cityid, date, Riverid);
         //}
     }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 }

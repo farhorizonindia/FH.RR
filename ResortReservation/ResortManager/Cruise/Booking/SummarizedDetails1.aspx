@@ -40,6 +40,7 @@
     <!-- Navbar-Font -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" type="text/css">
     <!-- //Fonts -->
+<<<<<<< HEAD
 
     <script type = "text/javascript" >
         $("#btnPayProceed").click( function()
@@ -52,6 +53,8 @@
         }
 
 </script>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 </head>
 <body>
     <form id="form1" runat="server">
@@ -68,6 +71,7 @@
                         <span class="icon-bar "></span>
                     </button>
                     <a class="navbar-brand agileits headerTextFont" href="searchproperty.aspx">Booking System</a>
+<<<<<<< HEAD
 
                      <asp:DropDownList id="ddlCurrency"
                 AppendDataBoundItems="True"
@@ -76,6 +80,8 @@
                              <asp:ListItem  Value="USD">INR</asp:ListItem>
                              <asp:ListItem  Value="INR">USD</asp:ListItem>
            </asp:DropDownList>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 </div>
 
                 <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
@@ -104,7 +110,10 @@
         <br />
         <br />
         <br />
+<<<<<<< HEAD
         
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         <section style="width: 100%; height: 74px; padding: 0 !important;">
 
 
@@ -1184,12 +1193,16 @@ All reservations are subject to cancellation if payments are not received by the
                                     <%--<p style="font-size: 18px;" class="text-left">Discount( <%Response.Write((dtrpax.Rows[i]["Discount"]).ToString()); %>):  </p>--%>
                                     <p style="font-size: 18px;" class="text-left">Taxable amount:  </p>
                                     <%
+<<<<<<< HEAD
 
 
                                         Response.Write(" <p style='font-size: 18px;' class='text-left'>GST (" + dtrpax.Rows[i]["Tax"].ToString() + "%):</p>");
 
 
 
+=======
+                                        Response.Write(" <p style='font-size: 18px;' class='text-left'>GST (" + dtrpax.Rows[i]["Tax"].ToString() + "%):</p>");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                     %>
                                     <%--   <p style="font-size: 18px;" class="text-left">GST@<%# Session["gettaxpercentage"].ToString() %>: </p>--%>
 
@@ -1198,6 +1211,7 @@ All reservations are subject to cancellation if payments are not received by the
                                     <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                 </div>
                                 <div class="col-sm-6">
+<<<<<<< HEAD
                                     <p style="font-size: 18px; " class="text-right">
                                         <%-- <strong>INR <%# Eval("Pricewithouttax1") %></strong>--%>
 
@@ -1212,6 +1226,11 @@ All reservations are subject to cancellation if payments are not received by the
                                                   Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Pricewithouttax1"].ToString() + " </strong></p>");
          
     } %>
+=======
+                                    <p style="font-size: 18px;" class="text-right">
+                                        <%-- <strong>INR <%# Eval("Pricewithouttax1") %></strong>--%>
+                                        <strong>INR  <%Response.Write((dtrpax.Rows[i]["Pricewithouttax1"]).ToString()); %></strong>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                     </p>
                                     <%--<p style="font-size: 18px;" class="text-right"><strong>INR   <%Response.Write((dtrpax.Rows[i]["Total"]).ToString()); %></strong> </p>--%>
                                     <%
@@ -1221,6 +1240,7 @@ All reservations are subject to cancellation if payments are not received by the
                                         }
                                         else
                                         {
+<<<<<<< HEAD
                                             if (ddlCurrency.Text != "USD")
                                             {
                                                 currency(dtrpax.Rows[i]["Total"].ToString(), "INR");
@@ -1235,11 +1255,16 @@ All reservations are subject to cancellation if payments are not received by the
                                                  Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Discountprice"].ToString() + " </strong></p>");
                                             }
                                            
+=======
+                                            Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Total"].ToString() + " </strong></p>");
+                                            Response.Write(" <p style='font-size: 18px;' class='text-right'><strong>INR " + dtrpax.Rows[i]["Discountprice"].ToString() + " </strong></p>");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                         }
 
 
                                     %>
                                     <%--<p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Discountprice"]).ToString()); %></strong> </p>--%>
+<<<<<<< HEAD
 
                                     <%
                                         if(ddlCurrency.Text != "USD")
@@ -1258,6 +1283,10 @@ All reservations are subject to cancellation if payments are not received by the
                                          %>
                                   <%--  <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["taxablepamt"]).ToString()); %></strong> </p>
                                     <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Tax1"]).ToString()); %></strong> </p>--%>
+=======
+                                    <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["taxablepamt"]).ToString()); %></strong> </p>
+                                    <p style="font-size: 18px;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Tax1"]).ToString()); %></strong> </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                                     <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Totalprice") %></strong> </p>--%>
 
@@ -1270,6 +1299,7 @@ All reservations are subject to cancellation if payments are not received by the
                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                     </div>
                                     <div class="col-sm-6">
+<<<<<<< HEAD
                                         <%
                                             if(ddlCurrency.Text != "USD")
                                             {
@@ -1283,6 +1313,10 @@ All reservations are subject to cancellation if payments are not received by the
                                              %>
 
                                       <%--  <p style="font-size: 18px; margin-right: -7%;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Totalprice"]).ToString()); %></strong> </p>--%>
+=======
+
+                                        <p style="font-size: 18px; margin-right: -7%;" class="text-right"><strong>INR  <%Response.Write((dtrpax.Rows[i]["Totalprice"]).ToString()); %></strong> </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                         <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                     </div>
                                 </div>
@@ -1397,7 +1431,10 @@ All reservations are subject to cancellation if payments are not received by the
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <p style="font-size: 18px;" class="text-right">
+<<<<<<< HEAD
                                                        
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                         <strong>INR <%# Eval("Pricewithouttax1") %></strong>
                                                     </p>
                                                     <p style="font-size: 18px;" class="text-right"><strong>INR  <%# Eval("Total") %></strong> </p>

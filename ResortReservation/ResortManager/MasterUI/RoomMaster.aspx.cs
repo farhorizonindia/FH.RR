@@ -158,6 +158,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         string sRoomNo = dgRooms.SelectedItem.Cells[0].Text;
         int iAccomID = 0;
         int.TryParse(Convert.ToString(dgRooms.SelectedItem.Cells[1].Text), out iAccomID);
+<<<<<<< HEAD
         int iroomcatID = 0;
         int.TryParse(Convert.ToString(dgRooms.SelectedItem.Cells[2].Text), out iroomcatID);
         hfRoomNo.Value = sRoomNo;
@@ -167,6 +168,14 @@ public partial class MasterUI_RoomMaster : MasterBasePage
 
         RoomMaster oRoomMaster = new RoomMaster();
         RoomDTO[] oAccomRoomData = oRoomMaster.GetData(iAccomID, sRoomNo,iroomcatID);
+=======
+        hfRoomNo.Value = sRoomNo;
+        hfAccomId.Value = iAccomID.ToString();
+        SessionServices.RoomMaster_OperationMode = "EDIT";
+
+        RoomMaster oRoomMaster = new RoomMaster();
+        RoomDTO[] oAccomRoomData = oRoomMaster.GetData(iAccomID, sRoomNo);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
         ddlAccomodation.SelectedValue = Convert.ToString(oAccomRoomData[0].AccomodationId);
         ddlFloors.SelectedValue = Convert.ToString(oAccomRoomData[0].FloorId);
@@ -749,6 +758,7 @@ public partial class MasterUI_RoomMaster : MasterBasePage
         if (e.Item.Cells[0].Text != "")
         {
             int acomid = Convert.ToInt32(e.Item.Cells[1].Text);
+<<<<<<< HEAD
 
             int roomcatid = Convert.ToInt32(e.Item.Cells[2].Text);
 
@@ -756,6 +766,11 @@ public partial class MasterUI_RoomMaster : MasterBasePage
             rdto.RoomNo = roomno;
             rdto.AccomodationId = acomid;
             rdto.roomcategoryid = roomcatid;
+=======
+            RoomDTO rdto = new RoomDTO();
+            rdto.RoomNo = roomno;
+            rdto.AccomodationId = acomid;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             RoomMaster oRoomMaster = new RoomMaster();
             bool n = oRoomMaster.updatestatus(rdto);
             if (n == true)

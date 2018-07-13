@@ -57,6 +57,7 @@
                             <span class="icon-bar "></span>
                         </button>
                         <a class="navbar-brand agileits " href="searchproperty1.aspx">Resorts</a>
+<<<<<<< HEAD
 
                           <asp:DropDownList id="ddlCurrency"
                 AppendDataBoundItems="True"
@@ -68,6 +69,11 @@
                     </div>
 
                     <div  id="navbar" class="navbar-collapse agileits  navbar-right collapse">
+=======
+                    </div>
+
+                    <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton>
@@ -1219,6 +1225,7 @@
 
                                                             <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                         </div>
+<<<<<<< HEAD
 
                                                             <div style="display:none">
                                                                         <%# Session["Nights"] = DataBinder.Eval(Container.DataItem, "Nights")%>
@@ -1255,11 +1262,19 @@
 
                                                                          %>
                                                            <%-- <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Nights") %></strong> </p>
+=======
+                                                        <div class="col-sm-6">
+                                                            <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Nights") %></strong> </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                             <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Price") %></strong> </p>
 
                                                             <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Total") %></strong> </p>
 
+<<<<<<< HEAD
                                                             <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Tax") %></strong> </p>--%>
+=======
+                                                            <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Tax") %></strong> </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                                                             <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                         </div>
@@ -1270,6 +1285,7 @@
                                                                 <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                             </div>
                                                             <div class="col-sm-6">
+<<<<<<< HEAD
                                                                 <%
                                                                     if(ddlCurrency.Text != "USD")
                                                                     {
@@ -1285,6 +1301,10 @@
                                                                      %>
 
                                                               <%--  <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Inclusivetax") %></strong> </p>--%>
+=======
+
+                                                                <p style="font-size: 18px;" class="text-right"><strong><%# Eval("Inclusivetax") %></strong> </p>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                                 <%--<button class="btn btn-primary wow agileits  fadeInUp pull-right" id="book-resort">Add to Cart<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>--%>
                                                             </div>
                                                         </div>

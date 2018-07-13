@@ -138,6 +138,7 @@ public partial class ClientUI_Packagewiseavailability : MasterBasePage
                     dgBookings.DataBind();
                 }
             //}
+<<<<<<< HEAD
             DateTime checkin = Convert.ToDateTime(txtFrom.Text);
             DateTime dd = Convert.ToDateTime("09/01/2019");
             if (checkin < Convert.ToDateTime(dd))
@@ -343,6 +344,108 @@ public partial class ClientUI_Packagewiseavailability : MasterBasePage
                     dgBookings1.DataSource = dtres;
                     dgBookings1.DataBind();
                 }
+=======
+            if (dtres != null && dtres.Rows.Count > 0)
+            {
+                dtres.Columns.Add("Discount %", typeof(string));
+                dtres.Columns.Add("Suite", typeof(string));
+                dtres.Columns.Add("Swb", typeof(string));
+                dtres.Columns.Add("Swob", typeof(string));
+                dtres.Columns.Add("OpenClose", typeof(string));
+                dtres.Columns.Add("Total", typeof(string));
+                DataRow dr = dtres.NewRow();
+                for (int i = 0; i < dtres.Rows.Count; i++)
+                {
+                    // DataTable getdt = dlsrch.fetchdiscount(dtres.Rows[i]["packageId"].ToString(), Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString()), Convert.ToDateTime(dtres.Rows[i]["CheckOutDate"].ToString()), Convert.ToDecimal(dtres.Rows[i]["Rate"].ToString()));
+                   
+
+                    DataTable dt45 = bindroomddl(dtres.Rows[i]["packageId"].ToString(), Convert.ToInt32(dtres.Rows[i]["Id"].ToString()));
+                    if (dt45 != null && dt45.Rows.Count > 0)
+                    {
+                        DataView dv = new DataView();
+                        dv = new DataView(dt45, "BookedStatus = 'Limited Availability' or BookedStatus = 'Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                        DataTable dtcruise1 = dv.ToTable();
+                        dv = new DataView(dtcruise1, "RoomCategory = 'Suite'", "RoomCategory", DataViewRowState.CurrentRows);
+                        DataTable dtcruise = dv.ToTable();
+                        if (dtcruise != null && dtcruise.Rows.Count > 0)
+                        {
+                            int sum = Convert.ToInt32(dtcruise.Compute("SUM(Column1)", string.Empty));
+                            dtres.Rows[i]["Suite"] = sum.ToString();
+                        }
+                        else
+                        {
+                            dtres.Rows[i]["Suite"] = "0";
+                        }
+                        DataView dv1 = new DataView();
+                        dv1 = new DataView(dt45, "BookedStatus = 'Limited Availability' or BookedStatus = 'Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                        DataTable dtcruise11 = dv1.ToTable();
+                        dv1 = new DataView(dtcruise1, "RoomCategory = 'Superior with Balcony'", "RoomCategory", DataViewRowState.CurrentRows);
+                        DataTable dtcruise111 = dv1.ToTable();
+                        if (dtcruise111 != null && dtcruise111.Rows.Count > 0)
+                        {
+                            int sum = Convert.ToInt32(dtcruise111.Compute("SUM(Column1)", string.Empty));
+                            dtres.Rows[i]["Swb"] = sum.ToString();
+                        }
+                        else
+                        {
+
+                            dtres.Rows[i]["Swb"] = "0";
+                        }
+                        DataView dv2 = new DataView();
+                        dv2 = new DataView(dt45, "BookedStatus = 'Limited Availability' or BookedStatus = 'Available'", "BookedStatus", DataViewRowState.CurrentRows);
+                        DataTable dtcruise12 = dv2.ToTable();
+                        dv2 = new DataView(dtcruise1, "RoomCategory = 'Superior without Balcony'", "RoomCategory", DataViewRowState.CurrentRows);
+                        DataTable dtcruise123 = dv2.ToTable();
+                        if (dtcruise123 != null && dtcruise123.Rows.Count > 0)
+                        {
+                            int sum = Convert.ToInt32(dtcruise123.Compute("SUM(Column1)", string.Empty));
+                            dtres.Rows[i]["Swob"] = sum.ToString();
+                        }
+                        else
+                        {
+                            dtres.Rows[i]["Swob"] = "0";
+                        }
+                        dtres.Rows[i]["Total"] = Convert.ToInt32(dtres.Rows[i]["Swob"].ToString()) + Convert.ToInt32(dtres.Rows[i]["Swb"].ToString()) + Convert.ToInt32(dtres.Rows[i]["Suite"].ToString());
+                    }
+
+
+
+                    //if (getdt != null && getdt.Rows.Count > 0)
+                    //{
+                    //    dtres.Rows[i]["openclose"] = getdt.Rows[0]["openclose"].ToString();
+                    //    //if (getdt.Rows[0]["openclose"].ToString() == "Close")
+                    //    //{
+                    //    //    dtres.Rows[i].Delete();
+                    //    //    dtres.AcceptChanges();
+                    //    //}
+                    //}
+                    //else
+                    //{
+                    //    dtres.Rows[i]["openclose"] = "Open";
+                    //}
+                    //DateTime now = Convert.ToDateTime(dtres.Rows[i]["CheckInDate"].ToString());
+
+                    //DateTime endOfDay = now.AddMinutes(1);
+                    //DateTime now1 = Convert.ToDateTime(DateTime.Now);
+                    //DateTime startOfDay1 = now1.Date;
+                    //DateTime endOfDay1 = startOfDay1.AddMinutes(1);
+
+                    //DataRow dr = getdt.Rows[i];
+                    //dr[3].Value = "New Value";
+                }
+                DataTable getall = new DataTable();
+                DataView dv67 = new DataView();
+                Session["Getalladata"] = dtres;
+                dgBookings.DataSource = dtres;
+                dgBookings.DataBind();
+                //dv67 = new DataView(dtres, "openclose = 'Open'", "openclose", DataViewRowState.CurrentRows);
+
+            }
+            else
+            {
+                dgBookings.DataSource = dtres;
+                dgBookings.DataBind();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
         }
     }
@@ -407,6 +510,7 @@ public partial class ClientUI_Packagewiseavailability : MasterBasePage
         }
     }
 
+<<<<<<< HEAD
 
     protected void dgBookings1_PageIndexChanged(object source, DataGridPageChangedEventArgs e)
     {
@@ -419,6 +523,8 @@ public partial class ClientUI_Packagewiseavailability : MasterBasePage
         }
     }
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     protected void Button2_Click(object sender, EventArgs e)
     {
         loadpackage();

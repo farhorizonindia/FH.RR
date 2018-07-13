@@ -204,6 +204,7 @@ public partial class MasterUI_DiscountEntry : MasterBasePage
                 blsrch.AgentId = 247;
             }
             DataTable dt12 = new DataTable();
+<<<<<<< HEAD
 
 
             DataTable dtsorted = new DataTable();
@@ -221,6 +222,9 @@ public partial class MasterUI_DiscountEntry : MasterBasePage
 
 
             //   dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
+=======
+            dtres = dlsrch.GetCruiseOpenDatesPackage(blsrch);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             DataTable dtnew = new DataTable();
             dtnew.Columns.Add("Id", typeof(int));

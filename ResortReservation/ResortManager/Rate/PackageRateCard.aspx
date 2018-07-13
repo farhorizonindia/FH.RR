@@ -145,7 +145,11 @@
                             <tr>
                                 <td class="auto-style3">Valid From</td>
                                 <td class="auto-style2">
+<<<<<<< HEAD
                                     <asp:TextBox ID="txtValFrom" runat="server" AutoPostBack="True" OnTextChanged="txtValFrom_TextChanged"></asp:TextBox>
+=======
+                                    <asp:TextBox ID="txtValFrom" runat="server"></asp:TextBox>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                     <asp:CalendarExtender ID="txtValFrom_CalendarExtender" runat="server" TargetControlID="txtValFrom"></asp:CalendarExtender>
                                     <asp:RequiredFieldValidator ID="reqftxtValFrom" runat="server" ControlToValidate="txtValFrom" ErrorMessage="*" ForeColor="Red" ValidationGroup="ValRate"></asp:RequiredFieldValidator>
                                 </td>

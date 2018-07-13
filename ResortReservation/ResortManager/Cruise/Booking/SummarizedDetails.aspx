@@ -1104,7 +1104,10 @@ All reservations are subject to cancellation if payments are not received by the
                                 </div>
 
                             </div>
+<<<<<<< HEAD
                             
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             <!-- middle-div -->
                             <!-- <div class="row">
                                 <div class="col-sm-12 middle-div">

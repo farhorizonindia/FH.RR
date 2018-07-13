@@ -337,7 +337,11 @@
                         <div>GST. 07AAACF6111G123</div>
                     </div>
                     <div class="Invoice_header_R">
+<<<<<<< HEAD
                         <img style="margin-left: 25%;" src="http://test.adventureresortscruises.in/Cruise/booking/ARC_Logo.jpg.png" alt="" />
+=======
+                        <img style="margin-left: 25%;" src="http://test1.adventureresortscruises.in/Cruise/booking/ARC_Logo.jpg.png" alt="" />
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -493,7 +497,10 @@
                             <td>979 </td>
                         </tr>
                     </table>--%>
+<<<<<<< HEAD
                         
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         <div style="width: 1000px;">
                             <asp:GridView ID="gdvCruiseRooms" DataKeyNames="RoomNumber" runat="server" AutoGenerateColumns="False" Width="100%" ShowFooter="True" OnRowDataBound="gdvCruiseRooms_RowDataBound">
                                 <Columns>
@@ -504,7 +511,10 @@
 
 
                                     <%-- <asp:BoundField DataField="RoomType" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" HeaderText="No Of Rooms" />--%>
+<<<<<<< HEAD
                                     
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                     <asp:BoundField DataField="pricewithouttax" HeaderText="Rate Per Person(INR)" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="166px" />
                                     <%-- <asp:BoundField DataField="Tax1" HeaderText="Tax" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="166px" />--%>
                                     <asp:BoundField DataField="Total" HeaderText="Gross Amount(INR)" HeaderStyle-CssClass="rightalign" ItemStyle-CssClass="rightalign" ItemStyle-Width="118px" />
@@ -609,9 +619,13 @@
                                     <asp:Label ID="lbladvance" runat="server"></asp:Label></td>
                             </tr>
                             <tr>
+<<<<<<< HEAD
                               <%--  <td class="auto-style4">Total Amout Paid (In INR)</td>--%>
                                   <td class="auto-style4">
                                       <asp:Label ID="lblttlamnt" runat="server" Text="Total Amout Paid (In INR)"></asp:Label></td>
+=======
+                                <td class="auto-style4">Total Amout Paid (In INR)</td>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                 <td class="ralign">
                                     <asp:Label ID="lblTotPaid" runat="server"></asp:Label></td>
                             </tr>

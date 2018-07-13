@@ -215,5 +215,58 @@ namespace WindowsFormsApplication1
                 MessageBox.Show(exp.Message);
             }
         }
+
+        private void btnDecrpytTheColumns_Click(object sender, EventArgs e)
+        {
+            TreeNode rootNode = treeView1.Nodes[0];
+            List<ParentItem> items = new List<ParentItem>();
+
+            try
+            {
+                foreach (TreeNode table in rootNode.Nodes)
+                {
+                    bool isAnyColumnSelected = false;
+                    foreach (TreeNode column in table.Nodes)
+                    {
+                        if (column.Checked)
+                            isAnyColumnSelected = true;
+                    }
+                    if (!isAnyColumnSelected)
+                    {
+                        continue;
+                    }
+
+                    string tableName = table.Text;
+                    foreach (TreeNode column in table.Nodes)
+                    {
+                        ParentItem pi = items.FirstOrDefault(parentItem => string.Compare(parentItem.ItemName, tableName, true) == 0);
+                        if (pi == null)
+                        {
+                            pi = new ParentItem { ItemName = tableName };
+                            items.Add(pi);
+                        }
+                        string columnName = column.Text;
+
+                        ChildItem ci = pi.Children.FirstOrDefault(childItem => string.Compare(childItem.ItemName, columnName, true) == 0);
+                        if (ci == null)
+                        {
+                            ci = new ChildItem { ItemName = columnName, Selected = column.Checked };
+                            pi.Children.Add(ci);
+                        }
+
+                    }
+                }
+                if (dm == null)
+                {
+                    dm = new DataManager(txtConnectionString.Text);
+                }
+                dm.DecryptData(items);
+                MessageBox.Show("Completed");
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+        }
     }
 }

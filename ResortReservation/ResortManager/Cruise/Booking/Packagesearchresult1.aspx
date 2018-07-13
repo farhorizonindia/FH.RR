@@ -16,9 +16,13 @@
 
     <link rel="stylesheet" href="css/css/reset.css">
     <!-- CSS reset -->
+<<<<<<< HEAD
     <link rel="stylesheet" href="css/css/style.css" />
 
  
+=======
+    <link rel="stylesheet" href="css/css/style.css">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- Resource style -->
     <script src="js/modernizr.js"></script>
     <!-- Meta-Tags -->
@@ -32,10 +36,14 @@
     <!-- Bootstrap-CSS -->
     <link rel="stylesheet" href="css/Newcss/bootstrap.min.css" type="text/css" media="all">
     <!-- Index-Page-CSS -->
+<<<<<<< HEAD
     <link rel="stylesheet" href="css/Newcss/style.css" type="text/css" media="all"/>
 
      
        
+=======
+    <link rel="stylesheet" href="css/Newcss/style.css" type="text/css" media="all">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- Animate.CSS -->
     <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all">
     <!-- //Custom-Stylesheet-Links -->
@@ -48,12 +56,17 @@
     <!-- Navbar-Font -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" type="text/css">
     <!-- //Fonts -->
+<<<<<<< HEAD
 
     
 </head>
 <body>
 
  
+=======
+</head>
+<body>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <div class="loaderbody"><div class="loader"><img src="../../images/loading1.gif" alt="Loading..." /> Please Wait</div></div>
     <form id="form1" runat="server">
         <div class="header agileits " id="home">
@@ -110,7 +123,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-4">
+<<<<<<< HEAD
                             <h2 class="text-left" style="padding-top: 15px; text-align: left !important; font-weight: normal; font-size: 24px; margin-bottom: 0;">Vessel:MV Mahabaahu
+=======
+                            <h2 class="text-left" style="padding-top: 15px; text-align: left !important; font-weight: normal; color: #000; font-size: 24px; margin-bottom: 0;">Vessel:MV Mahabaahu
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                 <%--<asp:Label ID="lblPackagename" runat="server" Text=' '></asp:Label>--%></h2>
                         </div>
                         <div class="col-sm-8">
@@ -127,7 +144,11 @@
                                         <li><em>Details & Check Out</em></li>
                                     </ol>
                                 </nav>
+<<<<<<< HEAD
                             </section>  
+=======
+                            </section>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         </div>
 
                     </div>
@@ -175,11 +196,15 @@
                                                         <br />
                                                         <%Response.Write(dtres.Rows[i]["PackageDescription"].ToString()); %>
                                                         <% PackageId = dtres.Rows[i]["PackageId"].ToString(); %>
+<<<<<<< HEAD
                                                         
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                     </p>
                                                 </div>
                                                 <div class="pull-right" style="padding-top: 10px;">
                                                     <%Response.Write("<a href='" + dtres.Rows[i]["ItineraryLink"].ToString() + "' class='btn btn-info btnWidth100 btnFont' >Itinerary</a>");%>
+<<<<<<< HEAD
                                                     <%
                                                         if (Session["agentid"] != null)
                                                         {
@@ -190,6 +215,9 @@
                                                             Response.Write("<a href='DepartureSearch1.aspx?PackId=" + PackageId + "&CheckinDep=" + CheckinDep + "&CheckoutDep=" + CheckoutDep + " '  class='btn btn-info btnWidth100 btnFont' >Book Now</a>");
                                                         }
                                                          %>
+=======
+                                                    <%Response.Write("<a href='DepartureSearch1.aspx?PackId=" + PackageId + "&CheckinDep=" + CheckinDep + "&CheckoutDep=" + CheckoutDep + " '  class='btn btn-info btnWidth100 btnFont' >Book Now</a>"); %>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                                     <%--<%-- <a href="http://www.mahabaahucruiseindia.com/brahmaputra-river-cruise-itinerary/upstream-itinerary/">
                                                 <button class="btn btn-primary wow agileits  fadeInLeft">ITINERARY<span class="glyphicon agileits  glyphicon-arrow-right" aria-hidden="true"></span></button>
                                             </a>--%>

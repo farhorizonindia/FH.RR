@@ -41,6 +41,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
     string packageid1 = "";
     protected void Page_Load(object sender, EventArgs e)
     {
+<<<<<<< HEAD
        
         if (Session["CssPath"] != null)
         {
@@ -50,6 +51,12 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
         //{
         //    Response.Redirect("searchproperty1.aspx");
         //}
+=======
+        if (Session["check"] == null)
+        {
+            Response.Redirect("searchproperty1.aspx");
+        }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         if (Session["CustName"] != null)
         {
             lblUsername.Text = "Hello " + Session["CustName"].ToString();
@@ -88,10 +95,13 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
         if (!IsPostBack)
         {
+<<<<<<< HEAD
             Session["Dollar"] = 1;
             Session["Crbooking"] = "";
             Session["lasttotal"] = "";
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             FillAgents();
             Session["get"] = null;
             try
@@ -117,6 +127,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 lblCheckInDate.Text = Convert.ToDateTime(Request.QueryString["CheckInDate"].ToString()).ToString("dd MMM yyyy");
                 lblCheckOutDate.Text = Convert.ToDateTime(Request.QueryString["CheckOutDate"].ToString()).ToString("dd MMM yyyy");
                 lblPackageName.Text = Request.QueryString["PackageName"].ToString();
+<<<<<<< HEAD
 
                 Session["packagenames"] = lblPackageName.Text;
                 Session["chkindate"] = lblCheckInDate.Text;
@@ -133,6 +144,18 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     string kjhlk = Request.QueryString["Discount"].ToString();
                 }
 
+=======
+                if (Request.QueryString["Discount"].ToString() == "")
+                {
+                    Session["getdiscountvalue"] = 0;
+                }
+                else
+                {
+                    Session["getdiscountvalue"] = Request.QueryString["Discount"].ToString();
+                    string kjhlk = Request.QueryString["Discount"].ToString();
+                }
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 get = Request.QueryString["Discount"].ToString();
             }
@@ -197,6 +220,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 //lnkLogout.Visible = false;
             }
             loadall();
+<<<<<<< HEAD
 
 
             try
@@ -216,6 +240,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 }
             }
             catch { }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
         ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockArea();", true);
     }
@@ -225,12 +251,15 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
         try
         {
+<<<<<<< HEAD
             DateTime checkin = Convert.ToDateTime(Request.QueryString["Checkindate"]);
             DateTime  dd = Convert.ToDateTime("09/01/2019");
             if(checkin <= Convert.ToDateTime(dd))
             {
                 
            
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             long get = 0;
             long get1 = 0;
             long getall = 0;
@@ -241,6 +270,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 PolygonHotSpot hotSpot;
           //  RectangleHotSpot hotSpot;
             if (Session["get"] == null)
+<<<<<<< HEAD
             {
                 ImageMap1.ImageUrl = "~/images/aspnet_imagemap.png";
             }
@@ -340,6 +370,25 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     {
                         ImageMap1.ImageUrl = "inv/aspnet_imagemap" + getall + ".png";
                     }
+=======
+            {
+                ImageMap1.ImageUrl = "~/images/aspnet_imagemap.png";
+            }
+
+            foreach (DataRow dr in dtRoomsdata.Rows)
+            {
+                hotSpot = new PolygonHotSpot();
+                hotSpot.TabIndex = -1;
+                
+                //HtmlTextWriter writer = new HtmlTextWriter(tex);
+                //writer.AddStyleAttribute=
+
+                if (dr["BookedStatus"].ToString() == "Available" && dr["ActiveStatus"].ToString() == "")
+                {
+                    hotSpot.HotSpotMode = HotSpotMode.PostBack;
+                    hotSpot.AlternateText = "Available";
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 }
             }
@@ -356,6 +405,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 //  RectangleHotSpot hotSpot;
                 if (Session["get"] == null)
                 {
+<<<<<<< HEAD
                     ImageMap1.ImageUrl = "~/images/aspnet_imagemap1.png";
                 }
 
@@ -456,6 +506,87 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     }
 
                 }
+=======
+                    hotSpot.HotSpotMode = HotSpotMode.Inactive;
+                    try
+                    {
+                        if (Session["get"] != null)
+                        {
+                            s = Session["get"].ToString();
+                        }
+
+                        get = Convert.ToInt32(dr["Coordinates"].ToString().Split(',')[0]);
+                        get1 = Convert.ToInt32(dr["Coordinates"].ToString().Split(',')[1]);
+                        string path = Server.MapPath("inv/aspnet_imagemap" + s + ".png");
+                        FileInfo file = new FileInfo(path);
+                        if (file.Exists)
+                        {
+
+
+
+                        }
+                        else
+                        {
+                            path = Server.MapPath("~/images/aspnet_imagemap.png");
+                        }
+                        Bitmap bitMapIm = new
+         System.Drawing.Bitmap(path);
+                        Graphics graphicIm = Graphics.FromImage(bitMapIm);
+
+                        Pen penGreen = new Pen(Color.Green, 3);
+                        Pen penRed = new Pen(Color.Red, 3);
+
+                        //graphicIm.DrawEllipse(penGreen, hotSpot, hotSpot, 7, 7);
+
+                        graphicIm.DrawString("X", new Font("Arial", 10, FontStyle.Bold), Brushes.Red, get, get1);
+                        getall = get + get1;
+                        Random rand = new Random();
+                        long data = rand.Next(10, 100000000);
+                        getall = getall + data;
+
+                        while (File.Exists(Server.MapPath("inv/aspnet_imagemap" + getall + ".png")))
+                        {
+                            int count = 1;
+                            Random rand1 = new Random();
+                            long data1 = rand1.Next(10, 100000000);
+                            getall = getall + data1;
+                        }
+                        FileInfo file1 = new FileInfo(Server.MapPath("inv/aspnet_imagemap" + getall + ".png"));
+
+
+                        bitMapIm.Save((Server.MapPath("inv/aspnet_imagemap" + getall + ".png")), ImageFormat.Png);
+                        graphicIm.Dispose();
+                        bitMapIm.Dispose();
+                        if (Session["get"] != null)
+                        {
+                            if (file.Exists)//check file exsit or not
+                            {
+                                file.Delete();
+                            }
+                        }
+                        Session["get"] = getall;
+                    }
+                    catch { }
+                    hotSpot.AlternateText = "Not Available";
+                }
+                //               
+                hotSpot.Coordinates = dr["Coordinates"].ToString();
+                // hotSpot.AlternateText = dr["BookedStatus"].ToString();
+                //ImageMap1.Attributes.Add("color", "fuchsia");
+                hotSpot.PostBackValue = dr["RoomNo"].ToString();
+
+                // ImageMap1.ImageUrl = "~/images/aspnet_imagemap.png";
+                ImageMap1.HotSpots.Add(hotSpot);
+                if (Session["get"] == null)
+                {
+                    ImageMap1.ImageUrl = "~/images/aspnet_imagemap.png";
+                }
+                else
+                {
+                    ImageMap1.ImageUrl = "inv/aspnet_imagemap" + getall + ".png";
+                }
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
 
 
@@ -467,12 +598,21 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
     public string rename(string fullpath)
     {
         int count = 1;
+<<<<<<< HEAD
 
         string fileNameOnly = Path.GetFileNameWithoutExtension(fullpath);
         string extension = Path.GetExtension(fullpath);
         string path = Path.GetDirectoryName(fullpath);
         string newFullPath = fullpath;
 
+=======
+
+        string fileNameOnly = Path.GetFileNameWithoutExtension(fullpath);
+        string extension = Path.GetExtension(fullpath);
+        string path = Path.GetDirectoryName(fullpath);
+        string newFullPath = fullpath;
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         while (File.Exists(newFullPath))
         {
             string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
@@ -512,8 +652,12 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 }
             }
             catch { }
+<<<<<<< HEAD
             //blsr.PackageId = Session["PackId"].ToString();
             blsr.PackageId = "Pack1";
+=======
+            blsr.PackageId = Session["PackId"].ToString();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             blsr.totpax = 2;
             //if (Session["totpax"] != null)
@@ -537,6 +681,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
             DataTable sortedDT = dv.ToTable();
             ViewState["RoomRate"] = sortedDT.Rows[0]["PPRoomRate"].ToString();
             string RoomRate = ViewState["RoomRate"].ToString();
+<<<<<<< HEAD
             
 
 
@@ -551,6 +696,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
             dt_copy.Rows.Remove(row);
 
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             if (sortedDT != null && RoomRate != "0")
             {
                 if (sortedDT.Rows.Count > 0)
@@ -562,6 +709,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     {
                         long get1 = Convert.ToInt32(sortedDT.Rows[i]["Price Per Person sharing"].ToString().Split('R')[1].Split('.')[0]);
                         long get2 = Convert.ToInt32(sortedDT.Rows[i]["Price Per Person Single Use"].ToString().Split('R')[1].Split('.')[0]);
+<<<<<<< HEAD
 
                         if (ddlCurrency.Text != "USD")
                         {
@@ -584,6 +732,13 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                         }
 
+=======
+                        string get12 = Convert.ToInt32(get1).ToString("##,0");
+                        string get22 = Convert.ToInt32(get2).ToString("##,0");
+
+                        sortedDT.Rows[i]["Price Per Person sharing"] = "INR " + get12;
+                        sortedDT.Rows[i]["Price Per Person Single Use"] = "INR " + Convert.ToInt32(sortedDT.Rows[i]["Price Per Person Single Use"].ToString().Split('R')[1].Split('.')[0]).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         //lblTax.Text = "Tax Value also add separately.Tax percentage value is " + Convert.ToString(Convert.ToInt32(sortedDT.Rows[i]["Tax Value"].ToString().Split('R')[1].Split('.')[0])) + "%";
                         lblTax.Text = "Prices are excluding Government Taxes";
                         Session["gettaxpercentage"] = sortedDT.Rows[i]["Tax Value"].ToString().Split('R')[1].Split('.')[0] + "%";
@@ -593,6 +748,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                     div1.Style.Remove("display");
                     //roundoff();
+<<<<<<< HEAD
                 }
                 else
                 {
@@ -643,6 +799,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                     div1.Style.Remove("display");
                  
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 }
                 else
                 {
@@ -1005,6 +1163,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 TotalCabins.Text = "Cabins Selected";
                 //GridRoomPaxDetail.FooterRow.Cells[3].Text =;
                 //GridRoomPaxDetail.FooterRow.Cells[6].Text = "<strong style='font-weight: bolder;float: left; color: Black;'>Total :</strong>" + " " + "<strong style='font-weight: bolder; color: Black;float: right;padding-right: 24%;'> INR" + " " + Totamt.ToString("##,0") + " </strong>" + "           " + " ";
+<<<<<<< HEAD
                 if (ddlCurrency.Text != "USD")
                 {
                     currency(Totamt.ToString("##,0"), ddlCurrency.Text);
@@ -1015,6 +1174,10 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     Session["lasttotal"]= Totamt.ToString("##,0");
                     lblgetTotal.Text = "INR " + Totamt.ToString("##,0");
                 }
+=======
+                lblgetTotal.Text = "INR " + Totamt.ToString("##,0");
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             }
             else
@@ -1222,6 +1385,14 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
             {
                 DataRow dr = dtInsertable.NewRow();
                 if (hfRoomId.Value == "")
+<<<<<<< HEAD
+                {
+                    if (Session["rn"] != null)
+                    {
+                        dr["RoomNumber"] = Session["rn"].ToString();
+                    }
+
+=======
                 {
                     if (Session["rn"] != null)
                     {
@@ -1231,6 +1402,32 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 }
                 else
                 {
+                    dr["RoomNumber"] = hfRoomId.Value;
+                    Session["rn"] = hfRoomId.Value;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
+                }
+
+
+                dr["RoomCategoryId"] = RoomcateId;
+                dr["Tax"] = view.ToTable().Rows[0][6].ToString().Split('R')[1].Split('.')[0];
+                string klj = view.ToTable().Rows[0][6].ToString().Split('R')[1].Split('.')[0];
+                dr["Discount"] = Session["getdiscountvalue"].ToString() + "%";
+                Session["GetCruiseRoomcatid"] = RoomcateId;
+                Session["totpax"] = Convert.ToInt32(view.ToTable().Rows[0][10].ToString());
+                dr["Pax"] = Convert.ToInt32(view.ToTable().Rows[0][10].ToString());
+                dr["Currency"] = view.ToTable().Rows[0][8].ToString();
+
+                //if ((txtPassengers.Text.ToString() == "2"))
+                //{
+                //    dr["RoomType"] = view.ToTable().Rows[0][9].ToString();
+                //}
+                //else if (txtPassengers.Text.ToString() == "1")
+                //{
+                //    dr["RoomType"] = view.ToTable().Rows[0][9].ToString();
+                //}
+                //else
+                {
+<<<<<<< HEAD
                     dr["RoomNumber"] = hfRoomId.Value;
                     Session["rn"] = hfRoomId.Value;
                 }
@@ -1255,6 +1452,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 //}
                 //else
                 {
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     dr["RoomType"] = view.ToTable().Rows[0][9].ToString();
                     dr["Bconfig"] = view.ToTable().Rows[0][9].ToString() + " Bed";
                 }
@@ -1275,6 +1474,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
                             //if (TaxStatus == "Tax Applied")
                             //{
+<<<<<<< HEAD
 
                             if (ddlCurrency.Text != "USD")
                             {
@@ -1331,6 +1531,27 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                                 dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
                                 dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                             }
+=======
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrrtx * Convert.ToInt32(1)).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * 1).ToString("##,0");
+
+                            double getdiscountamount = (Convert.ToDouble(arrr * 1) * (1 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 1) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 1) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round((taxableamnt * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                         }
                         else if (Session["getbedconfig"].ToString() == "Triple")
@@ -1341,6 +1562,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
                             //if (TaxStatus == "Tax Applied")
                             //{
+<<<<<<< HEAD
 
                             if (ddlCurrency.Text != "USD")
                             {
@@ -1394,6 +1616,26 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                                 dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
                                 dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                             }
+=======
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrrtx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * 3).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 3) * (3 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 3) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 3) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round((taxableamnt * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                         }
                         else
@@ -1403,6 +1645,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
                             //if (TaxStatus == "Tax Applied")
                             //{
+<<<<<<< HEAD
 
                             if (ddlCurrency.Text != "USD")
                             {
@@ -1505,10 +1748,15 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
 
                           
+=======
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(2)).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             dr["Price"] = Convert.ToDouble(arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
                             /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
                             dr["pricewithouttax"] = arrr1.ToString("##,0");
 
+<<<<<<< HEAD
                            
                             dr["pricewithouttax1"] = arrr1.ToString("##,0");
 
@@ -1522,12 +1770,52 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             dr["Discountprice"] = getdiscountamount.ToString("##,0");
 
                             double tax = Math.Round((taxableamnt * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+=======
+                            dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(2)).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr1 * 2) * (2 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr1 * 2) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr1 * 2) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
                             double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
                             dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
                             dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                         }
                     }
+<<<<<<< HEAD
+=======
+                    else
+                    {
+
+                        string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                        string TaxValue = (view.ToTable().Rows[0][6].ToString());
+                        //if (TaxStatus == "Tax Applied")
+                        //{
+                        arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                        dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        dr["Price"] = Convert.ToDouble(arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                        dr["pricewithouttax"] = arrr1.ToString("##,0");
+
+                        dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                        dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        //double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        dr["taxablepamt"] = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount).ToString("##,0");
+                        double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
+                        dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                        double tax = Math.Round((taxableamnt * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                        double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                        dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                    }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 }
                 else
@@ -1536,10 +1824,15 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     {
                         if (Session["getbedconfig"].ToString() == "Single")
                         {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             string TaxStatus = (view.ToTable().Rows[0][7].ToString());
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
                             //if (TaxStatus == "Tax Applied")
                             //{
+<<<<<<< HEAD
                             if (ddlCurrency.Text != "USD")
                             {
                                 arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
@@ -1593,6 +1886,26 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                                 dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
                                 dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                             }
+=======
+                            arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrWZ[1]).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * 1).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 1) * (1 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 1) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 1) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         }
                         else
                         {
@@ -1601,6 +1914,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
                             //if (TaxStatus == "Tax Applied")
                             //{
+<<<<<<< HEAD
 
                             if (ddlCurrency.Text != "USD")
                             {
@@ -1692,6 +2006,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                         }
                         else
                         {
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                             arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
                             dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrr1tx).ToString("##,0");
                             dr["Price"] = Convert.ToDouble(arrr1tx).ToString("##,0");
@@ -1704,6 +2020,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
                             dr["Discountprice"] = getdiscountamount.ToString("##,0");
 
+<<<<<<< HEAD
                             double tax = Math.Round(((Convert.ToDouble(taxableamnt)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
                             dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
                             double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
@@ -1711,6 +2028,40 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                         }
                     }
+=======
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(Convert.ToDouble(taxableamnt + tax)).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                    }
+                    else
+                    {
+
+                        string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                        string TaxValue = (view.ToTable().Rows[0][6].ToString());
+                        //if (TaxStatus == "Tax Applied")
+                        //{
+                        arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                        dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrr1tx).ToString("##,0");
+                        dr["Price"] = Convert.ToDouble(arrr1tx).ToString("##,0");
+                        /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                        dr["pricewithouttax"] = arrr1.ToString("##,0");
+                        dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                        dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        dr["taxablepamt"] = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount).ToString("##,0");
+                        double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
+                        dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                        double tax = Math.Round(((Convert.ToDouble(taxableamnt)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                        double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                        dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                    }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 }
                 if (txtPassengers.Text.ToString() == "2")
                     dr["categoryName"] = view.ToTable().Rows[0][0].ToString();
@@ -1797,6 +2148,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                 //dr["Price"] = Convert.ToDecimal(Convert.ToInt32(ddlpax1rm.SelectedValue) * Convert.ToDouble(view.ToTable().Rows[0][2]));
                 if (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) >= 2)
+<<<<<<< HEAD
                 {
                     if (Session["getbedconfig"] != null)
                     {
@@ -2041,6 +2393,8 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                 }
                 else
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 {
                     if (Session["getbedconfig"] != null)
                     {
@@ -2050,6 +2404,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxStatus = (view.ToTable().Rows[0][7].ToString());
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
 
+<<<<<<< HEAD
 
                             if (ddlCurrency.Text != "USD")
                             {
@@ -2101,6 +2456,25 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                                 dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
                                 dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
                             }
+=======
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrrtx * Convert.ToInt32(1)).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx * Convert.ToInt32(1)).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());     
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * 1).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 1) * (1 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 1) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 1) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         }
                         else if (Session["getbedconfig"].ToString() == "Triple")
                         {
@@ -2108,6 +2482,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                             string TaxStatus = (view.ToTable().Rows[0][7].ToString());
                             string TaxValue = (view.ToTable().Rows[0][6].ToString());
 
+<<<<<<< HEAD
                             if (ddlCurrency.Text != "USD")
                             {
                                 arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
@@ -3552,6 +3927,192 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     if (ViewState["VsRoomDetails"] != null)
                     {
                         dt = ViewState["VsRoomDetails"] as DataTable;
+=======
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrrtx * Convert.ToInt32(3)).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx * Convert.ToInt32(3)).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());     
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * 3).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 3) * (3 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 3) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 3) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                        else
+                        {
+                            Session["totpax"] = 2;
+                            string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                            string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                            arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(2)).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrr1tx * Convert.ToInt32(2)).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());      
+                            dr["pricewithouttax"] = arrr1.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(2)).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr1 * 2) * (2 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr1 * 2) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr1 * 2) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                    }
+                    else
+                    {
+                        Session["totpax"] = 2;
+                        string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                        string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                        arrWZ = view.ToTable().Rows[0][4].ToString().Split(' ');
+                        dr["CRPrice"] = arrWZ[0].ToString() + " " + (arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        dr["Price"] = Convert.ToDouble(arrr1tx * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());    
+                        dr["pricewithouttax"] = arrr1.ToString("##,0");
+                        dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                        dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        //double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        dr["taxablepamt"] = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount).ToString("##,0");
+                        double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
+                        dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                        double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                        double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                        dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                    }
+
+                }
+                else
+                {
+                    if (Session["getbedconfig"] != null)
+                    {
+                        if (Session["getbedconfig"].ToString() == "Single")
+                        {
+                            Session["totpax"] = 1;
+                            string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                            string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                            arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrrtx).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString()); 
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * Convert.ToInt32(1)).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 1) * (1 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 1) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 1) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                        else if (Session["getbedconfig"].ToString() == "Triple")
+                        {
+                            Session["totpax"] = 3;
+                            string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                            string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                            arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrrtx).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrrtx).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString()); 
+                            dr["pricewithouttax"] = arrr.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr * Convert.ToInt32(3)).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr * 3) * (3 * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr * 3) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr * 3) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                        else
+                        {
+                            Session["totpax"] = 2;
+                            string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                            string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                            arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                            dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrr1tx).ToString("##,0");
+                            dr["Price"] = Convert.ToDouble(arrr1tx).ToString("##,0");
+                            /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString()); 
+                            dr["pricewithouttax"] = arrr1.ToString("##,0");
+                            dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                            dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                            double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                            dr["taxablepamt"] = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount).ToString("##,0");
+                            double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
+                            dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                            double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                            double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                            dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                            dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                        }
+                    }
+                    else
+
+                    {
+                        Session["totpax"] = 2;
+                        string TaxStatus = (view.ToTable().Rows[0][7].ToString());
+                        string TaxValue = (view.ToTable().Rows[0][6].ToString());
+
+                        arrWZ = view.ToTable().Rows[0][5].ToString().Split(' ');
+                        dr["CRPrice"] = arrWZ[0].ToString() + " " + Convert.ToDouble(arrr1tx).ToString("##,0");
+                        dr["Price"] = Convert.ToDouble(arrr1tx).ToString("##,0");
+                        /* dr["Tax"] = 0;*/// Convert.ToDecimal(TaxValue.ToString());
+                        dr["pricewithouttax"] = arrr1.ToString("##,0");
+                        dr["pricewithouttax1"] = arrr1.ToString("##,0");
+                        dr["Total"] = Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())).ToString("##,0");
+                        double getdiscountamount = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) * (Convert.ToInt32(view.ToTable().Rows[0][10].ToString()) * Convert.ToDouble(Session["getdiscountvalue"].ToString()))) / 100;
+                        dr["taxablepamt"] = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount).ToString("##,0");
+                        double taxableamnt = (Convert.ToDouble(arrr1 * Convert.ToInt32(view.ToTable().Rows[0][10].ToString())) - getdiscountamount);
+                        dr["Discountprice"] = getdiscountamount.ToString("##,0");
+
+                        double tax = Math.Round(((taxableamnt) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Tax1"] = Convert.ToDouble(tax).ToString("##,0");
+                        double taxableprice = Math.Round(((arrr1 * Convert.ToInt32(1)) * Convert.ToDouble(view.ToTable().Rows[0][6].ToString().Split('R')[1])) / 100);
+                        dr["Totalprice"] = Convert.ToDouble(taxableamnt + tax).ToString("##,0");
+                        dr["texableprice"] = Convert.ToDouble(taxableprice).ToString("##,0");
+                    }
+
+                }
+
+                int Counter = 0;
+                foreach (DataRow dr1 in dtInsertable.Rows)
+                {
+                    Counter++;
+                    if (dr1["RoomNumber"].ToString() == hfRoomId.Value)
+                    {
+                        dr1.Delete();
+                        hfRoomId.Value = "";
+                        break;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     }
                     else
                     {
@@ -3568,6 +4129,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cabin cannot be selected as rates have not been mapped. Please send request to your sales representative to add rates.')", true);
                     return;
                 }
+<<<<<<< HEAD
             }
             else
             {
@@ -3591,6 +4153,44 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                 //ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('Cabin cannot be selected as rates have not been mapped. Please send request to your sales representative to add rates.')", true);
                 return;
+=======
+                int i = 0;
+                //if (Session["getroowindex"] != null)
+                //{
+                //    try
+                //    {
+                //        i = Convert.ToInt32(Session["getroowindex"].ToString());
+                //        dtInsertable.Rows[i].Delete();
+                //        Session["getroowindex"] = null;
+                //    }
+                //    catch { }
+                //}
+
+                if (Counter > 0)
+                {
+
+                    dtInsertable.AcceptChanges();
+                    if (Session["getroowindex"] != null)
+                    {
+                        dtInsertable.Rows.InsertAt(dr, Convert.ToInt32(Session["getroowindex"].ToString()));
+                        Session["getroowindex"] = null;
+                    }
+                    else
+                    {
+                        dtInsertable.Rows.Add(dr);
+                    }
+
+                }
+                else
+                    dtInsertable.Rows.Add(dr);
+
+                ViewState["VsRoomDetails"] = dtInsertable;
+
+                GridRoomPaxDetail.DataSource = dtInsertable;
+                GridRoomPaxDetail.DataBind();
+                //hfRoomId.Value = null;
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
         }
         catch (Exception ex)
@@ -3599,7 +4199,12 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
             DataTable dt = new DataTable();
             if (ViewState["VsRoomDetails"] != null)
             {
+<<<<<<< HEAD
                 dt = ViewState["VsRoomDetails"] as DataTable;
+=======
+                ButtonsDiv.Style.Remove("display");
+                GridRoomPaxDetail.Columns[0].Visible = true;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
             }
             else
             {
@@ -3608,8 +4213,25 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     dt = Session["blank"] as DataTable;
                 }
             }
+<<<<<<< HEAD
             GridRoomPaxDetail.DataSource = dt;
             GridRoomPaxDetail.DataBind();
+=======
+            if (Session["getdiscountvalue"] != null)
+            {
+                if (Session["getdiscountvalue"].ToString() == "0")
+                {
+                    GridRoomPaxDetail.Columns[6].Visible = false;
+                    GridRoomPaxDetail.Columns[7].Visible = false;
+
+
+                }
+            }
+            Session["getpax"] = txtPassengers.Text.ToString();
+        }
+        catch (Exception EX)
+        {
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             calculateTotal();
 
@@ -3621,34 +4243,74 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
     protected void GridRoomPaxDetail_SelectedIndexChanged1(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         GridViewRow row = GridRoomPaxDetail.SelectedRow;
         b = row.Cells[0].Text;
     }
 
     protected void ddlpax1rm_SelectedIndexChanged(object sender, EventArgs e)
     {
+=======
+        Session["totpax"] = null;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
     }
 
 
 
+<<<<<<< HEAD
     private string currency(string amount, string code)
+=======
+        catch
+        {
+        }
+    }
+    protected void Button3_Click(object sender, EventArgs e)
+    {
+        Session["Rrate"] = null;
+        Session["totpax"] = null;
+        ViewState["VsRoomDetails"] = null;
+        Session["BookedRooms"] = null;
+        gdvRoomCategories.DataSource = null;
+        gdvRoomCategories.DataBind();
+        GridRoomPaxDetail.DataSource = null;
+        GridRoomPaxDetail.DataBind();
+        Response.Redirect(Request.RawUrl);
+    }
+    protected void Button2_Click(object sender, EventArgs e)
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     {
         var countryname = "";
         try
         {
             if (Session["Dollar"].ToString() == "1")
             {
+<<<<<<< HEAD
                 WebClient obj = new WebClient();
                 //var rsponse = obj.DownloadString("http://www.apilayer.net/api/live?access_key=7adab05b358d13cdb27549445ba9f15d&format=1&source=USD");
                 var rsponse = obj.DownloadString("http://www.apilayer.net/api/live?access_key=1f011c76b84ee0d412dd6611c0545986&format=1&source=USD");
                 dynamic data = JObject.Parse(rsponse);
                 var aa = data.quotes;
                 foreach (var r in aa)
+=======
+                #region Inserting Booking Data
+                Session["cruiseBookingUrl"] = Request.Url.ToString();
+
+                DataTable RoomDetails = ViewState["VsRoomDetails"] as DataTable;
+                SessionServices.SaveSession<DataTable>("BookedRooms", RoomDetails);
+                //Session["BookedRooms"] = RoomDetails;
+
+                LockTheBooking(RoomDetails);
+
+                ///    
+                //Response.Redirect("sendtoairpay.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckinDate"].ToString());
+                if (Session["Redirecturl"] == null)
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 {
                     var sd = "USD" + code;
                     if (r.Name.Trim().ToLower() == sd.Trim().ToLower())
                     {
+<<<<<<< HEAD
                         var m = r.Name;
                         var n = r.Value;
                         decimal amounts = Convert.ToDecimal(amount);
@@ -3666,6 +4328,10 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                         ViewState["Totalprice"] = value;
                         ViewState["lblgetTotal"] = value;
                         break;
+=======
+                        string Redirecturl = "SummarizedDetails1.aspx?BookedId=" + BookedId + "&PackName=" + Request.QueryString["PackageName"].ToString() + "&NoOfNights=" + Request.QueryString["NoOfNights"].ToString() + "&CheckinDate=" + Request.QueryString["CheckInDate"].ToString() + "&CheckOutdate=" + Request.QueryString["CheckOutDate"].ToString() + "&Discount=" + Request.QueryString["Discount"].ToString() + "&PackId=" + Session["PackageId"].ToString() + "&DepartureId=" + Request.QueryString["DepartureId"].ToString();
+                        Session["Redirecturl"] = Redirecturl;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     }
                     else
                     {
@@ -3687,11 +4353,22 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
 
                     decimal amounts = Convert.ToDecimal(amount);
 
+<<<<<<< HEAD
                     var am = amounts / dollar;
                     Session["Dollar"] = dollar;
                     string value = am.ToString("#.00");
                     Session["PricePerPersonsharing"] = value;
                     Session["PricePerPersonsingleuse"] = value;
+=======
+    protected void lnkLogout_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Session.Abandon();
+        Session.RemoveAll();
+        System.Web.Security.FormsAuthentication.SignOut();
+        Response.Redirect("SearchProperty1.aspx");
+    }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                     ViewState["pricewithouttax1"] = value;
                     ViewState["Total"] = value;
@@ -3725,7 +4402,22 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
         {
             if (ddlCurrency.Text != "USD")
             {
+<<<<<<< HEAD
                 Session["SetCurrency"] = "INR";
+=======
+                lblmessage.Visible = false;
+                ImageButton imgbtn = (ImageButton)e.CommandSource;
+                GridViewRow grow = (GridViewRow)imgbtn.NamingContainer;
+                DataTable dtnew = ViewState["VsRoomDetails"] as DataTable;
+                dtnew.Rows.RemoveAt(grow.RowIndex);
+                dtnew.AcceptChanges();
+                ViewState["VsRoomDetails"] = dtnew;
+                SessionServices.SaveSession<DataTable>("BookedRooms", dtnew);
+                //Session["BookedRooms"] = dtnew;
+                GridRoomPaxDetail.DataSource = dtnew;
+                GridRoomPaxDetail.DataBind();
+                calculateTotal();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             }
             else
@@ -3739,6 +4431,7 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     Session["SetCurrency"] = "INR";
                 }
             }
+<<<<<<< HEAD
             bindRoomRates();
 
             if (ddlCurrency.Text != "USD")
@@ -3777,6 +4470,533 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     LoopInsertStatus++;
 
 
+=======
+        }
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Session["DepartureSearchUrl"].ToString());
+    }
+    protected void GridRoomPaxDetail_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        try
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                DataTable getcat = new DataTable();
+                string getvalue = "";
+                if (ViewState["VsRoomDetails"] != null)
+                {
+                    getcat = ViewState["VsRoomDetails"] as DataTable;
+                }
+                var ddl = (DropDownList)e.Row.FindControl("ddlbedconfiguration");
+                var ddlrcm = (DropDownList)e.Row.FindControl("ddlCategoryType");
+                DataSet ds = rtypemaster.GetallData();
+                DataTable dt = ds.Tables[0];
+                DataTable dt12 = Session["Getroomcatid"] as DataTable;
+
+                try
+                {
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        ddl.DataSource = dt;
+                        ddl.DataValueField = "RoomTypeId";
+                        ddl.DataTextField = "RoomType";
+                        ddl.DataBind();
+                        ddl.Items.Insert(0, "-Select-");
+                        if (dt12 != null && dt12.Rows.Count > 0)
+                        {
+                            if (dt12.Rows[0]["RmType"].ToString() != "Triple")
+                            {
+
+                                ddl.Items.FindByValue("3").Enabled = false;
+                                //ddl.Items[3].Attributes["disabled"] = "disabled";
+                            }
+                            else
+                            {
+                                ddl.Items.FindByValue("3").Enabled = true;
+                                //ddl.Items[3].Attributes["enabled"] = "enabled";
+                            }
+                        }
+                        try
+                        {
+                            if (e.Row.RowIndex == 0)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[0]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 1)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[1]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 2)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[2]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 3)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[3]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 4)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[4]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 5)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[5]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 6)
+                            {
+                                ddl.Items.FindByText(getcat.Rows[6]["RoomType"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+
+                        if (Session["GetroomType1"] == null)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                        SessionServices.SaveSession("savebadcon", ddl.SelectedValue.ToString());
+
+                    }
+
+                }
+                catch (Exception ex)
+                { }
+                try
+                {
+
+                    DataSet ds1 = rcmaster.GetallData();
+                    DataTable dt1 = Session["Getroomcatid"] as DataTable;
+                    if (dt1 != null && dt1.Rows.Count > 0)
+                    {
+                        ddlrcm.DataSource = dt1;
+                        ddlrcm.DataValueField = "roomcategoryid";
+                        ddlrcm.DataTextField = "Cabin Category";
+                        ddlrcm.DataBind();
+                        ddlrcm.Items.Insert(0, "-Select-");
+                        try
+                        {
+                            if (e.Row.RowIndex == 0)
+                            {
+                                getvalue = getcat.Rows[0]["RoomCategoryId"].ToString();
+                                ddlrcm.Items.FindByValue(getvalue).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 1)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[1]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 2)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[2]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 3)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[3]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 4)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[4]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 5)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[5]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        try
+                        {
+                            if (e.Row.RowIndex == 6)
+                            {
+                                ddlrcm.Items.FindByValue(getcat.Rows[6]["RoomCategoryId"].ToString()).Selected = true;
+                            }
+                        }
+                        catch { }
+                        if (Session["Getcateid1"] == null)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        catch
+        {
+        }
+
+    }
+    protected void txtPassengers_TextChanged(object sender, EventArgs e)
+    {
+        Session["totpax"] = null;
+    }
+    private void loadall()
+    {
+        Session["totpax"] = txtPassengers.Text.ToString();
+        string get = Request.QueryString["CheckIndate"].ToString();
+        if (Request.QueryString["CheckIndate"].ToString() != "")
+        {
+            Session["checkin"] = Request.QueryString["CheckIndate"].ToString();
+        }
+        BindCruiseRoomRates();
+        //if (GridRoomPaxDetail.Rows.Count > 0)
+        //{
+        //    ButtonsDiv.Style.Remove("display");
+        //}
+        //else
+        //load();
+        DataTable dt = new DataTable();
+        DataColumn dc;
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "RoomNumber";
+        dt.Columns.Add(dc);
+
+        //dc = new DataColumn();
+        //dc.DataType = Type.GetType("System.Int32");
+        //dc.ColumnName = "RoomCategoryId";
+        //dt.Columns.Add(dc);
+
+        // Create second column.
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Pax";
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Currency";
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "CRPrice";
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Tax1";
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Tax";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "pricewithouttax1";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "categoryName";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Total";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Discount";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Discountprice";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "Totalprice";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "texableprice";
+        dt.Columns.Add(dc);
+        dc = new DataColumn();
+        dc.DataType = Type.GetType("System.String");
+        dc.ColumnName = "taxablepamt";
+        dt.Columns.Add(dc);
+        DataRow dr = dt.NewRow();
+        dr["Tax"] = " ";
+        dt.Rows.Add(dr, 0);
+        Session["blank"] = dt;
+        if (dt != null && dt.Rows.Count > 0)
+        {
+            GridRoomPaxDetail.DataSource = dt;
+            GridRoomPaxDetail.DataBind();
+            GridRoomPaxDetail.Columns[0].Visible = false;
+        }
+        else
+        {
+
+        }
+        DataTable bookedRooms = SessionServices.RetrieveSession<DataTable>("BookedRooms");
+        if (bookedRooms != null)
+        {
+            if (packageid1 != "")
+
+            {
+                ViewState["VsRoomDetails"] = bookedRooms;
+            }
+            else
+            {
+                ViewState["VsRoomDetails"] = null;
+            }
+
+
+
+
+            GridRoomPaxDetail.DataSource = bookedRooms;
+            GridRoomPaxDetail.DataBind();
+            GridRoomPaxDetail.Columns[0].Visible = true;
+            calculateTotal();
+        }
+        {
+            ButtonsDiv.Style.Remove("display");
+        }
+    }
+    protected void btnShow_Click(object sender, EventArgs e)
+
+    {
+        if (ViewState["VsRoomDetails"] != null)
+        {
+
+        }
+        else
+        {
+            if (txtPassengers.Text == " ")
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please enter occupacy')", true);
+                return;
+            }
+            else
+            {
+                int count = 0;
+                try
+                {
+                    count = Convert.ToInt32(txtPassengers.Text);
+
+                    if (Convert.ToInt32(Session["getdefaultnoofbed"].ToString()) == 3)
+                    {
+                        if (Convert.ToInt32(txtPassengers.Text) <= 3)
+                        {
+                            Session["1"] = 1;
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('occupacy should be equal or less than 3')", true);
+                            return;
+                        }
+                    }
+                    else if (Convert.ToInt32(Session["getdefaultnoofbed"].ToString()) < 3)
+                    {
+                        if (Convert.ToInt32(txtPassengers.Text) < 3)
+                        {
+
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('occupacy should be less than 3')", true);
+                            return;
+                        }
+                    }
+                }
+                catch
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please enter valid occupacy')", true);
+                    return;
+                }
+            }
+            //Session["totpax"] = txtPassengers.Text;
+            if (Convert.ToInt32(txtPassengers.Text) > 0)
+            {
+                Session["totpax"] = txtPassengers.Text.ToString();
+
+                Session["checkin"] = Request.QueryString["CheckIndate"].ToString(); ;
+                BindCruiseRoomRates();
+                //if (GridRoomPaxDetail.Rows.Count > 0)
+                //{
+                //    ButtonsDiv.Style.Remove("display");
+                //}
+                //else
+                //load();
+                DataTable dt = new DataTable();
+                DataColumn dc;
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "RoomNumber";
+                dt.Columns.Add(dc);
+
+                //dc = new DataColumn();
+                //dc.DataType = Type.GetType("System.Int32");
+                //dc.ColumnName = "RoomCategoryId";
+                //dt.Columns.Add(dc);
+
+                // Create second column.
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "Pax";
+                dt.Columns.Add(dc);
+
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "Currency";
+                dt.Columns.Add(dc);
+
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "CRPrice";
+                dt.Columns.Add(dc);
+
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "Tax1";
+                dt.Columns.Add(dc);
+
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "Tax";
+                dt.Columns.Add(dc);
+                dc = new DataColumn();
+                dc.DataType = Type.GetType("System.String");
+                dc.ColumnName = "pricewithouttax1";
+                dt.Columns.Add(dc);
+
+
+                DataRow dr = dt.NewRow();
+                dr["Tax"] = " ";
+                dt.Rows.Add(dr, 0);
+                Session["blank"] = dt;
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    GridRoomPaxDetail.DataSource = dt;
+                    GridRoomPaxDetail.DataBind();
+                    GridRoomPaxDetail.Columns[0].Visible = false;
+                }
+                else
+                {
+
+                }
+                {
+                    ButtonsDiv.Style.Remove("display");
+                }
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please select occupacy')", true);
+                return;
+            }
+        }
+    }
+    public void BindCruiseRoomRates()
+    {
+
+        try
+        {
+            // bindroomddl();
+            bindRoomRates();
+            setImageMap();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "blockArea", "blockArea();", true);
+        }
+
+        catch
+        {
+        }
+    }
+    public void load()
+
+    {
+        try
+        {
+            if (gdvRoomCategories.Rows.Count > 1)
+            {
+                dt = SessionServices.RetrieveSession<DataTable>("Rrate");
+                #region getRoomCategory
+                blsr.action = "GetRoomCateId";
+
+                //hfRoomId.Value = e.PostBackValue.ToString();
+                blsr.RoomId = hfRoomId.Value;
+                blsr.PackageId = Session["PackageId"].ToString();
+
+                roomCatId = dlsr.getRoomCategory(blsr);
+                #endregion
+                Int32.TryParse(txtPassengers.Text, out irpax);
+                dv = new DataView();
+                dv = new DataView(dt, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
+                if (Convert.ToInt32(txtPassengers.Text) > 0)
+                {
+                    blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
+                    blsr.action = "Getmaxrooms";
+                    blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
+                    dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
+                    if (dtGetReturnedData != null)
+                    {
+                        if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
+                        {
+                            try
+                            {
+                                lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
+                            }
+                            catch
+                            { }
+                            addrows(dv, roomCatId);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot book any more rooms. Please contact our reservations office to make additional bookings.')", true);
+                        }
+                    }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 }
 
             }
@@ -3825,12 +5045,109 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
         }catch { }
 
     }
+    protected void ImageMap1_Click(object sender, ImageMapEventArgs e)
+    {
+        try
+        {
+            if (gdvRoomCategories.Rows.Count > 1)
+            {
+                dt = SessionServices.RetrieveSession<DataTable>("Rrate");
+                //dt = Session["Rrate"] as DataTable;
+                #region getRoomCategory
+                blsr.action = "GetRoomCateId";
+
+                hfRoomId.Value = e.PostBackValue.ToString();
+                blsr.RoomId = hfRoomId.Value;
+                blsr.PackageId = Session["PackageId"].ToString();
+
+                roomCatId = dlsr.getRoomCategory(blsr);
+                #endregion
+                Int32.TryParse(txtPassengers.Text, out irpax);
+                dv = new DataView();
+                dv = new DataView(dt, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
+                if (Session["Getcateid"] == null)
+                {
+                    Session["Getcateid"] = roomCatId.ToString();
+                }
+                else if (Session["Getcateid1"] == null)
+                {
+                    Session["Getcateid1"] = roomCatId.ToString();
+                }
+                else if (Session["Getcateid2"] == null)
+                {
+                    Session["Getcateid2"] = roomCatId.ToString();
+                }
+                else if (Session["Getcateid3"] == null)
+                {
+                    Session["Getcateid3"] = roomCatId.ToString();
+                }
+                else if (Session["Getcateid4"] == null)
+                {
+                    Session["Getcateid4"] = roomCatId.ToString();
+                }
+                DataTable dtget = dv.ToTable();
+                if (Session["GetroomType"] == null)
+                {
+                    Session["GetroomType"] = dtget.Rows[0]["RmType"].ToString();
+                }
+                else if (Session["GetroomType1"] == null)
+                {
+                    Session["GetroomType1"] = dtget.Rows[0]["RmType"].ToString();
+                }
+
+                blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
+                blsr.action = "Getmaxrooms";
+                blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
+                dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
+                if (dtGetReturnedData != null)
+                {
+                    if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
+                    {
+                        lblmessage.Visible = true;
+                        lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
+                        addrows(dv, roomCatId);
+                    
+                        lblmessage.Text = "cabin no "+ hfRoomId.Value + " reserved successfully";
+                        ScriptManager.RegisterStartupScript(Page, GetType(), "disp_confirm", "<script>disp_confirm()</script>", false);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot book any more rooms. Please contact our reservations office to make additional bookings.')", true);
+                    }
+                }
+
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
 
     private string currency1()
     {
         var countryname = "";
         try
         {
+<<<<<<< HEAD
+=======
+            int lockDuration = ConfigurationManager.AppSettings["LockDuration"] != null ? Convert.ToInt16(ConfigurationManager.AppSettings["LockDuration"]) : 10;
+            BALBookingLock bl = new BALBookingLock();
+
+            int accomId = Session["AccomId"] != null ? Convert.ToInt16(Session["AccomId"]) : 7;
+            Session["AccomId"] = accomId;
+            Guid uniqueIdentifier = Guid.NewGuid();
+
+            bl.AccomId = accomId;
+            bl.LockIdentifier = uniqueIdentifier.ToString();
+             bl.LockExpireAt = DateTime.Now.AddMinutes(lockDuration);
+         //   bl.LockExpireAt = System.DateTime.Now;
+            bl.LockRooms = new List<LockRoom>();
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
             WebClient obj = new WebClient();
             var rsponse = obj.DownloadString("http://www.apilayer.net/api/live?access_key=1f011c76b84ee0d412dd6611c0545986&format=1&source=USD");
@@ -3848,8 +5165,431 @@ public partial class Cruise_booking_CruiseBooking : BaseClass
                     break;
                 }                
             }
+<<<<<<< HEAD
+=======
+            DALBookingLock dbl = new DALBookingLock();
+            dbl.PlaceLock(bl);
+
+            SessionServices.SaveSession<BALBookingLock>("BookingLock", bl);
+            //Session["BookingLock"] = bl;
+        }
+        catch (Exception exp)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "LockError", "javascript:alert('" + exp.Message + "')", true);
+            throw exp;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
         catch { }
         return countryname;
+    }
+
+    protected void GridRoomPaxDetail_DataBound(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void GridRoomPaxDetail_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    private void FillAgents()
+    {
+        try
+        {
+            AgentMaster oAgentMaster = new AgentMaster();
+            blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
+            AgentDTO[] oAgentData = oAgentMaster.GetData1(blsr._iAgentId);
+            ListItemCollection li = new ListItemCollection();
+            ListItem l = new ListItem("Select Ref Agent", "0");
+            ddlAgentRef.Items.Insert(0, l);
+            if (oAgentData != null)
+            {
+                for (int i = 0; i < oAgentData.Length; i++)
+                {
+                    l = new ListItem(oAgentData[i].AgentName.ToString(), oAgentData[i].AgentId.ToString());
+                    ddlAgentRef.Items.Insert(i + 1, l);
+                }
+            }
+        }
+        catch { ddlAgentRef.Visible = false; }
+    }
+    protected void ddlAgentRef_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        bindRoomRates();
+    }
+    protected void ddlbedconfiguration_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        lblmessage.Visible = false;
+
+        try
+        {
+            if (gdvRoomCategories.Rows.Count > 1)
+            {
+                DropDownList ddl = (DropDownList)sender;
+                GridViewRow grow = (GridViewRow)ddl.NamingContainer;
+
+                Session["getroowindex"] = grow.RowIndex;
+                Session["getbedconfig"] = ddl.SelectedItem.ToString();
+                if (grow.RowIndex == 0)
+                {
+                    Session["GetroomType1"] = ddl.SelectedItem.ToString();
+                }
+                if (grow.RowIndex == 1)
+                {
+                    Session["GetroomType2"] = ddl.SelectedItem.ToString();
+                }
+                if (grow.RowIndex == 2)
+                {
+                    Session["GetroomType3"] = ddl.SelectedItem.ToString();
+                }
+                if (grow.RowIndex == 3)
+                {
+                    Session["GetroomType4"] = ddl.SelectedItem.ToString();
+                }
+                if (grow.RowIndex == 4)
+                {
+                    Session["GetroomType5"] = ddl.SelectedItem.ToString();
+                }
+                ViewState["dt"] = null;
+                DataTable dt1 = SessionServices.RetrieveSession<DataTable>("Rrate");
+                //DataTable dt1 = Session["Rrate"] as DataTable;
+                #region getRoomCategory
+                blsr.action = "GetRoomCateId";
+                string jgkj = "";
+                //hfRoomId.Value = e.PostBackValue.ToString();
+                //blsr.RoomId = hfRoomId.Value;
+                //blsr.PackageId = Session["PackageId"].ToString();
+                string rmtype = "";
+                foreach (GridViewRow row in GridRoomPaxDetail.Rows)
+                {
+                    if (row.RowIndex == grow.RowIndex)
+                    {
+                        if (row.RowType == DataControlRowType.DataRow)
+                        {
+
+                            DropDownList StopButton = (DropDownList)row.FindControl("ddlCategoryType");
+                            DropDownList StopButton1 = (DropDownList)row.FindControl("ddlbedconfiguration");
+                            Label getroomno = (Label)row.FindControl("RoomId");
+                            hfRoomId.Value = getroomno.Text;
+                            if (StopButton.SelectedIndex > 0)
+                            {
+
+                            }
+                            else
+                            {
+                                if (Convert.ToInt32(dt.Rows[0]["DefaultNoOfBeds"].ToString()) >= 3)
+                                {
+
+                                }
+                                else
+                                {
+                                    StopButton1.Items.FindByValue("3").Enabled = false;
+                                }
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Please select category first')", true);
+                                return;
+                            }
+
+                            roomCatId = Convert.ToInt32(StopButton.SelectedValue.ToString());
+
+                            rmtype = StopButton1.SelectedItem.ToString();
+                            //Session["getbedconfig"] = StopButton1.SelectedItem.ToString();
+                            Session["GetroomType"] = StopButton1.SelectedItem.ToString();
+                            //if (roomCatId == 1)
+                            //{
+                            //    ddlpax.SelectedValue = "1";
+                            //}
+                            //if (roomCatId == 2)
+                            //{
+                            //    ddlpax.SelectedValue = "2";
+                            //}
+                            //if (roomCatId == 3)
+                            //{
+                            //    ddlpax.SelectedValue = "2";
+                            //}
+                            //if (roomCatId == 4)
+                            //{
+                            //    ddlpax.SelectedValue = "2";
+                            //}
+
+                            //ImageButton StartButton = (ImageButton)row.FindControl("startImageButton");
+
+
+                        }
+                    }
+                }
+                var uyktu = jgkj;
+
+
+                //roomCatId = DD;
+                #endregion
+                Int32.TryParse(txtPassengers.Text, out irpax);
+                dv = new DataView();
+
+                dv = new DataView(dt1, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
+                //dv.RowFilter = "RmType = '" + rmtype + "'";
+                if (dv != null && dv.Count >= 1)
+                {
+
+                    blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
+                    blsr.action = "Getmaxrooms";
+                    blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
+                    dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
+                    if (dtGetReturnedData != null)
+                    {
+                        if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
+                        {
+                            //ViewState["VsRoomDetails"] = null;
+                            lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
+                            addrows(dv, roomCatId);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot book any more rooms. Please contact our reservations office to make additional bookings.')", true);
+                        }
+                    }
+
+                }
+                else
+                {
+                    DataTable dt = new DataTable();
+                    if (ViewState["VsRoomDetails"] != null)
+                    {
+                        dt = ViewState["VsRoomDetails"] as DataTable;
+                    }
+                    else
+                    {
+                        if (Session["blank"] != null)
+                        {
+                            dt = Session["blank"] as DataTable;
+                        }
+                    }
+                    GridRoomPaxDetail.DataSource = dt;
+                    GridRoomPaxDetail.DataBind();
+
+                    if (Convert.ToInt32(dt.Rows[0]["DefaultNoOfBeds"].ToString()) >= 3)
+                    {
+
+                    }
+                    else
+                    {
+                        ddlpax.Items.FindByValue("3").Enabled = false;
+                    }
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('Sorry,Not available at this time')", true);
+                    return;
+                }
+            }
+            else
+            {
+                DataTable dt = new DataTable();
+                if (ViewState["VsRoomDetails"] != null)
+                {
+                    dt = ViewState["VsRoomDetails"] as DataTable;
+                }
+                else
+                {
+                    if (Session["blank"] != null)
+                    {
+                        dt = Session["blank"] as DataTable;
+                    }
+                }
+                GridRoomPaxDetail.DataSource = dt;
+                GridRoomPaxDetail.DataBind();
+                if (Convert.ToInt32(dt.Rows[0]["DefaultNoOfBeds"].ToString()) >= 3)
+                {
+
+                }
+                else
+                {
+                    ddlpax.Items.FindByValue("3").Enabled = false;
+                }
+
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
+                return;
+            }
+        }
+        catch
+        {
+
+        }
+    }
+    protected void ddlCategoryType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        try
+        {
+            if (gdvRoomCategories.Rows.Count > 1)
+            {
+                DropDownList ddl = (DropDownList)sender;
+                GridViewRow grow = (GridViewRow)ddl.NamingContainer;
+                Session["getroowindex"] = grow.RowIndex;
+                Random rand = new Random();
+                int getvalue = rand.Next(0, 2);
+                if (grow.RowIndex == 0)
+                {
+                    Session["Getcateid"] = ddl.SelectedValue.ToString();
+                }
+                if (grow.RowIndex == 1)
+                {
+                    Session["Getcateid1"] = ddl.SelectedValue.ToString();
+                }
+                if (grow.RowIndex == 2)
+                {
+                    Session["Getcateid2"] = ddl.SelectedValue.ToString();
+                }
+                if (grow.RowIndex == 3)
+                {
+                    Session["Getcateid3"] = ddl.SelectedValue.ToString();
+                }
+                if (grow.RowIndex == 4)
+                {
+                    Session["Getcateid4"] = ddl.SelectedValue.ToString();
+                }
+                int getit = grow.RowIndex;
+                ViewState["dt"] = null;
+                DataTable dt1 = SessionServices.RetrieveSession<DataTable>("Rrate");
+                #region getRoomCategory
+                blsr.action = "GetRoomCateId";
+                string jgkj = "";
+                //hfRoomId.Value = e.PostBackValue.ToString();
+                //blsr.RoomId = hfRoomId.Value;
+                //blsr.PackageId = Session["PackageId"].ToString();
+                foreach (GridViewRow row in GridRoomPaxDetail.Rows)
+                {
+                    if (row.RowType == DataControlRowType.DataRow)
+                    {
+
+                        DropDownList StopButton = (DropDownList)row.FindControl("ddlCategoryType");
+                        roomCatId = Convert.ToInt32(ddl.SelectedValue.ToString());
+                        DataTable dtRoomsdata;
+
+                        dtRoomsdata = bindroomddl();
+                        DataView dv1 = dtRoomsdata.DefaultView;
+
+                        dv1.RowFilter = "RoomCategory = '" + ddl.SelectedItem.ToString() + "' and BookedStatus = 'Available'";
+                        {
+                            hfRoomId.Value = (string)dv1[getvalue]["RoomNo"];
+                        }
+                        break;
+                        //ImageButton StartButton = (ImageButton)row.FindControl("startImageButton");
+
+
+                    }
+                }
+                var uyktu = jgkj;
+
+
+                //roomCatId = DD;
+                #endregion
+                Int32.TryParse(txtPassengers.Text, out irpax);
+                dv = new DataView();
+                dv = new DataView(dt1, "roomcategoryid='" + roomCatId + "'", "roomcategoryid", DataViewRowState.CurrentRows);
+                if (dv != null && dv.Count >= 1)
+                {
+                    if (Convert.ToInt32(txtPassengers.Text) > 0)
+                    {
+                        Session["getbedconfig"] = null;
+                        DataTable dt123 = dv.ToTable();
+                        Session["GetroomType"] = dt123.Rows[0]["RmType"].ToString();
+                        Session["Getcateid"] = roomCatId;
+                        blsr._iAgentId = Session["UserCode"] != null ? Convert.ToInt32(Session["UserCode"].ToString()) : 247;
+                        blsr.action = "Getmaxrooms";
+                        blsr._dtStartDate = Convert.ToDateTime(Session["checkin"]);
+                        dtGetReturnedData = dlsr.getMaxRoomsBookable(blsr);
+                        if (dtGetReturnedData != null)
+                        {
+                            if (GridRoomPaxDetail.Rows.Count < Convert.ToInt32(dtGetReturnedData.Rows[0][0]))
+                            {
+                                //ViewState["VsRoomDetails"] = null;
+                                lblCurr.Text = dv.ToTable().Rows[0]["Currency"].ToString();
+                                addrows(dv, roomCatId);
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "QuoteFull", "javascript:alert('You cannot book any more rooms. Please contact our reservations office to make additional bookings.')", true);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    DataTable dt = new DataTable();
+                    if (ViewState["VsRoomDetails"] != null)
+                    {
+                        dt = ViewState["VsRoomDetails"] as DataTable;
+                    }
+                    else
+                    {
+                        if (Session["blank"] != null)
+                        {
+                            dt = Session["blank"] as DataTable;
+                        }
+                    }
+                    GridRoomPaxDetail.DataSource = dt;
+                    GridRoomPaxDetail.DataBind();
+
+                    calculateTotal();
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
+                    return;
+                }
+            }
+            else
+            {
+
+                DataTable dt = new DataTable();
+                if (ViewState["VsRoomDetails"] != null)
+                {
+                    dt = ViewState["VsRoomDetails"] as DataTable;
+                }
+                else
+                {
+                    if (Session["blank"] != null)
+                    {
+                        dt = Session["blank"] as DataTable;
+                    }
+                }
+                GridRoomPaxDetail.DataSource = dt;
+                GridRoomPaxDetail.DataBind();
+
+                calculateTotal();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this room,try selecting Passengers first')", true);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            DataTable dt = new DataTable();
+            if (ViewState["VsRoomDetails"] != null)
+            {
+                dt = ViewState["VsRoomDetails"] as DataTable;
+            }
+            else
+            {
+                if (Session["blank"] != null)
+                {
+                    dt = Session["blank"] as DataTable;
+                }
+            }
+            GridRoomPaxDetail.DataSource = dt;
+            GridRoomPaxDetail.DataBind();
+
+            calculateTotal();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Showstatus", "javascript:alert('No data found for this category,try another category')", true);
+            return;
+        }
+    }
+
+    protected void GridRoomPaxDetail_SelectedIndexChanged1(object sender, EventArgs e)
+    {
+        GridViewRow row = GridRoomPaxDetail.SelectedRow;
+        b = row.Cells[0].Text;
+    }
+
+    protected void ddlpax1rm_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
     }
 }

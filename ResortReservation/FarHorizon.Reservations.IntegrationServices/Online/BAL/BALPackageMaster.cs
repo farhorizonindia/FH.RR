@@ -36,7 +36,10 @@ namespace FarHorizon.Reservations.BusinessServices.Online.BAL
         public string ItineraryLink { get; set; }
         public DateTime Checkin { get; set; }
         public DateTime checkout { get; set; }
+<<<<<<< HEAD
 
         public bool IsActive { get; set; }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     }
 }

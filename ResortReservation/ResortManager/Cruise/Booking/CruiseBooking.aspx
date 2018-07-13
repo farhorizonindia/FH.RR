@@ -14,8 +14,11 @@
     <link rel="stylesheet" href="css/css/reset.css">
     <!-- CSS reset -->
     <link rel="stylesheet" href="css/css/style.css">
+<<<<<<< HEAD
 
    
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- Resource style -->
     <script src="js/modernizr.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -132,7 +135,11 @@ area:focus {outline: none!important; border:0!important; }
     <!-- Animate.CSS -->
     <link rel="stylesheet" href="css/Newcss/animate.css" type="text/css" media="all">
     <!-- //Custom-Stylesheet-Links -->
+<<<<<<< HEAD
         <link  rel="stylesheet" id="csspath" runat="server" type="text/css" media="all"/>
+=======
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     <!-- Fonts -->
     <!-- Body-Font -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" type="text/css">
@@ -157,6 +164,7 @@ area:focus {outline: none!important; border:0!important; }
                         <span class="icon-bar "></span>
                     </button>
                     <a class="navbar-brand agileits " href="searchproperty1.aspx">Resorts</a>
+<<<<<<< HEAD
 
                       
                 </div>
@@ -172,6 +180,11 @@ area:focus {outline: none!important; border:0!important; }
 
                      
 
+=======
+                </div>
+
+                <div id="navbar" class="navbar-collapse agileits  navbar-right collapse">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     <asp:Label ID="lblUsername" runat="server" Font-Bold="true" ForeColor="Red" Text=" "></asp:Label>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <asp:LinkButton ID="LinkButton1" runat="server" CssClass="button-link" OnClick="LinkButton1_Click">Logout</asp:LinkButton>
@@ -324,6 +337,7 @@ area:focus {outline: none!important; border:0!important; }
                                     <%-- <asp:DropDownList ID="ddlAgentRef" AutoPostBack="true" runat="server" OnSelectedIndexChanged="ddlAgentRef_SelectedIndexChanged"></asp:DropDownList>--%>
                                 </div>
                                 <div style="width: 58%; overflow-x: scroll; margin: 0 auto;">
+<<<<<<< HEAD
                                   
                                     <%--  <asp:ImageMap ID="ImageMap1" runat="server" hidefocus="true"  ImageUrl="~/images/aspnet_imagemap.png"
                                         OnClick="ImageMap1_Click" Style="width: auto;">--%>
@@ -332,6 +346,10 @@ area:focus {outline: none!important; border:0!important; }
                                         OnClick="ImageMap1_Click" Style="width: auto;">
 
 
+=======
+                                    <asp:ImageMap ID="ImageMap1" runat="server" hidefocus="true"  ImageUrl="~/images/aspnet_imagemap.png"
+                                        OnClick="ImageMap1_Click" Style="width: auto;">
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                         <%-- <asp:PolygonHotSpot Coordinates="346,15,374,16,375,59,347,56" AlternateText="210"
                                             HotSpotMode="PostBack" PostBackValue="210" />
                                         <asp:PolygonHotSpot Coordinates="373,13,413,14,410,58,371,58" AlternateText="208"
@@ -432,8 +450,13 @@ area:focus {outline: none!important; border:0!important; }
                                     </strong>
                                 </div>
 
+<<<<<<< HEAD
                                 <br />
                                 <br />
+=======
+                                <br />
+                                <br />
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                 <div id="Div1" class="box box-primary booking-online pax-details" style="width: 80%; padding: 20px !important; background: #fff; box-shadow: 2px 2px 8px #cacaca; border-radius: 5px; overflow-x: scroll; margin: 0 auto;">
                                     <table>
                                         <tr>
@@ -476,6 +499,7 @@ area:focus {outline: none!important; border:0!important; }
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Rate" ItemStyle-HorizontalAlign="Left" HeaderStyle-HorizontalAlign="Right">
+<<<<<<< HEAD
                                                 <ItemTemplate>
                                                     <asp:Label runat="server" ID="Price" Text='<%#Eval("pricewithouttax1") %>'></asp:Label>
                                                 </ItemTemplate>
@@ -492,6 +516,24 @@ area:focus {outline: none!important; border:0!important; }
 
                                                 </ItemTemplate>
                                             </asp:TemplateField>
+=======
+                                                <ItemTemplate>
+                                                    <asp:Label runat="server" ID="Price" Text='<%#Eval("pricewithouttax1") %>'></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Gross">
+                                                <ItemTemplate>
+                                                    <asp:Label runat="server" ID="Total" Text='<%#Eval("Total") %>'></asp:Label>
+
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Discount">
+                                                <ItemTemplate>
+                                                    <asp:Label runat="server" ID="lblDiscount1" Text='<%#Eval("Discount") %>'></asp:Label>
+
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                             <asp:TemplateField HeaderText="Taxable Amt">
                                                 <ItemTemplate>
                                                     <asp:Label runat="server" ID="lblTax11" Text='<%#Eval("taxablepamt") %>'></asp:Label>
@@ -688,8 +730,11 @@ area:focus {outline: none!important; border:0!important; }
             new WOW().init();
         </script>
         <!-- //Animate.CSS-JavaScript -->
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     </form>
 
 </body>

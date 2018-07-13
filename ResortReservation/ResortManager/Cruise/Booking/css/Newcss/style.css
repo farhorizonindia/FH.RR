@@ -125,7 +125,11 @@ a:focus, a:hover {
 
 .navbar-default {
     position: absolute;
+<<<<<<< HEAD
     /*z-index: 99999;*/
+=======
+    z-index: 99999;
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     width: 100%;
     background-color: rgba(255, 255, 255, 0.88);
     border: none;

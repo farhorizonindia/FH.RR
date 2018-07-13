@@ -56,8 +56,12 @@ public partial class Cruise_Masters_RoomImages : MasterBasePage
             string filename = uploadLogo.PostedFile.FileName;
             if (uploadLogo.PostedFile.ContentLength > 0)
             {
+<<<<<<< HEAD
                 //string uploadPath = "/Cruise/Booking/inv/";
                 string uploadPath = "/Cruise/Booking/images/";
+=======
+                string uploadPath = "/Cruise/Booking/inv/";
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
                 string savepath = rootedpath + filename;
 
@@ -130,8 +134,12 @@ public partial class Cruise_Masters_RoomImages : MasterBasePage
             string filename = uploadLogo.PostedFile.FileName;
             if (uploadLogo.PostedFile.ContentLength > 0)
             {
+<<<<<<< HEAD
                 //string uploadPath = "/Cruise/Booking/inv/";
                 string uploadPath = "/Cruise/Booking/images/";
+=======
+                string uploadPath = "/Cruise/Booking/inv/";
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 string rootedpath = HttpContext.Current.Server.MapPath(uploadPath);
                 string savepath = rootedpath + filename;
 

@@ -43,6 +43,7 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@Title", DataSecurityManager.Encrypt(obj.Title));
                 da.InsertCommand.Parameters.AddWithValue("@PaymentMethod", DataSecurityManager.Encrypt(obj.PaymentMethod));
                 da.InsertCommand.Parameters.AddWithValue("@Term", obj.term);
+<<<<<<< HEAD
                 da.InsertCommand.Parameters.AddWithValue("@AgentId", obj.AgentId);
 
 
@@ -117,6 +118,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 da.InsertCommand.Parameters.AddWithValue("@Specialqutos", DataSecurityManager.Encrypt(obj.specialqutos));
                 da.InsertCommand.Parameters.AddWithValue("@refrenceId", DataSecurityManager.Encrypt(obj.Refrenceid));
 
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 da.InsertCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();
@@ -132,6 +135,79 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
                 return 0;
             }
         }
+<<<<<<< HEAD
+=======
+        public int AddGuset(BALCustomers obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_customers]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@action", obj.action);
+                da.InsertCommand.Parameters.AddWithValue("@Address1", DataSecurityManager.Encrypt(obj.Address1));
+                da.InsertCommand.Parameters.AddWithValue("@Address2", DataSecurityManager.Encrypt(obj.Address2));
+                da.InsertCommand.Parameters.AddWithValue("@City", DataSecurityManager.Encrypt(obj.City));
+                da.InsertCommand.Parameters.AddWithValue("@CountryId", obj.CountryId);
+                da.InsertCommand.Parameters.AddWithValue("@Password", DataSecurityManager.Encrypt(obj.Password));
+                da.InsertCommand.Parameters.AddWithValue("@Email", DataSecurityManager.Encrypt(obj.Email));
+                da.InsertCommand.Parameters.AddWithValue("@FirstName", DataSecurityManager.Encrypt(obj.FirstName));
+                da.InsertCommand.Parameters.AddWithValue("@LastName", DataSecurityManager.Encrypt(obj.LastName));
+                da.InsertCommand.Parameters.AddWithValue("@PostalCode", DataSecurityManager.Encrypt(obj.PostalCode));
+                da.InsertCommand.Parameters.AddWithValue("@State", DataSecurityManager.Encrypt(obj.State));
+                da.InsertCommand.Parameters.AddWithValue("@Telephone", DataSecurityManager.Encrypt(obj.Telephone));
+                da.InsertCommand.Parameters.AddWithValue("@Title", DataSecurityManager.Encrypt(obj.Title));
+                da.InsertCommand.Parameters.AddWithValue("@PaymentMethod", DataSecurityManager.Encrypt(obj.PaymentMethod));
+                da.InsertCommand.Parameters.AddWithValue("@customertype", DataSecurityManager.Encrypt("Guest"));
+                da.InsertCommand.Parameters.AddWithValue("@Term", obj.term);
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+        public int Update(BALCustomers obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.InsertCommand = new SqlCommand("[dbo].[sp_customers]", cn);
+                da.InsertCommand.Parameters.AddWithValue("@action", obj.action);
+                da.InsertCommand.Parameters.AddWithValue("@CustId", obj.CustId);
+                da.InsertCommand.Parameters.AddWithValue("@Email", DataSecurityManager.Encrypt(obj.Email));
+                da.InsertCommand.Parameters.AddWithValue("@Nameoncard", DataSecurityManager.Encrypt(obj.nameoncard));
+                da.InsertCommand.Parameters.AddWithValue("@Cardnumber", DataSecurityManager.Encrypt(obj.caardnumber));
+                da.InsertCommand.Parameters.AddWithValue("@Expiry", DataSecurityManager.Encrypt(obj.expirydate));
+                da.InsertCommand.Parameters.AddWithValue("@BilingAddress", obj.bilingaddress);
+                da.InsertCommand.Parameters.AddWithValue("@Specialqutos", DataSecurityManager.Encrypt(obj.specialqutos));
+                da.InsertCommand.Parameters.AddWithValue("@refrenceId", DataSecurityManager.Encrypt(obj.Refrenceid));
+
+
+                da.InsertCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                int Status = da.InsertCommand.ExecuteNonQuery();
+                cn.Close();
+                if (Status > 0)
+                    return Status;
+                else
+                    return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
         public int UpdateforadminPassword(string password,Int32 custid)
         {
@@ -332,6 +408,8 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
+<<<<<<< HEAD
+=======
 
                 SqlDataAdapter da = new SqlDataAdapter();
                 da.SelectCommand = new SqlCommand("[dbo].[sp_customers]", cn);
@@ -359,11 +437,42 @@ namespace FarHorizon.Reservations.BusinessServices.Online.DAL
             try
             {
                 SqlConnection cn = new SqlConnection(strCon);
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 SqlDataAdapter da = new SqlDataAdapter();
                 da.SelectCommand = new SqlCommand("[dbo].[sp_customers]", cn);
                 da.SelectCommand.Parameters.Clear();
                 da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
+<<<<<<< HEAD
+
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+                da.SelectCommand.ExecuteReader();
+                DataTable dtReturnData = new DataTable();
+                cn.Close();
+                da.Fill(dtReturnData);
+                if (dtReturnData != null)
+                    return dtReturnData;
+                else
+                    return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public DataTable selectbyCustid(BALCustomers obj)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(strCon);
+
+                SqlDataAdapter da = new SqlDataAdapter();
+                da.SelectCommand = new SqlCommand("[dbo].[sp_customers]", cn);
+                da.SelectCommand.Parameters.Clear();
+                da.SelectCommand.Parameters.AddWithValue("@action", obj.action);
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                 da.SelectCommand.Parameters.AddWithValue("@CustId", obj.CustId);
                 da.SelectCommand.CommandType = CommandType.StoredProcedure;
                 cn.Open();

@@ -58,6 +58,7 @@ public partial class Rate_PackageRateCard : MasterBasePage
             ddlagent.DataBind();
             ddlagent.Items.Insert(0, new ListItem("-Select-", "0"));
 
+<<<<<<< HEAD
         }
         #endregion
     }
@@ -87,6 +88,37 @@ public partial class Rate_PackageRateCard : MasterBasePage
         }
         #endregion
     }
+=======
+        }
+        #endregion
+    }
+    private void BindAgentRef()
+    {
+
+        #region Bind Agent DD
+        blLinks._Action = "GetAllGetAllAgents";
+        dtGetReturnedData = dlLinks.BindControlsAgent(blLinks);
+        if (dtGetReturnedData != null)
+        {
+            ddlAgentRef.Items.Clear();
+            ddlAgentRef.DataSource = dtGetReturnedData;
+            ddlAgentRef.DataTextField = "AgentName";
+            ddlAgentRef.DataValueField = "AgentId";
+            ddlAgentRef.DataBind();
+            ddlAgentRef.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        else
+        {
+            ddlAgentRef.Items.Clear();
+            ddlAgentRef.DataSource = null;
+            ddlAgentRef.DataBind();
+            ddlAgentRef.Items.Insert(0, new ListItem("-Select-", "0"));
+
+        }
+        #endregion
+    }
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
     private void BindAgentCommission()
     {
 
@@ -770,9 +802,15 @@ public partial class Rate_PackageRateCard : MasterBasePage
 
             }
 
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
         }
 
         catch
@@ -903,9 +941,12 @@ public partial class Rate_PackageRateCard : MasterBasePage
         }
     }
 
+<<<<<<< HEAD
 
     protected void txtValFrom_TextChanged(object sender, EventArgs e)
     {
         bindGrid();
     }
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 }

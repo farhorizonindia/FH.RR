@@ -78,7 +78,10 @@
                                     <HeaderStyle Width="50px" />
                                 </asp:BoundColumn>
                                 <asp:BoundColumn DataField="AccomodationId" HeaderText="AccomodationId" Visible="False"></asp:BoundColumn>
+<<<<<<< HEAD
                                  <asp:BoundColumn DataField="RoomCategoryId" HeaderText="RoomCategoryId" Visible="False"></asp:BoundColumn>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                                 <asp:BoundColumn DataField="RoomCategory" HeaderText="Category">
                                     <HeaderStyle Width="250px" />
                                 </asp:BoundColumn>
@@ -198,9 +201,12 @@
                             <td>
                                 <asp:HiddenField ID="hfRoomNo" runat="server" />
                             </td>
+<<<<<<< HEAD
                             <td>
                                 <asp:HiddenField ID="hfroomcatid" runat="server" />
                             </td>
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                         </tr>
                     </table>
                     <table>

@@ -70,8 +70,12 @@ namespace FarHorizon.Reservations.MasterServices
 
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@sRoomNo", DbType.String, oAccomRoomData.RoomNo);
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@iAccomId", DbType.Int32, oAccomRoomData.AccomodationId);
+<<<<<<< HEAD
                 oDB.DbDatabase.AddInParameter(oDB.DbCmd, "@roomcatid", DbType.Int32, oAccomRoomData.roomcategoryid);
 
+=======
+               
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
 
                 oDB.ExecuteNonQuery(oDB.DbCmd);
             }
@@ -394,7 +398,10 @@ namespace FarHorizon.Reservations.MasterServices
                         oAccomRoomData[i].No_of_Beds = Convert.ToInt32(ds.Tables[0].Rows[i][4]);
                         oAccomRoomData[i].Status = Convert.ToBoolean(ds.Tables[0].Rows[i][6]);
                         oAccomRoomData[i].activestatus = Convert.ToString(ds.Tables[0].Rows[i][7]);
+<<<<<<< HEAD
                         oAccomRoomData[i].roomcategoryid = Convert.ToInt32(ds.Tables[0].Rows[i][8]);
+=======
+>>>>>>> 06df147e7f6e76b3ddcb27473f8305164d96b955
                     }
                 }
             }
